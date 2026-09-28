@@ -1,0 +1,61 @@
+# --- Secrets & environment -------------------------------------------------
+.azure/
+.env
+.env.*
+!.env.sample
+*.pem
+*.pfx
+attendees.txt
+attendees*.csv
+
+# --- Python ------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.python-version
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.uv-cache/
+
+# --- Notebooks rendered from scripts (make notebooks) -------------------------
+notebooks-generated/
+content/assets/**/*.ipynb
+!content/assets/load_resident360.ipynb
+
+# --- azd / Bicep / containers --------------------------------------------------
+infra/**/*.json
+!infra/**/abbreviations.json
+*.bicep.json
+.docker/
+
+# --- Fabric CLI / local runs --------------------------------------------------
+.fab/
+*.fab.log
+fabric-runs/
+
+# --- Demos, recordings, test artefacts ---------------------------------------
+demos/videos/
+demos/.playwright/
+demos/runs/
+test-results/
+playwright-report/
+node_modules/
+
+# --- Generated at runtime ------------------------------------------------------
+content/config/values.md
+*.log
+
+# --- OS / editor ---------------------------------------------------------------
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
