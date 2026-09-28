@@ -53,6 +53,10 @@ names:
   knowledge_base: "livewell-guides-kb"
   knowledge_source: "livewell-guides-ks"
   knowledge_container: "livewell-guides"
+  search_connection: "livewell-search"             # project connection to the shared search service (Foundry IQ)
+  storage_connection: "livewell-storage"           # project connection to the knowledge blob account
+  acr_connection: "livewell-acr"                   # project connection to ACR (hosted agent images)
+  appinsights_connection: "livewell-appinsights"   # project connection to Application Insights (tracing)
   mcp_app: "ca-mcp-activities-<env>"
   mcp_connection: "livewell-activities-mcp"        # project connection to the activities MCP server
   profile_openapi_tool: "livewell-profile"         # Navigator OpenAPI tool over the profile endpoint
@@ -70,6 +74,61 @@ models:
   deployment_type: "GlobalStandard"
   tpm_cap_thousands: 100
   forbidden: ["PTU", "partner models (Anthropic, Mistral, Cohere)"]
+  quota_usage_names:   # az cognitiveservices usage list -> OpenAI.GlobalStandard.<name>
+    model-router: "ModelRouter"
+    gpt-4.1-mini: "gpt4.1-mini"
+    text-embedding-3-large: "text-embedding-3-large"
+
+# ---------------------------------------------------------------------------
+# Region matrix (SPEC.md §8.2, validated 25 Sep 2026). scripts/preflight.sh FAILS if the configured
+# region is not "yes" on every row. "unverified" = documented fallback only: re-validate, then set
+# PREFLIGHT_ACCEPT_FALLBACK=1 for that run.
+# ---------------------------------------------------------------------------
+region_matrix:
+  validated_on: "2026-09-25"
+  rows:
+    foundry_project_agent_service:           { swedencentral: "yes", northcentralus: "unverified" }
+    model_router_and_models_global_standard: { swedencentral: "yes", northcentralus: "unverified" }
+    fabric_all_workloads_ontology_data_agent: { swedencentral: "yes", northcentralus: "unverified" }
+    search_agentic_retrieval_semantic_ranker: { swedencentral: "yes", northcentralus: "unverified" }
+    evaluators_playground_batch_risk_safety:  { swedencentral: "yes", northcentralus: "unverified" }
+    hosted_agents:                           { swedencentral: "yes", northcentralus: "unverified" }
+  not_colocated:
+    portal_red_teaming: "eastus2 / northcentralus only -> run red teaming via the azure-ai-evaluation SDK"
+  ruled_out:
+    eastus2: "new Azure AI Search services capacity-blocked"
+    southeastasia: "never used (SPEC.md §0)"
+  capacity_notes:   # live capacity blocks seen while provisioning (preflight check 7 reads these)
+    search:
+      swedencentral: "ResourcesForSkuUnavailable for new Basic AND serverless services on 2026-09-29 (mcaps first provision)"
+
+# ---------------------------------------------------------------------------
+# Built-in Azure role definitions (identical in every tenant). RBAC is assigned BY ID from here:
+# infra/modules/rbac.bicep and scripts/seed-attendees.sh both read this block.
+# ---------------------------------------------------------------------------
+rbac_roles:
+  foundry_user: "53ca6127-db72-4b80-b1b0-d745d6d5456d"              # attendees (project scope)
+  foundry_project_manager: "eadc314b-1a2d-4efa-be10-5d325db5065e"   # facilitators (account scope)
+  cognitive_services_user: "a97b65f3-24c7-4388-baec-2e87135dc908"   # search identity -> Foundry account
+  search_index_data_reader: "1407120a-92aa-4202-b7e9-c0e197c71c8f"  # project identity -> search
+  search_index_data_contributor: "8ebe5a00-799e-43f5-93ac-243d3dce84a7"
+  search_service_contributor: "7ca78c08-252a-4471-8644-bb5ff32d4ba0"
+  storage_blob_data_reader: "2a2b9908-6ea1-4ae2-8e65-a410df84e7d1"  # search identity -> storage
+  storage_blob_data_contributor: "ba92f5b4-2d11-453d-a403-e96b0029c9fe"
+  acr_pull: "7f951dda-4ed3-4680-a7ca-43fe172d538d"                  # project + MCP app identities
+  acr_push: "8311e382-0749-4cb8-b61a-304f252e45ec"
+  log_analytics_reader: "73c42c96-874c-492b-b04d-ab87d138a893"      # attendees -> Application Insights (portal traces)
+
+# What scripts/seed-attendees.sh grants each attendee (keys from rbac_roles; scope = resource).
+attendee_roles:
+  - { role: foundry_user, scope: project }               # agents, playground, evaluations in the shared project
+  - { role: search_index_data_reader, scope: search }    # browse the shared knowledge base in the portal
+  - { role: log_analytics_reader, scope: appinsights }   # Tracing tab (Lab 2)
+
+# Built-in Entra directory roles (template IDs, identical in every tenant). Used by
+# scripts/tenant/create-lab-users.sh for the break-glass account only.
+entra_roles:
+  global_administrator: "62e90394-69f5-4237-9190-012177145e10"
 
 modes:
   project_mode: "shared-project"     # shared-project | project-per-attendee
@@ -89,6 +148,8 @@ environments:
       prefix: "hpb.lab"
       count: 20
       pattern: "hpb.lab01 … hpb.lab20"
+      break_glass: "hpb.breakglass"
+      usage_location: "SG"
     budget_alerts_usd: [150, 300]
   sponsor:
     purpose: "delivery"
@@ -98,6 +159,8 @@ environments:
     lab_accounts:
       prefix: "hpb.lab"
       count: 20
+      break_glass: "hpb.breakglass"
+      usage_location: "SG"
     budget_alerts_usd: [150, 300]
 
 # ---------------------------------------------------------------------------

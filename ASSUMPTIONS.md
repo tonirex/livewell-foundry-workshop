@@ -12,7 +12,8 @@ Where an entry changes something SPEC.md states, it says so.
 | Guest Wi-Fi SSID and code | `workshop.guest_wifi` (rendered on the deck logistics slide) | TODO |
 | Sponsor subscription ID and tenant ID | `environments.sponsor` and `infra/env/sponsor.bicepparam` (Phase 2) | TODO |
 | Sponsor facilitator UPN(s) | `environments.sponsor.facilitator_upns` | TODO |
-| Fabric licence / capacity admin for the MCAPS facilitator account | Fabric admin portal (the account currently gets `UserNotLicensed` from the Fabric API and holds only Global Reader) | TODO: may block Phase 3 |
+| Fabric licence / capacity admin for the MCAPS facilitator account | Fabric admin portal (the account currently gets `UserNotLicensed` from the Fabric API and holds only Global Reader) | TODO: blocks the Fabric capacity (Phase 2) and Phase 3 |
+| Fabric tenant sign-up (MCAPS tenant has never used Fabric) | A tenant admin signs in once at app.fabric.microsoft.com; then `azd env set FABRIC_BRIDGE true` and `bash scripts/provision.sh mcaps` | TODO: blocks the F2 capacity (entry 2.7) |
 
 ## Phase 0: bootstrap
 
@@ -136,3 +137,65 @@ Where an entry changes something SPEC.md states, it says so.
 - **1.38** `scripts/check-content.py` is the Phase 1 acceptance gate: links resolve, no GUIDs or endpoints outside
   `workshop.yaml`, the eight lab-page sections, ten patterns mapped, prompt ids consistent across pages/keys/narrative,
   Mei ≤ 3 questions, citizen beats never use Fabric, the glossary is verbatim in both instruction files, and generators pass `--check`.
+
+## Phase 2: infrastructure and admin
+
+### Provisioning flow
+
+- **2.1** `scripts/provision.sh <env>` is the only supported entry point. azd reads `infra/main.bicepparam` before the
+  preprovision hook runs, so `provision.sh` runs `scripts/select-params.py` first. That script copies
+  `infra/env/<env>.bicepparam` to `infra/main.bicepparam` (gitignored), which makes a plain `azd provision` safe after the first run.
+- **2.2** An existing Consumption budget cannot move its start month. `select-params.py` pins `BUDGET_START_DATE`
+  (first of the current UTC month) in the azd env on first provision, and `teardown.sh` clears it.
+- **2.3** Git Bash rewrites `/subscriptions/...` arguments into Windows paths. `scripts/lib/common.sh` exports
+  `MSYS_NO_PATHCONV=1`, and temp paths use `mktempdir` (mixed `C:/...` form). This was the cause of a false "not Owner" preflight failure.
+- **2.4** The `azure.ai.agents` azd extension (1.0.0-beta.17) fails a real provision with "agent definition not
+  found" unless the `host: azure.ai.agent` service has an inline definition. `azure.yaml` therefore carries one for
+  `livewell-workshop-hosted` (responses protocol, remote build, 0.5 CPU / 1 Gi). It is still deployed only in Lab 4 (facilitator).
+
+### Capacity and region
+
+- **2.5** **Changes SPEC §6 (single region).** On 2026-09-29, swedencentral returned `ResourcesForSkuUnavailable` for new
+  Azure AI Search services on both Basic and Serverless, with quota available (basic 0/12, serverless 0/5). The Free
+  tier was rejected because the design is keyless (storage shared key off, Foundry local auth off), and Free cannot
+  use a managed identity for indexer or vectorizer calls. The fix is a `searchLocation` parameter (`SEARCH_LOCATION` in
+  the azd env). Only the search service moves, to **francecentral** (EU, not a high-demand region). Foundry, models,
+  storage and monitoring stay in swedencentral. Cross-region traffic is small (KB queries and indexing).
+  `region_matrix.capacity_notes.search.swedencentral` records the block so preflight fails fast until someone re-tests and clears it.
+- **2.6** Search stays Basic (the SPEC default). `SEARCH_SKU=serverless` remains as an escape hatch, but
+  serverless skips replicas, partitions and semantic settings.
+
+### Fabric
+
+- **2.7** The MCAPS tenant has never signed up for Microsoft Fabric. Creating the capacity fails with "Tenant ... wasn't
+  recognized by Microsoft Fabric", and the Power BI API returns Not Found. This needs a human (see the Values table).
+  Until then the mcaps env runs with `FABRIC_BRIDGE=false`, which skips only the F2 capacity.
+- **2.8** Fabric workspace creation (the `HPB Resident 360` workspace) is Phase 3. Phase 2 only creates the capacity
+  and teaches `teardown.sh` and `seed-attendees.sh` about the workspace.
+- **2.9** `scripts/capacity.sh` calls the ARM `suspend` / `resume` actions (Microsoft.Fabric 2023-11-01) directly
+  instead of `az fabric`, because the `fabric` az extension is not installed by default.
+
+### Identity and RBAC
+
+- **2.10** Role definition IDs live in `workshop.yaml` → `rbac_roles`, and no GUIDs appear in scripts.
+  Role-assignment names are deterministic (uuid5 of scope, principal and role), so re-running `seed-attendees.sh` is idempotent.
+- **2.11** Attendee roles (`workshop.yaml` → `attendee_roles`) are Foundry User on the project, **Search Index Data
+  Reader** on the search service (portal KB browsing) and **Log Analytics Reader** on App Insights (portal Tracing tab).
+  The last two are assumptions, not verified against a least-privilege attendee account yet.
+- **2.12** `MODE=project-per-attendee` creates `livewell-<upn-short>` projects by ARM PUT. It is written but not
+  exercised in the MCAPS run; shared-project is the default and the tested path.
+- **2.13** `tenant/create-lab-users.sh` needs User Administrator (and Privileged Role Administrator for the break-glass
+  Global Admin). The MCAPS account holds Global Reader only, so it was run with `--dry-run`. Passwords go to
+  `.azure/<env>/lab-accounts.csv` (gitignored) and are never printed.
+- **2.14** Foundry account `disableLocalAuth: true` and storage `allowSharedKeyAccess: false`. Search keeps
+  `aadOrApiKey` (API keys still allowed) because some portal KB wizards still request an admin key.
+- **2.15** Budget alerts go to the subscription Owner and Contributor roles, plus `budgetContactEmails` when set.
+  `budget_alerts_usd` [150, 300] come from `workshop.yaml`.
+
+### Resources
+
+- **2.16** The activities MCP Container App starts from the public `containerapps-helloworld` image with
+  `minReplicas: 0`. Phase 3 builds and pushes the real image to ACR and sets `minReplicas: 1` for the day.
+- **2.17** Project connection names come from `workshop.yaml` → `names.*_connection` (`livewell-search`,
+  `livewell-storage`, `livewell-acr`, `livewell-appinsights`). The Fabric and MCP connections are created in Phase 3.
+- **2.18** Log Analytics has a daily cap of 1 GB. `cost-guardrails.sh` fails if the cap is higher or missing.

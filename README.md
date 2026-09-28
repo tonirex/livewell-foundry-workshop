@@ -110,8 +110,10 @@ Windows on ARM: some wheels are x64-only. Use an x64 Python, or Codespaces.
 <summary><strong>Run of show, admin and cost</strong></summary>
 
 - [Facilitator run of show](foundry-workshop-plan.md): the 9:00–5:30 agenda, checkpoint gates, backup plans and demo prompts.
-- Admin runbooks (`content/admin/ADMIN-SETUP.md`, `content/admin/TENANT-BOOTSTRAP.md`) and scripts
-  (`scripts/preflight.sh`, `scripts/cost-guardrails.sh`, `scripts/seed-attendees.sh`, `scripts/teardown.sh`) come in Phase 2.
+- [Admin setup](content/admin/ADMIN-SETUP.md): timeline T-10 → T+1, cost table, RBAC, troubleshooting.
+  [Tenant bootstrap](content/admin/TENANT-BOOTSTRAP.md): one-time tenant, Fabric and lab-account setup.
+- Scripts: [preflight](scripts/preflight.sh), [provision](scripts/provision.sh), [cost guardrails](scripts/cost-guardrails.sh),
+  [Fabric capacity](scripts/capacity.sh), [seed attendees](scripts/seed-attendees.sh), [teardown](scripts/teardown.sh).
 - [Rahim's story](content/narrative/rahim.md): one chapter per lab, every beat tagged by seat and source.
 - [Prompt bank](content/prompts/test-prompts.json): the single source of truth for every prompt in the labs, keys and demos.
 - [Answer keys](content/answer-keys/) for the paste-the-output checkpoints.
