@@ -12,8 +12,8 @@ Where an entry changes something SPEC.md states, it says so.
 | Guest Wi-Fi SSID and code | `workshop.guest_wifi` (rendered on the deck logistics slide) | TODO |
 | Sponsor subscription ID and tenant ID | `environments.sponsor` and `infra/env/sponsor.bicepparam` (Phase 2) | TODO |
 | Sponsor facilitator UPN(s) | `environments.sponsor.facilitator_upns` | TODO |
-| Fabric licence / capacity admin for the MCAPS facilitator account | Fabric admin portal (the account currently gets `UserNotLicensed` from the Fabric API and holds only Global Reader) | TODO: blocks the Fabric capacity (Phase 2) and Phase 3 |
-| Fabric tenant sign-up (MCAPS tenant has never used Fabric) | A tenant admin signs in once at app.fabric.microsoft.com; then `azd env set FABRIC_BRIDGE true` and `bash scripts/provision.sh mcaps` | TODO: blocks the F2 capacity (entry 2.7) |
+| Fabric Administrator role for the MCAPS facilitator account | Entra ID → Roles → Fabric Administrator (or activate Global Administrator in PIM). The account holds only Global Reader, so `GET /v1/admin/tenantsettings` returns 403 and preflight check 8 fails | TODO: tenant settings in `content/admin/TENANT-BOOTSTRAP.md` (ontology preview, data agent, Copilot/Azure OpenAI, cross-geo) may block Phase 3 |
+| Fabric tenant sign-up (MCAPS tenant has never used Fabric) | A tenant user signs in once at app.fabric.microsoft.com | Done 2026-09-29: F2 `fablivewellmcaps` created by `provision.sh mcaps` |
 
 ## Phase 0: bootstrap
 
@@ -199,3 +199,7 @@ Where an entry changes something SPEC.md states, it says so.
 - **2.17** Project connection names come from `workshop.yaml` → `names.*_connection` (`livewell-search`,
   `livewell-storage`, `livewell-acr`, `livewell-appinsights`). The Fabric and MCP connections are created in Phase 3.
 - **2.18** Log Analytics has a daily cap of 1 GB. `cost-guardrails.sh` fails if the cap is higher or missing.
+- **2.19** Inputs set with `azd env set` (`FABRIC_BRIDGE`, `MODE`, `SEARCH_SKU`, `SEARCH_LOCATION`) are never Bicep output
+  names. `azd down` deletes output keys from `.azure/<env>/.env`, so an output named `FABRIC_BRIDGE` silently reset the
+  override after teardown #1. The outputs are now `LIVEWELL_FABRIC_BRIDGE` and `LIVEWELL_PROJECT_MODE`.
+- **2.20** On Windows, Git Bash cannot see the `fab.cmd` shim through `command -v fab`, so `scripts/lib/common.sh` falls back to `fab.cmd`.

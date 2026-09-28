@@ -4,6 +4,20 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Phase 2: infrastructure and admin scripts (`phase-2-infra`)
+
+- Bicep (`infra/`): Foundry account and project (model-router, gpt-4.1-mini, text-embedding-3-large;
+  100K TPM caps), Azure AI Search Basic, storage, ACR, Log Analytics and App Insights, Container Apps
+  environment with the MCP placeholder app (min replicas 0), Fabric F2 capacity (opt-out with
+  `FABRIC_BRIDGE=false`), US$300 budget with alerts at 50% and 100%, facilitator and project RBAC.
+- Per-environment parameters (`infra/env/mcaps.bicepparam`, `sponsor.bicepparam`) selected by
+  `scripts/select-params.py`; `SEARCH_LOCATION` override for regional Search capacity shortages.
+- Admin scripts: `preflight.sh` (8 checks), `provision.sh` (preflight, what-if, `azd provision`),
+  `cost-guardrails.sh`, `capacity.sh`, `teardown.sh`, `seed-attendees.sh`, `tenant/create-lab-users.sh`,
+  `render-values.py`, plus the `lib/` helpers (`common.sh`, `azrest.py`, `wsconfig.py`).
+- Admin docs: `content/admin/ADMIN-SETUP.md`, `TENANT-BOOTSTRAP.md`, troubleshooting table.
+- Verified in the `mcaps` environment: provision, guardrails, teardown and provision from empty.
+
 ### Phase 1: content and data (`phase-1-content`)
 
 - Workshop config (`content/config/workshop.yaml`) and glossary (`content/config/glossary.yaml`).

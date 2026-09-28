@@ -266,8 +266,10 @@ module budget 'modules/budget.bicep' = {
 // --- Outputs → .azure/<env>/.env (single source of truth, SPEC.md §8.1) ----------------------------
 output AZURE_LOCATION string = location
 output AZURE_RESOURCE_GROUP string = resourceGroup().name
-output MODE string = projectMode
-output FABRIC_BRIDGE string = fabricBridge ? 'true' : 'false'
+// MODE and FABRIC_BRIDGE are inputs (azd env set). They are deliberately NOT outputs: azd down deletes
+// output keys from .azure/<env>/.env, which would silently reset an override on the next provision.
+output LIVEWELL_PROJECT_MODE string = projectMode
+output LIVEWELL_FABRIC_BRIDGE string = fabricBridge ? 'true' : 'false'
 
 output AZURE_AI_ACCOUNT_NAME string = foundry.outputs.accountName
 output AZURE_AI_PROJECT_NAME string = foundry.outputs.projectName

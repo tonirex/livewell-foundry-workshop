@@ -27,9 +27,11 @@ else
   PY=python
 fi
 
-# fab: PATH first, then the repo venv.
+# fab: PATH first (fab.cmd shims are invisible to `command -v fab` in Git Bash), then the repo venv.
 if command -v fab >/dev/null 2>&1; then
   FAB=fab
+elif command -v fab.cmd >/dev/null 2>&1; then
+  FAB=fab.cmd
 elif [ -x "$ROOT/.venv/bin/fab" ]; then
   FAB="$ROOT/.venv/bin/fab"
 elif [ -x "$ROOT/.venv/Scripts/fab.exe" ]; then

@@ -1,7 +1,6 @@
 # versions.md: pinned tools, SDKs and preview surfaces
 
-Last checked: 2026-09-28 (Phase 1). Re-check before each delivery with `scripts/admin/preflight.sh`,
-which comes in Phase 2.
+Last checked: 2026-09-29 (Phase 2). Re-check before each delivery with `bash scripts/preflight.sh <env>`.
 
 ## Participant / facilitator tooling
 
@@ -13,6 +12,28 @@ which comes in Phase 2.
 | Azure Developer CLI (`azd`) | ≥ 1.31 (1.34 available) | `azd provision`, `azd down --purge` |
 | Fabric CLI (`fab`) | `ms-fabric-cli==1.7.0` | Workspace, lakehouse, notebook, ontology import |
 | Node | 20 LTS (demos only) | Playwright recorder |
+
+Verified end to end on 2026-09-29 (Phase 2, `mcaps` environment): az 2.87.0, azd 1.34.2, Bicep 0.47.16,
+azd extension `azure.ai.agents` 1.0.0-beta.17, fab 1.7.0, Git Bash (Git for Windows) on Windows ARM64.
+
+## Azure resource API versions (Bicep, `infra/`)
+
+| Resource type | API version |
+|---|---|
+| `Microsoft.CognitiveServices/accounts` (+ `/deployments`, `/projects`, `/projects/connections`) | 2025-06-01 |
+| `Microsoft.Search/searchServices` | 2026-09-01-preview (create); 2025-05-01 (`existing` in RBAC) |
+| `Microsoft.Fabric/capacities` | 2023-11-01 |
+| `Microsoft.Consumption/budgets` | 2023-11-01 |
+| `Microsoft.App/managedEnvironments`, `Microsoft.App/containerApps` | 2024-03-01 |
+| `Microsoft.ContainerRegistry/registries` | 2023-07-01 |
+| `Microsoft.Storage/storageAccounts` | 2023-05-01 |
+| `Microsoft.OperationalInsights/workspaces` | 2023-09-01 |
+| `Microsoft.Insights/components` | 2020-02-02 |
+| `Microsoft.ManagedIdentity/userAssignedIdentities` | 2023-01-31 |
+| `Microsoft.Authorization/roleAssignments` | 2022-04-01 |
+
+Management-plane REST calls in `scripts/` use the same versions (Search usages and name check 2025-05-01,
+Cost Management query 2023-11-01, Fabric capacity suspend/resume 2023-11-01). Fabric data plane: REST `v1`.
 
 ## Python packages (Builder rail and scripts)
 
