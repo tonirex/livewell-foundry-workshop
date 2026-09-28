@@ -23,7 +23,7 @@ All figures come from `python scripts/r360.py` (and, from Phase 3b, `scripts/val
 
 | Check | How | Pass |
 |---|---|---|
-| Fabric capacity resumed | `az fabric capacity resume` (see `content/admin/ADMIN-SETUP.md`, Phase 2) | Capacity **Active** in Fabric admin portal |
+| Fabric capacity resumed | `bash scripts/capacity.sh resume <env>` (see [ADMIN-SETUP](content/admin/ADMIN-SETUP.md)) | Capacity **Active** in Fabric admin portal |
 | Values sheet on screen | `python scripts/render-values.py` → `content/config/values.md` (gitignored) | Project endpoint + agent names visible |
 | Reference agents alive | Open the `livewell-demo-*` agents (`agent_naming.demo_agents` in `content/config/workshop.yaml`), send `lab0_hi` to `livewell-demo-lab0` | Introduces itself, says it is not a doctor |
 | Fabric tool alive | Send `fabric_q_disengaged_regions` to `livewell-demo-fabric` | Trace shows the Fabric IQ call; North ranks first |
@@ -114,5 +114,5 @@ Scripted runs prepend the `consent_line` from the prompt bank so the Lab 0 conse
 
 ## After the day (T+1)
 
-- Pause the Fabric capacity immediately after the session: `az fabric capacity suspend`.
-- Run `scripts/teardown.sh` (Phase 2) once demos are archived. See the cost table in `content/admin/ADMIN-SETUP.md`.
+- Pause the Fabric capacity immediately after the session: `bash scripts/capacity.sh suspend <env>`.
+- Run [`scripts/teardown.sh`](scripts/teardown.sh) once demos are archived. See the cost table in [ADMIN-SETUP](content/admin/ADMIN-SETUP.md).

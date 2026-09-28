@@ -1,0 +1,306 @@
+// LiveWell Coach workshop — one resource group, one region, every resource (SPEC.md §8).
+// Names come from content/config/workshop.yaml (`names:` / `models:`), with <env> = environmentName.
+// Per-environment values live in infra/env/<env>.bicepparam (copied to infra/main.bicepparam by the
+// azd preprovision hook, scripts/select-params.py).
+targetScope = 'resourceGroup'
+
+@description('azd environment name: mcaps (dry run) or sponsor (delivery).')
+@allowed([
+  'mcaps'
+  'sponsor'
+])
+param environmentName string
+
+@description('Single region for EVERY resource, Fabric capacity included. Validated: swedencentral (default), northcentralus (fallback). Never Southeast Asia.')
+@allowed([
+  'swedencentral'
+  'northcentralus'
+])
+param location string = 'swedencentral'
+
+@description('Object ID of the identity running azd (facilitator). Set by scripts/provision.sh / the preprovision hook.')
+param principalId string = ''
+
+@allowed([
+  'User'
+  'ServicePrincipal'
+])
+param principalType string = 'User'
+
+@description('Object IDs of additional facilitators (Foundry Project Manager + data-plane contributor roles).')
+param facilitatorPrincipalIds array = []
+
+@description('Fabric capacity admins: UPNs of MEMBER accounts in this tenant.')
+param fabricAdminMembers array
+
+@description('FABRIC_BRIDGE. false = no Fabric capacity; the profile tool reads citizens.json and the Fabric step is skipped.')
+param fabricBridge bool = true
+
+@allowed([
+  'F2'
+  'F4'
+])
+param fabricSku string = 'F2'
+
+@description('MODE. shared-project (default): attendees own livewell-<INITIALS>-<role> agents in one project.')
+@allowed([
+  'shared-project'
+  'project-per-attendee'
+])
+param projectMode string = 'shared-project'
+
+@description('Search tier. basic (default) or serverless (Serverless Developer, preview). Never S1+.')
+@allowed([
+  'basic'
+  'serverless'
+  'free'
+])
+param searchSku string = 'basic'
+
+@description('Region for the search service ONLY when the main region is capacity-blocked for new search services (empty = location). Exception to the one-region rule, recorded in ASSUMPTIONS.md.')
+param searchLocation string = ''
+@description('TPM cap (thousands) for each chat deployment (model-router, fallback). Global Standard only.')
+@minValue(10)
+@maxValue(150)
+param chatTpmCapThousands int = 100
+
+@description('TPM cap (thousands) for the embeddings deployment.')
+@minValue(10)
+@maxValue(150)
+param embeddingTpmCapThousands int = 100
+
+param modelRouterVersion string = '2025-11-18'
+param fallbackModelVersion string = '2025-04-14'
+param embeddingModelVersion string = '1'
+
+@description('MCP server min replicas. 0 between sessions; 1 on the workshop day.')
+@minValue(0)
+@maxValue(2)
+param mcpMinReplicas int = 0
+
+param budgetAmountUsd int = 300
+param budgetAlertThresholdsUsd array = [
+  150
+  300
+]
+param budgetContactEmails array = []
+
+@description('Budget start (yyyy-MM-01). Empty = first of the current month. scripts/select-params.py pins it in the azd env (BUDGET_START_DATE) on first provision because an existing budget cannot move its start date.')
+param budgetStartDate string = ''
+
+@description('Do not set: first of the current month, used when budgetStartDate is empty.')
+param currentMonthStart string = utcNow('yyyy-MM-01')
+
+@description('Extra tags (e.g. cost centre). workshop / env / azd-env-name are always applied.')
+param extraTags object = {}
+
+// -------------------------------------------------------------------------------------------------
+
+var names = loadYamlContent('../content/config/workshop.yaml', '$.names')
+var models = loadYamlContent('../content/config/workshop.yaml', '$.models')
+var n = {
+  foundryAccount: replace(names.foundry_account, '<env>', environmentName)
+  foundryProject: names.foundry_project
+  search: replace(names.search_service, '<env>', environmentName)
+  fabricCapacity: replace(names.fabric_capacity, '<env>', environmentName)
+  mcpApp: replace(names.mcp_app, '<env>', environmentName)
+  budget: replace(names.budget, '<env>', environmentName)
+  knowledgeContainer: names.knowledge_container
+  searchConnection: names.search_connection
+  storageConnection: names.storage_connection
+  acrConnection: names.acr_connection
+  appInsightsConnection: names.appinsights_connection
+}
+var token = take(uniqueString(subscription().id, resourceGroup().id, environmentName), 6)
+var tags = union(extraTags, {
+  workshop: 'livewell'
+  env: environmentName
+  'azd-env-name': environmentName
+})
+
+var facilitators = filter(union(empty(principalId) ? [] : [principalId], facilitatorPrincipalIds), p => !empty(p))
+
+var deployments = [
+  {
+    name: models.default
+    model: {
+      format: 'OpenAI'
+      name: models.default
+      version: modelRouterVersion
+    }
+    sku: {
+      name: models.deployment_type
+      capacity: chatTpmCapThousands
+    }
+  }
+  {
+    name: models.fallback
+    model: {
+      format: 'OpenAI'
+      name: models.fallback
+      version: fallbackModelVersion
+    }
+    sku: {
+      name: models.deployment_type
+      capacity: chatTpmCapThousands
+    }
+  }
+  {
+    name: models.embeddings
+    model: {
+      format: 'OpenAI'
+      name: models.embeddings
+      version: embeddingModelVersion
+    }
+    sku: {
+      name: models.deployment_type
+      capacity: embeddingTpmCapThousands
+    }
+  }
+]
+
+module monitoring 'modules/monitoring.bicep' = {
+  name: 'monitoring'
+  params: {
+    location: location
+    tags: tags
+    logAnalyticsName: 'log-livewell-${environmentName}'
+    appInsightsName: 'appi-livewell-${environmentName}'
+  }
+}
+
+module storage 'modules/storage.bicep' = {
+  name: 'storage'
+  params: {
+    location: location
+    tags: tags
+    name: 'stlivewell${environmentName}${token}'
+    containerName: n.knowledgeContainer
+  }
+}
+
+module search 'modules/search.bicep' = {
+  name: 'search'
+  params: {
+    location: empty(searchLocation) ? location : searchLocation
+    tags: tags
+    name: n.search
+    sku: searchSku
+  }
+}
+
+module containers 'modules/containerapps.bicep' = {
+  name: 'containers'
+  params: {
+    location: location
+    tags: tags
+    acrName: 'crlivewell${environmentName}${token}'
+    identityName: 'id-livewell-${environmentName}'
+    environmentName: 'cae-livewell-${environmentName}'
+    mcpAppName: n.mcpApp
+    logAnalyticsId: monitoring.outputs.logAnalyticsId
+    mcpMinReplicas: mcpMinReplicas
+  }
+}
+
+module foundry 'modules/foundry.bicep' = {
+  name: 'foundry'
+  params: {
+    location: location
+    tags: tags
+    accountName: n.foundryAccount
+    projectName: n.foundryProject
+    deployments: deployments
+    appInsightsId: monitoring.outputs.appInsightsId
+    appInsightsConnectionString: monitoring.outputs.appInsightsConnectionString
+    searchId: search.outputs.id
+    searchEndpoint: search.outputs.endpoint
+    storageId: storage.outputs.id
+    storageBlobEndpoint: storage.outputs.blobEndpoint
+    acrId: containers.outputs.acrId
+    acrLoginServer: containers.outputs.acrLoginServer
+    searchConnectionName: n.searchConnection
+    storageConnectionName: n.storageConnection
+    acrConnectionName: n.acrConnection
+    appInsightsConnectionName: n.appInsightsConnection
+  }
+}
+
+module rbac 'modules/rbac.bicep' = {
+  name: 'rbac'
+  params: {
+    accountName: foundry.outputs.accountName
+    projectName: foundry.outputs.projectName
+    searchName: search.outputs.name
+    storageName: storage.outputs.name
+    acrName: containers.outputs.acrName
+    facilitatorPrincipalIds: facilitators
+    facilitatorPrincipalType: principalType
+    projectPrincipalId: foundry.outputs.projectPrincipalId
+    searchPrincipalId: search.outputs.principalId
+  }
+}
+
+module fabric 'modules/fabric.bicep' = if (fabricBridge) {
+  name: 'fabric'
+  params: {
+    location: location
+    tags: tags
+    name: n.fabricCapacity
+    adminMembers: fabricAdminMembers
+    skuName: fabricSku
+  }
+}
+
+module budget 'modules/budget.bicep' = {
+  name: 'budget'
+  params: {
+    name: n.budget
+    amount: budgetAmountUsd
+    alertThresholdsUsd: budgetAlertThresholdsUsd
+    contactEmails: budgetContactEmails
+    startDate: empty(budgetStartDate) ? currentMonthStart : budgetStartDate
+  }
+}
+
+// --- Outputs → .azure/<env>/.env (single source of truth, SPEC.md §8.1) ----------------------------
+output AZURE_LOCATION string = location
+output AZURE_RESOURCE_GROUP string = resourceGroup().name
+// MODE and FABRIC_BRIDGE are inputs (azd env set). They are deliberately NOT outputs: azd down deletes
+// output keys from .azure/<env>/.env, which would silently reset an override on the next provision.
+output LIVEWELL_PROJECT_MODE string = projectMode
+output LIVEWELL_FABRIC_BRIDGE string = fabricBridge ? 'true' : 'false'
+
+output AZURE_AI_ACCOUNT_NAME string = foundry.outputs.accountName
+output AZURE_AI_PROJECT_NAME string = foundry.outputs.projectName
+output AZURE_AI_PROJECT_ID string = foundry.outputs.projectId
+output AZURE_AI_PROJECT_ENDPOINT string = foundry.outputs.projectEndpoint
+output FOUNDRY_PROJECT_ENDPOINT string = foundry.outputs.projectEndpoint
+output AZURE_OPENAI_ENDPOINT string = foundry.outputs.openAiEndpoint
+output AZURE_AI_MODEL_DEPLOYMENT_NAME string = models.default
+output AZURE_AI_FALLBACK_DEPLOYMENT_NAME string = models.fallback
+output AZURE_AI_EMBEDDING_DEPLOYMENT_NAME string = models.embeddings
+
+output AZURE_SEARCH_SERVICE_NAME string = search.outputs.name
+output AZURE_SEARCH_ENDPOINT string = search.outputs.endpoint
+output AZURE_SEARCH_LOCATION string = empty(searchLocation) ? location : searchLocation
+output AZURE_SEARCH_CONNECTION_NAME string = n.searchConnection
+output AZURE_SEARCH_CONNECTION_ID string = foundry.outputs.searchConnectionId
+output AZURE_STORAGE_ACCOUNT_NAME string = storage.outputs.name
+output AZURE_STORAGE_BLOB_ENDPOINT string = storage.outputs.blobEndpoint
+output KNOWLEDGE_CONTAINER string = n.knowledgeContainer
+
+output APPLICATIONINSIGHTS_NAME string = monitoring.outputs.appInsightsName
+output APPLICATIONINSIGHTS_CONNECTION_STRING string = monitoring.outputs.appInsightsConnectionString
+
+output AZURE_CONTAINER_REGISTRY_NAME string = containers.outputs.acrName
+output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containers.outputs.acrLoginServer
+output AZURE_CONTAINER_APPS_ENVIRONMENT_NAME string = containers.outputs.environmentName
+output AZURE_CONTAINER_APPS_ENVIRONMENT_ID string = containers.outputs.environmentId
+output AZURE_USER_ASSIGNED_IDENTITY_CLIENT_ID string = containers.outputs.identityClientId
+output MCP_APP_NAME string = containers.outputs.mcpAppName
+output MCP_URL string = 'https://${containers.outputs.mcpAppFqdn}/mcp'
+
+output FABRIC_CAPACITY_NAME string = fabricBridge ? fabric!.outputs.name : ''
+output FABRIC_CAPACITY_ID string = fabricBridge ? fabric!.outputs.id : ''
+output BUDGET_NAME string = budget.outputs.name
