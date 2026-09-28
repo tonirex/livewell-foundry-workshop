@@ -1,0 +1,65 @@
+{
+  "_comment": "Pinned persona overlay for Rahim (SPEC.md §3.3). Applied by content/assets/load_resident360.ipynb (Fabric) and scripts/r360.py (local mirror). Synthetic data only. Do not edit without re-running scripts/validate-narrative.py.",
+  "resident_id": "RESIDENT_00061",
+  "persona": {
+    "preferred_name": "Rahim",
+    "age": 61,
+    "seat": "citizen",
+    "story": "Joined the National Steps Challenge but drifting; rarely logs meals; skips outdoor events on hazy days; dropped a programme; elevated glucose at his last screening."
+  },
+  "resident_overrides": {
+    "age_band": "60-64",
+    "age_band_10y": "60-69",
+    "gender": "M",
+    "region": "North",
+    "planning_area": "Woodlands"
+  },
+  "activity_targets": {
+    "mean_daily_steps": 3100,
+    "mean_mvpa_minutes": 9,
+    "mean_sleep_minutes": 385
+  },
+  "screening": {
+    "screening_date": "2026-05-12",
+    "bmi": 26.1,
+    "systolic_bp": 132,
+    "diastolic_bp": 84,
+    "fasting_glucose_mmol": 6.4,
+    "total_cholesterol_mmol": 5.4,
+    "risk_band": "High"
+  },
+  "extra_event_bookings": [
+    {
+      "booking_id": "BKG003641",
+      "event_id": "EVT004",
+      "event_name": "Brisk Walk @ Park",
+      "event_type": "Community Walk",
+      "event_date": "2026-06-13",
+      "region": "North",
+      "booked_flag": "Y",
+      "attended_flag": "N"
+    },
+    {
+      "booking_id": "BKG003642",
+      "event_id": "EVT005",
+      "event_name": "Sundays@thePark",
+      "event_type": "Community Walk",
+      "event_date": "2026-06-27",
+      "region": "North",
+      "booked_flag": "Y",
+      "attended_flag": "N"
+    }
+  ],
+  "expected": {
+    "region": "North",
+    "age_band": "60-64",
+    "screening_risk": "High",
+    "programmes_dropped": 1,
+    "events_attended_max": 2,
+    "events_attended": 0,
+    "nsc_progress_pct_max": 30.0,
+    "avg_daily_steps_max": 4000,
+    "is_disengaged": 1,
+    "region_is_hazy": 1
+  }
+}

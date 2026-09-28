@@ -1,0 +1,79 @@
+# content/config/glossary.yaml
+# ONE glossary for the narrative, the LiveWell Coach instructions and the Fabric data-agent instructions.
+# scripts/check-content.py (Phase 1) and scripts/validate-narrative.py (static layer, Phase 3b) check that every
+# `definition` below appears verbatim in content/fabric/data-agent-instructions.md and in the `base` block of
+# content/prompts/coach-instructions.md, and that the narrative only uses the `term` spellings listed here.
+
+terms:
+  - id: mvpa
+    term: "MVPA"
+    definition: "MVPA = moderate-to-vigorous physical activity minutes."
+    notes: "The weekly guideline in the knowledge base is 150–300 MVPA minutes per week."
+
+  - id: healthpoints
+    term: "Healthpoints"
+    definition: "Healthpoints = the Healthy 365 rewards currency, redeemed as eVouchers."
+    related: ["eVouchers", "Healthy 365"]
+
+  - id: evouchers
+    term: "eVouchers"
+    definition: "eVouchers = merchant vouchers that residents redeem with Healthpoints."
+
+  - id: disengaged
+    term: "disengaged"
+    definition: "disengaged = is_disengaged = 1 (low steps AND no events attended AND a dropped programme)."
+    rule: "avg_daily_steps < 4000 AND events_attended = 0 AND programmes_dropped >= 1"
+
+  - id: hazy
+    term: "hazy"
+    definition: "hazy = regional 24-hour PSI >= 55 (a regional context proxy, not individual exposure)."
+    rule: "region_is_hazy = 1 when region_psi >= 55"
+
+  - id: screening_risk
+    term: "screening risk"
+    definition: "screening risk = the risk band from a resident's latest health screening (Low, Moderate, High or Not Screened)."
+
+  - id: event_occurrence
+    term: "event occurrence"
+    definition: "event occurrence = one dated, regional instance of an event (event_occurrence_id), not the recurring event series (event_id)."
+
+regions:
+  # The five HPB regions used by the Resident 360 kit. No other region spelling is allowed.
+  - "Central"
+  - "East"
+  - "North"
+  - "North-East"
+  - "West"
+
+programmes:
+  - "Active Ageing"
+  - "Diabetes Prevention"
+  - "Eat Drink Shop Healthy"
+  - "Healthier SG"
+  - "I Quit (Tobacco)"
+  - "Weight Management"
+
+challenges:
+  - "National Steps Challenge"
+  - "Eat Drink Shop Healthy"
+  - "Move It Challenge"
+
+age_bands:
+  # 5-year bands derived deterministically from the kit's 10-year bands (ASSUMPTIONS.md 1.6).
+  - "18-24"
+  - "25-29"
+  - "30-34"
+  - "35-39"
+  - "40-44"
+  - "45-49"
+  - "50-54"
+  - "55-59"
+  - "60-64"
+  - "65-69"
+  - "70+"
+
+forbidden_fields:
+  # Never add these anywhere in data, prompts, instructions or slides.
+  - race
+  - ethnicity
+  - religion
