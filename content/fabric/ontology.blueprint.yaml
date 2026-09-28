@@ -1,0 +1,112 @@
+# content/fabric/ontology.blueprint.yaml
+# Minimal LiveWell ontology over lh_resident360 (SPEC.md §9, step 30).
+# scripts/fabric/30-ontology.py renders this blueprint into the Fabric ontology item definition
+# (definition.json, .platform, EntityTypes/{id}/definition.json, EntityTypes/{id}/DataBindings/*.json,
+# RelationshipTypes/{id}/definition.json) and POSTs it to /v1/workspaces/{ws}/ontologies.
+#
+# Binding rule inherited from the Resident 360 kit (lab4): every entity type binds to an ENTITY-GRAIN
+# table (one row per key). Relationships bind to the table whose rows ARE the links.
+# First binding of every entity is non-timeseries (static). ⚠️ Ontology is preview.
+
+ontology:
+  name: resident_ontology
+  description: "LiveWell minimal Resident 360 ontology: residents, regions, event occurrences and programmes. Synthetic data."
+  lakehouse: lh_resident360
+  schema: dbo
+
+entity_types:
+  - id: Resident
+    display_name: Resident
+    table: resident_360
+    key: resident_id
+    display_name_property: resident_id
+    binding: static
+    properties:
+      - { name: resident_id,          column: resident_id,          type: String }
+      - { name: age_band,             column: age_band,             type: String }
+      - { name: gender,               column: gender,               type: String }
+      - { name: region,               column: region,               type: String }
+      - { name: planning_area,        column: planning_area,        type: String }
+      - { name: avg_daily_steps,      column: avg_daily_steps,      type: Double }
+      - { name: avg_mvpa_min,         column: avg_mvpa_min,         type: Double }
+      - { name: avg_sleep_min,        column: avg_sleep_min,        type: Double }
+      - { name: screening_risk,       column: screening_risk,       type: String }
+      - { name: meal_logs,            column: meal_logs,            type: BigInt }
+      - { name: events_attended,      column: events_attended,      type: BigInt }
+      - { name: events_booked,        column: events_booked,        type: BigInt }
+      - { name: programmes_enrolled,  column: programmes_enrolled,  type: BigInt }
+      - { name: programmes_dropped,   column: programmes_dropped,   type: BigInt }
+      - { name: healthpoints_earned,  column: healthpoints_earned,  type: BigInt }
+      - { name: healthpoints_redeemed, column: healthpoints_redeemed, type: BigInt }
+      - { name: vouchers_redeemed,    column: vouchers_redeemed,    type: BigInt }
+      - { name: nsc_progress_pct,     column: nsc_progress_pct,     type: Double }
+      - { name: region_psi,           column: region_psi,           type: BigInt }
+      - { name: region_is_hazy,       column: region_is_hazy,       type: BigInt }
+      - { name: is_disengaged,        column: is_disengaged,        type: BigInt }
+
+  - id: Region
+    display_name: Region
+    table: dim_region
+    key: region
+    display_name_property: region
+    binding: static
+    properties:
+      - { name: region,         column: region,         type: String }
+      - { name: region_psi,     column: region_psi,     type: BigInt }
+      - { name: region_is_hazy, column: region_is_hazy, type: BigInt }
+      - { name: resident_count, column: resident_count, type: BigInt }
+
+  - id: EventOccurrence
+    display_name: Event occurrence
+    table: dim_event_occurrence
+    key: event_occurrence_id
+    display_name_property: event_name
+    binding: static
+    properties:
+      - { name: event_occurrence_id, column: event_occurrence_id, type: String }
+      - { name: event_id,            column: event_id,            type: String }
+      - { name: event_name,          column: event_name,          type: String }
+      - { name: event_type,          column: event_type,          type: String }
+      - { name: event_date,          column: event_date,          type: DateTime }
+      - { name: region,              column: region,              type: String }
+
+  - id: Programme
+    display_name: Programme
+    table: dim_programme
+    key: programme_name
+    display_name_property: programme_name
+    binding: static
+    properties:
+      - { name: programme_name,     column: programme_name,     type: String }
+      - { name: enrolled_residents, column: enrolled_residents, type: BigInt }
+      - { name: dropped_count,      column: dropped_count,      type: BigInt }
+      - { name: first_enrolment,    column: first_enrolment,    type: DateTime }
+
+relationship_types:
+  - id: livesIn
+    description: "A resident's home region."
+    origin: { entity: Resident, key_column: resident_id }
+    target: { entity: Region,   key_column: region }
+    mapping_table: resident_360
+
+  - id: attended
+    description: "An event occurrence the resident actually attended (attended rows only; bookings that were not attended are excluded)."
+    origin: { entity: Resident,        key_column: resident_id }
+    target: { entity: EventOccurrence, key_column: event_occurrence_id }
+    mapping_table: fact_event_attendance
+
+  - id: heldIn
+    description: "The region where an event occurrence was held."
+    origin: { entity: EventOccurrence, key_column: event_occurrence_id }
+    target: { entity: Region,          key_column: region }
+    mapping_table: dim_event_occurrence
+
+  - id: enrolledIn
+    description: "A programme the resident enrolled in (any status, including Dropped)."
+    origin: { entity: Resident,  key_column: resident_id }
+    target: { entity: Programme, key_column: programme_name }
+    mapping_table: fact_programme_enrolment
+
+graph_refresh:
+  graph_model_prefix: "resident_ontology_graph_"
+  note: "After creating the ontology, refresh the graph model (Schedule -> Refresh now) and wait for Completed, or the data agent fails with a backend graph error."
