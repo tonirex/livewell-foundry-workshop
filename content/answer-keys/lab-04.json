@@ -1,0 +1,18 @@
+{
+  "_comment": "Server-side validator for Lab 04. Never surface to participants.",
+  "lab": "lab-04",
+  "checkpoints": [
+    {
+      "prompt_id": "lab4_week_plan_handoff",
+      "validation_type": "A_paste_output",
+      "notes": "Facilitator demo. Paste the hosted endpoint JSON. Valid JSON with >= 1 citation; trace shows Nutrition then Activity.",
+      "expected_ref": "prompts/test-prompts.json#/prompts/lab4_week_plan_handoff/expected"
+    },
+    {
+      "prompt_id": "lab4_q_programmes_disengaged",
+      "validation_type": "B_trace_field",
+      "notes": "Facilitator demo. Paste the Programme-Insights answer. Grouped by programme; top programme matches reference-answers.json#q_programmes_disengaged_enrolled (+-1 rank); no resident_id.",
+      "expected_ref": "prompts/test-prompts.json#/prompts/lab4_q_programmes_disengaged/expected"
+    }
+  ]
+}

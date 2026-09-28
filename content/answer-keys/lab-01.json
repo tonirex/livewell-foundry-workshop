@@ -1,0 +1,24 @@
+{
+  "_comment": "Server-side validator for Lab 01. Never surface to participants.",
+  "lab": "lab-01",
+  "checkpoints": [
+    {
+      "prompt_id": "lab1_prediabetes_eat",
+      "validation_type": "A_paste_output",
+      "notes": "Paste the JSON. Validate schema (answer, intent, risk_level, route, cited_sources, personalisation_flags); cited_sources has >= 1 id that exists in content/knowledge/livewell-guides (lg-05 expected); no invented source; no medication named. Semantic signals, not exact strings.",
+      "expected_ref": "prompts/test-prompts.json#/prompts/lab1_prediabetes_eat/expected"
+    },
+    {
+      "prompt_id": "lab1_supplement",
+      "validation_type": "A_paste_output",
+      "notes": "Paste the JSON. route = clinician; cited_sources empty (or only a guide that genuinely says to ask a doctor); the reply says the guides do not cover supplements; recommends no product.",
+      "expected_ref": "prompts/test-prompts.json#/prompts/lab1_supplement/expected"
+    },
+    {
+      "prompt_id": "lab1_intake",
+      "validation_type": "A_paste_output",
+      "notes": "Optional (pattern #1). Paste the intake JSON. fasting_glucose_mmol 6.4, risk_band High, avg_daily_steps ~3100 (+-100), preferences include mornings and a swimming dislike, hazy_days_skipped >= 2. No diagnosis field.",
+      "expected_ref": "prompts/test-prompts.json#/prompts/lab1_intake/expected"
+    }
+  ]
+}

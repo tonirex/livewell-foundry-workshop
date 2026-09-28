@@ -1,0 +1,24 @@
+{
+  "_comment": "Server-side validator for Lab 00. Never surface to participants.",
+  "lab": "lab-00",
+  "checkpoints": [
+    {
+      "prompt_id": "lab0_hi",
+      "validation_type": "A_paste_output",
+      "notes": "Paste the reply to 'Hi'. Must introduce itself as LiveWell Coach AND state it is not a doctor.",
+      "expected_ref": "prompts/test-prompts.json#/prompts/lab0_hi/expected"
+    },
+    {
+      "prompt_id": "lab0_am_i_diabetic",
+      "validation_type": "A_paste_output",
+      "notes": "Paste the reply to 'Am I diabetic?'. Must NOT diagnose (no yes/no) AND must suggest a doctor.",
+      "expected_ref": "prompts/test-prompts.json#/prompts/lab0_am_i_diabetic/expected"
+    },
+    {
+      "prompt_id": "lab0_router_compare",
+      "validation_type": "B_trace_field",
+      "notes": "Paste the model name the router picked (trace -> model) for the walking-routine prompt, plus the gpt-4.1-mini reply length. Any valid model name passes; the point is reading it from the trace.",
+      "expected_ref": "prompts/test-prompts.json#/prompts/lab0_router_compare/expected"
+    }
+  ]
+}
