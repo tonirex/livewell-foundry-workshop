@@ -1,0 +1,448 @@
+{
+  "_generated_by": "scripts/gen-citizens.py from the resident_360 gold build (scripts/r360.py)",
+  "_do_not_edit": "Regenerate instead: python scripts/gen-citizens.py",
+  "_synthetic": "All residents are synthetic. No real person is represented.",
+  "default_resident_id": "RESIDENT_00061",
+  "citizens": [
+    {
+      "resident_id": "RESIDENT_00061",
+      "display_name": "Rahim",
+      "persona_note": "Joined the National Steps Challenge but drifting; rarely logs meals; skips outdoor events on hazy days; dropped a programme; elevated glucose at his last screening.",
+      "age_band": "60-64",
+      "gender": "M",
+      "region": "North",
+      "planning_area": "Woodlands",
+      "screening_risk": "High",
+      "latest_screening_date": "2026-05-12",
+      "conditions": [
+        "elevated blood glucose"
+      ],
+      "avg_daily_steps": 3100.0,
+      "avg_mvpa_min_per_day": 9.1,
+      "avg_sleep_min": 380.0,
+      "nsc_progress_pct": 22.0,
+      "programmes": [
+        {
+          "programme_name": "Active Ageing",
+          "status": "Active"
+        },
+        {
+          "programme_name": "Eat Drink Shop Healthy",
+          "status": "Active"
+        },
+        {
+          "programme_name": "Healthier SG",
+          "status": "Dropped"
+        }
+      ],
+      "programmes_dropped": 1,
+      "events_attended": 0,
+      "events_booked": 2,
+      "meal_logs": 8,
+      "pct_healthier_choice": 0.5,
+      "healthpoints_balance": 120,
+      "region_psi": 60,
+      "region_is_hazy": 1,
+      "is_disengaged": 1
+    },
+    {
+      "resident_id": "RESIDENT_01125",
+      "display_name": null,
+      "persona_note": null,
+      "age_band": "18-24",
+      "gender": "F",
+      "region": "Central",
+      "planning_area": "Bukit Merah",
+      "screening_risk": "Not Screened",
+      "latest_screening_date": null,
+      "conditions": [],
+      "avg_daily_steps": 2659.0,
+      "avg_mvpa_min_per_day": 12.3,
+      "avg_sleep_min": 355.8,
+      "nsc_progress_pct": 23.2,
+      "programmes": [
+        {
+          "programme_name": "Active Ageing",
+          "status": "Dropped"
+        },
+        {
+          "programme_name": "Diabetes Prevention",
+          "status": "Active"
+        }
+      ],
+      "programmes_dropped": 1,
+      "events_attended": 0,
+      "events_booked": 1,
+      "meal_logs": 13,
+      "pct_healthier_choice": 0.308,
+      "healthpoints_balance": 300,
+      "region_psi": 52,
+      "region_is_hazy": 0,
+      "is_disengaged": 1
+    },
+    {
+      "resident_id": "RESIDENT_01480",
+      "display_name": null,
+      "persona_note": null,
+      "age_band": "35-39",
+      "gender": "M",
+      "region": "Central",
+      "planning_area": "Bukit Merah",
+      "screening_risk": "Low",
+      "latest_screening_date": "2026-03-26",
+      "conditions": [],
+      "avg_daily_steps": 7007.0,
+      "avg_mvpa_min_per_day": 19.1,
+      "avg_sleep_min": 421.7,
+      "nsc_progress_pct": 72.0,
+      "programmes": [
+        {
+          "programme_name": "Eat Drink Shop Healthy",
+          "status": "Active"
+        },
+        {
+          "programme_name": "Healthier SG",
+          "status": "Active"
+        },
+        {
+          "programme_name": "I Quit (Tobacco)",
+          "status": "Active"
+        }
+      ],
+      "programmes_dropped": 0,
+      "events_attended": 5,
+      "events_booked": 6,
+      "meal_logs": 19,
+      "pct_healthier_choice": 0.737,
+      "healthpoints_balance": 705,
+      "region_psi": 52,
+      "region_is_hazy": 0,
+      "is_disengaged": 0
+    },
+    {
+      "resident_id": "RESIDENT_00311",
+      "display_name": null,
+      "persona_note": null,
+      "age_band": "70+",
+      "gender": "F",
+      "region": "East",
+      "planning_area": "Pasir Ris",
+      "screening_risk": "Not Screened",
+      "latest_screening_date": null,
+      "conditions": [],
+      "avg_daily_steps": 2971.0,
+      "avg_mvpa_min_per_day": 6.8,
+      "avg_sleep_min": 428.7,
+      "nsc_progress_pct": 33.8,
+      "programmes": [
+        {
+          "programme_name": "Active Ageing",
+          "status": "Active"
+        },
+        {
+          "programme_name": "Eat Drink Shop Healthy",
+          "status": "Dropped"
+        },
+        {
+          "programme_name": "Weight Management",
+          "status": "Dropped"
+        }
+      ],
+      "programmes_dropped": 2,
+      "events_attended": 0,
+      "events_booked": 0,
+      "meal_logs": 9,
+      "pct_healthier_choice": 0.444,
+      "healthpoints_balance": 225,
+      "region_psi": 48,
+      "region_is_hazy": 0,
+      "is_disengaged": 1
+    },
+    {
+      "resident_id": "RESIDENT_00631",
+      "display_name": null,
+      "persona_note": null,
+      "age_band": "70+",
+      "gender": "F",
+      "region": "East",
+      "planning_area": "Bedok",
+      "screening_risk": "Moderate",
+      "latest_screening_date": "2026-06-02",
+      "conditions": [
+        "elevated blood glucose"
+      ],
+      "avg_daily_steps": 5084.0,
+      "avg_mvpa_min_per_day": 16.1,
+      "avg_sleep_min": 418.1,
+      "nsc_progress_pct": null,
+      "programmes": [
+        {
+          "programme_name": "Active Ageing",
+          "status": "Active"
+        },
+        {
+          "programme_name": "Eat Drink Shop Healthy",
+          "status": "Active"
+        }
+      ],
+      "programmes_dropped": 0,
+      "events_attended": 4,
+      "events_booked": 4,
+      "meal_logs": 20,
+      "pct_healthier_choice": 0.6,
+      "healthpoints_balance": 655,
+      "region_psi": 48,
+      "region_is_hazy": 0,
+      "is_disengaged": 0
+    },
+    {
+      "resident_id": "RESIDENT_00335",
+      "display_name": null,
+      "persona_note": null,
+      "age_band": "30-34",
+      "gender": "F",
+      "region": "North",
+      "planning_area": "Yishun",
+      "screening_risk": "Low",
+      "latest_screening_date": "2026-01-26",
+      "conditions": [],
+      "avg_daily_steps": 2987.0,
+      "avg_mvpa_min_per_day": 7.5,
+      "avg_sleep_min": 402.8,
+      "nsc_progress_pct": 45.4,
+      "programmes": [
+        {
+          "programme_name": "Active Ageing",
+          "status": "Dropped"
+        },
+        {
+          "programme_name": "Diabetes Prevention",
+          "status": "Active"
+        },
+        {
+          "programme_name": "Weight Management",
+          "status": "Dropped"
+        }
+      ],
+      "programmes_dropped": 2,
+      "events_attended": 0,
+      "events_booked": 0,
+      "meal_logs": 12,
+      "pct_healthier_choice": 0.75,
+      "healthpoints_balance": 115,
+      "region_psi": 60,
+      "region_is_hazy": 1,
+      "is_disengaged": 1
+    },
+    {
+      "resident_id": "RESIDENT_01293",
+      "display_name": null,
+      "persona_note": null,
+      "age_band": "45-49",
+      "gender": "M",
+      "region": "North",
+      "planning_area": "Yishun",
+      "screening_risk": "Moderate",
+      "latest_screening_date": "2026-03-26",
+      "conditions": [
+        "elevated blood glucose"
+      ],
+      "avg_daily_steps": 4804.0,
+      "avg_mvpa_min_per_day": 11.5,
+      "avg_sleep_min": 364.6,
+      "nsc_progress_pct": 72.8,
+      "programmes": [
+        {
+          "programme_name": "Active Ageing",
+          "status": "Active"
+        },
+        {
+          "programme_name": "Eat Drink Shop Healthy",
+          "status": "Active"
+        }
+      ],
+      "programmes_dropped": 0,
+      "events_attended": 3,
+      "events_booked": 3,
+      "meal_logs": 21,
+      "pct_healthier_choice": 0.714,
+      "healthpoints_balance": 445,
+      "region_psi": 60,
+      "region_is_hazy": 1,
+      "is_disengaged": 0
+    },
+    {
+      "resident_id": "RESIDENT_01258",
+      "display_name": null,
+      "persona_note": null,
+      "age_band": "30-34",
+      "gender": "M",
+      "region": "North-East",
+      "planning_area": "Punggol",
+      "screening_risk": "Moderate",
+      "latest_screening_date": "2026-01-19",
+      "conditions": [],
+      "avg_daily_steps": 3294.0,
+      "avg_mvpa_min_per_day": 8.1,
+      "avg_sleep_min": 443.4,
+      "nsc_progress_pct": null,
+      "programmes": [
+        {
+          "programme_name": "Weight Management",
+          "status": "Dropped"
+        }
+      ],
+      "programmes_dropped": 1,
+      "events_attended": 0,
+      "events_booked": 1,
+      "meal_logs": 5,
+      "pct_healthier_choice": 0.8,
+      "healthpoints_balance": 60,
+      "region_psi": 50,
+      "region_is_hazy": 0,
+      "is_disengaged": 1
+    },
+    {
+      "resident_id": "RESIDENT_00536",
+      "display_name": null,
+      "persona_note": null,
+      "age_band": "40-44",
+      "gender": "F",
+      "region": "North-East",
+      "planning_area": "Punggol",
+      "screening_risk": "Moderate",
+      "latest_screening_date": "2026-06-28",
+      "conditions": [],
+      "avg_daily_steps": 7617.0,
+      "avg_mvpa_min_per_day": 22.6,
+      "avg_sleep_min": 365.4,
+      "nsc_progress_pct": 74.1,
+      "programmes": [
+        {
+          "programme_name": "Diabetes Prevention",
+          "status": "Active"
+        },
+        {
+          "programme_name": "Healthier SG",
+          "status": "Active"
+        },
+        {
+          "programme_name": "Weight Management",
+          "status": "Active"
+        }
+      ],
+      "programmes_dropped": 0,
+      "events_attended": 3,
+      "events_booked": 3,
+      "meal_logs": 25,
+      "pct_healthier_choice": 0.72,
+      "healthpoints_balance": 550,
+      "region_psi": 50,
+      "region_is_hazy": 0,
+      "is_disengaged": 0
+    },
+    {
+      "resident_id": "RESIDENT_01449",
+      "display_name": null,
+      "persona_note": null,
+      "age_band": "55-59",
+      "gender": "M",
+      "region": "West",
+      "planning_area": "Clementi",
+      "screening_risk": "Moderate",
+      "latest_screening_date": "2026-06-23",
+      "conditions": [
+        "elevated blood glucose"
+      ],
+      "avg_daily_steps": 3722.0,
+      "avg_mvpa_min_per_day": 14.6,
+      "avg_sleep_min": 452.2,
+      "nsc_progress_pct": 17.0,
+      "programmes": [
+        {
+          "programme_name": "Diabetes Prevention",
+          "status": "Dropped"
+        },
+        {
+          "programme_name": "Healthier SG",
+          "status": "Active"
+        }
+      ],
+      "programmes_dropped": 1,
+      "events_attended": 0,
+      "events_booked": 1,
+      "meal_logs": 9,
+      "pct_healthier_choice": 0.333,
+      "healthpoints_balance": 180,
+      "region_psi": 55,
+      "region_is_hazy": 1,
+      "is_disengaged": 1
+    },
+    {
+      "resident_id": "RESIDENT_00546",
+      "display_name": null,
+      "persona_note": null,
+      "age_band": "55-59",
+      "gender": "M",
+      "region": "West",
+      "planning_area": "Bukit Batok",
+      "screening_risk": "Moderate",
+      "latest_screening_date": "2026-03-16",
+      "conditions": [],
+      "avg_daily_steps": 6650.0,
+      "avg_mvpa_min_per_day": 19.9,
+      "avg_sleep_min": 439.8,
+      "nsc_progress_pct": 75.9,
+      "programmes": [
+        {
+          "programme_name": "Active Ageing",
+          "status": "Active"
+        },
+        {
+          "programme_name": "Weight Management",
+          "status": "Active"
+        }
+      ],
+      "programmes_dropped": 0,
+      "events_attended": 3,
+      "events_booked": 3,
+      "meal_logs": 22,
+      "pct_healthier_choice": 0.727,
+      "healthpoints_balance": 935,
+      "region_psi": 55,
+      "region_is_hazy": 1,
+      "is_disengaged": 0
+    },
+    {
+      "resident_id": "RESIDENT_00211",
+      "display_name": null,
+      "persona_note": null,
+      "age_band": "18-24",
+      "gender": "F",
+      "region": "East",
+      "planning_area": "Pasir Ris",
+      "screening_risk": "Not Screened",
+      "latest_screening_date": null,
+      "conditions": [],
+      "avg_daily_steps": 5458.0,
+      "avg_mvpa_min_per_day": 19.5,
+      "avg_sleep_min": 386.2,
+      "nsc_progress_pct": 29.7,
+      "programmes": [
+        {
+          "programme_name": "Weight Management",
+          "status": "Dropped"
+        }
+      ],
+      "programmes_dropped": 1,
+      "events_attended": 0,
+      "events_booked": 0,
+      "meal_logs": 1,
+      "pct_healthier_choice": 0.0,
+      "healthpoints_balance": 70,
+      "region_psi": 48,
+      "region_is_hazy": 0,
+      "is_disengaged": 0
+    }
+  ]
+}

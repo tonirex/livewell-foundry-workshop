@@ -1,0 +1,3005 @@
+resident_id,programme_name,enrol_date,status,channel
+RESIDENT_00188,Diabetes Prevention,2026-02-02,Active,Employer
+RESIDENT_01409,Active Ageing,2026-02-03,Active,Polyclinic
+RESIDENT_01096,Eat Drink Shop Healthy,2026-02-01,Dropped,GP Clinic
+RESIDENT_01017,Healthier SG,2026-02-23,Dropped,Employer
+RESIDENT_00340,Healthier SG,2026-01-31,Dropped,Employer
+RESIDENT_01323,Diabetes Prevention,2026-02-07,Active,Roadshow
+RESIDENT_01395,I Quit (Tobacco),2026-03-01,Dropped,Roadshow
+RESIDENT_01072,Active Ageing,2026-03-31,Dropped,Polyclinic
+RESIDENT_00122,I Quit (Tobacco),2026-03-26,Active,Employer
+RESIDENT_00776,Healthier SG,2026-01-01,Active,Polyclinic
+RESIDENT_00982,Active Ageing,2026-02-18,Active,Polyclinic
+RESIDENT_00703,Diabetes Prevention,2026-04-11,Active,Roadshow
+RESIDENT_00566,Eat Drink Shop Healthy,2026-03-23,Active,GP Clinic
+RESIDENT_00060,I Quit (Tobacco),2026-05-19,Active,App
+RESIDENT_01033,Healthier SG,2026-01-03,Active,App
+RESIDENT_00039,Diabetes Prevention,2026-03-06,Active,Employer
+RESIDENT_00719,Weight Management,2026-01-09,Dropped,Employer
+RESIDENT_00148,Eat Drink Shop Healthy,2026-03-01,Active,Polyclinic
+RESIDENT_01469,Eat Drink Shop Healthy,2026-02-28,Active,Polyclinic
+RESIDENT_00161,Healthier SG,2026-02-01,Active,Roadshow
+RESIDENT_00691,Weight Management,2026-01-06,Active,Employer
+RESIDENT_00896,Weight Management,2026-03-30,Active,GP Clinic
+RESIDENT_00899,Healthier SG,2026-02-04,Dropped,Roadshow
+RESIDENT_01429,Weight Management,2026-01-06,Active,App
+RESIDENT_00251,Active Ageing,2026-05-22,Active,Roadshow
+RESIDENT_01284,Diabetes Prevention,2026-01-12,Active,App
+RESIDENT_01191,Eat Drink Shop Healthy,2026-05-20,Active,App
+RESIDENT_00441,Diabetes Prevention,2026-03-03,Active,Polyclinic
+RESIDENT_00664,Diabetes Prevention,2026-04-09,Active,Employer
+RESIDENT_01001,Weight Management,2026-03-19,Active,GP Clinic
+RESIDENT_00555,Diabetes Prevention,2026-04-08,Dropped,Roadshow
+RESIDENT_00661,Active Ageing,2026-04-04,Dropped,GP Clinic
+RESIDENT_00253,Weight Management,2026-04-06,Dropped,Employer
+RESIDENT_00060,Diabetes Prevention,2026-04-21,Active,Employer
+RESIDENT_01385,Active Ageing,2026-03-18,Dropped,Employer
+RESIDENT_00078,Healthier SG,2026-01-12,Active,Roadshow
+RESIDENT_00946,Healthier SG,2026-03-14,Active,Roadshow
+RESIDENT_00300,I Quit (Tobacco),2026-04-17,Active,App
+RESIDENT_01319,Eat Drink Shop Healthy,2026-02-28,Active,Polyclinic
+RESIDENT_01492,Weight Management,2026-05-30,Active,Polyclinic
+RESIDENT_00677,I Quit (Tobacco),2026-02-28,Active,Employer
+RESIDENT_00397,Eat Drink Shop Healthy,2026-02-15,Active,App
+RESIDENT_00368,I Quit (Tobacco),2026-01-18,Active,Employer
+RESIDENT_01390,Diabetes Prevention,2026-03-28,Active,GP Clinic
+RESIDENT_00790,Diabetes Prevention,2026-02-05,Active,Employer
+RESIDENT_01127,Healthier SG,2026-05-28,Active,GP Clinic
+RESIDENT_01099,Diabetes Prevention,2026-01-16,Dropped,GP Clinic
+RESIDENT_01276,Eat Drink Shop Healthy,2026-05-31,Active,Employer
+RESIDENT_01419,Weight Management,2026-04-10,Active,Polyclinic
+RESIDENT_00451,Eat Drink Shop Healthy,2026-02-15,Dropped,App
+RESIDENT_00302,Healthier SG,2026-05-11,Dropped,Roadshow
+RESIDENT_00154,Weight Management,2026-03-27,Active,GP Clinic
+RESIDENT_00303,Weight Management,2026-05-01,Active,App
+RESIDENT_00092,Weight Management,2026-03-06,Active,App
+RESIDENT_00258,Active Ageing,2026-05-29,Dropped,GP Clinic
+RESIDENT_00994,Eat Drink Shop Healthy,2026-03-14,Active,GP Clinic
+RESIDENT_00198,Eat Drink Shop Healthy,2026-02-11,Dropped,Roadshow
+RESIDENT_01227,Eat Drink Shop Healthy,2026-03-17,Active,Roadshow
+RESIDENT_00929,Diabetes Prevention,2026-03-03,Active,Roadshow
+RESIDENT_00199,Healthier SG,2026-04-29,Active,App
+RESIDENT_01408,Active Ageing,2026-04-07,Active,Employer
+RESIDENT_00202,Healthier SG,2026-02-26,Active,App
+RESIDENT_00290,Weight Management,2026-05-02,Dropped,App
+RESIDENT_00468,Healthier SG,2026-03-06,Active,GP Clinic
+RESIDENT_01246,Eat Drink Shop Healthy,2026-04-26,Active,Polyclinic
+RESIDENT_00501,Active Ageing,2026-04-09,Dropped,GP Clinic
+RESIDENT_01480,Eat Drink Shop Healthy,2026-04-10,Active,GP Clinic
+RESIDENT_00504,Eat Drink Shop Healthy,2026-04-08,Active,GP Clinic
+RESIDENT_00736,Eat Drink Shop Healthy,2026-01-15,Dropped,GP Clinic
+RESIDENT_01086,I Quit (Tobacco),2026-04-21,Dropped,Employer
+RESIDENT_00957,Active Ageing,2026-02-09,Active,App
+RESIDENT_00640,Active Ageing,2026-02-16,Dropped,Roadshow
+RESIDENT_01331,Healthier SG,2026-01-18,Active,Roadshow
+RESIDENT_01262,Diabetes Prevention,2026-04-12,Active,GP Clinic
+RESIDENT_00301,Eat Drink Shop Healthy,2026-01-15,Dropped,Roadshow
+RESIDENT_01130,Healthier SG,2026-03-16,Active,App
+RESIDENT_00908,Healthier SG,2026-04-07,Active,App
+RESIDENT_01065,Healthier SG,2026-02-23,Dropped,App
+RESIDENT_00449,Weight Management,2026-04-25,Active,Roadshow
+RESIDENT_01356,Healthier SG,2026-05-17,Active,App
+RESIDENT_01229,Diabetes Prevention,2026-04-24,Dropped,GP Clinic
+RESIDENT_00885,Active Ageing,2026-05-05,Active,Roadshow
+RESIDENT_01423,I Quit (Tobacco),2026-05-27,Active,Polyclinic
+RESIDENT_00363,Diabetes Prevention,2026-05-22,Active,App
+RESIDENT_00320,Weight Management,2026-05-18,Active,Employer
+RESIDENT_01335,I Quit (Tobacco),2026-05-15,Active,Roadshow
+RESIDENT_00558,Eat Drink Shop Healthy,2026-04-07,Dropped,Roadshow
+RESIDENT_00090,Weight Management,2026-03-10,Active,Employer
+RESIDENT_01177,Active Ageing,2026-01-01,Active,Employer
+RESIDENT_00998,I Quit (Tobacco),2026-05-10,Dropped,GP Clinic
+RESIDENT_00803,Weight Management,2026-04-12,Dropped,Polyclinic
+RESIDENT_00895,Active Ageing,2026-01-13,Active,Polyclinic
+RESIDENT_01247,Healthier SG,2026-02-06,Active,Employer
+RESIDENT_00964,I Quit (Tobacco),2026-03-07,Dropped,Roadshow
+RESIDENT_00840,Healthier SG,2026-02-01,Active,Employer
+RESIDENT_00437,Healthier SG,2026-04-05,Active,Polyclinic
+RESIDENT_00501,Healthier SG,2026-02-03,Active,Employer
+RESIDENT_00066,I Quit (Tobacco),2026-04-14,Dropped,Employer
+RESIDENT_00565,Healthier SG,2026-03-04,Dropped,GP Clinic
+RESIDENT_00666,Weight Management,2026-05-22,Active,Roadshow
+RESIDENT_00364,Weight Management,2026-02-05,Dropped,App
+RESIDENT_00040,Active Ageing,2026-05-29,Active,Employer
+RESIDENT_00758,Healthier SG,2026-05-16,Active,Employer
+RESIDENT_00420,Healthier SG,2026-05-20,Dropped,App
+RESIDENT_00509,Active Ageing,2026-04-17,Dropped,Employer
+RESIDENT_00642,Diabetes Prevention,2026-03-19,Active,Employer
+RESIDENT_00732,Weight Management,2026-02-05,Dropped,Employer
+RESIDENT_01467,Healthier SG,2026-04-28,Active,GP Clinic
+RESIDENT_00472,Eat Drink Shop Healthy,2026-01-09,Active,Roadshow
+RESIDENT_00384,Healthier SG,2026-04-01,Active,App
+RESIDENT_00649,Eat Drink Shop Healthy,2026-04-10,Active,Roadshow
+RESIDENT_00919,I Quit (Tobacco),2026-04-12,Dropped,GP Clinic
+RESIDENT_00991,Healthier SG,2026-03-21,Active,GP Clinic
+RESIDENT_00250,Weight Management,2026-04-07,Dropped,Polyclinic
+RESIDENT_00780,I Quit (Tobacco),2026-01-12,Dropped,Employer
+RESIDENT_00118,Eat Drink Shop Healthy,2026-01-10,Dropped,App
+RESIDENT_01419,Active Ageing,2026-05-21,Dropped,GP Clinic
+RESIDENT_01279,Eat Drink Shop Healthy,2026-02-17,Active,Polyclinic
+RESIDENT_00113,I Quit (Tobacco),2026-02-19,Active,Polyclinic
+RESIDENT_00785,Healthier SG,2026-01-22,Active,GP Clinic
+RESIDENT_01154,I Quit (Tobacco),2026-01-11,Active,App
+RESIDENT_01344,Eat Drink Shop Healthy,2026-03-12,Dropped,GP Clinic
+RESIDENT_00673,Weight Management,2026-05-30,Dropped,Polyclinic
+RESIDENT_01216,Diabetes Prevention,2026-03-29,Active,GP Clinic
+RESIDENT_00881,Eat Drink Shop Healthy,2026-03-14,Active,Employer
+RESIDENT_01497,Diabetes Prevention,2026-04-20,Active,GP Clinic
+RESIDENT_00439,Active Ageing,2026-03-09,Dropped,App
+RESIDENT_00330,Diabetes Prevention,2026-02-19,Active,App
+RESIDENT_00917,I Quit (Tobacco),2026-01-18,Active,Polyclinic
+RESIDENT_00868,Eat Drink Shop Healthy,2026-02-20,Active,Polyclinic
+RESIDENT_01062,Healthier SG,2026-02-22,Dropped,Roadshow
+RESIDENT_00424,Eat Drink Shop Healthy,2026-02-22,Active,Roadshow
+RESIDENT_00186,I Quit (Tobacco),2026-03-22,Active,Employer
+RESIDENT_00537,I Quit (Tobacco),2026-01-11,Dropped,App
+RESIDENT_01114,I Quit (Tobacco),2026-05-27,Active,GP Clinic
+RESIDENT_01318,Healthier SG,2026-02-15,Dropped,Employer
+RESIDENT_00646,I Quit (Tobacco),2026-03-22,Active,App
+RESIDENT_00409,Weight Management,2026-01-15,Dropped,App
+RESIDENT_00996,Diabetes Prevention,2026-01-27,Dropped,Roadshow
+RESIDENT_01185,Eat Drink Shop Healthy,2026-05-14,Active,Roadshow
+RESIDENT_00353,Eat Drink Shop Healthy,2026-02-20,Dropped,GP Clinic
+RESIDENT_00722,Eat Drink Shop Healthy,2026-05-10,Active,GP Clinic
+RESIDENT_01125,Active Ageing,2026-05-28,Dropped,Employer
+RESIDENT_00940,I Quit (Tobacco),2026-04-10,Active,Polyclinic
+RESIDENT_00963,Diabetes Prevention,2026-01-02,Active,GP Clinic
+RESIDENT_00023,I Quit (Tobacco),2026-05-21,Active,Employer
+RESIDENT_01392,I Quit (Tobacco),2026-04-10,Dropped,Employer
+RESIDENT_01265,I Quit (Tobacco),2026-05-06,Active,Employer
+RESIDENT_01143,I Quit (Tobacco),2026-04-15,Active,Roadshow
+RESIDENT_01302,I Quit (Tobacco),2026-01-03,Active,App
+RESIDENT_00915,Healthier SG,2026-05-23,Active,Roadshow
+RESIDENT_00443,Healthier SG,2026-03-11,Active,GP Clinic
+RESIDENT_01377,Active Ageing,2026-05-22,Active,Employer
+RESIDENT_01297,I Quit (Tobacco),2026-04-15,Active,Roadshow
+RESIDENT_01116,I Quit (Tobacco),2026-01-11,Active,GP Clinic
+RESIDENT_00933,Diabetes Prevention,2026-02-05,Active,Employer
+RESIDENT_01221,Active Ageing,2026-05-06,Active,GP Clinic
+RESIDENT_00557,Eat Drink Shop Healthy,2026-03-12,Active,Roadshow
+RESIDENT_00549,Healthier SG,2026-02-18,Dropped,Polyclinic
+RESIDENT_01249,Healthier SG,2026-04-20,Dropped,App
+RESIDENT_01180,Weight Management,2026-03-14,Active,App
+RESIDENT_00318,Active Ageing,2026-01-28,Dropped,App
+RESIDENT_01214,I Quit (Tobacco),2026-02-12,Active,GP Clinic
+RESIDENT_01432,Active Ageing,2026-04-07,Dropped,Employer
+RESIDENT_01321,I Quit (Tobacco),2026-04-28,Active,Polyclinic
+RESIDENT_01221,Healthier SG,2026-01-07,Active,Employer
+RESIDENT_01083,Diabetes Prevention,2026-02-09,Active,GP Clinic
+RESIDENT_00130,Active Ageing,2026-05-30,Active,GP Clinic
+RESIDENT_00039,Active Ageing,2026-01-02,Active,Roadshow
+RESIDENT_01063,I Quit (Tobacco),2026-02-12,Active,App
+RESIDENT_00459,Diabetes Prevention,2026-03-31,Active,GP Clinic
+RESIDENT_00123,Eat Drink Shop Healthy,2026-04-16,Active,Polyclinic
+RESIDENT_01318,Eat Drink Shop Healthy,2026-03-15,Active,GP Clinic
+RESIDENT_01253,Diabetes Prevention,2026-04-23,Dropped,Roadshow
+RESIDENT_00198,Diabetes Prevention,2026-03-30,Active,Polyclinic
+RESIDENT_00277,Diabetes Prevention,2026-01-16,Dropped,Roadshow
+RESIDENT_00888,I Quit (Tobacco),2026-01-04,Dropped,GP Clinic
+RESIDENT_00948,Weight Management,2026-03-08,Active,GP Clinic
+RESIDENT_00137,I Quit (Tobacco),2026-01-25,Active,App
+RESIDENT_00571,Eat Drink Shop Healthy,2026-04-12,Dropped,App
+RESIDENT_00343,Active Ageing,2026-02-24,Active,Roadshow
+RESIDENT_00897,Weight Management,2026-05-18,Active,Polyclinic
+RESIDENT_01201,Diabetes Prevention,2026-05-21,Active,Employer
+RESIDENT_01271,Healthier SG,2026-05-24,Active,Roadshow
+RESIDENT_01101,Active Ageing,2026-02-23,Active,Roadshow
+RESIDENT_01499,Healthier SG,2026-03-15,Dropped,GP Clinic
+RESIDENT_00907,Weight Management,2026-04-03,Active,App
+RESIDENT_01151,Weight Management,2026-05-16,Active,GP Clinic
+RESIDENT_01188,Weight Management,2026-05-09,Active,App
+RESIDENT_00692,Eat Drink Shop Healthy,2026-01-26,Active,Roadshow
+RESIDENT_00937,Diabetes Prevention,2026-04-18,Active,GP Clinic
+RESIDENT_00762,Diabetes Prevention,2026-02-21,Active,GP Clinic
+RESIDENT_00113,Weight Management,2026-01-14,Active,Polyclinic
+RESIDENT_00776,Eat Drink Shop Healthy,2026-05-20,Active,GP Clinic
+RESIDENT_00540,Diabetes Prevention,2026-03-05,Dropped,App
+RESIDENT_01336,Weight Management,2026-01-30,Active,Polyclinic
+RESIDENT_01347,I Quit (Tobacco),2026-04-01,Dropped,GP Clinic
+RESIDENT_01374,Weight Management,2026-04-25,Dropped,GP Clinic
+RESIDENT_00070,Weight Management,2026-05-07,Active,Roadshow
+RESIDENT_01197,Diabetes Prevention,2026-02-08,Dropped,App
+RESIDENT_01472,Diabetes Prevention,2026-05-23,Active,Roadshow
+RESIDENT_01270,Healthier SG,2026-05-08,Active,Polyclinic
+RESIDENT_00329,Healthier SG,2026-01-14,Active,Roadshow
+RESIDENT_01013,Active Ageing,2026-01-21,Active,Roadshow
+RESIDENT_01455,Healthier SG,2026-04-13,Active,Roadshow
+RESIDENT_00100,Weight Management,2026-02-26,Active,GP Clinic
+RESIDENT_00415,Healthier SG,2026-05-29,Active,Employer
+RESIDENT_00199,Diabetes Prevention,2026-03-16,Active,App
+RESIDENT_00739,Active Ageing,2026-02-05,Active,Polyclinic
+RESIDENT_00218,Weight Management,2026-03-31,Dropped,Polyclinic
+RESIDENT_00083,Active Ageing,2026-03-30,Active,GP Clinic
+RESIDENT_00134,Eat Drink Shop Healthy,2026-03-23,Dropped,App
+RESIDENT_00742,Diabetes Prevention,2026-03-29,Active,GP Clinic
+RESIDENT_00926,Active Ageing,2026-05-12,Active,GP Clinic
+RESIDENT_00398,Eat Drink Shop Healthy,2026-04-08,Active,Polyclinic
+RESIDENT_00191,Diabetes Prevention,2026-03-05,Active,App
+RESIDENT_01476,Healthier SG,2026-01-15,Active,Roadshow
+RESIDENT_00337,Healthier SG,2026-01-29,Active,Roadshow
+RESIDENT_01048,Healthier SG,2026-03-24,Active,GP Clinic
+RESIDENT_00891,Healthier SG,2026-04-11,Dropped,App
+RESIDENT_00679,Healthier SG,2026-01-15,Active,App
+RESIDENT_00794,Diabetes Prevention,2026-05-20,Dropped,GP Clinic
+RESIDENT_00682,Weight Management,2026-02-27,Active,Polyclinic
+RESIDENT_00758,I Quit (Tobacco),2026-03-12,Active,App
+RESIDENT_00598,Diabetes Prevention,2026-02-01,Active,Polyclinic
+RESIDENT_01109,Active Ageing,2026-04-25,Active,Roadshow
+RESIDENT_00024,Eat Drink Shop Healthy,2026-01-21,Active,App
+RESIDENT_00618,Weight Management,2026-02-05,Dropped,App
+RESIDENT_00322,Eat Drink Shop Healthy,2026-02-26,Active,Employer
+RESIDENT_00023,Active Ageing,2026-01-13,Active,Employer
+RESIDENT_01112,Active Ageing,2026-05-26,Active,App
+RESIDENT_00440,I Quit (Tobacco),2026-03-22,Active,GP Clinic
+RESIDENT_00456,Active Ageing,2026-05-03,Active,Roadshow
+RESIDENT_00809,Healthier SG,2026-04-12,Active,Polyclinic
+RESIDENT_00757,Healthier SG,2026-03-27,Active,Roadshow
+RESIDENT_00751,Eat Drink Shop Healthy,2026-01-16,Dropped,Employer
+RESIDENT_00093,Healthier SG,2026-02-19,Dropped,Polyclinic
+RESIDENT_01361,Weight Management,2026-04-04,Active,App
+RESIDENT_01181,Active Ageing,2026-02-05,Active,App
+RESIDENT_01278,Diabetes Prevention,2026-03-22,Dropped,Polyclinic
+RESIDENT_01444,Weight Management,2026-04-11,Active,Polyclinic
+RESIDENT_01374,Diabetes Prevention,2026-04-07,Dropped,Polyclinic
+RESIDENT_00070,Eat Drink Shop Healthy,2026-04-17,Active,Polyclinic
+RESIDENT_00230,Active Ageing,2026-03-26,Active,Employer
+RESIDENT_00343,Diabetes Prevention,2026-03-04,Dropped,Employer
+RESIDENT_00487,Weight Management,2026-01-22,Dropped,GP Clinic
+RESIDENT_00800,Weight Management,2026-03-24,Active,Polyclinic
+RESIDENT_00071,Eat Drink Shop Healthy,2026-05-16,Active,Employer
+RESIDENT_00067,Weight Management,2026-01-04,Active,Roadshow
+RESIDENT_00550,I Quit (Tobacco),2026-03-10,Dropped,GP Clinic
+RESIDENT_01494,Diabetes Prevention,2026-04-25,Active,Employer
+RESIDENT_00508,Healthier SG,2026-01-08,Active,GP Clinic
+RESIDENT_01236,I Quit (Tobacco),2026-03-08,Active,Polyclinic
+RESIDENT_00705,I Quit (Tobacco),2026-04-22,Dropped,App
+RESIDENT_00581,Diabetes Prevention,2026-05-09,Active,GP Clinic
+RESIDENT_00387,Active Ageing,2026-03-23,Active,GP Clinic
+RESIDENT_01398,Diabetes Prevention,2026-05-23,Active,Employer
+RESIDENT_01038,Diabetes Prevention,2026-02-19,Active,Polyclinic
+RESIDENT_00814,Healthier SG,2026-01-30,Active,Polyclinic
+RESIDENT_01126,Eat Drink Shop Healthy,2026-05-30,Active,Polyclinic
+RESIDENT_00644,Weight Management,2026-03-05,Active,Roadshow
+RESIDENT_00453,Eat Drink Shop Healthy,2026-03-22,Active,App
+RESIDENT_00065,Healthier SG,2026-02-10,Active,GP Clinic
+RESIDENT_01243,Eat Drink Shop Healthy,2026-01-13,Dropped,App
+RESIDENT_01064,Healthier SG,2026-01-26,Dropped,App
+RESIDENT_00826,Diabetes Prevention,2026-04-06,Active,Polyclinic
+RESIDENT_01344,Weight Management,2026-03-14,Active,Employer
+RESIDENT_00673,Healthier SG,2026-05-30,Dropped,GP Clinic
+RESIDENT_01354,I Quit (Tobacco),2026-05-13,Dropped,Polyclinic
+RESIDENT_00329,I Quit (Tobacco),2026-05-11,Active,GP Clinic
+RESIDENT_00465,Eat Drink Shop Healthy,2026-01-18,Active,GP Clinic
+RESIDENT_00841,Weight Management,2026-01-19,Active,Roadshow
+RESIDENT_01084,Active Ageing,2026-02-09,Dropped,App
+RESIDENT_00676,I Quit (Tobacco),2026-01-04,Active,App
+RESIDENT_00412,I Quit (Tobacco),2026-02-15,Active,Employer
+RESIDENT_00841,Active Ageing,2026-05-20,Active,App
+RESIDENT_01345,Active Ageing,2026-02-14,Active,App
+RESIDENT_00015,Healthier SG,2026-05-14,Active,Employer
+RESIDENT_00538,Eat Drink Shop Healthy,2026-01-10,Active,Polyclinic
+RESIDENT_01338,Eat Drink Shop Healthy,2026-05-03,Active,GP Clinic
+RESIDENT_00227,Eat Drink Shop Healthy,2026-05-23,Active,GP Clinic
+RESIDENT_01004,Diabetes Prevention,2026-04-27,Active,Roadshow
+RESIDENT_00185,Healthier SG,2026-03-14,Active,App
+RESIDENT_01401,Diabetes Prevention,2026-02-28,Active,GP Clinic
+RESIDENT_00918,Active Ageing,2026-01-20,Dropped,Employer
+RESIDENT_00157,Weight Management,2026-02-15,Active,App
+RESIDENT_00812,Diabetes Prevention,2026-04-17,Dropped,App
+RESIDENT_00567,Healthier SG,2026-02-14,Active,App
+RESIDENT_00270,Healthier SG,2026-02-26,Dropped,App
+RESIDENT_00552,Weight Management,2026-05-28,Active,App
+RESIDENT_00084,Eat Drink Shop Healthy,2026-02-20,Dropped,App
+RESIDENT_00521,Active Ageing,2026-05-07,Active,Employer
+RESIDENT_01113,Weight Management,2026-03-26,Active,Roadshow
+RESIDENT_00280,Healthier SG,2026-01-27,Active,Roadshow
+RESIDENT_00371,I Quit (Tobacco),2026-02-08,Dropped,Polyclinic
+RESIDENT_00996,Weight Management,2026-03-22,Active,Roadshow
+RESIDENT_01352,Active Ageing,2026-05-01,Dropped,Roadshow
+RESIDENT_01280,Weight Management,2026-03-11,Active,Roadshow
+RESIDENT_01168,Diabetes Prevention,2026-01-27,Dropped,Polyclinic
+RESIDENT_00413,Healthier SG,2026-02-19,Active,GP Clinic
+RESIDENT_00851,Weight Management,2026-01-02,Active,Polyclinic
+RESIDENT_00423,Active Ageing,2026-02-23,Dropped,Roadshow
+RESIDENT_01488,Eat Drink Shop Healthy,2026-01-20,Active,App
+RESIDENT_01101,Eat Drink Shop Healthy,2026-04-10,Active,Employer
+RESIDENT_00554,Healthier SG,2026-01-04,Active,Employer
+RESIDENT_01255,Healthier SG,2026-05-30,Dropped,GP Clinic
+RESIDENT_00416,Eat Drink Shop Healthy,2026-04-10,Dropped,Roadshow
+RESIDENT_00797,Eat Drink Shop Healthy,2026-05-03,Dropped,Polyclinic
+RESIDENT_01222,Diabetes Prevention,2026-03-15,Active,Roadshow
+RESIDENT_00584,Healthier SG,2026-04-04,Active,Polyclinic
+RESIDENT_00887,Healthier SG,2026-04-02,Active,App
+RESIDENT_00787,Active Ageing,2026-01-03,Active,App
+RESIDENT_00010,Active Ageing,2026-02-25,Active,Employer
+RESIDENT_01123,Diabetes Prevention,2026-05-08,Active,GP Clinic
+RESIDENT_00903,I Quit (Tobacco),2026-02-25,Active,Roadshow
+RESIDENT_01138,Active Ageing,2026-05-05,Active,Employer
+RESIDENT_00972,Diabetes Prevention,2026-03-05,Active,App
+RESIDENT_01417,Weight Management,2026-05-27,Active,Roadshow
+RESIDENT_00299,I Quit (Tobacco),2026-02-02,Active,GP Clinic
+RESIDENT_00190,Eat Drink Shop Healthy,2026-02-09,Active,Employer
+RESIDENT_00567,Weight Management,2026-01-24,Active,Employer
+RESIDENT_00054,Diabetes Prevention,2026-05-20,Active,App
+RESIDENT_01091,Active Ageing,2026-01-10,Dropped,GP Clinic
+RESIDENT_00701,Weight Management,2026-03-19,Dropped,Roadshow
+RESIDENT_00090,I Quit (Tobacco),2026-04-28,Active,GP Clinic
+RESIDENT_00844,I Quit (Tobacco),2026-03-05,Active,Employer
+RESIDENT_00811,Active Ageing,2026-02-24,Dropped,Roadshow
+RESIDENT_00484,I Quit (Tobacco),2026-05-09,Active,GP Clinic
+RESIDENT_00453,I Quit (Tobacco),2026-02-03,Active,App
+RESIDENT_00663,I Quit (Tobacco),2026-01-04,Active,Roadshow
+RESIDENT_01230,Eat Drink Shop Healthy,2026-04-20,Active,GP Clinic
+RESIDENT_01290,Healthier SG,2026-02-06,Active,App
+RESIDENT_01197,Healthier SG,2026-05-04,Dropped,GP Clinic
+RESIDENT_00319,Eat Drink Shop Healthy,2026-05-30,Active,GP Clinic
+RESIDENT_01264,I Quit (Tobacco),2026-03-11,Active,Polyclinic
+RESIDENT_00595,Diabetes Prevention,2026-05-24,Active,Employer
+RESIDENT_00917,Diabetes Prevention,2026-01-02,Active,App
+RESIDENT_00418,Active Ageing,2026-04-26,Dropped,GP Clinic
+RESIDENT_00605,Eat Drink Shop Healthy,2026-05-19,Dropped,Roadshow
+RESIDENT_01474,I Quit (Tobacco),2026-01-05,Active,Roadshow
+RESIDENT_00706,Eat Drink Shop Healthy,2026-02-04,Active,App
+RESIDENT_00627,Weight Management,2026-05-15,Active,Employer
+RESIDENT_00333,Eat Drink Shop Healthy,2026-04-16,Dropped,App
+RESIDENT_00116,Diabetes Prevention,2026-05-21,Active,Roadshow
+RESIDENT_00174,I Quit (Tobacco),2026-03-12,Active,GP Clinic
+RESIDENT_00573,Eat Drink Shop Healthy,2026-01-03,Active,Employer
+RESIDENT_01055,Weight Management,2026-04-15,Dropped,Roadshow
+RESIDENT_00558,Healthier SG,2026-01-09,Active,Employer
+RESIDENT_00921,Healthier SG,2026-02-10,Dropped,Polyclinic
+RESIDENT_00086,I Quit (Tobacco),2026-05-16,Active,Employer
+RESIDENT_01007,Eat Drink Shop Healthy,2026-01-20,Active,App
+RESIDENT_01426,Eat Drink Shop Healthy,2026-04-09,Active,GP Clinic
+RESIDENT_01452,Diabetes Prevention,2026-04-02,Active,Roadshow
+RESIDENT_00419,Diabetes Prevention,2026-03-10,Dropped,Employer
+RESIDENT_00976,Diabetes Prevention,2026-05-03,Dropped,App
+RESIDENT_00031,Eat Drink Shop Healthy,2026-02-18,Active,Roadshow
+RESIDENT_00388,Active Ageing,2026-01-16,Active,Polyclinic
+RESIDENT_00841,Healthier SG,2026-03-09,Dropped,GP Clinic
+RESIDENT_00804,Weight Management,2026-05-04,Active,Employer
+RESIDENT_00527,I Quit (Tobacco),2026-03-17,Dropped,Polyclinic
+RESIDENT_00867,I Quit (Tobacco),2026-01-14,Active,GP Clinic
+RESIDENT_00513,Healthier SG,2026-02-16,Active,GP Clinic
+RESIDENT_00398,I Quit (Tobacco),2026-02-05,Active,Polyclinic
+RESIDENT_00557,Active Ageing,2026-02-01,Active,Roadshow
+RESIDENT_00366,I Quit (Tobacco),2026-05-02,Active,Employer
+RESIDENT_00232,Active Ageing,2026-05-18,Active,App
+RESIDENT_00188,Weight Management,2026-02-24,Active,Roadshow
+RESIDENT_00665,Weight Management,2026-04-28,Active,GP Clinic
+RESIDENT_00258,Eat Drink Shop Healthy,2026-04-24,Dropped,Roadshow
+RESIDENT_01242,Active Ageing,2026-05-19,Active,App
+RESIDENT_00220,Healthier SG,2026-03-21,Dropped,Polyclinic
+RESIDENT_00723,Diabetes Prevention,2026-04-07,Active,Polyclinic
+RESIDENT_00935,Healthier SG,2026-04-04,Active,Employer
+RESIDENT_01365,I Quit (Tobacco),2026-05-06,Active,App
+RESIDENT_01262,Active Ageing,2026-01-17,Dropped,Employer
+RESIDENT_00637,Diabetes Prevention,2026-04-12,Active,App
+RESIDENT_00656,Active Ageing,2026-04-22,Active,Roadshow
+RESIDENT_00106,Weight Management,2026-02-25,Active,Roadshow
+RESIDENT_01207,Diabetes Prevention,2026-04-16,Dropped,Polyclinic
+RESIDENT_00502,Weight Management,2026-03-24,Active,Polyclinic
+RESIDENT_00588,Weight Management,2026-05-07,Active,App
+RESIDENT_00638,Healthier SG,2026-01-04,Active,Employer
+RESIDENT_00505,Diabetes Prevention,2026-02-18,Active,Polyclinic
+RESIDENT_00608,Weight Management,2026-01-13,Active,App
+RESIDENT_01388,Weight Management,2026-02-12,Active,Polyclinic
+RESIDENT_00978,Healthier SG,2026-05-29,Active,Employer
+RESIDENT_00161,I Quit (Tobacco),2026-01-12,Active,Employer
+RESIDENT_01451,Weight Management,2026-02-03,Active,Roadshow
+RESIDENT_00683,Diabetes Prevention,2026-05-09,Active,Employer
+RESIDENT_00616,I Quit (Tobacco),2026-03-14,Active,App
+RESIDENT_00203,Active Ageing,2026-01-01,Active,Polyclinic
+RESIDENT_01220,Eat Drink Shop Healthy,2026-03-20,Dropped,App
+RESIDENT_00410,Active Ageing,2026-02-01,Active,Employer
+RESIDENT_00668,Eat Drink Shop Healthy,2026-05-23,Active,GP Clinic
+RESIDENT_00564,Active Ageing,2026-02-18,Active,App
+RESIDENT_01096,Healthier SG,2026-03-31,Active,Polyclinic
+RESIDENT_00553,I Quit (Tobacco),2026-01-18,Dropped,App
+RESIDENT_01119,Eat Drink Shop Healthy,2026-05-07,Active,Employer
+RESIDENT_00619,Diabetes Prevention,2026-03-29,Active,Roadshow
+RESIDENT_01075,Eat Drink Shop Healthy,2026-01-06,Active,Polyclinic
+RESIDENT_00727,Diabetes Prevention,2026-05-03,Dropped,Roadshow
+RESIDENT_01121,Diabetes Prevention,2026-03-05,Active,Polyclinic
+RESIDENT_00216,Eat Drink Shop Healthy,2026-03-12,Active,Employer
+RESIDENT_01206,Active Ageing,2026-04-22,Active,GP Clinic
+RESIDENT_00239,Eat Drink Shop Healthy,2026-05-26,Active,Employer
+RESIDENT_00416,Diabetes Prevention,2026-04-20,Dropped,Roadshow
+RESIDENT_00871,Weight Management,2026-04-19,Active,Polyclinic
+RESIDENT_01261,Diabetes Prevention,2026-05-16,Active,Polyclinic
+RESIDENT_00715,Diabetes Prevention,2026-05-08,Dropped,Roadshow
+RESIDENT_01264,Eat Drink Shop Healthy,2026-01-09,Active,Roadshow
+RESIDENT_00353,Weight Management,2026-05-07,Dropped,App
+RESIDENT_01104,Healthier SG,2026-03-25,Active,Polyclinic
+RESIDENT_00689,Diabetes Prevention,2026-05-09,Dropped,App
+RESIDENT_01497,Weight Management,2026-05-07,Active,GP Clinic
+RESIDENT_01439,Weight Management,2026-03-24,Dropped,App
+RESIDENT_01288,Weight Management,2026-05-13,Dropped,Employer
+RESIDENT_00570,Weight Management,2026-01-08,Active,Employer
+RESIDENT_01307,Active Ageing,2026-02-05,Active,GP Clinic
+RESIDENT_01315,Healthier SG,2026-01-06,Active,Polyclinic
+RESIDENT_01471,Eat Drink Shop Healthy,2026-05-23,Dropped,GP Clinic
+RESIDENT_00475,Weight Management,2026-03-25,Dropped,App
+RESIDENT_00977,I Quit (Tobacco),2026-04-10,Dropped,Polyclinic
+RESIDENT_00654,Active Ageing,2026-02-03,Active,Polyclinic
+RESIDENT_00987,Diabetes Prevention,2026-04-27,Active,App
+RESIDENT_00711,Healthier SG,2026-01-13,Active,Employer
+RESIDENT_00850,Weight Management,2026-01-27,Dropped,Roadshow
+RESIDENT_01040,Eat Drink Shop Healthy,2026-03-13,Active,GP Clinic
+RESIDENT_00056,I Quit (Tobacco),2026-05-23,Active,App
+RESIDENT_00514,I Quit (Tobacco),2026-02-01,Dropped,Employer
+RESIDENT_01088,Diabetes Prevention,2026-04-24,Dropped,Polyclinic
+RESIDENT_00097,Healthier SG,2026-02-10,Active,Polyclinic
+RESIDENT_00624,Healthier SG,2026-04-23,Dropped,App
+RESIDENT_00427,I Quit (Tobacco),2026-05-06,Active,Roadshow
+RESIDENT_01050,Active Ageing,2026-05-19,Active,GP Clinic
+RESIDENT_00794,Healthier SG,2026-03-13,Active,App
+RESIDENT_00291,I Quit (Tobacco),2026-04-18,Active,GP Clinic
+RESIDENT_00939,I Quit (Tobacco),2026-03-27,Active,Polyclinic
+RESIDENT_00355,I Quit (Tobacco),2026-04-25,Active,Employer
+RESIDENT_00381,Eat Drink Shop Healthy,2026-04-20,Active,Roadshow
+RESIDENT_01491,Diabetes Prevention,2026-02-08,Active,Polyclinic
+RESIDENT_00478,Active Ageing,2026-01-23,Active,Polyclinic
+RESIDENT_00882,Diabetes Prevention,2026-04-16,Active,App
+RESIDENT_01326,Healthier SG,2026-05-24,Active,Employer
+RESIDENT_00577,Eat Drink Shop Healthy,2026-04-26,Active,GP Clinic
+RESIDENT_00266,Healthier SG,2026-05-05,Active,Polyclinic
+RESIDENT_00059,Eat Drink Shop Healthy,2026-04-20,Active,GP Clinic
+RESIDENT_00260,Diabetes Prevention,2026-01-23,Active,Polyclinic
+RESIDENT_01430,Weight Management,2026-04-08,Dropped,Roadshow
+RESIDENT_00067,Diabetes Prevention,2026-05-28,Active,Employer
+RESIDENT_00116,Weight Management,2026-05-03,Active,App
+RESIDENT_00473,Healthier SG,2026-02-12,Dropped,App
+RESIDENT_00390,Eat Drink Shop Healthy,2026-03-01,Active,Polyclinic
+RESIDENT_00179,Healthier SG,2026-04-21,Active,GP Clinic
+RESIDENT_01351,Active Ageing,2026-02-06,Dropped,GP Clinic
+RESIDENT_00811,Healthier SG,2026-04-24,Active,Employer
+RESIDENT_01070,Active Ageing,2026-05-08,Active,Employer
+RESIDENT_01353,I Quit (Tobacco),2026-02-05,Active,Polyclinic
+RESIDENT_00768,Eat Drink Shop Healthy,2026-04-25,Active,App
+RESIDENT_00774,Diabetes Prevention,2026-02-23,Active,GP Clinic
+RESIDENT_00455,Weight Management,2026-04-08,Active,Employer
+RESIDENT_00962,Diabetes Prevention,2026-01-12,Active,Employer
+RESIDENT_00447,Active Ageing,2026-03-25,Active,Polyclinic
+RESIDENT_00233,Eat Drink Shop Healthy,2026-01-01,Active,Roadshow
+RESIDENT_01007,I Quit (Tobacco),2026-03-17,Dropped,App
+RESIDENT_01215,Weight Management,2026-05-25,Active,Roadshow
+RESIDENT_00461,Active Ageing,2026-02-10,Active,GP Clinic
+RESIDENT_00182,Active Ageing,2026-01-29,Dropped,Polyclinic
+RESIDENT_00406,Diabetes Prevention,2026-01-08,Active,Roadshow
+RESIDENT_00604,Active Ageing,2026-03-08,Active,Polyclinic
+RESIDENT_00589,I Quit (Tobacco),2026-02-21,Active,GP Clinic
+RESIDENT_00792,Eat Drink Shop Healthy,2026-02-17,Dropped,App
+RESIDENT_01274,Active Ageing,2026-05-24,Active,Polyclinic
+RESIDENT_01045,Active Ageing,2026-05-24,Dropped,Polyclinic
+RESIDENT_00136,I Quit (Tobacco),2026-03-18,Dropped,Polyclinic
+RESIDENT_01272,Active Ageing,2026-05-20,Active,App
+RESIDENT_00912,Active Ageing,2026-03-05,Active,Polyclinic
+RESIDENT_00207,Healthier SG,2026-02-28,Active,Roadshow
+RESIDENT_01008,Eat Drink Shop Healthy,2026-04-20,Active,Roadshow
+RESIDENT_01315,Weight Management,2026-03-28,Active,App
+RESIDENT_00369,Diabetes Prevention,2026-01-14,Active,Roadshow
+RESIDENT_00179,Active Ageing,2026-04-28,Active,GP Clinic
+RESIDENT_01403,Eat Drink Shop Healthy,2026-04-29,Dropped,App
+RESIDENT_01415,Weight Management,2026-02-22,Active,Employer
+RESIDENT_00311,Active Ageing,2026-04-23,Active,Employer
+RESIDENT_00746,I Quit (Tobacco),2026-05-27,Dropped,Roadshow
+RESIDENT_01217,I Quit (Tobacco),2026-01-25,Active,Employer
+RESIDENT_01271,Active Ageing,2026-01-05,Active,Employer
+RESIDENT_00945,Weight Management,2026-05-18,Active,Employer
+RESIDENT_00658,Diabetes Prevention,2026-05-07,Active,Roadshow
+RESIDENT_00839,Eat Drink Shop Healthy,2026-04-10,Active,GP Clinic
+RESIDENT_00208,Diabetes Prevention,2026-03-11,Active,GP Clinic
+RESIDENT_00267,Eat Drink Shop Healthy,2026-05-02,Active,Roadshow
+RESIDENT_01448,I Quit (Tobacco),2026-04-30,Active,Employer
+RESIDENT_01284,Active Ageing,2026-01-17,Active,Polyclinic
+RESIDENT_01046,Active Ageing,2026-01-25,Dropped,Employer
+RESIDENT_00180,I Quit (Tobacco),2026-05-20,Dropped,GP Clinic
+RESIDENT_01447,Eat Drink Shop Healthy,2026-02-22,Active,Employer
+RESIDENT_01276,Diabetes Prevention,2026-01-13,Active,GP Clinic
+RESIDENT_00115,Eat Drink Shop Healthy,2026-04-05,Dropped,GP Clinic
+RESIDENT_01400,Healthier SG,2026-04-30,Dropped,GP Clinic
+RESIDENT_00784,I Quit (Tobacco),2026-04-20,Active,GP Clinic
+RESIDENT_00672,Eat Drink Shop Healthy,2026-04-06,Dropped,Roadshow
+RESIDENT_00220,Eat Drink Shop Healthy,2026-01-26,Dropped,Polyclinic
+RESIDENT_00075,I Quit (Tobacco),2026-05-20,Active,Roadshow
+RESIDENT_00066,Eat Drink Shop Healthy,2026-05-08,Active,Polyclinic
+RESIDENT_00274,Eat Drink Shop Healthy,2026-02-13,Active,Polyclinic
+RESIDENT_00879,Eat Drink Shop Healthy,2026-02-21,Active,Polyclinic
+RESIDENT_01373,Active Ageing,2026-02-24,Active,Employer
+RESIDENT_01068,Active Ageing,2026-05-09,Dropped,Polyclinic
+RESIDENT_01433,I Quit (Tobacco),2026-02-14,Dropped,Roadshow
+RESIDENT_00611,I Quit (Tobacco),2026-05-04,Dropped,Polyclinic
+RESIDENT_00582,Diabetes Prevention,2026-04-01,Active,Employer
+RESIDENT_00356,I Quit (Tobacco),2026-01-07,Active,Employer
+RESIDENT_00783,Eat Drink Shop Healthy,2026-01-02,Dropped,Roadshow
+RESIDENT_00914,Eat Drink Shop Healthy,2026-02-25,Active,Polyclinic
+RESIDENT_00510,Healthier SG,2026-04-12,Active,App
+RESIDENT_00817,Healthier SG,2026-01-02,Active,Employer
+RESIDENT_00944,Eat Drink Shop Healthy,2026-02-11,Active,App
+RESIDENT_00069,Healthier SG,2026-01-26,Active,GP Clinic
+RESIDENT_00115,Active Ageing,2026-05-12,Active,Polyclinic
+RESIDENT_00374,Eat Drink Shop Healthy,2026-03-21,Dropped,App
+RESIDENT_00696,Eat Drink Shop Healthy,2026-02-24,Active,Roadshow
+RESIDENT_00370,Weight Management,2026-01-15,Dropped,App
+RESIDENT_00019,Eat Drink Shop Healthy,2026-03-16,Active,Polyclinic
+RESIDENT_00231,Weight Management,2026-02-13,Active,App
+RESIDENT_00437,Weight Management,2026-01-19,Active,Roadshow
+RESIDENT_00865,Weight Management,2026-04-14,Dropped,Roadshow
+RESIDENT_00658,Eat Drink Shop Healthy,2026-02-18,Active,App
+RESIDENT_00847,Eat Drink Shop Healthy,2026-03-04,Dropped,Polyclinic
+RESIDENT_00846,I Quit (Tobacco),2026-05-06,Active,Polyclinic
+RESIDENT_01110,Weight Management,2026-01-21,Active,Roadshow
+RESIDENT_00026,Healthier SG,2026-04-20,Active,GP Clinic
+RESIDENT_00049,Healthier SG,2026-04-16,Active,App
+RESIDENT_01103,I Quit (Tobacco),2026-02-11,Dropped,Roadshow
+RESIDENT_00806,Active Ageing,2026-04-09,Active,Employer
+RESIDENT_01061,Eat Drink Shop Healthy,2026-04-02,Dropped,GP Clinic
+RESIDENT_00749,Weight Management,2026-03-04,Active,Employer
+RESIDENT_00288,Diabetes Prevention,2026-04-30,Dropped,Roadshow
+RESIDENT_01208,Weight Management,2026-01-14,Active,Roadshow
+RESIDENT_00924,Active Ageing,2026-01-14,Active,Polyclinic
+RESIDENT_01398,Eat Drink Shop Healthy,2026-04-17,Active,App
+RESIDENT_00829,Active Ageing,2026-03-18,Active,GP Clinic
+RESIDENT_01333,Diabetes Prevention,2026-01-31,Dropped,Polyclinic
+RESIDENT_00162,Weight Management,2026-04-09,Active,Roadshow
+RESIDENT_00727,Eat Drink Shop Healthy,2026-02-05,Active,Roadshow
+RESIDENT_01418,Active Ageing,2026-04-16,Active,Employer
+RESIDENT_01450,Active Ageing,2026-01-15,Active,Roadshow
+RESIDENT_00061,Active Ageing,2026-02-09,Active,App
+RESIDENT_00502,I Quit (Tobacco),2026-01-17,Active,GP Clinic
+RESIDENT_00967,Eat Drink Shop Healthy,2026-02-14,Active,Employer
+RESIDENT_00284,Healthier SG,2026-05-17,Active,Employer
+RESIDENT_00187,Active Ageing,2026-05-12,Dropped,Roadshow
+RESIDENT_00483,Eat Drink Shop Healthy,2026-05-04,Active,Roadshow
+RESIDENT_00459,Active Ageing,2026-05-05,Dropped,App
+RESIDENT_00463,Weight Management,2026-01-21,Active,Roadshow
+RESIDENT_00943,Eat Drink Shop Healthy,2026-04-14,Active,Polyclinic
+RESIDENT_00325,Eat Drink Shop Healthy,2026-05-01,Dropped,Employer
+RESIDENT_00263,Healthier SG,2026-01-29,Active,Polyclinic
+RESIDENT_00437,Active Ageing,2026-05-24,Active,App
+RESIDENT_00911,I Quit (Tobacco),2026-04-25,Dropped,Polyclinic
+RESIDENT_01203,Weight Management,2026-05-17,Active,Polyclinic
+RESIDENT_01329,Healthier SG,2026-03-08,Active,Employer
+RESIDENT_00339,Healthier SG,2026-01-31,Dropped,Roadshow
+RESIDENT_00575,Healthier SG,2026-01-03,Active,Employer
+RESIDENT_00791,I Quit (Tobacco),2026-05-12,Active,App
+RESIDENT_00519,Eat Drink Shop Healthy,2026-02-28,Active,Roadshow
+RESIDENT_01235,Active Ageing,2026-04-23,Active,Roadshow
+RESIDENT_01087,Healthier SG,2026-01-25,Dropped,Employer
+RESIDENT_00042,I Quit (Tobacco),2026-01-24,Active,Employer
+RESIDENT_00196,Weight Management,2026-03-22,Dropped,Polyclinic
+RESIDENT_00009,Eat Drink Shop Healthy,2026-03-31,Dropped,App
+RESIDENT_00684,Eat Drink Shop Healthy,2026-02-25,Active,App
+RESIDENT_00748,Diabetes Prevention,2026-01-02,Active,Employer
+RESIDENT_00743,Weight Management,2026-03-21,Active,App
+RESIDENT_01020,Active Ageing,2026-02-23,Dropped,Roadshow
+RESIDENT_00895,Eat Drink Shop Healthy,2026-05-02,Active,GP Clinic
+RESIDENT_00992,Diabetes Prevention,2026-04-08,Active,Roadshow
+RESIDENT_01401,Eat Drink Shop Healthy,2026-03-01,Active,App
+RESIDENT_00335,Diabetes Prevention,2026-03-04,Active,Employer
+RESIDENT_01055,I Quit (Tobacco),2026-03-18,Active,Roadshow
+RESIDENT_01329,I Quit (Tobacco),2026-02-04,Active,App
+RESIDENT_00776,I Quit (Tobacco),2026-01-20,Active,GP Clinic
+RESIDENT_00744,Diabetes Prevention,2026-04-10,Dropped,Roadshow
+RESIDENT_00743,Active Ageing,2026-02-22,Active,GP Clinic
+RESIDENT_00556,Healthier SG,2026-05-19,Active,GP Clinic
+RESIDENT_00160,Weight Management,2026-04-02,Active,Roadshow
+RESIDENT_01195,Healthier SG,2026-05-23,Active,GP Clinic
+RESIDENT_01351,I Quit (Tobacco),2026-02-17,Active,Polyclinic
+RESIDENT_00990,Healthier SG,2026-05-02,Active,Roadshow
+RESIDENT_00777,Healthier SG,2026-03-21,Active,Employer
+RESIDENT_00010,Weight Management,2026-01-12,Active,GP Clinic
+RESIDENT_01131,Eat Drink Shop Healthy,2026-01-02,Active,Employer
+RESIDENT_00448,Diabetes Prevention,2026-03-13,Active,GP Clinic
+RESIDENT_01433,Weight Management,2026-03-30,Dropped,GP Clinic
+RESIDENT_01367,Eat Drink Shop Healthy,2026-03-17,Active,Roadshow
+RESIDENT_00705,Active Ageing,2026-04-05,Dropped,Employer
+RESIDENT_01229,Weight Management,2026-02-11,Active,Polyclinic
+RESIDENT_00158,Healthier SG,2026-01-06,Active,Employer
+RESIDENT_00730,Diabetes Prevention,2026-01-11,Active,Polyclinic
+RESIDENT_01039,Weight Management,2026-04-18,Dropped,Employer
+RESIDENT_01382,Eat Drink Shop Healthy,2026-03-16,Active,App
+RESIDENT_00999,Weight Management,2026-04-20,Dropped,App
+RESIDENT_01381,Diabetes Prevention,2026-04-12,Dropped,Roadshow
+RESIDENT_00385,Active Ageing,2026-03-24,Active,Roadshow
+RESIDENT_00309,I Quit (Tobacco),2026-01-29,Active,Roadshow
+RESIDENT_00488,Eat Drink Shop Healthy,2026-04-01,Active,GP Clinic
+RESIDENT_00878,I Quit (Tobacco),2026-02-13,Dropped,Employer
+RESIDENT_00018,Weight Management,2026-04-27,Active,Polyclinic
+RESIDENT_01250,Healthier SG,2026-04-16,Active,Roadshow
+RESIDENT_01043,Weight Management,2026-02-22,Active,Employer
+RESIDENT_01018,Diabetes Prevention,2026-01-07,Active,App
+RESIDENT_01036,Weight Management,2026-03-25,Active,Polyclinic
+RESIDENT_00316,Active Ageing,2026-02-11,Dropped,App
+RESIDENT_00065,Weight Management,2026-01-18,Dropped,GP Clinic
+RESIDENT_00494,Diabetes Prevention,2026-02-11,Active,Employer
+RESIDENT_00234,Healthier SG,2026-01-30,Active,App
+RESIDENT_01244,Healthier SG,2026-02-02,Active,Polyclinic
+RESIDENT_00469,Eat Drink Shop Healthy,2026-01-05,Active,Employer
+RESIDENT_00244,Eat Drink Shop Healthy,2026-05-20,Active,Roadshow
+RESIDENT_00008,Healthier SG,2026-03-07,Active,GP Clinic
+RESIDENT_01432,Eat Drink Shop Healthy,2026-02-28,Dropped,Roadshow
+RESIDENT_01349,I Quit (Tobacco),2026-04-09,Active,Employer
+RESIDENT_01129,Diabetes Prevention,2026-04-11,Active,Roadshow
+RESIDENT_00231,Healthier SG,2026-02-26,Active,Polyclinic
+RESIDENT_00461,Diabetes Prevention,2026-05-12,Active,Polyclinic
+RESIDENT_01298,Weight Management,2026-01-20,Active,GP Clinic
+RESIDENT_00472,Weight Management,2026-04-05,Active,GP Clinic
+RESIDENT_00982,Healthier SG,2026-02-19,Active,GP Clinic
+RESIDENT_00097,I Quit (Tobacco),2026-04-20,Active,Employer
+RESIDENT_00397,Diabetes Prevention,2026-01-24,Active,Employer
+RESIDENT_00648,Diabetes Prevention,2026-03-24,Active,Polyclinic
+RESIDENT_01386,Weight Management,2026-03-28,Dropped,GP Clinic
+RESIDENT_00533,I Quit (Tobacco),2026-05-17,Dropped,Roadshow
+RESIDENT_00378,Weight Management,2026-01-05,Active,Polyclinic
+RESIDENT_01371,Eat Drink Shop Healthy,2026-05-31,Active,Polyclinic
+RESIDENT_00739,I Quit (Tobacco),2026-03-17,Active,GP Clinic
+RESIDENT_00197,Weight Management,2026-04-06,Active,App
+RESIDENT_01205,Weight Management,2026-01-31,Active,Employer
+RESIDENT_01146,Healthier SG,2026-04-17,Active,Polyclinic
+RESIDENT_00786,I Quit (Tobacco),2026-05-25,Active,GP Clinic
+RESIDENT_00666,I Quit (Tobacco),2026-01-03,Dropped,App
+RESIDENT_00511,I Quit (Tobacco),2026-05-07,Dropped,Employer
+RESIDENT_00351,Active Ageing,2026-03-21,Dropped,GP Clinic
+RESIDENT_00289,Diabetes Prevention,2026-04-22,Active,Polyclinic
+RESIDENT_00062,Active Ageing,2026-01-27,Active,Polyclinic
+RESIDENT_00946,I Quit (Tobacco),2026-04-20,Dropped,Polyclinic
+RESIDENT_01182,Weight Management,2026-03-16,Active,GP Clinic
+RESIDENT_01210,Diabetes Prevention,2026-02-15,Dropped,Employer
+RESIDENT_00561,Weight Management,2026-05-23,Active,App
+RESIDENT_01079,Healthier SG,2026-03-23,Active,Employer
+RESIDENT_00342,Healthier SG,2026-01-24,Dropped,App
+RESIDENT_00450,Healthier SG,2026-05-19,Active,Employer
+RESIDENT_01440,Healthier SG,2026-02-02,Dropped,GP Clinic
+RESIDENT_00983,Eat Drink Shop Healthy,2026-01-13,Active,App
+RESIDENT_01014,Healthier SG,2026-03-08,Active,App
+RESIDENT_01257,Weight Management,2026-05-31,Active,GP Clinic
+RESIDENT_00369,Active Ageing,2026-05-17,Dropped,Roadshow
+RESIDENT_00641,Eat Drink Shop Healthy,2026-01-17,Active,Polyclinic
+RESIDENT_00363,Weight Management,2026-05-16,Active,GP Clinic
+RESIDENT_01077,Active Ageing,2026-05-28,Active,Roadshow
+RESIDENT_00952,Healthier SG,2026-01-01,Dropped,Roadshow
+RESIDENT_00238,Active Ageing,2026-05-28,Active,GP Clinic
+RESIDENT_00935,Eat Drink Shop Healthy,2026-01-19,Active,App
+RESIDENT_00376,Weight Management,2026-05-13,Active,Employer
+RESIDENT_00802,Diabetes Prevention,2026-04-27,Active,Polyclinic
+RESIDENT_01402,Active Ageing,2026-04-23,Active,GP Clinic
+RESIDENT_01370,Active Ageing,2026-01-06,Active,Employer
+RESIDENT_01442,Healthier SG,2026-05-05,Active,Roadshow
+RESIDENT_00043,Diabetes Prevention,2026-01-14,Active,Employer
+RESIDENT_00639,Diabetes Prevention,2026-03-07,Active,Polyclinic
+RESIDENT_01149,Diabetes Prevention,2026-04-05,Active,Roadshow
+RESIDENT_00197,Active Ageing,2026-04-04,Active,Roadshow
+RESIDENT_01166,Diabetes Prevention,2026-04-15,Active,GP Clinic
+RESIDENT_01211,Healthier SG,2026-01-19,Active,GP Clinic
+RESIDENT_00959,Weight Management,2026-03-18,Active,Polyclinic
+RESIDENT_00729,Eat Drink Shop Healthy,2026-04-13,Active,Roadshow
+RESIDENT_00353,Diabetes Prevention,2026-03-21,Dropped,Roadshow
+RESIDENT_01438,Active Ageing,2026-05-31,Active,Polyclinic
+RESIDENT_01464,Eat Drink Shop Healthy,2026-05-19,Active,GP Clinic
+RESIDENT_00594,I Quit (Tobacco),2026-03-15,Dropped,Roadshow
+RESIDENT_01112,Eat Drink Shop Healthy,2026-02-27,Active,Polyclinic
+RESIDENT_00471,I Quit (Tobacco),2026-01-17,Active,GP Clinic
+RESIDENT_00610,Weight Management,2026-03-07,Dropped,Roadshow
+RESIDENT_00549,Eat Drink Shop Healthy,2026-03-02,Dropped,GP Clinic
+RESIDENT_01003,Active Ageing,2026-05-15,Active,App
+RESIDENT_00625,Eat Drink Shop Healthy,2026-01-26,Active,Employer
+RESIDENT_00479,Eat Drink Shop Healthy,2026-03-08,Active,GP Clinic
+RESIDENT_00275,I Quit (Tobacco),2026-03-08,Active,GP Clinic
+RESIDENT_00332,Weight Management,2026-03-23,Active,Polyclinic
+RESIDENT_00758,Eat Drink Shop Healthy,2026-01-13,Active,Employer
+RESIDENT_01042,Diabetes Prevention,2026-04-12,Dropped,Roadshow
+RESIDENT_00844,Healthier SG,2026-04-27,Active,Polyclinic
+RESIDENT_01366,I Quit (Tobacco),2026-03-04,Active,App
+RESIDENT_00857,Diabetes Prevention,2026-01-16,Active,Roadshow
+RESIDENT_00017,Active Ageing,2026-05-12,Active,App
+RESIDENT_00314,Weight Management,2026-05-07,Active,GP Clinic
+RESIDENT_01196,I Quit (Tobacco),2026-01-20,Active,Employer
+RESIDENT_01255,Active Ageing,2026-05-07,Dropped,Roadshow
+RESIDENT_01382,Diabetes Prevention,2026-04-02,Active,App
+RESIDENT_00295,Active Ageing,2026-02-24,Dropped,Polyclinic
+RESIDENT_00030,Active Ageing,2026-02-13,Active,Roadshow
+RESIDENT_01423,Active Ageing,2026-02-18,Active,App
+RESIDENT_00277,Weight Management,2026-01-03,Active,GP Clinic
+RESIDENT_00868,Active Ageing,2026-01-24,Active,App
+RESIDENT_00722,I Quit (Tobacco),2026-01-07,Active,App
+RESIDENT_01047,Eat Drink Shop Healthy,2026-03-31,Active,Polyclinic
+RESIDENT_00780,Weight Management,2026-03-18,Active,Roadshow
+RESIDENT_00590,Healthier SG,2026-05-16,Active,GP Clinic
+RESIDENT_00809,Eat Drink Shop Healthy,2026-02-03,Active,Polyclinic
+RESIDENT_00791,Eat Drink Shop Healthy,2026-04-08,Active,Employer
+RESIDENT_00498,Active Ageing,2026-03-02,Active,App
+RESIDENT_00138,Healthier SG,2026-02-05,Active,App
+RESIDENT_01395,Healthier SG,2026-02-16,Dropped,App
+RESIDENT_01360,Diabetes Prevention,2026-02-23,Active,App
+RESIDENT_01158,Eat Drink Shop Healthy,2026-02-04,Active,Employer
+RESIDENT_00013,Healthier SG,2026-04-04,Active,Roadshow
+RESIDENT_01281,Weight Management,2026-03-31,Active,App
+RESIDENT_01095,Eat Drink Shop Healthy,2026-05-21,Active,Polyclinic
+RESIDENT_01030,Active Ageing,2026-04-27,Dropped,GP Clinic
+RESIDENT_00243,Active Ageing,2026-03-19,Active,Polyclinic
+RESIDENT_00988,I Quit (Tobacco),2026-02-19,Active,GP Clinic
+RESIDENT_00140,Eat Drink Shop Healthy,2026-05-24,Active,Employer
+RESIDENT_01309,Eat Drink Shop Healthy,2026-04-08,Active,Employer
+RESIDENT_00536,Diabetes Prevention,2026-05-01,Active,App
+RESIDENT_00544,Healthier SG,2026-04-24,Active,App
+RESIDENT_00613,Eat Drink Shop Healthy,2026-05-03,Dropped,Roadshow
+RESIDENT_00154,Diabetes Prevention,2026-04-26,Active,App
+RESIDENT_01147,Diabetes Prevention,2026-02-18,Active,GP Clinic
+RESIDENT_00051,Diabetes Prevention,2026-05-10,Active,App
+RESIDENT_00448,I Quit (Tobacco),2026-03-23,Active,Roadshow
+RESIDENT_00628,Active Ageing,2026-04-11,Dropped,App
+RESIDENT_00980,Eat Drink Shop Healthy,2026-01-30,Active,Polyclinic
+RESIDENT_00095,I Quit (Tobacco),2026-01-15,Dropped,GP Clinic
+RESIDENT_00772,I Quit (Tobacco),2026-03-11,Active,App
+RESIDENT_01460,Eat Drink Shop Healthy,2026-02-05,Dropped,GP Clinic
+RESIDENT_00746,Diabetes Prevention,2026-05-17,Dropped,Employer
+RESIDENT_01074,Healthier SG,2026-03-30,Active,Roadshow
+RESIDENT_00321,Diabetes Prevention,2026-03-14,Active,Employer
+RESIDENT_01042,I Quit (Tobacco),2026-02-03,Dropped,Employer
+RESIDENT_01357,Diabetes Prevention,2026-05-08,Dropped,Roadshow
+RESIDENT_01182,Active Ageing,2026-03-15,Active,Roadshow
+RESIDENT_01011,Diabetes Prevention,2026-04-27,Dropped,GP Clinic
+RESIDENT_00708,I Quit (Tobacco),2026-05-24,Active,Polyclinic
+RESIDENT_00169,Eat Drink Shop Healthy,2026-03-18,Dropped,Roadshow
+RESIDENT_00808,Healthier SG,2026-05-26,Dropped,GP Clinic
+RESIDENT_01147,I Quit (Tobacco),2026-04-01,Active,App
+RESIDENT_00146,Healthier SG,2026-05-22,Active,GP Clinic
+RESIDENT_00047,Active Ageing,2026-03-13,Active,GP Clinic
+RESIDENT_00040,I Quit (Tobacco),2026-01-31,Active,Employer
+RESIDENT_00651,Eat Drink Shop Healthy,2026-04-04,Dropped,Employer
+RESIDENT_00446,Eat Drink Shop Healthy,2026-05-24,Dropped,GP Clinic
+RESIDENT_01465,Healthier SG,2026-01-11,Active,Roadshow
+RESIDENT_00165,Eat Drink Shop Healthy,2026-03-09,Active,Employer
+RESIDENT_00082,Eat Drink Shop Healthy,2026-05-26,Active,Employer
+RESIDENT_00360,Active Ageing,2026-05-22,Active,Polyclinic
+RESIDENT_00144,Healthier SG,2026-05-21,Active,App
+RESIDENT_00918,Eat Drink Shop Healthy,2026-05-03,Dropped,Roadshow
+RESIDENT_01269,I Quit (Tobacco),2026-01-01,Active,GP Clinic
+RESIDENT_01483,Weight Management,2026-05-28,Active,Polyclinic
+RESIDENT_00416,Active Ageing,2026-05-14,Active,Employer
+RESIDENT_00766,Weight Management,2026-03-13,Active,App
+RESIDENT_00206,Active Ageing,2026-03-12,Active,GP Clinic
+RESIDENT_00004,I Quit (Tobacco),2026-03-09,Active,GP Clinic
+RESIDENT_00640,Diabetes Prevention,2026-02-09,Active,Roadshow
+RESIDENT_00424,I Quit (Tobacco),2026-02-20,Active,Roadshow
+RESIDENT_01494,Eat Drink Shop Healthy,2026-03-13,Active,Polyclinic
+RESIDENT_00071,I Quit (Tobacco),2026-03-01,Active,Roadshow
+RESIDENT_01363,Weight Management,2026-03-22,Active,App
+RESIDENT_00265,Healthier SG,2026-05-09,Active,GP Clinic
+RESIDENT_01053,Diabetes Prevention,2026-01-02,Active,App
+RESIDENT_01389,Active Ageing,2026-03-04,Active,Employer
+RESIDENT_01440,I Quit (Tobacco),2026-04-22,Active,Employer
+RESIDENT_00388,Weight Management,2026-01-08,Active,Roadshow
+RESIDENT_00742,Healthier SG,2026-04-23,Active,Roadshow
+RESIDENT_01449,Healthier SG,2026-04-14,Active,Roadshow
+RESIDENT_00334,Weight Management,2026-03-28,Active,Employer
+RESIDENT_01114,Active Ageing,2026-02-23,Active,App
+RESIDENT_01413,Healthier SG,2026-04-02,Active,Roadshow
+RESIDENT_00868,Weight Management,2026-05-09,Active,GP Clinic
+RESIDENT_01122,Weight Management,2026-01-28,Active,GP Clinic
+RESIDENT_00741,Eat Drink Shop Healthy,2026-03-20,Active,Roadshow
+RESIDENT_00060,Active Ageing,2026-03-19,Active,App
+RESIDENT_01283,Weight Management,2026-01-28,Active,Employer
+RESIDENT_00077,Diabetes Prevention,2026-05-30,Active,Polyclinic
+RESIDENT_00518,Healthier SG,2026-01-08,Active,Roadshow
+RESIDENT_01345,I Quit (Tobacco),2026-04-29,Dropped,GP Clinic
+RESIDENT_00417,Healthier SG,2026-03-24,Active,Roadshow
+RESIDENT_00963,Weight Management,2026-03-31,Dropped,App
+RESIDENT_00277,I Quit (Tobacco),2026-02-25,Active,Employer
+RESIDENT_00265,I Quit (Tobacco),2026-04-27,Active,App
+RESIDENT_00027,Healthier SG,2026-04-05,Dropped,Roadshow
+RESIDENT_00270,Active Ageing,2026-01-12,Active,Roadshow
+RESIDENT_00085,Healthier SG,2026-03-10,Dropped,Roadshow
+RESIDENT_00726,I Quit (Tobacco),2026-03-17,Active,App
+RESIDENT_00872,Active Ageing,2026-02-06,Active,GP Clinic
+RESIDENT_01129,Weight Management,2026-02-25,Active,Polyclinic
+RESIDENT_01154,Diabetes Prevention,2026-02-18,Active,App
+RESIDENT_00533,Diabetes Prevention,2026-04-27,Active,Employer
+RESIDENT_01492,Diabetes Prevention,2026-01-31,Active,App
+RESIDENT_00446,I Quit (Tobacco),2026-05-04,Active,Employer
+RESIDENT_00663,Weight Management,2026-04-27,Active,GP Clinic
+RESIDENT_01482,Active Ageing,2026-02-04,Active,Roadshow
+RESIDENT_00135,I Quit (Tobacco),2026-04-21,Dropped,GP Clinic
+RESIDENT_00775,Healthier SG,2026-04-16,Active,App
+RESIDENT_00048,Weight Management,2026-01-25,Active,Roadshow
+RESIDENT_00645,Weight Management,2026-01-16,Active,Employer
+RESIDENT_01338,I Quit (Tobacco),2026-02-10,Active,Roadshow
+RESIDENT_01253,I Quit (Tobacco),2026-05-29,Active,Polyclinic
+RESIDENT_01019,Diabetes Prevention,2026-04-09,Active,Employer
+RESIDENT_00164,Eat Drink Shop Healthy,2026-01-15,Active,Employer
+RESIDENT_01239,Eat Drink Shop Healthy,2026-03-19,Dropped,Roadshow
+RESIDENT_00888,Active Ageing,2026-02-16,Active,App
+RESIDENT_00970,I Quit (Tobacco),2026-01-23,Active,Roadshow
+RESIDENT_00251,Healthier SG,2026-03-21,Dropped,GP Clinic
+RESIDENT_00786,Weight Management,2026-04-22,Active,GP Clinic
+RESIDENT_01237,Eat Drink Shop Healthy,2026-01-18,Dropped,Roadshow
+RESIDENT_00394,I Quit (Tobacco),2026-04-24,Dropped,Roadshow
+RESIDENT_01489,Diabetes Prevention,2026-03-11,Dropped,Roadshow
+RESIDENT_00826,Weight Management,2026-03-22,Active,Roadshow
+RESIDENT_00916,I Quit (Tobacco),2026-03-07,Active,GP Clinic
+RESIDENT_01072,Healthier SG,2026-03-16,Active,App
+RESIDENT_01286,Active Ageing,2026-04-05,Active,Polyclinic
+RESIDENT_00021,Active Ageing,2026-03-26,Dropped,Polyclinic
+RESIDENT_01193,Eat Drink Shop Healthy,2026-05-21,Dropped,GP Clinic
+RESIDENT_00655,I Quit (Tobacco),2026-04-30,Dropped,GP Clinic
+RESIDENT_00816,Diabetes Prevention,2026-03-24,Active,Polyclinic
+RESIDENT_01009,Active Ageing,2026-03-08,Active,Employer
+RESIDENT_01101,Diabetes Prevention,2026-05-18,Active,Roadshow
+RESIDENT_00162,Healthier SG,2026-02-13,Active,Employer
+RESIDENT_01355,Healthier SG,2026-04-15,Dropped,Polyclinic
+RESIDENT_00280,Diabetes Prevention,2026-01-30,Active,Polyclinic
+RESIDENT_01053,I Quit (Tobacco),2026-02-27,Active,GP Clinic
+RESIDENT_00851,Eat Drink Shop Healthy,2026-01-30,Active,Employer
+RESIDENT_00235,Healthier SG,2026-05-12,Dropped,Employer
+RESIDENT_00470,Active Ageing,2026-04-14,Active,GP Clinic
+RESIDENT_00525,Healthier SG,2026-05-21,Active,Roadshow
+RESIDENT_00397,I Quit (Tobacco),2026-05-21,Active,App
+RESIDENT_01040,Diabetes Prevention,2026-01-08,Active,Polyclinic
+RESIDENT_00080,Healthier SG,2026-04-28,Active,Polyclinic
+RESIDENT_01414,Active Ageing,2026-03-27,Dropped,Employer
+RESIDENT_00964,Eat Drink Shop Healthy,2026-04-12,Dropped,Roadshow
+RESIDENT_00411,I Quit (Tobacco),2026-01-13,Active,App
+RESIDENT_00159,Healthier SG,2026-04-01,Active,Employer
+RESIDENT_01002,Healthier SG,2026-05-17,Dropped,Roadshow
+RESIDENT_00655,Diabetes Prevention,2026-01-27,Dropped,Polyclinic
+RESIDENT_00800,I Quit (Tobacco),2026-02-04,Active,App
+RESIDENT_00744,Weight Management,2026-02-10,Dropped,Employer
+RESIDENT_00833,Active Ageing,2026-05-03,Dropped,Roadshow
+RESIDENT_00964,Active Ageing,2026-02-25,Dropped,App
+RESIDENT_01209,Healthier SG,2026-01-27,Active,Polyclinic
+RESIDENT_00559,Active Ageing,2026-04-16,Dropped,App
+RESIDENT_00129,Eat Drink Shop Healthy,2026-03-05,Dropped,Roadshow
+RESIDENT_00824,Diabetes Prevention,2026-02-16,Active,GP Clinic
+RESIDENT_01358,Active Ageing,2026-04-26,Dropped,Polyclinic
+RESIDENT_00828,I Quit (Tobacco),2026-03-05,Active,GP Clinic
+RESIDENT_00225,Healthier SG,2026-05-31,Active,Polyclinic
+RESIDENT_00232,Diabetes Prevention,2026-04-20,Active,Polyclinic
+RESIDENT_01397,Weight Management,2026-03-31,Dropped,Polyclinic
+RESIDENT_01254,Active Ageing,2026-02-26,Active,Roadshow
+RESIDENT_00538,Healthier SG,2026-05-11,Active,Employer
+RESIDENT_00746,Active Ageing,2026-04-29,Dropped,GP Clinic
+RESIDENT_01273,Weight Management,2026-03-06,Active,Roadshow
+RESIDENT_00894,Diabetes Prevention,2026-01-17,Active,Roadshow
+RESIDENT_00914,I Quit (Tobacco),2026-05-24,Dropped,Polyclinic
+RESIDENT_00101,Eat Drink Shop Healthy,2026-03-14,Active,GP Clinic
+RESIDENT_00014,Eat Drink Shop Healthy,2026-03-29,Active,App
+RESIDENT_01443,Healthier SG,2026-03-29,Active,Roadshow
+RESIDENT_00050,Weight Management,2026-04-25,Dropped,GP Clinic
+RESIDENT_00645,Active Ageing,2026-04-01,Dropped,Employer
+RESIDENT_01199,Active Ageing,2026-01-31,Active,Roadshow
+RESIDENT_00434,Active Ageing,2026-05-31,Active,Polyclinic
+RESIDENT_00063,Active Ageing,2026-01-23,Active,Roadshow
+RESIDENT_01427,Diabetes Prevention,2026-02-23,Active,Roadshow
+RESIDENT_00081,Diabetes Prevention,2026-01-18,Active,Roadshow
+RESIDENT_00903,Active Ageing,2026-03-07,Active,GP Clinic
+RESIDENT_00181,Eat Drink Shop Healthy,2026-04-22,Active,Polyclinic
+RESIDENT_00852,Eat Drink Shop Healthy,2026-02-21,Active,Employer
+RESIDENT_01102,Active Ageing,2026-03-17,Active,Polyclinic
+RESIDENT_01010,Weight Management,2026-02-21,Active,App
+RESIDENT_00141,Weight Management,2026-03-12,Dropped,App
+RESIDENT_00122,Weight Management,2026-03-08,Active,Roadshow
+RESIDENT_00612,Healthier SG,2026-03-06,Active,GP Clinic
+RESIDENT_00558,Active Ageing,2026-04-02,Dropped,App
+RESIDENT_00486,Eat Drink Shop Healthy,2026-04-12,Active,Roadshow
+RESIDENT_01205,Eat Drink Shop Healthy,2026-02-24,Active,GP Clinic
+RESIDENT_01017,Weight Management,2026-03-31,Dropped,GP Clinic
+RESIDENT_00715,Active Ageing,2026-04-09,Dropped,Polyclinic
+RESIDENT_00564,Eat Drink Shop Healthy,2026-05-23,Active,Polyclinic
+RESIDENT_00178,I Quit (Tobacco),2026-03-20,Active,Polyclinic
+RESIDENT_00083,Eat Drink Shop Healthy,2026-01-11,Active,App
+RESIDENT_00036,Eat Drink Shop Healthy,2026-02-15,Dropped,Roadshow
+RESIDENT_00036,Diabetes Prevention,2026-01-13,Dropped,App
+RESIDENT_00432,Eat Drink Shop Healthy,2026-03-28,Dropped,Employer
+RESIDENT_01328,Healthier SG,2026-04-04,Dropped,Employer
+RESIDENT_00323,Healthier SG,2026-02-27,Dropped,GP Clinic
+RESIDENT_00273,Active Ageing,2026-05-17,Active,Polyclinic
+RESIDENT_00182,Diabetes Prevention,2026-03-06,Active,App
+RESIDENT_00241,Weight Management,2026-03-11,Dropped,Roadshow
+RESIDENT_00086,Diabetes Prevention,2026-05-11,Active,Roadshow
+RESIDENT_00735,Weight Management,2026-05-24,Active,Polyclinic
+RESIDENT_01082,Eat Drink Shop Healthy,2026-01-11,Active,GP Clinic
+RESIDENT_00585,Eat Drink Shop Healthy,2026-01-17,Active,Employer
+RESIDENT_00556,Active Ageing,2026-02-06,Active,Employer
+RESIDENT_00089,Diabetes Prevention,2026-02-20,Active,App
+RESIDENT_01179,I Quit (Tobacco),2026-03-30,Active,App
+RESIDENT_00128,Active Ageing,2026-04-11,Dropped,GP Clinic
+RESIDENT_01266,Active Ageing,2026-05-17,Active,Polyclinic
+RESIDENT_01300,Healthier SG,2026-01-26,Dropped,Roadshow
+RESIDENT_00281,Active Ageing,2026-04-19,Dropped,GP Clinic
+RESIDENT_01403,Healthier SG,2026-04-19,Dropped,Roadshow
+RESIDENT_00894,Active Ageing,2026-01-16,Active,App
+RESIDENT_00214,Weight Management,2026-05-24,Active,App
+RESIDENT_01128,I Quit (Tobacco),2026-05-28,Dropped,GP Clinic
+RESIDENT_01346,Weight Management,2026-05-25,Active,GP Clinic
+RESIDENT_00472,Active Ageing,2026-04-23,Active,Employer
+RESIDENT_01359,I Quit (Tobacco),2026-05-17,Active,GP Clinic
+RESIDENT_00805,Active Ageing,2026-04-13,Dropped,Employer
+RESIDENT_00025,I Quit (Tobacco),2026-02-14,Active,GP Clinic
+RESIDENT_00932,I Quit (Tobacco),2026-03-12,Active,Roadshow
+RESIDENT_01335,Diabetes Prevention,2026-01-25,Active,GP Clinic
+RESIDENT_00681,I Quit (Tobacco),2026-02-10,Active,Roadshow
+RESIDENT_01296,Healthier SG,2026-01-04,Dropped,App
+RESIDENT_00560,Eat Drink Shop Healthy,2026-03-09,Active,GP Clinic
+RESIDENT_00690,Healthier SG,2026-03-24,Active,App
+RESIDENT_00665,Active Ageing,2026-03-11,Active,Polyclinic
+RESIDENT_01305,Active Ageing,2026-04-22,Active,App
+RESIDENT_01058,Diabetes Prevention,2026-01-14,Active,Employer
+RESIDENT_00415,I Quit (Tobacco),2026-01-19,Active,Polyclinic
+RESIDENT_01421,Active Ageing,2026-05-01,Dropped,Polyclinic
+RESIDENT_00731,Diabetes Prevention,2026-05-28,Dropped,Roadshow
+RESIDENT_01167,Diabetes Prevention,2026-05-24,Active,Polyclinic
+RESIDENT_00955,Weight Management,2026-05-22,Dropped,Employer
+RESIDENT_01021,Healthier SG,2026-03-25,Active,Employer
+RESIDENT_00144,Active Ageing,2026-01-28,Active,GP Clinic
+RESIDENT_01253,Eat Drink Shop Healthy,2026-01-10,Active,GP Clinic
+RESIDENT_00346,Active Ageing,2026-03-22,Dropped,Employer
+RESIDENT_01086,Active Ageing,2026-02-27,Active,GP Clinic
+RESIDENT_00851,Diabetes Prevention,2026-05-02,Active,Polyclinic
+RESIDENT_00431,Eat Drink Shop Healthy,2026-02-18,Dropped,App
+RESIDENT_00121,Eat Drink Shop Healthy,2026-02-16,Active,GP Clinic
+RESIDENT_01471,Diabetes Prevention,2026-05-23,Dropped,Polyclinic
+RESIDENT_00834,Active Ageing,2026-05-30,Active,Polyclinic
+RESIDENT_01257,Active Ageing,2026-05-07,Active,GP Clinic
+RESIDENT_01246,Active Ageing,2026-02-19,Dropped,GP Clinic
+RESIDENT_00114,Healthier SG,2026-01-11,Dropped,Employer
+RESIDENT_00705,Eat Drink Shop Healthy,2026-03-10,Active,App
+RESIDENT_00513,Diabetes Prevention,2026-03-14,Active,App
+RESIDENT_00438,Eat Drink Shop Healthy,2026-05-14,Active,App
+RESIDENT_01082,Active Ageing,2026-05-31,Dropped,Roadshow
+RESIDENT_00602,Diabetes Prevention,2026-04-12,Dropped,Polyclinic
+RESIDENT_00109,Eat Drink Shop Healthy,2026-01-08,Active,Polyclinic
+RESIDENT_01023,Eat Drink Shop Healthy,2026-04-21,Dropped,Employer
+RESIDENT_00774,Active Ageing,2026-01-21,Active,Employer
+RESIDENT_00995,Eat Drink Shop Healthy,2026-05-17,Active,Roadshow
+RESIDENT_00005,Active Ageing,2026-03-06,Active,Polyclinic
+RESIDENT_00390,I Quit (Tobacco),2026-05-09,Active,Roadshow
+RESIDENT_00480,Healthier SG,2026-04-04,Active,GP Clinic
+RESIDENT_01055,Healthier SG,2026-05-25,Active,GP Clinic
+RESIDENT_00798,Weight Management,2026-05-17,Dropped,App
+RESIDENT_01047,Weight Management,2026-02-24,Active,Polyclinic
+RESIDENT_00256,Weight Management,2026-03-02,Dropped,GP Clinic
+RESIDENT_01169,I Quit (Tobacco),2026-05-15,Active,App
+RESIDENT_00630,Weight Management,2026-05-21,Active,GP Clinic
+RESIDENT_00412,Weight Management,2026-04-12,Active,Roadshow
+RESIDENT_00454,Healthier SG,2026-02-06,Active,Employer
+RESIDENT_00143,Diabetes Prevention,2026-02-17,Active,GP Clinic
+RESIDENT_00427,Active Ageing,2026-01-22,Dropped,App
+RESIDENT_00176,Active Ageing,2026-02-18,Active,App
+RESIDENT_00055,Weight Management,2026-03-21,Dropped,App
+RESIDENT_01159,Healthier SG,2026-04-19,Active,Employer
+RESIDENT_00687,I Quit (Tobacco),2026-01-30,Active,Roadshow
+RESIDENT_00566,Diabetes Prevention,2026-02-20,Active,App
+RESIDENT_01037,Diabetes Prevention,2026-05-28,Active,Polyclinic
+RESIDENT_00190,I Quit (Tobacco),2026-02-15,Dropped,App
+RESIDENT_01260,Diabetes Prevention,2026-02-15,Active,Polyclinic
+RESIDENT_00904,Diabetes Prevention,2026-04-12,Active,Polyclinic
+RESIDENT_00448,Active Ageing,2026-02-03,Active,Roadshow
+RESIDENT_00224,Active Ageing,2026-02-15,Dropped,App
+RESIDENT_00467,Diabetes Prevention,2026-02-25,Active,Polyclinic
+RESIDENT_00734,Healthier SG,2026-05-12,Active,Polyclinic
+RESIDENT_00346,Eat Drink Shop Healthy,2026-04-05,Active,Polyclinic
+RESIDENT_00589,Active Ageing,2026-01-12,Active,App
+RESIDENT_00594,Healthier SG,2026-04-20,Active,Roadshow
+RESIDENT_01075,Active Ageing,2026-03-27,Active,GP Clinic
+RESIDENT_00410,Diabetes Prevention,2026-05-13,Active,App
+RESIDENT_00328,Diabetes Prevention,2026-03-17,Active,Employer
+RESIDENT_01387,Active Ageing,2026-01-09,Active,Roadshow
+RESIDENT_01125,Diabetes Prevention,2026-03-25,Active,Polyclinic
+RESIDENT_00429,Eat Drink Shop Healthy,2026-04-06,Dropped,GP Clinic
+RESIDENT_00359,Diabetes Prevention,2026-03-19,Active,App
+RESIDENT_00995,I Quit (Tobacco),2026-02-07,Dropped,GP Clinic
+RESIDENT_00495,I Quit (Tobacco),2026-05-23,Active,Roadshow
+RESIDENT_01102,Eat Drink Shop Healthy,2026-01-20,Active,Polyclinic
+RESIDENT_01392,Eat Drink Shop Healthy,2026-03-29,Dropped,Roadshow
+RESIDENT_01317,Healthier SG,2026-03-20,Dropped,App
+RESIDENT_00823,Active Ageing,2026-04-21,Active,Employer
+RESIDENT_00436,Weight Management,2026-02-28,Active,Roadshow
+RESIDENT_01035,Diabetes Prevention,2026-05-24,Active,GP Clinic
+RESIDENT_00002,Diabetes Prevention,2026-01-18,Active,Polyclinic
+RESIDENT_00650,I Quit (Tobacco),2026-04-21,Active,App
+RESIDENT_00707,I Quit (Tobacco),2026-03-06,Dropped,GP Clinic
+RESIDENT_00050,I Quit (Tobacco),2026-04-16,Active,Employer
+RESIDENT_00150,Healthier SG,2026-03-08,Active,App
+RESIDENT_00620,Eat Drink Shop Healthy,2026-02-03,Dropped,GP Clinic
+RESIDENT_00219,Diabetes Prevention,2026-01-05,Dropped,Employer
+RESIDENT_00102,Healthier SG,2026-04-21,Active,Employer
+RESIDENT_00865,I Quit (Tobacco),2026-05-02,Active,App
+RESIDENT_01419,Diabetes Prevention,2026-02-17,Active,Roadshow
+RESIDENT_01320,Eat Drink Shop Healthy,2026-05-30,Active,Polyclinic
+RESIDENT_00999,Eat Drink Shop Healthy,2026-04-06,Active,GP Clinic
+RESIDENT_01106,Healthier SG,2026-03-23,Dropped,Employer
+RESIDENT_00500,Active Ageing,2026-05-19,Active,Roadshow
+RESIDENT_00652,Eat Drink Shop Healthy,2026-03-16,Active,GP Clinic
+RESIDENT_00366,Eat Drink Shop Healthy,2026-03-04,Active,Employer
+RESIDENT_00575,Eat Drink Shop Healthy,2026-02-20,Active,Employer
+RESIDENT_01159,Diabetes Prevention,2026-01-27,Dropped,Employer
+RESIDENT_01258,Weight Management,2026-04-24,Dropped,Roadshow
+RESIDENT_01099,Weight Management,2026-02-27,Dropped,GP Clinic
+RESIDENT_00691,Diabetes Prevention,2026-02-18,Dropped,App
+RESIDENT_00966,Diabetes Prevention,2026-04-14,Active,Roadshow
+RESIDENT_00098,Eat Drink Shop Healthy,2026-05-09,Dropped,App
+RESIDENT_01350,I Quit (Tobacco),2026-01-13,Active,GP Clinic
+RESIDENT_00695,Active Ageing,2026-02-20,Active,GP Clinic
+RESIDENT_00524,I Quit (Tobacco),2026-04-24,Active,Polyclinic
+RESIDENT_00099,Weight Management,2026-01-02,Active,GP Clinic
+RESIDENT_00807,Weight Management,2026-05-13,Dropped,Polyclinic
+RESIDENT_00753,Weight Management,2026-04-20,Active,GP Clinic
+RESIDENT_00191,Active Ageing,2026-01-28,Active,Employer
+RESIDENT_01012,Healthier SG,2026-03-15,Dropped,Roadshow
+RESIDENT_01290,Eat Drink Shop Healthy,2026-04-15,Active,GP Clinic
+RESIDENT_01414,I Quit (Tobacco),2026-04-25,Active,App
+RESIDENT_01103,Eat Drink Shop Healthy,2026-03-20,Dropped,GP Clinic
+RESIDENT_01120,Active Ageing,2026-02-13,Active,Employer
+RESIDENT_01141,Active Ageing,2026-03-30,Active,App
+RESIDENT_01470,Active Ageing,2026-04-20,Active,Roadshow
+RESIDENT_00593,Healthier SG,2026-01-27,Dropped,App
+RESIDENT_00516,Active Ageing,2026-04-29,Dropped,GP Clinic
+RESIDENT_00869,Eat Drink Shop Healthy,2026-04-27,Active,GP Clinic
+RESIDENT_00739,Weight Management,2026-04-15,Active,Employer
+RESIDENT_01200,Weight Management,2026-05-14,Active,Polyclinic
+RESIDENT_00837,Diabetes Prevention,2026-01-28,Active,App
+RESIDENT_00075,Eat Drink Shop Healthy,2026-01-03,Dropped,App
+RESIDENT_00849,Diabetes Prevention,2026-04-03,Active,Employer
+RESIDENT_01280,Active Ageing,2026-03-27,Active,GP Clinic
+RESIDENT_00192,Diabetes Prevention,2026-04-19,Active,App
+RESIDENT_01127,Weight Management,2026-05-09,Active,Polyclinic
+RESIDENT_00856,Eat Drink Shop Healthy,2026-02-24,Active,Employer
+RESIDENT_01386,I Quit (Tobacco),2026-04-19,Active,GP Clinic
+RESIDENT_00532,Healthier SG,2026-03-14,Active,Roadshow
+RESIDENT_01057,I Quit (Tobacco),2026-03-10,Active,App
+RESIDENT_00725,Weight Management,2026-04-08,Active,Employer
+RESIDENT_01439,Healthier SG,2026-03-19,Dropped,App
+RESIDENT_00242,Healthier SG,2026-01-21,Dropped,Employer
+RESIDENT_00953,Active Ageing,2026-01-16,Active,GP Clinic
+RESIDENT_00075,Diabetes Prevention,2026-03-18,Active,App
+RESIDENT_01106,Diabetes Prevention,2026-04-03,Dropped,App
+RESIDENT_01484,Healthier SG,2026-03-08,Dropped,App
+RESIDENT_00166,Eat Drink Shop Healthy,2026-01-17,Active,Roadshow
+RESIDENT_01050,Healthier SG,2026-03-26,Active,GP Clinic
+RESIDENT_01023,Diabetes Prevention,2026-03-15,Active,App
+RESIDENT_00653,I Quit (Tobacco),2026-01-21,Active,Employer
+RESIDENT_01470,Diabetes Prevention,2026-02-26,Active,GP Clinic
+RESIDENT_00037,I Quit (Tobacco),2026-02-15,Active,Polyclinic
+RESIDENT_00136,Weight Management,2026-03-04,Active,App
+RESIDENT_00458,I Quit (Tobacco),2026-05-20,Active,Employer
+RESIDENT_00163,Diabetes Prevention,2026-01-03,Active,Roadshow
+RESIDENT_01342,Diabetes Prevention,2026-05-18,Active,Employer
+RESIDENT_00556,Eat Drink Shop Healthy,2026-01-22,Active,Roadshow
+RESIDENT_01044,Weight Management,2026-01-31,Active,GP Clinic
+RESIDENT_01103,Weight Management,2026-01-20,Dropped,Employer
+RESIDENT_00958,I Quit (Tobacco),2026-01-03,Active,Roadshow
+RESIDENT_01236,Healthier SG,2026-02-15,Active,GP Clinic
+RESIDENT_01116,Eat Drink Shop Healthy,2026-02-28,Active,Polyclinic
+RESIDENT_00991,Diabetes Prevention,2026-05-09,Active,GP Clinic
+RESIDENT_00835,Eat Drink Shop Healthy,2026-02-21,Active,App
+RESIDENT_01171,Weight Management,2026-04-03,Dropped,App
+RESIDENT_00813,Active Ageing,2026-03-07,Active,Employer
+RESIDENT_00863,I Quit (Tobacco),2026-04-12,Active,GP Clinic
+RESIDENT_00147,Diabetes Prevention,2026-02-04,Dropped,Roadshow
+RESIDENT_01044,Healthier SG,2026-03-04,Active,Roadshow
+RESIDENT_00624,Active Ageing,2026-02-23,Active,App
+RESIDENT_00929,Healthier SG,2026-05-30,Active,Roadshow
+RESIDENT_00248,Diabetes Prevention,2026-01-23,Active,App
+RESIDENT_00935,Diabetes Prevention,2026-01-05,Dropped,Employer
+RESIDENT_01031,I Quit (Tobacco),2026-02-07,Active,Polyclinic
+RESIDENT_00863,Diabetes Prevention,2026-02-05,Active,GP Clinic
+RESIDENT_00744,Eat Drink Shop Healthy,2026-01-30,Dropped,GP Clinic
+RESIDENT_00433,Eat Drink Shop Healthy,2026-01-07,Active,App
+RESIDENT_00006,Weight Management,2026-02-14,Active,Employer
+RESIDENT_00810,Eat Drink Shop Healthy,2026-01-25,Dropped,Polyclinic
+RESIDENT_00880,I Quit (Tobacco),2026-01-18,Active,Roadshow
+RESIDENT_00052,Healthier SG,2026-05-04,Active,Employer
+RESIDENT_00015,Eat Drink Shop Healthy,2026-03-03,Active,App
+RESIDENT_00951,Weight Management,2026-01-21,Active,Employer
+RESIDENT_01256,Healthier SG,2026-03-11,Active,GP Clinic
+RESIDENT_00492,I Quit (Tobacco),2026-04-15,Active,App
+RESIDENT_00493,Eat Drink Shop Healthy,2026-05-05,Active,Roadshow
+RESIDENT_01317,I Quit (Tobacco),2026-04-03,Active,App
+RESIDENT_00335,Weight Management,2026-01-16,Dropped,Employer
+RESIDENT_01284,I Quit (Tobacco),2026-02-25,Active,Roadshow
+RESIDENT_00763,Healthier SG,2026-05-11,Active,Employer
+RESIDENT_01112,I Quit (Tobacco),2026-01-11,Active,Employer
+RESIDENT_01427,I Quit (Tobacco),2026-01-11,Dropped,App
+RESIDENT_01313,Weight Management,2026-04-24,Active,Polyclinic
+RESIDENT_00171,Diabetes Prevention,2026-04-23,Active,GP Clinic
+RESIDENT_00462,Eat Drink Shop Healthy,2026-05-30,Active,Polyclinic
+RESIDENT_00657,Diabetes Prevention,2026-03-17,Active,Polyclinic
+RESIDENT_00775,Eat Drink Shop Healthy,2026-01-13,Active,GP Clinic
+RESIDENT_00004,Eat Drink Shop Healthy,2026-05-15,Active,Polyclinic
+RESIDENT_00076,Diabetes Prevention,2026-03-30,Active,GP Clinic
+RESIDENT_00643,Diabetes Prevention,2026-03-17,Active,App
+RESIDENT_00757,I Quit (Tobacco),2026-02-09,Active,Roadshow
+RESIDENT_00418,Diabetes Prevention,2026-04-15,Active,App
+RESIDENT_00303,I Quit (Tobacco),2026-03-15,Active,App
+RESIDENT_00332,Healthier SG,2026-05-19,Dropped,Roadshow
+RESIDENT_00352,Active Ageing,2026-05-15,Active,Employer
+RESIDENT_00450,I Quit (Tobacco),2026-04-28,Active,Employer
+RESIDENT_00689,Weight Management,2026-02-27,Dropped,Polyclinic
+RESIDENT_01210,Eat Drink Shop Healthy,2026-03-10,Active,App
+RESIDENT_00591,Diabetes Prevention,2026-01-16,Active,App
+RESIDENT_00187,Diabetes Prevention,2026-04-25,Dropped,Roadshow
+RESIDENT_01299,Diabetes Prevention,2026-01-27,Active,GP Clinic
+RESIDENT_01464,Diabetes Prevention,2026-02-02,Dropped,App
+RESIDENT_00829,Diabetes Prevention,2026-02-28,Active,Roadshow
+RESIDENT_01413,Weight Management,2026-04-25,Active,App
+RESIDENT_00889,Healthier SG,2026-04-05,Active,Roadshow
+RESIDENT_00032,I Quit (Tobacco),2026-05-06,Dropped,Polyclinic
+RESIDENT_01320,I Quit (Tobacco),2026-03-16,Active,Roadshow
+RESIDENT_00994,I Quit (Tobacco),2026-03-13,Active,Polyclinic
+RESIDENT_00956,Diabetes Prevention,2026-05-05,Active,Polyclinic
+RESIDENT_00286,Eat Drink Shop Healthy,2026-03-31,Active,Polyclinic
+RESIDENT_00419,I Quit (Tobacco),2026-03-26,Dropped,App
+RESIDENT_00901,Active Ageing,2026-04-04,Active,Employer
+RESIDENT_00710,I Quit (Tobacco),2026-03-10,Active,Employer
+RESIDENT_00687,Active Ageing,2026-03-25,Active,GP Clinic
+RESIDENT_01230,Diabetes Prevention,2026-05-09,Active,App
+RESIDENT_01244,Diabetes Prevention,2026-03-21,Active,Employer
+RESIDENT_00587,Diabetes Prevention,2026-01-27,Active,Employer
+RESIDENT_00210,Weight Management,2026-03-29,Dropped,Polyclinic
+RESIDENT_01174,Weight Management,2026-03-10,Active,GP Clinic
+RESIDENT_00102,Eat Drink Shop Healthy,2026-03-04,Active,Employer
+RESIDENT_00315,Healthier SG,2026-02-05,Active,Polyclinic
+RESIDENT_00025,Healthier SG,2026-01-13,Active,GP Clinic
+RESIDENT_00615,I Quit (Tobacco),2026-02-22,Dropped,GP Clinic
+RESIDENT_01267,Eat Drink Shop Healthy,2026-04-25,Active,Employer
+RESIDENT_00168,Eat Drink Shop Healthy,2026-01-09,Active,App
+RESIDENT_00707,Weight Management,2026-05-02,Active,App
+RESIDENT_01165,Active Ageing,2026-04-25,Dropped,GP Clinic
+RESIDENT_00350,Active Ageing,2026-02-22,Dropped,App
+RESIDENT_00785,Weight Management,2026-01-29,Dropped,Employer
+RESIDENT_00549,Diabetes Prevention,2026-01-15,Dropped,GP Clinic
+RESIDENT_00753,Healthier SG,2026-03-07,Active,App
+RESIDENT_00614,Eat Drink Shop Healthy,2026-03-13,Active,GP Clinic
+RESIDENT_00053,Eat Drink Shop Healthy,2026-02-19,Active,Polyclinic
+RESIDENT_00250,Eat Drink Shop Healthy,2026-01-26,Dropped,App
+RESIDENT_00768,Diabetes Prevention,2026-03-17,Active,Polyclinic
+RESIDENT_01000,I Quit (Tobacco),2026-01-03,Active,Roadshow
+RESIDENT_00344,Diabetes Prevention,2026-04-08,Active,Roadshow
+RESIDENT_00737,Weight Management,2026-03-03,Active,App
+RESIDENT_00247,I Quit (Tobacco),2026-02-11,Dropped,App
+RESIDENT_00786,Eat Drink Shop Healthy,2026-05-16,Active,Polyclinic
+RESIDENT_00132,I Quit (Tobacco),2026-05-12,Active,App
+RESIDENT_01298,Diabetes Prevention,2026-01-12,Dropped,App
+RESIDENT_00819,Diabetes Prevention,2026-04-14,Active,App
+RESIDENT_00469,Diabetes Prevention,2026-04-27,Active,Polyclinic
+RESIDENT_01079,Active Ageing,2026-02-25,Active,Polyclinic
+RESIDENT_00142,I Quit (Tobacco),2026-04-21,Active,Roadshow
+RESIDENT_01404,Healthier SG,2026-01-18,Active,GP Clinic
+RESIDENT_00789,Healthier SG,2026-02-01,Active,Polyclinic
+RESIDENT_00754,Healthier SG,2026-04-08,Active,App
+RESIDENT_00194,Active Ageing,2026-02-07,Active,Employer
+RESIDENT_00628,Healthier SG,2026-01-31,Active,Roadshow
+RESIDENT_01205,Diabetes Prevention,2026-01-29,Active,GP Clinic
+RESIDENT_00643,I Quit (Tobacco),2026-01-30,Active,GP Clinic
+RESIDENT_01384,Active Ageing,2026-03-26,Active,App
+RESIDENT_01022,Eat Drink Shop Healthy,2026-05-02,Active,Employer
+RESIDENT_00433,Active Ageing,2026-05-01,Active,Polyclinic
+RESIDENT_01165,Weight Management,2026-02-18,Active,Roadshow
+RESIDENT_01473,Weight Management,2026-04-18,Dropped,Employer
+RESIDENT_00674,Diabetes Prevention,2026-03-25,Dropped,GP Clinic
+RESIDENT_00419,Active Ageing,2026-03-30,Dropped,Roadshow
+RESIDENT_00284,Active Ageing,2026-04-04,Active,GP Clinic
+RESIDENT_01478,Healthier SG,2026-01-27,Dropped,Polyclinic
+RESIDENT_00133,Weight Management,2026-04-22,Active,Roadshow
+RESIDENT_00566,Active Ageing,2026-05-24,Active,Employer
+RESIDENT_00637,Eat Drink Shop Healthy,2026-02-25,Active,Roadshow
+RESIDENT_00684,I Quit (Tobacco),2026-05-23,Dropped,Employer
+RESIDENT_01127,Eat Drink Shop Healthy,2026-01-11,Active,Employer
+RESIDENT_00788,Active Ageing,2026-05-18,Active,App
+RESIDENT_00711,Active Ageing,2026-03-29,Active,Polyclinic
+RESIDENT_00601,Healthier SG,2026-05-23,Active,GP Clinic
+RESIDENT_00580,I Quit (Tobacco),2026-02-11,Dropped,App
+RESIDENT_00750,Healthier SG,2026-04-30,Active,App
+RESIDENT_00156,Diabetes Prevention,2026-04-27,Active,Polyclinic
+RESIDENT_00845,Healthier SG,2026-01-24,Active,Roadshow
+RESIDENT_00379,Active Ageing,2026-02-20,Dropped,Roadshow
+RESIDENT_01014,Weight Management,2026-01-12,Active,Employer
+RESIDENT_00215,Active Ageing,2026-04-06,Dropped,Roadshow
+RESIDENT_01418,Diabetes Prevention,2026-04-12,Dropped,Roadshow
+RESIDENT_00700,Healthier SG,2026-03-20,Dropped,App
+RESIDENT_01468,Eat Drink Shop Healthy,2026-05-21,Dropped,App
+RESIDENT_00719,Healthier SG,2026-01-08,Active,Roadshow
+RESIDENT_00577,Active Ageing,2026-05-01,Active,Roadshow
+RESIDENT_00224,Weight Management,2026-02-25,Active,Polyclinic
+RESIDENT_00902,Diabetes Prevention,2026-05-10,Dropped,Polyclinic
+RESIDENT_01308,Active Ageing,2026-02-13,Active,GP Clinic
+RESIDENT_00645,Healthier SG,2026-03-31,Dropped,Employer
+RESIDENT_00189,Healthier SG,2026-03-19,Dropped,Employer
+RESIDENT_00813,Weight Management,2026-03-22,Active,Polyclinic
+RESIDENT_01469,Weight Management,2026-01-03,Active,Polyclinic
+RESIDENT_01285,Healthier SG,2026-03-14,Active,GP Clinic
+RESIDENT_00440,Healthier SG,2026-05-26,Active,GP Clinic
+RESIDENT_00363,Eat Drink Shop Healthy,2026-05-23,Active,App
+RESIDENT_00117,Active Ageing,2026-04-29,Active,Polyclinic
+RESIDENT_00984,Eat Drink Shop Healthy,2026-02-07,Active,Roadshow
+RESIDENT_01487,Eat Drink Shop Healthy,2026-03-04,Active,Polyclinic
+RESIDENT_00384,Active Ageing,2026-02-15,Active,GP Clinic
+RESIDENT_00001,Active Ageing,2026-01-13,Active,Employer
+RESIDENT_00529,Diabetes Prevention,2026-03-23,Dropped,GP Clinic
+RESIDENT_00815,I Quit (Tobacco),2026-02-02,Active,GP Clinic
+RESIDENT_01497,Active Ageing,2026-03-21,Active,Roadshow
+RESIDENT_00240,Active Ageing,2026-05-03,Active,Polyclinic
+RESIDENT_00902,Healthier SG,2026-01-15,Active,Roadshow
+RESIDENT_01459,Weight Management,2026-04-25,Active,GP Clinic
+RESIDENT_00781,Weight Management,2026-05-22,Active,Polyclinic
+RESIDENT_00595,Healthier SG,2026-03-20,Dropped,App
+RESIDENT_01277,Weight Management,2026-04-14,Dropped,Polyclinic
+RESIDENT_01063,Active Ageing,2026-04-18,Active,GP Clinic
+RESIDENT_00954,Eat Drink Shop Healthy,2026-04-05,Active,GP Clinic
+RESIDENT_00576,Weight Management,2026-01-16,Dropped,Polyclinic
+RESIDENT_00466,Healthier SG,2026-02-06,Active,Roadshow
+RESIDENT_00391,Healthier SG,2026-04-15,Active,Polyclinic
+RESIDENT_00755,Diabetes Prevention,2026-02-23,Active,App
+RESIDENT_01202,I Quit (Tobacco),2026-05-14,Active,Polyclinic
+RESIDENT_01396,Weight Management,2026-03-31,Active,Roadshow
+RESIDENT_01206,Diabetes Prevention,2026-04-15,Dropped,Roadshow
+RESIDENT_00421,Healthier SG,2026-03-24,Active,Roadshow
+RESIDENT_01142,Healthier SG,2026-01-24,Active,Employer
+RESIDENT_00777,Weight Management,2026-04-17,Active,Roadshow
+RESIDENT_00294,Healthier SG,2026-04-16,Active,Roadshow
+RESIDENT_00989,Active Ageing,2026-01-04,Active,Employer
+RESIDENT_00281,Diabetes Prevention,2026-03-24,Active,GP Clinic
+RESIDENT_00490,Eat Drink Shop Healthy,2026-02-15,Dropped,App
+RESIDENT_00497,Healthier SG,2026-03-18,Dropped,App
+RESIDENT_00589,Healthier SG,2026-01-16,Active,Roadshow
+RESIDENT_00966,I Quit (Tobacco),2026-01-08,Active,Employer
+RESIDENT_00631,Active Ageing,2026-02-01,Active,App
+RESIDENT_01233,Diabetes Prevention,2026-01-08,Active,Polyclinic
+RESIDENT_01108,Weight Management,2026-05-16,Active,Roadshow
+RESIDENT_00970,Weight Management,2026-01-18,Active,Employer
+RESIDENT_01364,Eat Drink Shop Healthy,2026-03-11,Active,GP Clinic
+RESIDENT_00682,Eat Drink Shop Healthy,2026-02-14,Active,App
+RESIDENT_00548,Diabetes Prevention,2026-01-25,Active,Roadshow
+RESIDENT_00675,Active Ageing,2026-01-18,Active,GP Clinic
+RESIDENT_00456,Healthier SG,2026-05-10,Active,Roadshow
+RESIDENT_00609,Active Ageing,2026-03-25,Dropped,Roadshow
+RESIDENT_01368,Eat Drink Shop Healthy,2026-04-04,Active,App
+RESIDENT_01335,Weight Management,2026-01-23,Dropped,Polyclinic
+RESIDENT_00215,Diabetes Prevention,2026-03-19,Dropped,Roadshow
+RESIDENT_00542,Eat Drink Shop Healthy,2026-02-16,Active,Employer
+RESIDENT_00730,Active Ageing,2026-04-29,Active,GP Clinic
+RESIDENT_00521,I Quit (Tobacco),2026-01-15,Active,Roadshow
+RESIDENT_00420,Weight Management,2026-01-22,Active,Roadshow
+RESIDENT_00339,Eat Drink Shop Healthy,2026-05-02,Dropped,App
+RESIDENT_01104,I Quit (Tobacco),2026-01-29,Dropped,App
+RESIDENT_00149,Healthier SG,2026-02-12,Active,Roadshow
+RESIDENT_00480,I Quit (Tobacco),2026-03-14,Dropped,Employer
+RESIDENT_00862,Weight Management,2026-02-20,Active,App
+RESIDENT_00740,I Quit (Tobacco),2026-04-16,Active,Roadshow
+RESIDENT_01034,Healthier SG,2026-03-31,Active,GP Clinic
+RESIDENT_00714,Active Ageing,2026-05-11,Active,GP Clinic
+RESIDENT_00225,Eat Drink Shop Healthy,2026-04-10,Active,Polyclinic
+RESIDENT_01473,I Quit (Tobacco),2026-04-21,Active,Roadshow
+RESIDENT_01393,Weight Management,2026-05-22,Active,GP Clinic
+RESIDENT_01129,I Quit (Tobacco),2026-03-06,Active,Employer
+RESIDENT_00911,Weight Management,2026-04-03,Dropped,App
+RESIDENT_00022,I Quit (Tobacco),2026-05-27,Active,Polyclinic
+RESIDENT_00431,Healthier SG,2026-04-24,Dropped,Polyclinic
+RESIDENT_00506,Active Ageing,2026-04-05,Dropped,Polyclinic
+RESIDENT_00839,Diabetes Prevention,2026-02-24,Active,Roadshow
+RESIDENT_00523,Diabetes Prevention,2026-01-05,Active,App
+RESIDENT_00359,I Quit (Tobacco),2026-04-21,Active,App
+RESIDENT_00341,Weight Management,2026-02-02,Active,Polyclinic
+RESIDENT_01399,Weight Management,2026-01-20,Dropped,Polyclinic
+RESIDENT_01032,Weight Management,2026-03-18,Active,App
+RESIDENT_00810,Healthier SG,2026-03-24,Dropped,Polyclinic
+RESIDENT_01213,Eat Drink Shop Healthy,2026-01-10,Dropped,GP Clinic
+RESIDENT_00729,Active Ageing,2026-05-18,Dropped,App
+RESIDENT_00391,I Quit (Tobacco),2026-05-12,Active,Employer
+RESIDENT_01381,I Quit (Tobacco),2026-01-26,Active,Employer
+RESIDENT_01485,Diabetes Prevention,2026-05-26,Active,Employer
+RESIDENT_01140,Eat Drink Shop Healthy,2026-05-26,Active,App
+RESIDENT_01285,I Quit (Tobacco),2026-02-01,Active,GP Clinic
+RESIDENT_00902,Eat Drink Shop Healthy,2026-04-20,Active,Roadshow
+RESIDENT_01384,Healthier SG,2026-02-13,Active,Polyclinic
+RESIDENT_01288,Eat Drink Shop Healthy,2026-05-28,Active,GP Clinic
+RESIDENT_00297,Active Ageing,2026-01-04,Active,GP Clinic
+RESIDENT_00981,I Quit (Tobacco),2026-03-25,Active,GP Clinic
+RESIDENT_00681,Eat Drink Shop Healthy,2026-02-21,Active,Roadshow
+RESIDENT_01481,I Quit (Tobacco),2026-02-21,Active,GP Clinic
+RESIDENT_00414,Diabetes Prevention,2026-02-03,Active,GP Clinic
+RESIDENT_00690,Diabetes Prevention,2026-02-12,Dropped,Polyclinic
+RESIDENT_00693,Diabetes Prevention,2026-05-09,Dropped,Roadshow
+RESIDENT_00971,Weight Management,2026-04-14,Dropped,Employer
+RESIDENT_01467,Active Ageing,2026-03-10,Active,Roadshow
+RESIDENT_00973,Weight Management,2026-03-03,Active,GP Clinic
+RESIDENT_00906,Active Ageing,2026-03-08,Active,GP Clinic
+RESIDENT_00322,I Quit (Tobacco),2026-05-16,Active,Roadshow
+RESIDENT_00766,Diabetes Prevention,2026-05-04,Dropped,Polyclinic
+RESIDENT_01183,Eat Drink Shop Healthy,2026-04-22,Active,Polyclinic
+RESIDENT_01399,Active Ageing,2026-03-11,Dropped,Employer
+RESIDENT_00709,Active Ageing,2026-04-22,Active,App
+RESIDENT_01471,Active Ageing,2026-02-04,Active,Roadshow
+RESIDENT_01290,Active Ageing,2026-05-06,Active,GP Clinic
+RESIDENT_01118,Diabetes Prevention,2026-02-23,Active,App
+RESIDENT_00991,Eat Drink Shop Healthy,2026-04-22,Active,Employer
+RESIDENT_00462,I Quit (Tobacco),2026-02-02,Dropped,App
+RESIDENT_00347,Eat Drink Shop Healthy,2026-03-30,Dropped,Polyclinic
+RESIDENT_00387,Diabetes Prevention,2026-02-15,Active,Roadshow
+RESIDENT_01163,Weight Management,2026-05-07,Active,Polyclinic
+RESIDENT_00403,Healthier SG,2026-02-10,Dropped,Employer
+RESIDENT_00827,Eat Drink Shop Healthy,2026-05-23,Dropped,Roadshow
+RESIDENT_01221,Diabetes Prevention,2026-05-29,Active,App
+RESIDENT_00559,Diabetes Prevention,2026-02-08,Active,Employer
+RESIDENT_01213,Diabetes Prevention,2026-03-02,Dropped,Polyclinic
+RESIDENT_00600,Healthier SG,2026-04-15,Active,Employer
+RESIDENT_00960,Weight Management,2026-02-21,Dropped,Roadshow
+RESIDENT_00617,Diabetes Prevention,2026-05-09,Dropped,Roadshow
+RESIDENT_01094,Eat Drink Shop Healthy,2026-03-30,Active,GP Clinic
+RESIDENT_00261,Active Ageing,2026-05-10,Active,Employer
+RESIDENT_00633,Eat Drink Shop Healthy,2026-04-12,Active,GP Clinic
+RESIDENT_00215,I Quit (Tobacco),2026-02-05,Dropped,Polyclinic
+RESIDENT_00938,Weight Management,2026-03-12,Active,GP Clinic
+RESIDENT_00034,Eat Drink Shop Healthy,2026-05-17,Dropped,GP Clinic
+RESIDENT_00635,Diabetes Prevention,2026-03-07,Active,Employer
+RESIDENT_01030,Healthier SG,2026-05-26,Dropped,GP Clinic
+RESIDENT_00517,Diabetes Prevention,2026-02-28,Dropped,Roadshow
+RESIDENT_00223,Weight Management,2026-01-27,Active,Employer
+RESIDENT_01235,Diabetes Prevention,2026-03-15,Active,Roadshow
+RESIDENT_00311,Weight Management,2026-01-09,Dropped,App
+RESIDENT_00110,Active Ageing,2026-05-19,Active,GP Clinic
+RESIDENT_01387,Weight Management,2026-04-06,Active,Employer
+RESIDENT_00345,Eat Drink Shop Healthy,2026-02-04,Active,Employer
+RESIDENT_00443,Eat Drink Shop Healthy,2026-02-02,Active,App
+RESIDENT_01000,Eat Drink Shop Healthy,2026-04-13,Dropped,Roadshow
+RESIDENT_01027,Eat Drink Shop Healthy,2026-05-02,Active,Roadshow
+RESIDENT_01434,Diabetes Prevention,2026-04-27,Active,Roadshow
+RESIDENT_01178,Weight Management,2026-01-31,Active,GP Clinic
+RESIDENT_00548,Active Ageing,2026-02-21,Active,Employer
+RESIDENT_00688,Weight Management,2026-05-31,Active,Roadshow
+RESIDENT_01282,Diabetes Prevention,2026-05-13,Active,Polyclinic
+RESIDENT_00443,Weight Management,2026-01-22,Active,Roadshow
+RESIDENT_00457,Weight Management,2026-01-30,Active,Employer
+RESIDENT_00386,I Quit (Tobacco),2026-02-25,Active,Roadshow
+RESIDENT_00753,I Quit (Tobacco),2026-03-26,Active,Polyclinic
+RESIDENT_01032,Active Ageing,2026-05-10,Active,GP Clinic
+RESIDENT_00659,Eat Drink Shop Healthy,2026-05-18,Active,Roadshow
+RESIDENT_01295,Active Ageing,2026-04-25,Active,Roadshow
+RESIDENT_00662,Weight Management,2026-03-16,Active,Employer
+RESIDENT_01431,I Quit (Tobacco),2026-01-27,Active,Polyclinic
+RESIDENT_00404,Healthier SG,2026-05-20,Active,GP Clinic
+RESIDENT_01293,Eat Drink Shop Healthy,2026-01-26,Active,GP Clinic
+RESIDENT_00920,Active Ageing,2026-03-18,Dropped,Polyclinic
+RESIDENT_00916,Diabetes Prevention,2026-02-12,Active,App
+RESIDENT_00411,Active Ageing,2026-03-27,Active,GP Clinic
+RESIDENT_00413,Eat Drink Shop Healthy,2026-04-06,Active,Employer
+RESIDENT_00192,Active Ageing,2026-04-10,Active,GP Clinic
+RESIDENT_01420,Healthier SG,2026-05-26,Active,Polyclinic
+RESIDENT_01202,Eat Drink Shop Healthy,2026-02-20,Active,GP Clinic
+RESIDENT_00760,I Quit (Tobacco),2026-03-15,Active,GP Clinic
+RESIDENT_00807,I Quit (Tobacco),2026-02-23,Dropped,Roadshow
+RESIDENT_00681,Active Ageing,2026-02-10,Active,Polyclinic
+RESIDENT_00898,Healthier SG,2026-05-15,Dropped,Roadshow
+RESIDENT_01124,Weight Management,2026-03-27,Active,Employer
+RESIDENT_00413,Active Ageing,2026-04-24,Active,Polyclinic
+RESIDENT_01275,Active Ageing,2026-01-05,Dropped,Roadshow
+RESIDENT_01411,Weight Management,2026-03-04,Active,Polyclinic
+RESIDENT_00901,Weight Management,2026-01-18,Active,App
+RESIDENT_00078,Diabetes Prevention,2026-02-15,Active,Roadshow
+RESIDENT_00168,Active Ageing,2026-03-18,Active,Polyclinic
+RESIDENT_01405,Diabetes Prevention,2026-05-23,Active,Roadshow
+RESIDENT_00149,Diabetes Prevention,2026-03-14,Active,Employer
+RESIDENT_01292,I Quit (Tobacco),2026-03-24,Active,App
+RESIDENT_01371,Weight Management,2026-04-04,Active,Roadshow
+RESIDENT_00063,I Quit (Tobacco),2026-01-24,Active,GP Clinic
+RESIDENT_00628,I Quit (Tobacco),2026-05-27,Active,Employer
+RESIDENT_00175,Diabetes Prevention,2026-02-23,Active,Polyclinic
+RESIDENT_01056,Weight Management,2026-03-27,Active,Polyclinic
+RESIDENT_01029,Active Ageing,2026-01-11,Active,Employer
+RESIDENT_01368,Diabetes Prevention,2026-02-20,Active,App
+RESIDENT_01429,Active Ageing,2026-02-01,Active,App
+RESIDENT_00246,Active Ageing,2026-05-04,Dropped,App
+RESIDENT_01254,Weight Management,2026-02-05,Active,Polyclinic
+RESIDENT_00585,Healthier SG,2026-01-14,Active,Employer
+RESIDENT_00454,Diabetes Prevention,2026-04-14,Active,GP Clinic
+RESIDENT_00624,Eat Drink Shop Healthy,2026-02-25,Active,GP Clinic
+RESIDENT_00842,Active Ageing,2026-02-04,Dropped,App
+RESIDENT_00793,Active Ageing,2026-04-02,Active,Roadshow
+RESIDENT_00300,Eat Drink Shop Healthy,2026-01-18,Dropped,App
+RESIDENT_00473,Weight Management,2026-04-25,Dropped,Roadshow
+RESIDENT_00852,Active Ageing,2026-05-29,Active,GP Clinic
+RESIDENT_00985,Diabetes Prevention,2026-03-16,Dropped,Employer
+RESIDENT_01046,Weight Management,2026-05-20,Dropped,Roadshow
+RESIDENT_00996,Active Ageing,2026-05-13,Active,Employer
+RESIDENT_00528,Active Ageing,2026-02-17,Active,Employer
+RESIDENT_00709,I Quit (Tobacco),2026-02-13,Active,Polyclinic
+RESIDENT_00714,Diabetes Prevention,2026-04-09,Dropped,Polyclinic
+RESIDENT_00332,Diabetes Prevention,2026-02-04,Active,Employer
+RESIDENT_01463,Active Ageing,2026-03-02,Active,App
+RESIDENT_00300,Active Ageing,2026-04-06,Dropped,GP Clinic
+RESIDENT_00832,Diabetes Prevention,2026-02-02,Active,Employer
+RESIDENT_01059,Diabetes Prevention,2026-01-19,Active,Roadshow
+RESIDENT_00360,Weight Management,2026-01-02,Active,Roadshow
+RESIDENT_00575,Diabetes Prevention,2026-03-17,Active,GP Clinic
+RESIDENT_00479,I Quit (Tobacco),2026-04-06,Active,Employer
+RESIDENT_00805,Eat Drink Shop Healthy,2026-02-20,Active,Polyclinic
+RESIDENT_00380,Active Ageing,2026-04-29,Dropped,Employer
+RESIDENT_00641,I Quit (Tobacco),2026-03-14,Active,GP Clinic
+RESIDENT_00047,Eat Drink Shop Healthy,2026-05-04,Active,Roadshow
+RESIDENT_00153,Active Ageing,2026-02-17,Dropped,GP Clinic
+RESIDENT_00393,Diabetes Prevention,2026-01-31,Active,Roadshow
+RESIDENT_00531,Active Ageing,2026-01-13,Active,Polyclinic
+RESIDENT_00488,Active Ageing,2026-04-06,Active,Employer
+RESIDENT_01041,Active Ageing,2026-05-15,Dropped,Employer
+RESIDENT_00326,Active Ageing,2026-05-13,Active,Employer
+RESIDENT_00675,Diabetes Prevention,2026-02-13,Active,Employer
+RESIDENT_00272,Diabetes Prevention,2026-01-20,Active,Employer
+RESIDENT_00625,Weight Management,2026-04-06,Active,Polyclinic
+RESIDENT_00879,I Quit (Tobacco),2026-04-23,Dropped,Employer
+RESIDENT_00937,Eat Drink Shop Healthy,2026-04-26,Active,Polyclinic
+RESIDENT_00634,Healthier SG,2026-02-27,Active,App
+RESIDENT_00961,I Quit (Tobacco),2026-01-14,Dropped,Roadshow
+RESIDENT_00521,Healthier SG,2026-04-07,Active,GP Clinic
+RESIDENT_00173,Diabetes Prevention,2026-04-05,Dropped,Roadshow
+RESIDENT_00065,I Quit (Tobacco),2026-05-30,Active,Roadshow
+RESIDENT_00074,Diabetes Prevention,2026-04-08,Dropped,Polyclinic
+RESIDENT_00745,Diabetes Prevention,2026-03-19,Dropped,Employer
+RESIDENT_00995,Diabetes Prevention,2026-04-12,Dropped,Roadshow
+RESIDENT_00292,Diabetes Prevention,2026-01-21,Active,Polyclinic
+RESIDENT_01392,Healthier SG,2026-01-15,Dropped,App
+RESIDENT_00140,Healthier SG,2026-05-17,Active,GP Clinic
+RESIDENT_01380,Weight Management,2026-01-16,Active,Employer
+RESIDENT_00573,Healthier SG,2026-01-17,Active,GP Clinic
+RESIDENT_00773,Active Ageing,2026-02-03,Active,Employer
+RESIDENT_01445,Weight Management,2026-05-18,Active,GP Clinic
+RESIDENT_00761,Active Ageing,2026-01-12,Active,Employer
+RESIDENT_01279,I Quit (Tobacco),2026-02-10,Active,Polyclinic
+RESIDENT_01073,Healthier SG,2026-01-03,Dropped,Roadshow
+RESIDENT_01310,Diabetes Prevention,2026-03-13,Active,Roadshow
+RESIDENT_01458,Eat Drink Shop Healthy,2026-01-20,Active,Roadshow
+RESIDENT_01437,Eat Drink Shop Healthy,2026-03-30,Active,App
+RESIDENT_01160,Eat Drink Shop Healthy,2026-05-21,Dropped,Polyclinic
+RESIDENT_00582,Eat Drink Shop Healthy,2026-03-02,Active,App
+RESIDENT_01341,Active Ageing,2026-04-08,Active,Roadshow
+RESIDENT_01373,Healthier SG,2026-03-02,Active,Employer
+RESIDENT_01136,Eat Drink Shop Healthy,2026-03-26,Dropped,Employer
+RESIDENT_00973,Healthier SG,2026-04-04,Dropped,App
+RESIDENT_01074,Active Ageing,2026-04-27,Active,GP Clinic
+RESIDENT_01443,Active Ageing,2026-02-07,Active,Polyclinic
+RESIDENT_01255,Diabetes Prevention,2026-04-01,Active,GP Clinic
+RESIDENT_00747,Diabetes Prevention,2026-05-05,Active,Employer
+RESIDENT_00047,Weight Management,2026-01-15,Active,Employer
+RESIDENT_01477,Active Ageing,2026-02-03,Active,Polyclinic
+RESIDENT_00551,Weight Management,2026-01-28,Active,Polyclinic
+RESIDENT_00254,Healthier SG,2026-03-26,Active,Employer
+RESIDENT_00284,Eat Drink Shop Healthy,2026-02-05,Active,Employer
+RESIDENT_00508,Diabetes Prevention,2026-04-18,Active,GP Clinic
+RESIDENT_00377,Active Ageing,2026-01-16,Dropped,App
+RESIDENT_01170,I Quit (Tobacco),2026-01-10,Dropped,GP Clinic
+RESIDENT_01264,Weight Management,2026-01-14,Active,GP Clinic
+RESIDENT_00491,I Quit (Tobacco),2026-04-22,Dropped,GP Clinic
+RESIDENT_01340,Active Ageing,2026-03-23,Dropped,App
+RESIDENT_00170,Eat Drink Shop Healthy,2026-05-27,Active,App
+RESIDENT_00255,I Quit (Tobacco),2026-04-17,Active,Polyclinic
+RESIDENT_00383,Healthier SG,2026-03-20,Dropped,Polyclinic
+RESIDENT_01459,Healthier SG,2026-02-25,Dropped,Polyclinic
+RESIDENT_01375,I Quit (Tobacco),2026-02-10,Active,GP Clinic
+RESIDENT_01353,Weight Management,2026-03-09,Active,App
+RESIDENT_00767,Eat Drink Shop Healthy,2026-03-24,Active,GP Clinic
+RESIDENT_01120,Weight Management,2026-01-20,Active,App
+RESIDENT_00937,Weight Management,2026-05-03,Active,GP Clinic
+RESIDENT_00755,Eat Drink Shop Healthy,2026-04-24,Active,GP Clinic
+RESIDENT_00777,Diabetes Prevention,2026-04-13,Active,Employer
+RESIDENT_01427,Weight Management,2026-02-28,Active,App
+RESIDENT_01276,Weight Management,2026-01-01,Active,GP Clinic
+RESIDENT_00574,Diabetes Prevention,2026-02-23,Active,Roadshow
+RESIDENT_00154,Eat Drink Shop Healthy,2026-01-05,Active,App
+RESIDENT_01157,Healthier SG,2026-02-03,Active,Roadshow
+RESIDENT_00913,Active Ageing,2026-02-23,Active,Employer
+RESIDENT_01107,Diabetes Prevention,2026-03-18,Active,GP Clinic
+RESIDENT_00993,Active Ageing,2026-02-13,Active,Roadshow
+RESIDENT_01032,I Quit (Tobacco),2026-03-30,Active,Employer
+RESIDENT_00137,Eat Drink Shop Healthy,2026-02-20,Active,Employer
+RESIDENT_00317,Active Ageing,2026-05-24,Active,Polyclinic
+RESIDENT_00396,Active Ageing,2026-03-13,Active,GP Clinic
+RESIDENT_00734,Diabetes Prevention,2026-04-18,Active,App
+RESIDENT_00616,Diabetes Prevention,2026-05-14,Active,Polyclinic
+RESIDENT_01402,Weight Management,2026-02-04,Dropped,App
+RESIDENT_00800,Diabetes Prevention,2026-04-27,Active,Employer
+RESIDENT_00141,Healthier SG,2026-05-08,Dropped,GP Clinic
+RESIDENT_01303,Healthier SG,2026-04-28,Active,Employer
+RESIDENT_00932,Healthier SG,2026-02-02,Dropped,App
+RESIDENT_01424,Active Ageing,2026-05-15,Active,App
+RESIDENT_01412,Healthier SG,2026-05-05,Dropped,App
+RESIDENT_00561,Eat Drink Shop Healthy,2026-02-03,Active,Polyclinic
+RESIDENT_00079,Active Ageing,2026-01-11,Active,Employer
+RESIDENT_01009,Healthier SG,2026-05-01,Active,Roadshow
+RESIDENT_00958,Eat Drink Shop Healthy,2026-03-09,Active,Polyclinic
+RESIDENT_00622,Diabetes Prevention,2026-02-14,Dropped,Polyclinic
+RESIDENT_01164,I Quit (Tobacco),2026-03-04,Dropped,Roadshow
+RESIDENT_00121,Diabetes Prevention,2026-04-25,Active,Roadshow
+RESIDENT_01369,I Quit (Tobacco),2026-05-01,Dropped,Polyclinic
+RESIDENT_00522,Eat Drink Shop Healthy,2026-05-14,Active,App
+RESIDENT_00805,I Quit (Tobacco),2026-05-06,Active,Polyclinic
+RESIDENT_00952,Diabetes Prevention,2026-03-17,Dropped,Roadshow
+RESIDENT_00701,Active Ageing,2026-02-25,Dropped,Employer
+RESIDENT_00894,Healthier SG,2026-04-09,Active,Employer
+RESIDENT_01422,I Quit (Tobacco),2026-03-03,Active,Employer
+RESIDENT_01489,Eat Drink Shop Healthy,2026-04-12,Dropped,App
+RESIDENT_00377,Eat Drink Shop Healthy,2026-02-28,Dropped,Polyclinic
+RESIDENT_00020,Healthier SG,2026-03-23,Active,Polyclinic
+RESIDENT_01341,Healthier SG,2026-03-11,Active,Polyclinic
+RESIDENT_00835,Active Ageing,2026-04-10,Active,Roadshow
+RESIDENT_00366,Diabetes Prevention,2026-01-27,Active,Polyclinic
+RESIDENT_01152,Weight Management,2026-01-15,Active,Employer
+RESIDENT_00334,I Quit (Tobacco),2026-03-07,Active,Roadshow
+RESIDENT_00145,Weight Management,2026-03-22,Dropped,Roadshow
+RESIDENT_01192,Healthier SG,2026-04-07,Active,GP Clinic
+RESIDENT_01304,Eat Drink Shop Healthy,2026-04-06,Active,Polyclinic
+RESIDENT_00043,Active Ageing,2026-02-27,Active,Employer
+RESIDENT_01460,Weight Management,2026-03-23,Dropped,Polyclinic
+RESIDENT_00529,Weight Management,2026-02-09,Active,App
+RESIDENT_01238,Weight Management,2026-04-19,Active,GP Clinic
+RESIDENT_00233,I Quit (Tobacco),2026-05-22,Active,GP Clinic
+RESIDENT_01181,Eat Drink Shop Healthy,2026-04-04,Active,GP Clinic
+RESIDENT_00728,Eat Drink Shop Healthy,2026-04-18,Dropped,Roadshow
+RESIDENT_00860,Eat Drink Shop Healthy,2026-01-21,Active,GP Clinic
+RESIDENT_01145,I Quit (Tobacco),2026-03-22,Active,App
+RESIDENT_01480,I Quit (Tobacco),2026-03-20,Active,GP Clinic
+RESIDENT_00496,Weight Management,2026-05-01,Dropped,Polyclinic
+RESIDENT_00051,Eat Drink Shop Healthy,2026-02-17,Active,Employer
+RESIDENT_01490,Healthier SG,2026-04-20,Active,Polyclinic
+RESIDENT_01086,Healthier SG,2026-04-26,Active,App
+RESIDENT_01115,Eat Drink Shop Healthy,2026-01-30,Dropped,Polyclinic
+RESIDENT_00683,Active Ageing,2026-04-20,Active,App
+RESIDENT_00594,Eat Drink Shop Healthy,2026-01-24,Dropped,Employer
+RESIDENT_00767,I Quit (Tobacco),2026-04-25,Active,Roadshow
+RESIDENT_00875,Diabetes Prevention,2026-05-09,Dropped,App
+RESIDENT_01220,Diabetes Prevention,2026-04-23,Dropped,GP Clinic
+RESIDENT_00814,Diabetes Prevention,2026-01-20,Active,Polyclinic
+RESIDENT_01246,Diabetes Prevention,2026-03-19,Active,Employer
+RESIDENT_01289,Diabetes Prevention,2026-02-27,Active,Polyclinic
+RESIDENT_01300,Weight Management,2026-03-26,Active,Employer
+RESIDENT_00378,Active Ageing,2026-04-21,Active,GP Clinic
+RESIDENT_01388,Eat Drink Shop Healthy,2026-05-04,Active,GP Clinic
+RESIDENT_00876,I Quit (Tobacco),2026-03-05,Active,Employer
+RESIDENT_00467,Weight Management,2026-03-18,Active,Polyclinic
+RESIDENT_00105,Healthier SG,2026-04-11,Active,GP Clinic
+RESIDENT_00942,Active Ageing,2026-01-02,Active,GP Clinic
+RESIDENT_01460,Diabetes Prevention,2026-05-26,Dropped,GP Clinic
+RESIDENT_00092,Active Ageing,2026-04-12,Active,App
+RESIDENT_01353,Eat Drink Shop Healthy,2026-03-30,Active,GP Clinic
+RESIDENT_00362,Weight Management,2026-03-23,Active,Employer
+RESIDENT_00661,Weight Management,2026-01-29,Dropped,GP Clinic
+RESIDENT_00686,Weight Management,2026-05-27,Active,Polyclinic
+RESIDENT_00835,Weight Management,2026-05-08,Active,App
+RESIDENT_01110,Healthier SG,2026-05-26,Dropped,GP Clinic
+RESIDENT_00667,I Quit (Tobacco),2026-04-25,Active,Employer
+RESIDENT_00893,I Quit (Tobacco),2026-02-26,Active,Polyclinic
+RESIDENT_00145,Active Ageing,2026-02-16,Dropped,GP Clinic
+RESIDENT_00317,I Quit (Tobacco),2026-04-10,Dropped,App
+RESIDENT_01195,Active Ageing,2026-04-01,Active,GP Clinic
+RESIDENT_00499,Weight Management,2026-04-22,Active,App
+RESIDENT_00699,Diabetes Prevention,2026-02-12,Active,Polyclinic
+RESIDENT_01154,Active Ageing,2026-01-19,Active,Roadshow
+RESIDENT_00982,I Quit (Tobacco),2026-05-18,Dropped,GP Clinic
+RESIDENT_01197,Active Ageing,2026-03-19,Dropped,GP Clinic
+RESIDENT_00071,Healthier SG,2026-05-10,Active,Polyclinic
+RESIDENT_01118,Active Ageing,2026-01-08,Active,Roadshow
+RESIDENT_00867,Diabetes Prevention,2026-03-12,Active,Roadshow
+RESIDENT_01031,Active Ageing,2026-02-10,Active,Roadshow
+RESIDENT_00461,Healthier SG,2026-03-23,Active,App
+RESIDENT_00130,Eat Drink Shop Healthy,2026-03-07,Active,Polyclinic
+RESIDENT_00799,Diabetes Prevention,2026-05-16,Active,Polyclinic
+RESIDENT_00597,Weight Management,2026-03-08,Active,App
+RESIDENT_01219,Weight Management,2026-05-16,Active,Polyclinic
+RESIDENT_01022,Diabetes Prevention,2026-02-10,Active,GP Clinic
+RESIDENT_00224,I Quit (Tobacco),2026-02-08,Dropped,Employer
+RESIDENT_00721,Healthier SG,2026-05-01,Dropped,App
+RESIDENT_01134,Healthier SG,2026-03-24,Active,GP Clinic
+RESIDENT_01420,I Quit (Tobacco),2026-02-20,Active,GP Clinic
+RESIDENT_00049,Weight Management,2026-01-21,Active,GP Clinic
+RESIDENT_00562,Weight Management,2026-04-11,Dropped,Polyclinic
+RESIDENT_00159,Weight Management,2026-01-21,Dropped,Roadshow
+RESIDENT_01017,I Quit (Tobacco),2026-03-16,Dropped,Polyclinic
+RESIDENT_00357,Diabetes Prevention,2026-04-14,Dropped,App
+RESIDENT_00572,Active Ageing,2026-03-22,Active,Employer
+RESIDENT_00219,Healthier SG,2026-01-22,Active,App
+RESIDENT_01052,Active Ageing,2026-01-13,Dropped,Employer
+RESIDENT_01388,Healthier SG,2026-02-25,Active,Employer
+RESIDENT_01299,Healthier SG,2026-01-25,Dropped,GP Clinic
+RESIDENT_00669,Eat Drink Shop Healthy,2026-03-01,Active,GP Clinic
+RESIDENT_00742,Eat Drink Shop Healthy,2026-01-24,Dropped,Roadshow
+RESIDENT_01194,Eat Drink Shop Healthy,2026-02-09,Active,Employer
+RESIDENT_01386,Active Ageing,2026-01-31,Active,Employer
+RESIDENT_00552,Healthier SG,2026-05-28,Active,Polyclinic
+RESIDENT_00064,Diabetes Prevention,2026-01-14,Dropped,App
+RESIDENT_00697,Active Ageing,2026-05-14,Dropped,Polyclinic
+RESIDENT_01435,Diabetes Prevention,2026-04-15,Dropped,Employer
+RESIDENT_01057,Active Ageing,2026-01-20,Active,Employer
+RESIDENT_01116,Diabetes Prevention,2026-02-08,Active,Polyclinic
+RESIDENT_00849,Active Ageing,2026-04-21,Active,Employer
+RESIDENT_01049,Weight Management,2026-04-16,Active,Polyclinic
+RESIDENT_01406,Healthier SG,2026-02-22,Active,GP Clinic
+RESIDENT_00115,Weight Management,2026-05-21,Active,App
+RESIDENT_01324,I Quit (Tobacco),2026-01-16,Active,Employer
+RESIDENT_00295,Healthier SG,2026-01-10,Dropped,Roadshow
+RESIDENT_00966,Eat Drink Shop Healthy,2026-04-22,Active,Polyclinic
+RESIDENT_01076,Weight Management,2026-02-26,Active,GP Clinic
+RESIDENT_00550,Healthier SG,2026-02-09,Active,Roadshow
+RESIDENT_00546,Active Ageing,2026-03-21,Active,Polyclinic
+RESIDENT_00815,Active Ageing,2026-01-08,Active,Polyclinic
+RESIDENT_01085,Healthier SG,2026-01-28,Active,GP Clinic
+RESIDENT_00358,Active Ageing,2026-01-07,Active,Employer
+RESIDENT_00112,Weight Management,2026-05-31,Dropped,Polyclinic
+RESIDENT_00596,Eat Drink Shop Healthy,2026-03-04,Dropped,GP Clinic
+RESIDENT_00694,Eat Drink Shop Healthy,2026-01-16,Active,App
+RESIDENT_01094,Weight Management,2026-05-25,Active,Roadshow
+RESIDENT_01295,Eat Drink Shop Healthy,2026-05-30,Active,Employer
+RESIDENT_00347,Healthier SG,2026-01-17,Dropped,Employer
+RESIDENT_01316,Weight Management,2026-04-06,Dropped,Polyclinic
+RESIDENT_00057,Eat Drink Shop Healthy,2026-01-20,Active,GP Clinic
+RESIDENT_00379,Eat Drink Shop Healthy,2026-05-12,Active,Roadshow
+RESIDENT_00936,Weight Management,2026-04-21,Dropped,Polyclinic
+RESIDENT_01469,Healthier SG,2026-04-28,Active,GP Clinic
+RESIDENT_00107,Eat Drink Shop Healthy,2026-01-01,Active,Employer
+RESIDENT_00989,Weight Management,2026-01-29,Active,Employer
+RESIDENT_00972,I Quit (Tobacco),2026-01-01,Dropped,GP Clinic
+RESIDENT_00268,Active Ageing,2026-05-15,Dropped,GP Clinic
+RESIDENT_00865,Healthier SG,2026-01-05,Dropped,GP Clinic
+RESIDENT_00201,Diabetes Prevention,2026-04-22,Active,Employer
+RESIDENT_00843,Weight Management,2026-02-05,Dropped,GP Clinic
+RESIDENT_01496,I Quit (Tobacco),2026-03-13,Dropped,Employer
+RESIDENT_00952,Weight Management,2026-03-21,Dropped,Roadshow
+RESIDENT_01106,Weight Management,2026-03-05,Dropped,Roadshow
+RESIDENT_00518,Weight Management,2026-05-28,Active,App
+RESIDENT_01428,Weight Management,2026-01-29,Dropped,Roadshow
+RESIDENT_00177,I Quit (Tobacco),2026-04-08,Dropped,App
+RESIDENT_00713,Active Ageing,2026-01-16,Active,Roadshow
+RESIDENT_00750,Active Ageing,2026-01-11,Active,Employer
+RESIDENT_01033,Active Ageing,2026-01-07,Active,App
+RESIDENT_01069,Healthier SG,2026-04-24,Active,GP Clinic
+RESIDENT_00127,Active Ageing,2026-05-09,Active,GP Clinic
+RESIDENT_00218,Diabetes Prevention,2026-02-18,Active,Polyclinic
+RESIDENT_00418,Weight Management,2026-05-27,Dropped,App
+RESIDENT_00576,I Quit (Tobacco),2026-01-08,Active,App
+RESIDENT_00561,Diabetes Prevention,2026-04-03,Active,Roadshow
+RESIDENT_00124,Weight Management,2026-02-10,Active,Polyclinic
+RESIDENT_01441,Diabetes Prevention,2026-03-19,Active,Polyclinic
+RESIDENT_01381,Healthier SG,2026-02-22,Active,App
+RESIDENT_00279,Active Ageing,2026-03-17,Active,Roadshow
+RESIDENT_00627,Eat Drink Shop Healthy,2026-04-24,Active,App
+RESIDENT_00836,Diabetes Prevention,2026-02-23,Active,App
+RESIDENT_00120,Healthier SG,2026-02-18,Dropped,GP Clinic
+RESIDENT_01363,Diabetes Prevention,2026-05-31,Active,App
+RESIDENT_01265,Active Ageing,2026-03-22,Dropped,Roadshow
+RESIDENT_01225,Healthier SG,2026-01-19,Active,App
+RESIDENT_00564,Diabetes Prevention,2026-01-24,Active,Polyclinic
+RESIDENT_01153,Eat Drink Shop Healthy,2026-01-18,Active,Polyclinic
+RESIDENT_01479,Diabetes Prevention,2026-04-27,Active,GP Clinic
+RESIDENT_00514,Active Ageing,2026-03-29,Active,Roadshow
+RESIDENT_01132,Diabetes Prevention,2026-02-16,Active,Employer
+RESIDENT_00219,I Quit (Tobacco),2026-03-12,Dropped,Roadshow
+RESIDENT_00574,Eat Drink Shop Healthy,2026-05-02,Active,GP Clinic
+RESIDENT_00032,Eat Drink Shop Healthy,2026-03-07,Active,Roadshow
+RESIDENT_00119,Healthier SG,2026-01-27,Dropped,Polyclinic
+RESIDENT_00285,Weight Management,2026-03-11,Active,App
+RESIDENT_01143,Diabetes Prevention,2026-05-05,Dropped,Polyclinic
+RESIDENT_01002,Weight Management,2026-03-12,Active,GP Clinic
+RESIDENT_00471,Active Ageing,2026-02-19,Active,GP Clinic
+RESIDENT_01214,Active Ageing,2026-05-17,Active,App
+RESIDENT_00469,Healthier SG,2026-03-11,Active,Roadshow
+RESIDENT_01049,Healthier SG,2026-03-29,Active,Roadshow
+RESIDENT_00084,Weight Management,2026-01-05,Dropped,Employer
+RESIDENT_01329,Eat Drink Shop Healthy,2026-05-02,Active,GP Clinic
+RESIDENT_00236,I Quit (Tobacco),2026-05-03,Active,GP Clinic
+RESIDENT_00091,Diabetes Prevention,2026-02-25,Active,Polyclinic
+RESIDENT_00515,Eat Drink Shop Healthy,2026-02-15,Active,Employer
+RESIDENT_00721,Active Ageing,2026-02-03,Dropped,App
+RESIDENT_01487,Diabetes Prevention,2026-02-01,Active,Employer
+RESIDENT_01466,I Quit (Tobacco),2026-01-09,Active,App
+RESIDENT_00088,Active Ageing,2026-03-31,Active,Roadshow
+RESIDENT_00116,Active Ageing,2026-02-14,Active,App
+RESIDENT_00044,I Quit (Tobacco),2026-01-10,Active,Polyclinic
+RESIDENT_01261,Healthier SG,2026-01-18,Active,Roadshow
+RESIDENT_00614,Active Ageing,2026-05-19,Active,Employer
+RESIDENT_01190,Weight Management,2026-03-19,Active,Roadshow
+RESIDENT_00584,Active Ageing,2026-02-21,Active,Roadshow
+RESIDENT_00410,Healthier SG,2026-05-03,Active,GP Clinic
+RESIDENT_01311,Weight Management,2026-03-03,Active,Employer
+RESIDENT_00391,Active Ageing,2026-03-19,Active,App
+RESIDENT_01220,I Quit (Tobacco),2026-01-22,Active,Polyclinic
+RESIDENT_00411,Diabetes Prevention,2026-05-28,Active,Roadshow
+RESIDENT_00477,Eat Drink Shop Healthy,2026-05-13,Active,Polyclinic
+RESIDENT_00975,Eat Drink Shop Healthy,2026-03-05,Active,Roadshow
+RESIDENT_00669,Weight Management,2026-02-02,Active,Roadshow
+RESIDENT_01326,Diabetes Prevention,2026-01-30,Active,App
+RESIDENT_00358,I Quit (Tobacco),2026-04-26,Active,App
+RESIDENT_00551,Healthier SG,2026-05-02,Active,Employer
+RESIDENT_00359,Healthier SG,2026-03-09,Active,GP Clinic
+RESIDENT_01242,I Quit (Tobacco),2026-02-27,Dropped,Employer
+RESIDENT_00402,Healthier SG,2026-05-13,Active,Polyclinic
+RESIDENT_01066,Eat Drink Shop Healthy,2026-02-09,Active,App
+RESIDENT_00196,Eat Drink Shop Healthy,2026-04-20,Active,Roadshow
+RESIDENT_01225,Weight Management,2026-03-31,Active,GP Clinic
+RESIDENT_00271,Healthier SG,2026-03-09,Active,GP Clinic
+RESIDENT_00673,Eat Drink Shop Healthy,2026-02-19,Active,Employer
+RESIDENT_00230,Weight Management,2026-05-21,Active,Polyclinic
+RESIDENT_01362,I Quit (Tobacco),2026-01-04,Active,Polyclinic
+RESIDENT_00718,Active Ageing,2026-02-09,Active,App
+RESIDENT_00348,Diabetes Prevention,2026-05-20,Active,GP Clinic
+RESIDENT_00126,Active Ageing,2026-02-06,Active,GP Clinic
+RESIDENT_01021,I Quit (Tobacco),2026-03-08,Active,App
+RESIDENT_01016,Diabetes Prevention,2026-03-10,Active,Employer
+RESIDENT_00239,Weight Management,2026-05-03,Active,App
+RESIDENT_01325,Diabetes Prevention,2026-04-25,Active,Roadshow
+RESIDENT_01495,Diabetes Prevention,2026-03-22,Dropped,Roadshow
+RESIDENT_00668,Healthier SG,2026-01-30,Active,App
+RESIDENT_01256,I Quit (Tobacco),2026-04-26,Active,Roadshow
+RESIDENT_01347,Diabetes Prevention,2026-04-09,Dropped,Employer
+RESIDENT_01270,I Quit (Tobacco),2026-04-10,Active,Roadshow
+RESIDENT_01069,Eat Drink Shop Healthy,2026-02-11,Active,Employer
+RESIDENT_01169,Eat Drink Shop Healthy,2026-04-25,Active,Roadshow
+RESIDENT_01088,Eat Drink Shop Healthy,2026-03-30,Active,App
+RESIDENT_00281,Healthier SG,2026-04-19,Active,App
+RESIDENT_00738,Active Ageing,2026-05-19,Dropped,GP Clinic
+RESIDENT_00659,Diabetes Prevention,2026-05-25,Active,GP Clinic
+RESIDENT_00892,I Quit (Tobacco),2026-01-10,Dropped,Polyclinic
+RESIDENT_01007,Diabetes Prevention,2026-03-15,Active,Employer
+RESIDENT_00059,Healthier SG,2026-01-13,Active,GP Clinic
+RESIDENT_01085,I Quit (Tobacco),2026-01-06,Active,Employer
+RESIDENT_01422,Healthier SG,2026-04-02,Active,App
+RESIDENT_00206,I Quit (Tobacco),2026-03-13,Active,Employer
+RESIDENT_01495,Active Ageing,2026-03-07,Active,App
+RESIDENT_01018,Healthier SG,2026-03-23,Active,GP Clinic
+RESIDENT_01245,Eat Drink Shop Healthy,2026-03-04,Active,Polyclinic
+RESIDENT_01484,Eat Drink Shop Healthy,2026-04-13,Active,Roadshow
+RESIDENT_00457,Active Ageing,2026-01-29,Active,Employer
+RESIDENT_00774,Weight Management,2026-04-09,Active,GP Clinic
+RESIDENT_00247,Active Ageing,2026-01-04,Dropped,App
+RESIDENT_00745,Healthier SG,2026-04-03,Dropped,Roadshow
+RESIDENT_00735,Eat Drink Shop Healthy,2026-02-05,Dropped,Polyclinic
+RESIDENT_00928,Weight Management,2026-03-22,Active,Roadshow
+RESIDENT_01430,Active Ageing,2026-01-11,Dropped,GP Clinic
+RESIDENT_00222,Active Ageing,2026-02-14,Dropped,GP Clinic
+RESIDENT_01168,I Quit (Tobacco),2026-01-18,Active,Employer
+RESIDENT_00915,Diabetes Prevention,2026-03-29,Active,GP Clinic
+RESIDENT_00007,Diabetes Prevention,2026-02-20,Dropped,Employer
+RESIDENT_00679,I Quit (Tobacco),2026-05-21,Dropped,Polyclinic
+RESIDENT_00931,Weight Management,2026-01-22,Active,App
+RESIDENT_00530,Diabetes Prevention,2026-01-01,Dropped,App
+RESIDENT_00541,Healthier SG,2026-02-09,Active,Roadshow
+RESIDENT_00765,Active Ageing,2026-02-24,Active,App
+RESIDENT_01379,Active Ageing,2026-03-16,Dropped,App
+RESIDENT_00216,Diabetes Prevention,2026-05-28,Dropped,App
+RESIDENT_01059,Active Ageing,2026-03-25,Active,Roadshow
+RESIDENT_00732,Healthier SG,2026-05-20,Dropped,Polyclinic
+RESIDENT_01494,I Quit (Tobacco),2026-05-13,Active,GP Clinic
+RESIDENT_00596,Active Ageing,2026-03-17,Active,Polyclinic
+RESIDENT_01331,Active Ageing,2026-03-11,Active,Polyclinic
+RESIDENT_00897,Healthier SG,2026-01-04,Active,Employer
+RESIDENT_01100,I Quit (Tobacco),2026-01-02,Active,Polyclinic
+RESIDENT_01426,I Quit (Tobacco),2026-03-13,Active,GP Clinic
+RESIDENT_00978,Active Ageing,2026-04-22,Active,GP Clinic
+RESIDENT_00693,Weight Management,2026-02-03,Active,Roadshow
+RESIDENT_00174,Weight Management,2026-02-18,Active,App
+RESIDENT_00712,Weight Management,2026-01-04,Active,Employer
+RESIDENT_01036,Diabetes Prevention,2026-04-11,Active,GP Clinic
+RESIDENT_01235,I Quit (Tobacco),2026-05-31,Active,App
+RESIDENT_01356,I Quit (Tobacco),2026-04-07,Active,App
+RESIDENT_00111,Healthier SG,2026-01-23,Dropped,Roadshow
+RESIDENT_00055,Eat Drink Shop Healthy,2026-02-25,Dropped,App
+RESIDENT_01332,Diabetes Prevention,2026-04-03,Active,GP Clinic
+RESIDENT_01078,Weight Management,2026-03-23,Active,GP Clinic
+RESIDENT_00871,Diabetes Prevention,2026-03-06,Active,Polyclinic
+RESIDENT_00950,Active Ageing,2026-01-27,Active,App
+RESIDENT_00229,Eat Drink Shop Healthy,2026-05-07,Active,Employer
+RESIDENT_01089,Healthier SG,2026-01-14,Dropped,Employer
+RESIDENT_00430,I Quit (Tobacco),2026-05-08,Active,Polyclinic
+RESIDENT_00605,Diabetes Prevention,2026-03-07,Active,Roadshow
+RESIDENT_01474,Diabetes Prevention,2026-05-23,Active,App
+RESIDENT_00037,Diabetes Prevention,2026-03-19,Active,Employer
+RESIDENT_00874,Weight Management,2026-01-03,Active,Polyclinic
+RESIDENT_01325,I Quit (Tobacco),2026-05-10,Active,App
+RESIDENT_01383,Healthier SG,2026-04-23,Active,Polyclinic
+RESIDENT_00150,I Quit (Tobacco),2026-01-08,Active,GP Clinic
+RESIDENT_00409,Diabetes Prevention,2026-04-19,Active,Employer
+RESIDENT_01180,Active Ageing,2026-01-23,Dropped,Polyclinic
+RESIDENT_00520,I Quit (Tobacco),2026-05-22,Dropped,Employer
+RESIDENT_00434,Diabetes Prevention,2026-03-19,Active,GP Clinic
+RESIDENT_00762,I Quit (Tobacco),2026-04-30,Active,Employer
+RESIDENT_00535,I Quit (Tobacco),2026-02-13,Dropped,Roadshow
+RESIDENT_01500,Active Ageing,2026-02-11,Active,App
+RESIDENT_00009,Active Ageing,2026-04-27,Dropped,Polyclinic
+RESIDENT_00210,I Quit (Tobacco),2026-02-05,Active,Polyclinic
+RESIDENT_01260,Weight Management,2026-03-11,Active,Polyclinic
+RESIDENT_00382,Eat Drink Shop Healthy,2026-05-28,Active,Employer
+RESIDENT_00582,I Quit (Tobacco),2026-04-09,Active,Polyclinic
+RESIDENT_00530,Weight Management,2026-04-22,Active,Polyclinic
+RESIDENT_01231,Healthier SG,2026-05-31,Active,App
+RESIDENT_01454,Weight Management,2026-02-13,Active,Polyclinic
+RESIDENT_01337,I Quit (Tobacco),2026-02-24,Active,Employer
+RESIDENT_00732,Diabetes Prevention,2026-03-08,Dropped,App
+RESIDENT_00606,Healthier SG,2026-02-06,Active,GP Clinic
+RESIDENT_00579,Eat Drink Shop Healthy,2026-02-26,Active,GP Clinic
+RESIDENT_00938,I Quit (Tobacco),2026-05-24,Active,GP Clinic
+RESIDENT_00098,Weight Management,2026-05-16,Dropped,Roadshow
+RESIDENT_00821,Weight Management,2026-05-30,Active,Roadshow
+RESIDENT_01160,Active Ageing,2026-04-26,Active,App
+RESIDENT_00665,Eat Drink Shop Healthy,2026-01-04,Active,Employer
+RESIDENT_01493,Eat Drink Shop Healthy,2026-04-11,Active,GP Clinic
+RESIDENT_00343,Eat Drink Shop Healthy,2026-02-02,Dropped,GP Clinic
+RESIDENT_00045,Weight Management,2026-04-15,Active,Polyclinic
+RESIDENT_01026,Diabetes Prevention,2026-05-09,Dropped,App
+RESIDENT_00632,Weight Management,2026-02-15,Active,Roadshow
+RESIDENT_00954,Diabetes Prevention,2026-05-17,Active,Employer
+RESIDENT_00870,Active Ageing,2026-01-26,Active,Employer
+RESIDENT_00145,I Quit (Tobacco),2026-01-11,Active,Polyclinic
+RESIDENT_00441,I Quit (Tobacco),2026-05-05,Active,Employer
+RESIDENT_01456,I Quit (Tobacco),2026-02-28,Active,App
+RESIDENT_01414,Healthier SG,2026-02-18,Active,GP Clinic
+RESIDENT_01100,Weight Management,2026-05-20,Active,Polyclinic
+RESIDENT_00481,I Quit (Tobacco),2026-02-23,Active,App
+RESIDENT_00796,Active Ageing,2026-02-17,Active,App
+RESIDENT_00167,Healthier SG,2026-05-18,Dropped,Roadshow
+RESIDENT_00061,Eat Drink Shop Healthy,2026-04-26,Active,GP Clinic
+RESIDENT_00220,Diabetes Prevention,2026-02-07,Dropped,Employer
+RESIDENT_01054,Active Ageing,2026-04-08,Active,Roadshow
+RESIDENT_00422,Diabetes Prevention,2026-04-25,Active,Roadshow
+RESIDENT_00946,Diabetes Prevention,2026-04-02,Active,GP Clinic
+RESIDENT_00477,Healthier SG,2026-04-07,Active,App
+RESIDENT_01227,Diabetes Prevention,2026-02-14,Active,Polyclinic
+RESIDENT_00365,Eat Drink Shop Healthy,2026-01-04,Active,Roadshow
+RESIDENT_00260,I Quit (Tobacco),2026-05-24,Active,Employer
+RESIDENT_00403,Weight Management,2026-04-01,Active,Polyclinic
+RESIDENT_00301,Weight Management,2026-01-30,Dropped,Roadshow
+RESIDENT_00173,I Quit (Tobacco),2026-03-12,Dropped,Polyclinic
+RESIDENT_01071,Diabetes Prevention,2026-02-20,Dropped,GP Clinic
+RESIDENT_00536,Weight Management,2026-05-10,Active,GP Clinic
+RESIDENT_00919,Diabetes Prevention,2026-05-19,Dropped,App
+RESIDENT_00344,Eat Drink Shop Healthy,2026-05-26,Dropped,GP Clinic
+RESIDENT_00125,Active Ageing,2026-01-11,Active,GP Clinic
+RESIDENT_01330,Weight Management,2026-02-22,Active,Employer
+RESIDENT_01288,Diabetes Prevention,2026-01-01,Active,Roadshow
+RESIDENT_01314,Weight Management,2026-03-22,Active,Polyclinic
+RESIDENT_01438,Healthier SG,2026-03-29,Active,Employer
+RESIDENT_00487,Eat Drink Shop Healthy,2026-02-11,Active,App
+RESIDENT_01306,Healthier SG,2026-01-03,Dropped,App
+RESIDENT_00362,Healthier SG,2026-03-07,Active,Polyclinic
+RESIDENT_01394,Diabetes Prevention,2026-03-17,Active,Employer
+RESIDENT_00726,Active Ageing,2026-05-19,Dropped,Roadshow
+RESIDENT_01485,Eat Drink Shop Healthy,2026-05-14,Active,Polyclinic
+RESIDENT_01384,Eat Drink Shop Healthy,2026-02-01,Active,Employer
+RESIDENT_00486,Weight Management,2026-05-12,Dropped,Roadshow
+RESIDENT_01218,Diabetes Prevention,2026-04-10,Dropped,GP Clinic
+RESIDENT_00487,Diabetes Prevention,2026-03-19,Dropped,Roadshow
+RESIDENT_00936,Eat Drink Shop Healthy,2026-01-13,Active,GP Clinic
+RESIDENT_01306,Diabetes Prevention,2026-03-14,Active,Roadshow
+RESIDENT_01131,Healthier SG,2026-01-15,Active,Employer
+RESIDENT_00069,Diabetes Prevention,2026-03-06,Active,App
+RESIDENT_01391,I Quit (Tobacco),2026-05-05,Dropped,Employer
+RESIDENT_00701,Eat Drink Shop Healthy,2026-05-09,Dropped,Employer
+RESIDENT_01428,Healthier SG,2026-01-12,Active,Employer
+RESIDENT_00056,Eat Drink Shop Healthy,2026-03-15,Active,Polyclinic
+RESIDENT_00079,I Quit (Tobacco),2026-04-08,Active,GP Clinic
+RESIDENT_00044,Eat Drink Shop Healthy,2026-03-16,Active,Roadshow
+RESIDENT_00262,Active Ageing,2026-03-29,Active,App
+RESIDENT_00693,Eat Drink Shop Healthy,2026-04-15,Active,Polyclinic
+RESIDENT_00483,Healthier SG,2026-02-12,Active,GP Clinic
+RESIDENT_01483,Healthier SG,2026-01-01,Active,Roadshow
+RESIDENT_00640,Weight Management,2026-04-11,Dropped,Polyclinic
+RESIDENT_01026,Eat Drink Shop Healthy,2026-02-27,Dropped,GP Clinic
+RESIDENT_00205,Weight Management,2026-01-13,Active,Polyclinic
+RESIDENT_00552,I Quit (Tobacco),2026-05-02,Active,Roadshow
+RESIDENT_00923,Healthier SG,2026-01-14,Active,Employer
+RESIDENT_00131,Eat Drink Shop Healthy,2026-02-04,Dropped,Polyclinic
+RESIDENT_01042,Active Ageing,2026-03-31,Active,Polyclinic
+RESIDENT_01387,Eat Drink Shop Healthy,2026-05-13,Active,Polyclinic
+RESIDENT_00175,Eat Drink Shop Healthy,2026-03-16,Dropped,Roadshow
+RESIDENT_00400,Diabetes Prevention,2026-03-17,Active,Employer
+RESIDENT_00073,Weight Management,2026-04-28,Active,App
+RESIDENT_00341,I Quit (Tobacco),2026-03-06,Active,Polyclinic
+RESIDENT_00344,Active Ageing,2026-03-28,Active,Employer
+RESIDENT_00228,Weight Management,2026-02-04,Active,Polyclinic
+RESIDENT_00579,Diabetes Prevention,2026-05-18,Active,GP Clinic
+RESIDENT_00293,Diabetes Prevention,2026-05-29,Active,Employer
+RESIDENT_00985,Active Ageing,2026-03-02,Active,Employer
+RESIDENT_00229,Active Ageing,2026-03-13,Active,Employer
+RESIDENT_00372,Active Ageing,2026-03-29,Dropped,Polyclinic
+RESIDENT_00402,Weight Management,2026-05-28,Dropped,Roadshow
+RESIDENT_00642,Weight Management,2026-02-10,Dropped,Roadshow
+RESIDENT_00657,I Quit (Tobacco),2026-02-22,Active,Roadshow
+RESIDENT_01406,Weight Management,2026-02-09,Active,Roadshow
+RESIDENT_01232,Healthier SG,2026-02-02,Dropped,Employer
+RESIDENT_00285,Active Ageing,2026-03-30,Dropped,GP Clinic
+RESIDENT_00160,I Quit (Tobacco),2026-04-08,Dropped,Polyclinic
+RESIDENT_00278,I Quit (Tobacco),2026-04-24,Active,Roadshow
+RESIDENT_00042,Active Ageing,2026-01-17,Dropped,GP Clinic
+RESIDENT_00029,Diabetes Prevention,2026-01-10,Active,Roadshow
+RESIDENT_00545,Healthier SG,2026-03-03,Dropped,Employer
+RESIDENT_01211,Diabetes Prevention,2026-05-01,Active,GP Clinic
+RESIDENT_00358,Healthier SG,2026-03-15,Active,App
+RESIDENT_01457,Healthier SG,2026-02-22,Active,Polyclinic
+RESIDENT_00691,I Quit (Tobacco),2026-04-17,Active,Roadshow
+RESIDENT_01240,Active Ageing,2026-05-22,Active,App
+RESIDENT_01364,Diabetes Prevention,2026-04-13,Dropped,Employer
+RESIDENT_00183,I Quit (Tobacco),2026-04-08,Dropped,App
+RESIDENT_00140,Active Ageing,2026-03-31,Active,Polyclinic
+RESIDENT_00184,Diabetes Prevention,2026-02-24,Active,Polyclinic
+RESIDENT_01366,Eat Drink Shop Healthy,2026-02-17,Active,Roadshow
+RESIDENT_01040,I Quit (Tobacco),2026-04-13,Active,Polyclinic
+RESIDENT_00910,Diabetes Prevention,2026-04-21,Active,GP Clinic
+RESIDENT_00654,I Quit (Tobacco),2026-05-20,Active,Polyclinic
+RESIDENT_00804,Healthier SG,2026-04-03,Active,App
+RESIDENT_00283,Eat Drink Shop Healthy,2026-02-17,Active,App
+RESIDENT_00500,Eat Drink Shop Healthy,2026-02-01,Active,Roadshow
+RESIDENT_00012,Healthier SG,2026-01-15,Dropped,Employer
+RESIDENT_00938,Healthier SG,2026-05-04,Active,Polyclinic
+RESIDENT_01131,Diabetes Prevention,2026-02-07,Active,App
+RESIDENT_00904,I Quit (Tobacco),2026-01-17,Active,Roadshow
+RESIDENT_01174,Diabetes Prevention,2026-05-09,Dropped,Employer
+RESIDENT_01461,Active Ageing,2026-03-13,Active,Employer
+RESIDENT_01232,Eat Drink Shop Healthy,2026-03-23,Dropped,Roadshow
+RESIDENT_00094,Healthier SG,2026-04-04,Active,GP Clinic
+RESIDENT_00459,Weight Management,2026-05-13,Active,Roadshow
+RESIDENT_00712,Active Ageing,2026-04-21,Active,GP Clinic
+RESIDENT_00460,I Quit (Tobacco),2026-05-17,Active,GP Clinic
+RESIDENT_00704,Diabetes Prevention,2026-05-22,Active,Roadshow
+RESIDENT_00599,Diabetes Prevention,2026-04-20,Dropped,Roadshow
+RESIDENT_00833,Eat Drink Shop Healthy,2026-04-20,Dropped,App
+RESIDENT_00752,Weight Management,2026-02-05,Dropped,Roadshow
+RESIDENT_00979,Active Ageing,2026-01-15,Active,Roadshow
+RESIDENT_01368,Active Ageing,2026-01-21,Active,Employer
+RESIDENT_00883,I Quit (Tobacco),2026-02-26,Active,App
+RESIDENT_01180,Diabetes Prevention,2026-01-26,Active,Polyclinic
+RESIDENT_00124,Diabetes Prevention,2026-05-18,Active,Employer
+RESIDENT_00523,Active Ageing,2026-01-21,Dropped,GP Clinic
+RESIDENT_00038,Healthier SG,2026-05-14,Dropped,GP Clinic
+RESIDENT_00939,Weight Management,2026-02-04,Active,GP Clinic
+RESIDENT_01263,Eat Drink Shop Healthy,2026-01-03,Active,Employer
+RESIDENT_00926,Healthier SG,2026-02-04,Active,GP Clinic
+RESIDENT_00104,Healthier SG,2026-03-11,Active,Polyclinic
+RESIDENT_00012,Weight Management,2026-01-09,Dropped,GP Clinic
+RESIDENT_01319,I Quit (Tobacco),2026-03-03,Active,Employer
+RESIDENT_00213,I Quit (Tobacco),2026-03-29,Dropped,Roadshow
+RESIDENT_01237,I Quit (Tobacco),2026-01-06,Active,App
+RESIDENT_00474,I Quit (Tobacco),2026-03-14,Active,App
+RESIDENT_00127,I Quit (Tobacco),2026-03-07,Active,Employer
+RESIDENT_00021,Eat Drink Shop Healthy,2026-05-13,Active,Roadshow
+RESIDENT_01096,Weight Management,2026-04-03,Active,Polyclinic
+RESIDENT_00571,Healthier SG,2026-02-06,Dropped,Polyclinic
+RESIDENT_01445,Diabetes Prevention,2026-04-28,Active,App
+RESIDENT_00212,Weight Management,2026-04-14,Active,Polyclinic
+RESIDENT_00703,Weight Management,2026-02-19,Active,Employer
+RESIDENT_00806,Healthier SG,2026-05-18,Active,GP Clinic
+RESIDENT_00689,Eat Drink Shop Healthy,2026-04-13,Active,Roadshow
+RESIDENT_00245,Eat Drink Shop Healthy,2026-05-01,Dropped,Employer
+RESIDENT_00754,Diabetes Prevention,2026-03-24,Active,GP Clinic
+RESIDENT_00320,Eat Drink Shop Healthy,2026-02-03,Active,Roadshow
+RESIDENT_00052,Active Ageing,2026-03-24,Active,GP Clinic
+RESIDENT_01151,Active Ageing,2026-02-15,Active,App
+RESIDENT_00076,I Quit (Tobacco),2026-05-10,Active,App
+RESIDENT_01275,Weight Management,2026-04-06,Active,App
+RESIDENT_00639,I Quit (Tobacco),2026-05-25,Dropped,Employer
+RESIDENT_01407,Weight Management,2026-05-14,Active,Roadshow
+RESIDENT_00320,Diabetes Prevention,2026-02-27,Dropped,App
+RESIDENT_00941,I Quit (Tobacco),2026-02-06,Active,Roadshow
+RESIDENT_00956,Weight Management,2026-03-12,Active,Roadshow
+RESIDENT_00899,I Quit (Tobacco),2026-02-21,Dropped,Polyclinic
+RESIDENT_01393,Eat Drink Shop Healthy,2026-01-16,Dropped,GP Clinic
+RESIDENT_01109,Eat Drink Shop Healthy,2026-02-02,Active,GP Clinic
+RESIDENT_00729,I Quit (Tobacco),2026-01-14,Dropped,GP Clinic
+RESIDENT_01473,Healthier SG,2026-03-02,Active,App
+RESIDENT_01382,Weight Management,2026-02-08,Active,App
+RESIDENT_01184,Active Ageing,2026-03-10,Dropped,App
+RESIDENT_01320,Active Ageing,2026-02-10,Active,App
+RESIDENT_00936,Healthier SG,2026-01-20,Dropped,GP Clinic
+RESIDENT_01483,Diabetes Prevention,2026-05-26,Active,Polyclinic
+RESIDENT_01468,Healthier SG,2026-04-27,Dropped,Polyclinic
+RESIDENT_01196,Diabetes Prevention,2026-02-13,Active,App
+RESIDENT_00493,Weight Management,2026-01-24,Active,App
+RESIDENT_00781,Active Ageing,2026-05-01,Active,Employer
+RESIDENT_00050,Eat Drink Shop Healthy,2026-02-22,Dropped,Polyclinic
+RESIDENT_01297,Weight Management,2026-03-07,Dropped,GP Clinic
+RESIDENT_00671,I Quit (Tobacco),2026-03-22,Active,App
+RESIDENT_00585,Weight Management,2026-02-28,Dropped,Polyclinic
+RESIDENT_00407,Healthier SG,2026-05-07,Active,Roadshow
+RESIDENT_00205,Eat Drink Shop Healthy,2026-04-26,Active,Employer
+RESIDENT_00974,I Quit (Tobacco),2026-03-23,Active,Roadshow
+RESIDENT_01334,Diabetes Prevention,2026-02-21,Dropped,App
+RESIDENT_01065,I Quit (Tobacco),2026-03-19,Dropped,Employer
+RESIDENT_00361,Healthier SG,2026-05-03,Active,GP Clinic
+RESIDENT_01416,Diabetes Prevention,2026-02-17,Active,Polyclinic
+RESIDENT_00859,Eat Drink Shop Healthy,2026-04-21,Dropped,App
+RESIDENT_00778,Diabetes Prevention,2026-02-21,Active,Employer
+RESIDENT_00849,Weight Management,2026-02-07,Active,Employer
+RESIDENT_01176,Active Ageing,2026-05-16,Active,Roadshow
+RESIDENT_01241,Diabetes Prevention,2026-01-02,Dropped,Employer
+RESIDENT_01203,Diabetes Prevention,2026-05-10,Active,Roadshow
+RESIDENT_00845,Eat Drink Shop Healthy,2026-04-28,Active,App
+RESIDENT_00439,Weight Management,2026-04-09,Dropped,App
+RESIDENT_00850,Diabetes Prevention,2026-05-29,Active,Employer
+RESIDENT_01090,Active Ageing,2026-02-24,Active,GP Clinic
+RESIDENT_00504,I Quit (Tobacco),2026-02-13,Active,Employer
+RESIDENT_01249,I Quit (Tobacco),2026-01-27,Active,App
+RESIDENT_00035,Active Ageing,2026-05-11,Dropped,GP Clinic
+RESIDENT_01348,I Quit (Tobacco),2026-01-07,Dropped,App
+RESIDENT_00653,Eat Drink Shop Healthy,2026-05-05,Active,App
+RESIDENT_00949,Diabetes Prevention,2026-05-31,Active,Polyclinic
+RESIDENT_00339,Diabetes Prevention,2026-04-12,Active,GP Clinic
+RESIDENT_00149,Active Ageing,2026-04-05,Active,Roadshow
+RESIDENT_00392,Active Ageing,2026-03-30,Active,Polyclinic
+RESIDENT_00278,Weight Management,2026-05-16,Dropped,App
+RESIDENT_00884,Healthier SG,2026-04-03,Active,Roadshow
+RESIDENT_00333,Active Ageing,2026-05-10,Dropped,Roadshow
+RESIDENT_01024,Healthier SG,2026-01-07,Active,Employer
+RESIDENT_00430,Active Ageing,2026-05-04,Dropped,Roadshow
+RESIDENT_00942,Healthier SG,2026-04-30,Active,GP Clinic
+RESIDENT_00546,Weight Management,2026-04-09,Active,Employer
+RESIDENT_01025,Healthier SG,2026-04-12,Active,Employer
+RESIDENT_01236,Eat Drink Shop Healthy,2026-03-18,Active,Polyclinic
+RESIDENT_00267,Weight Management,2026-05-22,Dropped,Polyclinic
+RESIDENT_01111,I Quit (Tobacco),2026-05-03,Active,Polyclinic
+RESIDENT_00198,Healthier SG,2026-04-22,Dropped,Employer
+RESIDENT_00866,Weight Management,2026-02-06,Active,Polyclinic
+RESIDENT_00870,Weight Management,2026-04-04,Active,App
+RESIDENT_00794,I Quit (Tobacco),2026-04-09,Active,Roadshow
+RESIDENT_00512,Eat Drink Shop Healthy,2026-01-09,Dropped,App
+RESIDENT_00383,Eat Drink Shop Healthy,2026-01-25,Dropped,Polyclinic
+RESIDENT_01472,Active Ageing,2026-02-28,Dropped,App
+RESIDENT_00456,Eat Drink Shop Healthy,2026-05-26,Active,GP Clinic
+RESIDENT_00661,Diabetes Prevention,2026-02-10,Active,GP Clinic
+RESIDENT_00751,Diabetes Prevention,2026-02-12,Dropped,Polyclinic
+RESIDENT_00307,I Quit (Tobacco),2026-04-30,Dropped,Employer
+RESIDENT_00886,I Quit (Tobacco),2026-02-28,Active,Roadshow
+RESIDENT_00038,Eat Drink Shop Healthy,2026-03-01,Active,Polyclinic
+RESIDENT_00482,I Quit (Tobacco),2026-04-24,Active,App
+RESIDENT_00143,I Quit (Tobacco),2026-05-13,Dropped,Roadshow
+RESIDENT_00986,Active Ageing,2026-04-20,Active,Polyclinic
+RESIDENT_00228,Active Ageing,2026-01-05,Active,App
+RESIDENT_00425,Eat Drink Shop Healthy,2026-02-16,Active,Employer
+RESIDENT_00528,Healthier SG,2026-03-04,Active,Employer
+RESIDENT_00642,Active Ageing,2026-03-25,Active,Polyclinic
+RESIDENT_00124,Active Ageing,2026-01-03,Active,App
+RESIDENT_00607,Weight Management,2026-01-06,Active,GP Clinic
+RESIDENT_01198,Diabetes Prevention,2026-01-04,Dropped,Employer
+RESIDENT_01265,Weight Management,2026-03-22,Active,App
+RESIDENT_01080,Eat Drink Shop Healthy,2026-02-12,Active,Polyclinic
+RESIDENT_01201,Weight Management,2026-02-19,Dropped,Employer
+RESIDENT_00244,Weight Management,2026-03-30,Active,Polyclinic
+RESIDENT_01285,Active Ageing,2026-04-27,Active,Polyclinic
+RESIDENT_00891,Diabetes Prevention,2026-04-09,Active,Polyclinic
+RESIDENT_01156,Eat Drink Shop Healthy,2026-01-30,Active,GP Clinic
+RESIDENT_00684,Weight Management,2026-04-21,Active,Employer
+RESIDENT_00392,Diabetes Prevention,2026-03-29,Dropped,Polyclinic
+RESIDENT_00934,Diabetes Prevention,2026-02-22,Dropped,App
+RESIDENT_01186,Weight Management,2026-03-01,Active,Employer
+RESIDENT_00360,Eat Drink Shop Healthy,2026-05-10,Active,Polyclinic
+RESIDENT_00490,Weight Management,2026-04-18,Dropped,Roadshow
+RESIDENT_01183,I Quit (Tobacco),2026-05-14,Active,Roadshow
+RESIDENT_01233,Eat Drink Shop Healthy,2026-03-17,Active,Employer
+RESIDENT_00034,Diabetes Prevention,2026-01-03,Dropped,GP Clinic
+RESIDENT_00020,I Quit (Tobacco),2026-02-21,Active,GP Clinic
+RESIDENT_00138,I Quit (Tobacco),2026-02-22,Active,Polyclinic
+RESIDENT_01377,Healthier SG,2026-04-19,Dropped,GP Clinic
+RESIDENT_01044,Active Ageing,2026-05-12,Active,App
+RESIDENT_00536,Healthier SG,2026-04-19,Active,App
+RESIDENT_00040,Weight Management,2026-04-23,Dropped,Polyclinic
+RESIDENT_00197,I Quit (Tobacco),2026-03-07,Active,GP Clinic
+RESIDENT_00858,I Quit (Tobacco),2026-05-28,Active,Roadshow
+RESIDENT_00725,Eat Drink Shop Healthy,2026-05-14,Active,GP Clinic
+RESIDENT_01105,Eat Drink Shop Healthy,2026-01-23,Active,Polyclinic
+RESIDENT_00955,Eat Drink Shop Healthy,2026-05-11,Active,Polyclinic
+RESIDENT_00779,Diabetes Prevention,2026-03-25,Active,Employer
+RESIDENT_01343,Weight Management,2026-02-10,Dropped,Roadshow
+RESIDENT_01358,Eat Drink Shop Healthy,2026-01-06,Active,App
+RESIDENT_00983,Diabetes Prevention,2026-04-19,Active,Polyclinic
+RESIDENT_00058,Active Ageing,2026-02-26,Active,Employer
+RESIDENT_00751,Healthier SG,2026-04-09,Active,App
+RESIDENT_00606,Diabetes Prevention,2026-03-07,Dropped,Employer
+RESIDENT_01349,Eat Drink Shop Healthy,2026-03-25,Active,Roadshow
+RESIDENT_00478,I Quit (Tobacco),2026-04-10,Active,GP Clinic
+RESIDENT_00305,Diabetes Prevention,2026-01-02,Active,GP Clinic
+RESIDENT_00172,Diabetes Prevention,2026-04-19,Active,App
+RESIDENT_00652,Weight Management,2026-03-26,Dropped,GP Clinic
+RESIDENT_00082,Weight Management,2026-05-01,Active,App
+RESIDENT_00382,Active Ageing,2026-05-31,Active,App
+RESIDENT_01371,Diabetes Prevention,2026-04-14,Dropped,App
+RESIDENT_00694,Healthier SG,2026-04-16,Dropped,App
+RESIDENT_00593,Active Ageing,2026-04-04,Active,Roadshow
+RESIDENT_00768,Weight Management,2026-01-17,Active,Roadshow
+RESIDENT_00380,Healthier SG,2026-03-11,Dropped,GP Clinic
+RESIDENT_00567,Eat Drink Shop Healthy,2026-03-15,Active,App
+RESIDENT_01452,Eat Drink Shop Healthy,2026-05-31,Active,Roadshow
+RESIDENT_00586,Healthier SG,2026-01-23,Active,Roadshow
+RESIDENT_01377,Diabetes Prevention,2026-02-13,Active,Polyclinic
+RESIDENT_01162,Diabetes Prevention,2026-01-14,Dropped,GP Clinic
+RESIDENT_00014,Healthier SG,2026-05-03,Active,Polyclinic
+RESIDENT_00903,Diabetes Prevention,2026-04-18,Active,Employer
+RESIDENT_00922,I Quit (Tobacco),2026-04-17,Dropped,Polyclinic
+RESIDENT_00559,Eat Drink Shop Healthy,2026-03-15,Active,Roadshow
+RESIDENT_00141,Diabetes Prevention,2026-02-15,Dropped,Roadshow
+RESIDENT_00831,Active Ageing,2026-03-11,Active,GP Clinic
+RESIDENT_01294,Eat Drink Shop Healthy,2026-04-01,Dropped,App
+RESIDENT_01189,Eat Drink Shop Healthy,2026-02-09,Dropped,Polyclinic
+RESIDENT_00847,Active Ageing,2026-05-10,Active,Polyclinic
+RESIDENT_01465,Weight Management,2026-04-11,Active,Employer
+RESIDENT_00255,Healthier SG,2026-04-26,Active,Polyclinic
+RESIDENT_01084,Weight Management,2026-01-20,Active,Roadshow
+RESIDENT_00210,Healthier SG,2026-01-29,Active,Roadshow
+RESIDENT_01178,Active Ageing,2026-05-13,Active,Employer
+RESIDENT_01224,I Quit (Tobacco),2026-04-09,Active,Employer
+RESIDENT_00441,Healthier SG,2026-04-04,Active,Roadshow
+RESIDENT_00218,Healthier SG,2026-01-24,Active,Employer
+RESIDENT_01416,Weight Management,2026-04-10,Active,Roadshow
+RESIDENT_00796,Healthier SG,2026-02-15,Active,App
+RESIDENT_01060,Active Ageing,2026-02-12,Active,App
+RESIDENT_00857,Eat Drink Shop Healthy,2026-05-29,Active,Roadshow
+RESIDENT_01259,Eat Drink Shop Healthy,2026-03-27,Active,App
+RESIDENT_01412,Active Ageing,2026-04-17,Active,GP Clinic
+RESIDENT_00686,Diabetes Prevention,2026-04-26,Active,GP Clinic
+RESIDENT_00028,Healthier SG,2026-01-24,Dropped,Roadshow
+RESIDENT_00728,Weight Management,2026-05-20,Dropped,Polyclinic
+RESIDENT_01092,I Quit (Tobacco),2026-01-30,Dropped,App
+RESIDENT_00302,Eat Drink Shop Healthy,2026-05-10,Dropped,Roadshow
+RESIDENT_01175,Weight Management,2026-01-07,Active,GP Clinic
+RESIDENT_00986,I Quit (Tobacco),2026-02-04,Dropped,App
+RESIDENT_00770,Active Ageing,2026-02-13,Dropped,App
+RESIDENT_00613,Diabetes Prevention,2026-03-13,Active,GP Clinic
+RESIDENT_00540,Active Ageing,2026-05-26,Active,Employer
+RESIDENT_01306,Weight Management,2026-04-23,Active,Polyclinic
+RESIDENT_01043,Diabetes Prevention,2026-04-11,Active,App
+RESIDENT_01449,Diabetes Prevention,2026-05-03,Dropped,Roadshow
+RESIDENT_01424,I Quit (Tobacco),2026-02-11,Active,GP Clinic
+RESIDENT_01137,Eat Drink Shop Healthy,2026-01-20,Dropped,App
+RESIDENT_00817,Active Ageing,2026-03-09,Active,Employer
+RESIDENT_01172,Weight Management,2026-03-01,Dropped,Employer
+RESIDENT_00872,Diabetes Prevention,2026-05-10,Active,GP Clinic
+RESIDENT_00959,I Quit (Tobacco),2026-03-23,Active,App
+RESIDENT_00850,Eat Drink Shop Healthy,2026-04-14,Active,App
+RESIDENT_00678,Weight Management,2026-05-07,Active,App
+RESIDENT_00155,Weight Management,2026-04-29,Dropped,Polyclinic
+RESIDENT_00254,Weight Management,2026-04-03,Active,GP Clinic
+RESIDENT_00659,I Quit (Tobacco),2026-05-25,Dropped,Roadshow
+RESIDENT_01056,Eat Drink Shop Healthy,2026-02-16,Active,Polyclinic
+RESIDENT_00398,Healthier SG,2026-04-19,Dropped,GP Clinic
+RESIDENT_00511,Eat Drink Shop Healthy,2026-04-29,Dropped,Polyclinic
+RESIDENT_00818,I Quit (Tobacco),2026-03-23,Dropped,Employer
+RESIDENT_00713,Healthier SG,2026-05-09,Dropped,App
+RESIDENT_01361,Active Ageing,2026-05-13,Active,App
+RESIDENT_01216,Eat Drink Shop Healthy,2026-02-16,Active,App
+RESIDENT_01394,Healthier SG,2026-05-09,Active,GP Clinic
+RESIDENT_01361,I Quit (Tobacco),2026-03-11,Active,Roadshow
+RESIDENT_00237,I Quit (Tobacco),2026-05-19,Active,Employer
+RESIDENT_00429,I Quit (Tobacco),2026-04-12,Dropped,GP Clinic
+RESIDENT_01458,Diabetes Prevention,2026-05-19,Active,Employer
+RESIDENT_00214,Healthier SG,2026-04-19,Active,App
+RESIDENT_00505,Eat Drink Shop Healthy,2026-02-19,Active,App
+RESIDENT_01337,Healthier SG,2026-04-25,Dropped,Employer
+RESIDENT_00251,Eat Drink Shop Healthy,2026-01-18,Active,Polyclinic
+RESIDENT_01212,Eat Drink Shop Healthy,2026-05-31,Active,Roadshow
+RESIDENT_00468,Active Ageing,2026-05-25,Active,Roadshow
+RESIDENT_01309,Active Ageing,2026-02-10,Dropped,App
+RESIDENT_00876,Active Ageing,2026-01-07,Active,Polyclinic
+RESIDENT_01174,Healthier SG,2026-01-24,Active,Roadshow
+RESIDENT_00528,I Quit (Tobacco),2026-01-03,Active,Polyclinic
+RESIDENT_00650,Weight Management,2026-04-10,Dropped,App
+RESIDENT_01279,Weight Management,2026-02-28,Active,App
+RESIDENT_01155,I Quit (Tobacco),2026-05-23,Active,App
+RESIDENT_01223,Healthier SG,2026-01-31,Dropped,App
+RESIDENT_00862,I Quit (Tobacco),2026-02-03,Active,GP Clinic
+RESIDENT_01409,Eat Drink Shop Healthy,2026-04-12,Active,Employer
+RESIDENT_01143,Active Ageing,2026-04-11,Dropped,Polyclinic
+RESIDENT_00498,Diabetes Prevention,2026-04-12,Active,App
+RESIDENT_00131,Weight Management,2026-02-09,Active,App
+RESIDENT_01416,Eat Drink Shop Healthy,2026-05-13,Active,Employer
+RESIDENT_00399,Diabetes Prevention,2026-04-24,Dropped,Polyclinic
+RESIDENT_00031,Weight Management,2026-04-24,Active,App
+RESIDENT_00025,Active Ageing,2026-05-18,Active,GP Clinic
+RESIDENT_01251,Active Ageing,2026-04-26,Active,App
+RESIDENT_01067,Weight Management,2026-04-09,Active,GP Clinic
+RESIDENT_00819,I Quit (Tobacco),2026-03-19,Active,Polyclinic
+RESIDENT_01301,Weight Management,2026-05-20,Dropped,App
+RESIDENT_00580,Eat Drink Shop Healthy,2026-05-17,Active,GP Clinic
+RESIDENT_00455,Active Ageing,2026-03-25,Active,Polyclinic
+RESIDENT_00507,Healthier SG,2026-02-01,Dropped,Employer
+RESIDENT_00109,I Quit (Tobacco),2026-02-27,Active,Employer
+RESIDENT_01177,I Quit (Tobacco),2026-03-17,Active,Polyclinic
+RESIDENT_00650,Diabetes Prevention,2026-04-05,Active,App
+RESIDENT_00193,Healthier SG,2026-04-05,Active,Polyclinic
+RESIDENT_00046,I Quit (Tobacco),2026-03-18,Dropped,Employer
+RESIDENT_00429,Diabetes Prevention,2026-03-27,Active,Employer
+RESIDENT_00986,Weight Management,2026-02-17,Dropped,App
+RESIDENT_01056,I Quit (Tobacco),2026-01-26,Active,GP Clinic
+RESIDENT_00617,Weight Management,2026-05-09,Dropped,Employer
+RESIDENT_01299,Eat Drink Shop Healthy,2026-04-28,Active,App
+RESIDENT_00788,Diabetes Prevention,2026-05-08,Active,Roadshow
+RESIDENT_00749,Active Ageing,2026-02-19,Dropped,App
+RESIDENT_00350,Weight Management,2026-05-12,Dropped,Polyclinic
+RESIDENT_01327,Weight Management,2026-03-11,Active,Roadshow
+RESIDENT_00757,Weight Management,2026-02-26,Active,Employer
+RESIDENT_00096,Diabetes Prevention,2026-05-12,Active,GP Clinic
+RESIDENT_00872,Eat Drink Shop Healthy,2026-01-20,Active,Roadshow
+RESIDENT_00276,Diabetes Prevention,2026-03-31,Dropped,Employer
+RESIDENT_00875,Active Ageing,2026-01-10,Active,Roadshow
+RESIDENT_00003,I Quit (Tobacco),2026-05-08,Active,Roadshow
+RESIDENT_01480,Healthier SG,2026-04-20,Active,App
+RESIDENT_00603,I Quit (Tobacco),2026-03-02,Active,Polyclinic
+RESIDENT_00072,Diabetes Prevention,2026-04-22,Dropped,GP Clinic
+RESIDENT_00680,I Quit (Tobacco),2026-05-23,Active,App
+RESIDENT_01172,Eat Drink Shop Healthy,2026-04-03,Active,Employer
+RESIDENT_00349,Diabetes Prevention,2026-01-20,Active,Polyclinic
+RESIDENT_00041,Active Ageing,2026-01-27,Dropped,Employer
+RESIDENT_00968,Eat Drink Shop Healthy,2026-04-08,Active,Polyclinic
+RESIDENT_00621,Weight Management,2026-05-06,Active,Employer
+RESIDENT_00023,Diabetes Prevention,2026-02-09,Active,Employer
+RESIDENT_00667,Eat Drink Shop Healthy,2026-01-01,Active,App
+RESIDENT_00250,I Quit (Tobacco),2026-02-01,Active,Employer
+RESIDENT_00435,Active Ageing,2026-04-22,Active,Roadshow
+RESIDENT_01304,Weight Management,2026-04-13,Active,GP Clinic
+RESIDENT_00973,Diabetes Prevention,2026-01-02,Active,Roadshow
+RESIDENT_00139,I Quit (Tobacco),2026-01-22,Active,Polyclinic
+RESIDENT_01239,I Quit (Tobacco),2026-04-15,Dropped,App
+RESIDENT_01263,Diabetes Prevention,2026-03-07,Active,Roadshow
+RESIDENT_00087,Diabetes Prevention,2026-05-23,Dropped,Polyclinic
+RESIDENT_00016,Healthier SG,2026-04-23,Active,GP Clinic
+RESIDENT_00972,Active Ageing,2026-04-28,Active,App
+RESIDENT_01122,Eat Drink Shop Healthy,2026-03-17,Active,Roadshow
+RESIDENT_01169,Healthier SG,2026-05-31,Dropped,Employer
+RESIDENT_00631,Eat Drink Shop Healthy,2026-01-29,Active,GP Clinic
+RESIDENT_01291,Diabetes Prevention,2026-03-07,Active,App
+RESIDENT_00087,Active Ageing,2026-05-12,Active,Roadshow
+RESIDENT_00623,Active Ageing,2026-05-27,Active,Polyclinic
+RESIDENT_00788,Eat Drink Shop Healthy,2026-03-26,Active,App
+RESIDENT_01098,Weight Management,2026-05-25,Dropped,GP Clinic
+RESIDENT_00209,Weight Management,2026-02-26,Active,Employer
+RESIDENT_00406,Eat Drink Shop Healthy,2026-05-24,Active,Polyclinic
+RESIDENT_01334,I Quit (Tobacco),2026-02-24,Dropped,Roadshow
+RESIDENT_00412,Diabetes Prevention,2026-04-17,Active,App
+RESIDENT_00863,Eat Drink Shop Healthy,2026-05-06,Active,GP Clinic
+RESIDENT_00588,Eat Drink Shop Healthy,2026-03-09,Active,Employer
+RESIDENT_01020,Weight Management,2026-05-16,Active,Polyclinic
+RESIDENT_00605,Active Ageing,2026-02-03,Active,GP Clinic
+RESIDENT_00798,Diabetes Prevention,2026-05-17,Active,App
+RESIDENT_00144,I Quit (Tobacco),2026-02-02,Active,GP Clinic
+RESIDENT_00325,Diabetes Prevention,2026-05-12,Active,App
+RESIDENT_00241,Active Ageing,2026-04-09,Dropped,Roadshow
+RESIDENT_00328,Eat Drink Shop Healthy,2026-01-18,Active,Polyclinic
+RESIDENT_00703,Healthier SG,2026-05-21,Active,Roadshow
+RESIDENT_00433,I Quit (Tobacco),2026-01-04,Active,App
+RESIDENT_00161,Weight Management,2026-03-24,Active,Employer
+RESIDENT_01270,Active Ageing,2026-04-04,Active,Roadshow
+RESIDENT_00840,Active Ageing,2026-01-10,Active,App
+RESIDENT_00156,Eat Drink Shop Healthy,2026-05-24,Active,GP Clinic
+RESIDENT_01310,Active Ageing,2026-05-21,Active,Roadshow
+RESIDENT_00702,Diabetes Prevention,2026-03-16,Active,Employer
+RESIDENT_01144,I Quit (Tobacco),2026-02-12,Dropped,Polyclinic
+RESIDENT_01303,Weight Management,2026-05-13,Active,GP Clinic
+RESIDENT_01312,Diabetes Prevention,2026-05-30,Active,App
+RESIDENT_01421,Weight Management,2026-03-22,Dropped,App
+RESIDENT_00960,Diabetes Prevention,2026-01-29,Dropped,Employer
+RESIDENT_00997,Diabetes Prevention,2026-03-13,Dropped,App
+RESIDENT_00368,Healthier SG,2026-01-28,Active,Polyclinic
+RESIDENT_01487,Active Ageing,2026-01-26,Active,GP Clinic
+RESIDENT_00749,Eat Drink Shop Healthy,2026-04-04,Dropped,Roadshow
+RESIDENT_01356,Diabetes Prevention,2026-03-29,Dropped,GP Clinic
+RESIDENT_00147,Healthier SG,2026-03-11,Dropped,GP Clinic
+RESIDENT_00139,Eat Drink Shop Healthy,2026-05-28,Active,Roadshow
+RESIDENT_00055,Active Ageing,2026-03-25,Dropped,Roadshow
+RESIDENT_00909,I Quit (Tobacco),2026-04-12,Active,App
+RESIDENT_00679,Weight Management,2026-03-13,Dropped,Employer
+RESIDENT_00068,Eat Drink Shop Healthy,2026-05-23,Active,Roadshow
+RESIDENT_00285,Healthier SG,2026-01-17,Active,Employer
+RESIDENT_01451,I Quit (Tobacco),2026-01-04,Dropped,Polyclinic
+RESIDENT_00560,Diabetes Prevention,2026-03-22,Dropped,Employer
+RESIDENT_00820,Healthier SG,2026-02-16,Dropped,GP Clinic
+RESIDENT_00037,Weight Management,2026-05-05,Active,Polyclinic
+RESIDENT_00907,Healthier SG,2026-05-14,Active,Roadshow
+RESIDENT_01213,Weight Management,2026-05-05,Dropped,Polyclinic
+RESIDENT_00682,Active Ageing,2026-05-27,Active,Roadshow
+RESIDENT_00873,Diabetes Prevention,2026-03-01,Active,GP Clinic
+RESIDENT_00263,Weight Management,2026-05-22,Dropped,GP Clinic
+RESIDENT_00003,Healthier SG,2026-01-14,Active,App
+RESIDENT_01100,Eat Drink Shop Healthy,2026-04-02,Active,Roadshow
+RESIDENT_00568,Active Ageing,2026-03-23,Active,GP Clinic
+RESIDENT_01186,Diabetes Prevention,2026-03-08,Active,Employer
+RESIDENT_00450,Weight Management,2026-01-28,Active,GP Clinic
+RESIDENT_00954,Healthier SG,2026-03-20,Active,Polyclinic
+RESIDENT_01225,I Quit (Tobacco),2026-05-05,Active,Employer
+RESIDENT_01379,Healthier SG,2026-01-05,Active,App
+RESIDENT_00389,I Quit (Tobacco),2026-02-08,Active,Roadshow
+RESIDENT_00485,Healthier SG,2026-01-22,Active,App
+RESIDENT_00940,Diabetes Prevention,2026-03-14,Active,GP Clinic
+RESIDENT_00911,Eat Drink Shop Healthy,2026-05-19,Dropped,Employer
+RESIDENT_00217,Weight Management,2026-04-30,Dropped,Roadshow
+RESIDENT_00012,Eat Drink Shop Healthy,2026-01-06,Active,GP Clinic
+RESIDENT_00928,I Quit (Tobacco),2026-05-14,Active,App
+RESIDENT_00592,Active Ageing,2026-02-05,Active,Polyclinic
+RESIDENT_00639,Eat Drink Shop Healthy,2026-01-25,Active,Employer
+RESIDENT_00505,Healthier SG,2026-02-19,Active,Employer
+RESIDENT_00854,Diabetes Prevention,2026-05-15,Dropped,Employer
+RESIDENT_00820,Eat Drink Shop Healthy,2026-04-10,Dropped,Polyclinic
+RESIDENT_00356,Weight Management,2026-05-24,Active,Employer
+RESIDENT_01191,I Quit (Tobacco),2026-03-27,Active,Roadshow
+RESIDENT_01481,Healthier SG,2026-03-03,Active,Polyclinic
+RESIDENT_01034,Diabetes Prevention,2026-02-12,Active,Roadshow
+RESIDENT_01425,Diabetes Prevention,2026-05-27,Active,App
+RESIDENT_01075,I Quit (Tobacco),2026-04-28,Active,App
+RESIDENT_00495,Eat Drink Shop Healthy,2026-02-18,Active,Polyclinic
+RESIDENT_00287,Active Ageing,2026-03-16,Dropped,App
+RESIDENT_00367,Weight Management,2026-05-15,Active,Employer
+RESIDENT_00921,Eat Drink Shop Healthy,2026-01-28,Dropped,App
+RESIDENT_00296,Eat Drink Shop Healthy,2026-04-27,Dropped,Employer
+RESIDENT_01234,Active Ageing,2026-04-09,Active,Polyclinic
+RESIDENT_00927,Healthier SG,2026-01-28,Active,Employer
+RESIDENT_00428,Healthier SG,2026-02-02,Active,Employer
+RESIDENT_00783,Active Ageing,2026-01-24,Active,GP Clinic
+RESIDENT_01187,Weight Management,2026-04-23,Active,Employer
+RESIDENT_01304,I Quit (Tobacco),2026-01-02,Dropped,Roadshow
+RESIDENT_01157,Diabetes Prevention,2026-01-11,Active,App
+RESIDENT_00403,I Quit (Tobacco),2026-03-08,Active,Employer
+RESIDENT_00376,Diabetes Prevention,2026-03-07,Active,App
+RESIDENT_01081,Eat Drink Shop Healthy,2026-04-07,Dropped,Polyclinic
+RESIDENT_01354,Active Ageing,2026-03-20,Active,GP Clinic
+RESIDENT_00130,Weight Management,2026-05-05,Active,Employer
+RESIDENT_00128,Healthier SG,2026-04-28,Active,Roadshow
+RESIDENT_00235,Eat Drink Shop Healthy,2026-03-15,Active,App
+RESIDENT_00960,I Quit (Tobacco),2026-01-15,Dropped,Employer
+RESIDENT_00135,Weight Management,2026-05-30,Active,Polyclinic
+RESIDENT_00512,Diabetes Prevention,2026-01-22,Dropped,App
+RESIDENT_00005,Weight Management,2026-01-16,Active,App
+RESIDENT_01015,Diabetes Prevention,2026-05-06,Dropped,App
+RESIDENT_00408,Healthier SG,2026-03-04,Active,Polyclinic
+RESIDENT_00980,Healthier SG,2026-01-29,Active,GP Clinic
+RESIDENT_00354,Active Ageing,2026-01-20,Active,Polyclinic
+RESIDENT_00610,Healthier SG,2026-01-06,Active,App
+RESIDENT_00133,Diabetes Prevention,2026-04-13,Active,App
+RESIDENT_01462,Healthier SG,2026-03-15,Active,GP Clinic
+RESIDENT_00371,Weight Management,2026-01-17,Active,GP Clinic
+RESIDENT_00036,Weight Management,2026-05-17,Dropped,App
+RESIDENT_01267,Healthier SG,2026-03-08,Active,App
+RESIDENT_00308,Eat Drink Shop Healthy,2026-02-21,Active,Polyclinic
+RESIDENT_00310,Diabetes Prevention,2026-02-17,Active,Employer
+RESIDENT_01079,I Quit (Tobacco),2026-01-04,Active,Employer
+RESIDENT_01025,I Quit (Tobacco),2026-01-06,Active,Employer
+RESIDENT_00572,Diabetes Prevention,2026-05-11,Active,Roadshow
+RESIDENT_00421,I Quit (Tobacco),2026-03-28,Active,Employer
+RESIDENT_00078,Weight Management,2026-03-24,Active,Polyclinic
+RESIDENT_00855,Eat Drink Shop Healthy,2026-05-05,Active,Polyclinic
+RESIDENT_01423,Eat Drink Shop Healthy,2026-03-08,Active,App
+RESIDENT_00987,Eat Drink Shop Healthy,2026-04-22,Active,App
+RESIDENT_00956,Healthier SG,2026-03-16,Dropped,Roadshow
+RESIDENT_00423,Weight Management,2026-02-18,Dropped,Polyclinic
+RESIDENT_01150,Eat Drink Shop Healthy,2026-03-03,Active,Roadshow
+RESIDENT_01248,I Quit (Tobacco),2026-01-01,Active,Roadshow
+RESIDENT_00053,Healthier SG,2026-03-06,Active,GP Clinic
+RESIDENT_00230,Eat Drink Shop Healthy,2026-02-18,Active,Polyclinic
+RESIDENT_00493,I Quit (Tobacco),2026-01-25,Active,Employer
+RESIDENT_00370,Eat Drink Shop Healthy,2026-03-10,Dropped,App
+RESIDENT_01003,I Quit (Tobacco),2026-01-16,Dropped,Employer
+RESIDENT_00117,Healthier SG,2026-03-30,Active,GP Clinic
+RESIDENT_00028,Diabetes Prevention,2026-05-02,Dropped,Roadshow
+RESIDENT_01043,I Quit (Tobacco),2026-03-13,Dropped,Polyclinic
+RESIDENT_01215,Active Ageing,2026-05-04,Active,App
+RESIDENT_01095,Diabetes Prevention,2026-03-14,Active,Employer
+RESIDENT_00160,Active Ageing,2026-05-22,Active,Employer
+RESIDENT_01241,Active Ageing,2026-04-01,Dropped,Employer
+RESIDENT_01005,Healthier SG,2026-03-11,Dropped,GP Clinic
+RESIDENT_01010,Healthier SG,2026-03-06,Active,Polyclinic
+RESIDENT_00170,I Quit (Tobacco),2026-05-26,Dropped,Polyclinic
+RESIDENT_00933,Weight Management,2026-02-02,Active,App
+RESIDENT_00273,I Quit (Tobacco),2026-04-11,Active,Roadshow
+RESIDENT_01035,I Quit (Tobacco),2026-05-22,Dropped,Employer
+RESIDENT_00827,I Quit (Tobacco),2026-03-30,Active,App
+RESIDENT_01204,Weight Management,2026-01-18,Active,Polyclinic
+RESIDENT_01077,Healthier SG,2026-05-01,Dropped,GP Clinic
+RESIDENT_00918,Diabetes Prevention,2026-05-30,Active,Polyclinic
+RESIDENT_00035,Diabetes Prevention,2026-03-31,Dropped,GP Clinic
+RESIDENT_00070,Active Ageing,2026-01-30,Dropped,Polyclinic
+RESIDENT_01432,Weight Management,2026-05-29,Dropped,Employer
+RESIDENT_00426,Healthier SG,2026-02-01,Active,Polyclinic
+RESIDENT_00875,Weight Management,2026-02-18,Dropped,App
+RESIDENT_01287,I Quit (Tobacco),2026-02-06,Active,App
+RESIDENT_00401,Healthier SG,2026-01-06,Active,GP Clinic
+RESIDENT_00457,Healthier SG,2026-02-10,Dropped,Polyclinic
+RESIDENT_00830,Eat Drink Shop Healthy,2026-04-12,Active,GP Clinic
+RESIDENT_00804,I Quit (Tobacco),2026-01-17,Active,GP Clinic
+RESIDENT_00111,Eat Drink Shop Healthy,2026-03-11,Active,Employer
+RESIDENT_01374,I Quit (Tobacco),2026-03-03,Dropped,Employer
+RESIDENT_01168,Eat Drink Shop Healthy,2026-01-30,Active,App
+RESIDENT_00890,I Quit (Tobacco),2026-02-09,Active,GP Clinic
+RESIDENT_00428,Active Ageing,2026-01-02,Active,App
+RESIDENT_00905,Eat Drink Shop Healthy,2026-02-07,Active,Employer
+RESIDENT_01450,Weight Management,2026-01-31,Dropped,Employer
+RESIDENT_01475,Healthier SG,2026-03-18,Dropped,GP Clinic
+RESIDENT_00943,Healthier SG,2026-01-18,Active,Employer
+RESIDENT_01339,I Quit (Tobacco),2026-05-16,Active,GP Clinic
+RESIDENT_00721,Weight Management,2026-04-27,Dropped,Polyclinic
+RESIDENT_01448,Weight Management,2026-01-17,Active,App
+RESIDENT_00878,Active Ageing,2026-04-02,Active,GP Clinic
+RESIDENT_00563,Diabetes Prevention,2026-05-22,Dropped,Employer
+RESIDENT_01024,Diabetes Prevention,2026-02-22,Dropped,App
+RESIDENT_00084,Diabetes Prevention,2026-01-11,Dropped,App
+RESIDENT_00896,Eat Drink Shop Healthy,2026-03-24,Active,Roadshow
+RESIDENT_00497,I Quit (Tobacco),2026-02-24,Dropped,Roadshow
+RESIDENT_01330,Eat Drink Shop Healthy,2026-02-10,Dropped,Employer
+RESIDENT_00395,I Quit (Tobacco),2026-05-25,Dropped,App
+RESIDENT_01134,Eat Drink Shop Healthy,2026-03-10,Dropped,Roadshow
+RESIDENT_00081,I Quit (Tobacco),2026-01-22,Active,Polyclinic
+RESIDENT_01144,Diabetes Prevention,2026-05-11,Active,Employer
+RESIDENT_00297,Diabetes Prevention,2026-04-15,Active,Polyclinic
+RESIDENT_00930,Active Ageing,2026-01-19,Active,GP Clinic
+RESIDENT_01051,I Quit (Tobacco),2026-05-17,Active,Employer
+RESIDENT_01098,I Quit (Tobacco),2026-02-03,Active,Polyclinic
+RESIDENT_01336,Healthier SG,2026-01-03,Active,App
+RESIDENT_01375,Weight Management,2026-05-19,Active,Polyclinic
+RESIDENT_00949,Active Ageing,2026-01-29,Active,GP Clinic
+RESIDENT_01272,Diabetes Prevention,2026-03-26,Active,Roadshow
+RESIDENT_01145,Diabetes Prevention,2026-03-04,Active,Employer
+RESIDENT_00354,Diabetes Prevention,2026-05-05,Active,Employer
+RESIDENT_00825,Eat Drink Shop Healthy,2026-04-03,Dropped,GP Clinic
+RESIDENT_00499,Eat Drink Shop Healthy,2026-03-07,Dropped,App
+RESIDENT_01436,Healthier SG,2026-04-27,Active,Employer
+RESIDENT_00158,Weight Management,2026-01-06,Active,Polyclinic
+RESIDENT_01410,Diabetes Prevention,2026-05-16,Dropped,Roadshow
+RESIDENT_00822,I Quit (Tobacco),2026-02-15,Active,Roadshow
+RESIDENT_01434,Weight Management,2026-04-10,Active,Roadshow
+RESIDENT_00702,Eat Drink Shop Healthy,2026-04-10,Dropped,Employer
+RESIDENT_00809,Diabetes Prevention,2026-02-18,Active,Polyclinic
+RESIDENT_00816,Weight Management,2026-05-08,Dropped,Polyclinic
+RESIDENT_00041,Healthier SG,2026-05-13,Active,Employer
+RESIDENT_00773,I Quit (Tobacco),2026-04-21,Dropped,GP Clinic
+RESIDENT_00324,Diabetes Prevention,2026-04-12,Active,App
+RESIDENT_00432,Active Ageing,2026-05-06,Active,GP Clinic
+RESIDENT_01128,Weight Management,2026-02-02,Active,Roadshow
+RESIDENT_00848,Weight Management,2026-05-05,Dropped,Employer
+RESIDENT_01010,I Quit (Tobacco),2026-02-14,Active,Polyclinic
+RESIDENT_00252,Diabetes Prevention,2026-02-12,Dropped,Polyclinic
+RESIDENT_00892,Eat Drink Shop Healthy,2026-03-24,Active,Polyclinic
+RESIDENT_00111,Weight Management,2026-04-20,Active,Roadshow
+RESIDENT_00883,Diabetes Prevention,2026-03-01,Dropped,App
+RESIDENT_00355,Healthier SG,2026-05-08,Active,Polyclinic
+RESIDENT_01158,Weight Management,2026-01-25,Active,Roadshow
+RESIDENT_01273,Eat Drink Shop Healthy,2026-04-04,Dropped,GP Clinic
+RESIDENT_00309,Eat Drink Shop Healthy,2026-05-27,Active,App
+RESIDENT_01362,Healthier SG,2026-05-25,Dropped,Polyclinic
+RESIDENT_01437,Weight Management,2026-03-06,Active,Roadshow
+RESIDENT_00720,I Quit (Tobacco),2026-04-25,Active,Roadshow
+RESIDENT_00680,Diabetes Prevention,2026-03-23,Active,Employer
+RESIDENT_00745,Eat Drink Shop Healthy,2026-01-16,Active,GP Clinic
+RESIDENT_00735,Active Ageing,2026-02-03,Active,Employer
+RESIDENT_00039,I Quit (Tobacco),2026-01-02,Active,Polyclinic
+RESIDENT_00899,Active Ageing,2026-02-11,Dropped,Employer
+RESIDENT_00885,I Quit (Tobacco),2026-03-30,Active,GP Clinic
+RESIDENT_00317,Diabetes Prevention,2026-05-25,Dropped,Employer
+RESIDENT_00717,Active Ageing,2026-03-24,Active,Employer
+RESIDENT_01321,Eat Drink Shop Healthy,2026-01-19,Active,GP Clinic
+RESIDENT_00288,Healthier SG,2026-04-04,Dropped,Roadshow
+RESIDENT_01447,Diabetes Prevention,2026-03-18,Active,App
+RESIDENT_00004,Active Ageing,2026-01-04,Active,App
+RESIDENT_00287,Weight Management,2026-01-21,Active,Polyclinic
+RESIDENT_01262,Weight Management,2026-01-15,Active,App
+RESIDENT_00033,Weight Management,2026-02-03,Dropped,Polyclinic
+RESIDENT_01360,Active Ageing,2026-05-06,Dropped,GP Clinic
+RESIDENT_01426,Weight Management,2026-02-04,Active,App
+RESIDENT_00204,Eat Drink Shop Healthy,2026-05-18,Active,Roadshow
+RESIDENT_00175,Weight Management,2026-05-31,Active,Employer
+RESIDENT_01006,I Quit (Tobacco),2026-02-01,Active,Employer
+RESIDENT_01457,Diabetes Prevention,2026-01-15,Active,Roadshow
+RESIDENT_00256,Diabetes Prevention,2026-05-10,Active,Polyclinic
+RESIDENT_00747,I Quit (Tobacco),2026-02-01,Active,Employer
+RESIDENT_00685,Diabetes Prevention,2026-01-10,Active,App
+RESIDENT_00984,Healthier SG,2026-04-26,Dropped,App
+RESIDENT_00480,Eat Drink Shop Healthy,2026-03-11,Dropped,Roadshow
+RESIDENT_00983,Healthier SG,2026-02-11,Active,Roadshow
+RESIDENT_00282,Diabetes Prevention,2026-04-04,Dropped,Polyclinic
+RESIDENT_00869,Healthier SG,2026-02-23,Active,App
+RESIDENT_01114,Healthier SG,2026-03-25,Active,Roadshow
+RESIDENT_01182,I Quit (Tobacco),2026-03-25,Dropped,GP Clinic
+RESIDENT_00086,Weight Management,2026-05-14,Active,Employer
+RESIDENT_01305,Weight Management,2026-05-12,Active,Roadshow
+RESIDENT_01231,Weight Management,2026-03-11,Active,Employer
+RESIDENT_00909,Weight Management,2026-04-09,Active,Roadshow
+RESIDENT_01012,Diabetes Prevention,2026-04-25,Dropped,GP Clinic
+RESIDENT_00208,Weight Management,2026-04-14,Active,GP Clinic
+RESIDENT_00201,Healthier SG,2026-02-24,Active,Roadshow
+RESIDENT_00630,Eat Drink Shop Healthy,2026-03-29,Active,App
+RESIDENT_00454,Active Ageing,2026-01-04,Active,App
+RESIDENT_01352,I Quit (Tobacco),2026-05-24,Dropped,Polyclinic
+RESIDENT_00526,Eat Drink Shop Healthy,2026-04-09,Active,Employer
+RESIDENT_00243,Eat Drink Shop Healthy,2026-02-26,Active,GP Clinic
+RESIDENT_01378,Active Ageing,2026-04-12,Dropped,Roadshow
+RESIDENT_00338,Active Ageing,2026-05-30,Active,Polyclinic
+RESIDENT_00167,Weight Management,2026-04-03,Active,Employer
+RESIDENT_00195,Eat Drink Shop Healthy,2026-02-17,Active,Roadshow
+RESIDENT_01444,Diabetes Prevention,2026-01-25,Active,Roadshow
+RESIDENT_01465,I Quit (Tobacco),2026-01-13,Active,Roadshow
+RESIDENT_00583,Diabetes Prevention,2026-04-20,Active,App
+RESIDENT_00864,Active Ageing,2026-02-16,Dropped,App
+RESIDENT_01133,Weight Management,2026-05-24,Dropped,App
+RESIDENT_01190,Healthier SG,2026-01-22,Active,Roadshow
+RESIDENT_00581,Weight Management,2026-03-26,Active,Polyclinic
+RESIDENT_01486,Eat Drink Shop Healthy,2026-02-13,Active,Polyclinic
+RESIDENT_00504,Active Ageing,2026-02-22,Active,Polyclinic
+RESIDENT_00615,Diabetes Prevention,2026-01-11,Active,App
+RESIDENT_00871,Eat Drink Shop Healthy,2026-04-30,Dropped,App
+RESIDENT_00629,Weight Management,2026-03-30,Active,App
+RESIDENT_00881,Weight Management,2026-01-13,Active,Polyclinic
+RESIDENT_00182,Eat Drink Shop Healthy,2026-02-18,Dropped,GP Clinic
+RESIDENT_00364,Eat Drink Shop Healthy,2026-02-04,Active,Polyclinic
+RESIDENT_01070,Diabetes Prevention,2026-03-27,Active,Employer
+RESIDENT_01066,I Quit (Tobacco),2026-02-17,Active,App
+RESIDENT_01372,Diabetes Prevention,2026-02-28,Active,Employer
+RESIDENT_00720,Eat Drink Shop Healthy,2026-03-31,Active,Employer
+RESIDENT_00104,Weight Management,2026-05-31,Active,Polyclinic
+RESIDENT_00226,I Quit (Tobacco),2026-02-13,Active,Employer
+RESIDENT_01343,Eat Drink Shop Healthy,2026-05-02,Active,Polyclinic
+RESIDENT_01298,I Quit (Tobacco),2026-01-07,Dropped,Employer
+RESIDENT_00999,Active Ageing,2026-04-05,Dropped,GP Clinic
+RESIDENT_01334,Active Ageing,2026-02-21,Dropped,GP Clinic
+RESIDENT_01344,Healthier SG,2026-03-27,Dropped,Roadshow
+RESIDENT_00373,Weight Management,2026-03-01,Active,Polyclinic
+RESIDENT_01162,Healthier SG,2026-03-25,Dropped,GP Clinic
+RESIDENT_00901,Healthier SG,2026-03-30,Dropped,GP Clinic
+RESIDENT_00476,Healthier SG,2026-03-02,Active,Employer
+RESIDENT_00108,I Quit (Tobacco),2026-03-08,Dropped,Polyclinic
+RESIDENT_01385,Diabetes Prevention,2026-04-15,Active,Polyclinic
+RESIDENT_00389,Diabetes Prevention,2026-03-31,Active,Roadshow
+RESIDENT_00336,Active Ageing,2026-04-25,Active,Polyclinic
+RESIDENT_00034,I Quit (Tobacco),2026-03-22,Dropped,Employer
+RESIDENT_00335,Active Ageing,2026-04-23,Dropped,Employer
+RESIDENT_00647,Weight Management,2026-02-07,Dropped,App
+RESIDENT_00440,Eat Drink Shop Healthy,2026-02-03,Active,App
+RESIDENT_00795,Weight Management,2026-02-17,Active,GP Clinic
+RESIDENT_01401,Active Ageing,2026-04-13,Active,GP Clinic
+RESIDENT_00133,I Quit (Tobacco),2026-03-17,Active,Roadshow
+RESIDENT_00264,I Quit (Tobacco),2026-03-10,Active,Employer
+RESIDENT_00229,Healthier SG,2026-03-18,Active,Polyclinic
+RESIDENT_00177,Weight Management,2026-02-24,Active,App
+RESIDENT_01410,Eat Drink Shop Healthy,2026-04-12,Active,Polyclinic
+RESIDENT_00024,Healthier SG,2026-02-06,Active,Employer
+RESIDENT_01491,Healthier SG,2026-04-08,Active,Polyclinic
+RESIDENT_01153,Healthier SG,2026-02-04,Active,App
+RESIDENT_01490,Diabetes Prevention,2026-02-27,Dropped,GP Clinic
+RESIDENT_00431,Weight Management,2026-01-07,Dropped,App
+RESIDENT_01088,Active Ageing,2026-03-14,Active,Polyclinic
+RESIDENT_00618,Healthier SG,2026-01-21,Active,Employer
+RESIDENT_00670,Diabetes Prevention,2026-04-04,Active,App
+RESIDENT_01090,I Quit (Tobacco),2026-03-21,Active,Polyclinic
+RESIDENT_00303,Active Ageing,2026-04-17,Active,GP Clinic
+RESIDENT_00007,Weight Management,2026-05-31,Active,Roadshow
+RESIDENT_00445,Diabetes Prevention,2026-01-22,Active,Roadshow
+RESIDENT_00517,Eat Drink Shop Healthy,2026-01-07,Dropped,App
+RESIDENT_00157,Active Ageing,2026-02-11,Active,Employer
+RESIDENT_00119,I Quit (Tobacco),2026-02-14,Dropped,Roadshow
+RESIDENT_01481,Weight Management,2026-05-13,Active,Polyclinic
+RESIDENT_00989,Healthier SG,2026-05-01,Active,Polyclinic
+RESIDENT_00848,Diabetes Prevention,2026-03-02,Dropped,Polyclinic
+RESIDENT_00801,Diabetes Prevention,2026-04-24,Active,GP Clinic
+RESIDENT_00920,Weight Management,2026-05-31,Active,App
+RESIDENT_00052,Eat Drink Shop Healthy,2026-04-09,Dropped,App
+RESIDENT_00619,Active Ageing,2026-05-07,Active,Roadshow
+RESIDENT_00855,Healthier SG,2026-01-19,Dropped,Roadshow
+RESIDENT_00984,Active Ageing,2026-01-28,Active,Roadshow
+RESIDENT_00152,Eat Drink Shop Healthy,2026-05-29,Active,Roadshow
+RESIDENT_01193,Diabetes Prevention,2026-02-22,Active,App
+RESIDENT_00770,Weight Management,2026-05-09,Active,GP Clinic
+RESIDENT_00677,Healthier SG,2026-04-15,Active,Roadshow
+RESIDENT_00428,Diabetes Prevention,2026-03-04,Dropped,App
+RESIDENT_00255,Active Ageing,2026-04-27,Active,App
+RESIDENT_00778,I Quit (Tobacco),2026-04-23,Active,Employer
+RESIDENT_00698,Weight Management,2026-02-17,Dropped,App
+RESIDENT_00578,Weight Management,2026-04-04,Active,Employer
+RESIDENT_01081,Weight Management,2026-01-15,Active,Employer
+RESIDENT_00915,I Quit (Tobacco),2026-04-16,Active,Roadshow
+RESIDENT_00134,I Quit (Tobacco),2026-01-14,Dropped,Employer
+RESIDENT_00854,Active Ageing,2026-01-13,Dropped,Polyclinic
+RESIDENT_01054,Diabetes Prevention,2026-03-07,Dropped,Employer
+RESIDENT_01177,Healthier SG,2026-03-17,Active,Employer
+RESIDENT_01025,Active Ageing,2026-01-11,Active,App
+RESIDENT_01333,I Quit (Tobacco),2026-01-05,Dropped,Employer
+RESIDENT_01189,I Quit (Tobacco),2026-05-16,Dropped,GP Clinic
+RESIDENT_00782,Diabetes Prevention,2026-02-05,Active,Employer
+RESIDENT_01468,Diabetes Prevention,2026-03-07,Dropped,App
+RESIDENT_00950,Healthier SG,2026-05-09,Active,App
+RESIDENT_00051,I Quit (Tobacco),2026-03-07,Active,Roadshow
+RESIDENT_01049,Active Ageing,2026-03-28,Active,App
+RESIDENT_01254,Diabetes Prevention,2026-01-09,Active,Roadshow
+RESIDENT_01453,Diabetes Prevention,2026-01-24,Dropped,App
+RESIDENT_01117,Weight Management,2026-03-12,Dropped,Employer
+RESIDENT_00110,Weight Management,2026-04-03,Dropped,Polyclinic
+RESIDENT_00211,Weight Management,2026-04-12,Dropped,Employer
+RESIDENT_01226,Eat Drink Shop Healthy,2026-03-17,Active,App
+RESIDENT_00373,I Quit (Tobacco),2026-04-12,Active,GP Clinic
+RESIDENT_01336,Eat Drink Shop Healthy,2026-03-31,Active,Roadshow
+RESIDENT_01310,Weight Management,2026-02-20,Active,Roadshow
+RESIDENT_00532,Eat Drink Shop Healthy,2026-04-26,Active,GP Clinic
+RESIDENT_00186,Diabetes Prevention,2026-04-30,Active,App
+RESIDENT_01214,Eat Drink Shop Healthy,2026-05-10,Active,Employer
+RESIDENT_00584,Diabetes Prevention,2026-02-27,Active,GP Clinic
+RESIDENT_00467,Active Ageing,2026-05-27,Active,Roadshow
+RESIDENT_00711,Weight Management,2026-02-06,Active,Employer
+RESIDENT_00276,Weight Management,2026-04-28,Active,Polyclinic
+RESIDENT_00727,I Quit (Tobacco),2026-01-18,Dropped,GP Clinic
+RESIDENT_00959,Eat Drink Shop Healthy,2026-05-02,Active,Roadshow
+RESIDENT_01397,Eat Drink Shop Healthy,2026-03-26,Dropped,Employer
+RESIDENT_00756,Diabetes Prevention,2026-04-18,Active,App
+RESIDENT_00201,Weight Management,2026-01-07,Active,Roadshow
+RESIDENT_00028,Active Ageing,2026-03-12,Dropped,GP Clinic
+RESIDENT_01047,Active Ageing,2026-02-14,Active,Polyclinic
+RESIDENT_01462,Weight Management,2026-04-03,Dropped,App
+RESIDENT_00882,I Quit (Tobacco),2026-01-06,Active,Polyclinic
+RESIDENT_01076,I Quit (Tobacco),2026-05-28,Active,GP Clinic
+RESIDENT_00098,I Quit (Tobacco),2026-03-28,Active,GP Clinic
+RESIDENT_01433,Eat Drink Shop Healthy,2026-05-09,Active,Employer
+RESIDENT_00455,Diabetes Prevention,2026-04-05,Dropped,Roadshow
+RESIDENT_00702,Healthier SG,2026-01-17,Active,Roadshow
+RESIDENT_00923,Active Ageing,2026-04-02,Active,Roadshow
+RESIDENT_01176,Eat Drink Shop Healthy,2026-01-20,Active,Roadshow
+RESIDENT_00021,Diabetes Prevention,2026-04-11,Dropped,Polyclinic
+RESIDENT_01034,Eat Drink Shop Healthy,2026-02-03,Active,Polyclinic
+RESIDENT_01087,I Quit (Tobacco),2026-03-23,Dropped,Roadshow
+RESIDENT_00653,Diabetes Prevention,2026-02-16,Active,GP Clinic
+RESIDENT_00502,Diabetes Prevention,2026-04-10,Active,GP Clinic
+RESIDENT_00187,Weight Management,2026-05-07,Active,Roadshow
+RESIDENT_01250,Eat Drink Shop Healthy,2026-02-27,Dropped,App
+RESIDENT_00043,Eat Drink Shop Healthy,2026-02-05,Active,Polyclinic
+RESIDENT_00998,Healthier SG,2026-02-10,Active,App
+RESIDENT_00465,I Quit (Tobacco),2026-03-18,Active,Polyclinic
+RESIDENT_00532,Diabetes Prevention,2026-04-28,Active,Roadshow
+RESIDENT_01410,Weight Management,2026-05-24,Active,App
+RESIDENT_01027,I Quit (Tobacco),2026-02-24,Active,App
+RESIDENT_00103,Diabetes Prevention,2026-05-19,Active,Roadshow
+RESIDENT_00323,Eat Drink Shop Healthy,2026-02-10,Active,Polyclinic
+RESIDENT_01272,Weight Management,2026-05-31,Active,GP Clinic
+RESIDENT_00616,Weight Management,2026-01-18,Active,App
+RESIDENT_00298,Diabetes Prevention,2026-04-13,Dropped,Roadshow
+RESIDENT_00044,Diabetes Prevention,2026-02-17,Active,Employer
+RESIDENT_01089,Active Ageing,2026-01-20,Active,GP Clinic
+RESIDENT_00053,Active Ageing,2026-05-12,Active,GP Clinic
+RESIDENT_00885,Healthier SG,2026-03-27,Active,Employer
+RESIDENT_00442,Weight Management,2026-05-26,Active,GP Clinic
+RESIDENT_00108,Eat Drink Shop Healthy,2026-04-19,Dropped,Polyclinic
+RESIDENT_01071,Healthier SG,2026-03-12,Dropped,GP Clinic
+RESIDENT_01175,Eat Drink Shop Healthy,2026-04-15,Active,Polyclinic
+RESIDENT_01021,Active Ageing,2026-05-30,Active,Polyclinic
+RESIDENT_00159,I Quit (Tobacco),2026-05-05,Active,Employer
+RESIDENT_00636,Healthier SG,2026-01-25,Dropped,Roadshow
+RESIDENT_00274,Weight Management,2026-02-17,Active,GP Clinic
+RESIDENT_01211,Eat Drink Shop Healthy,2026-02-11,Active,GP Clinic
+RESIDENT_00011,Active Ageing,2026-03-16,Active,GP Clinic
+RESIDENT_00208,Eat Drink Shop Healthy,2026-04-01,Active,Employer
+RESIDENT_00257,Active Ageing,2026-02-23,Active,GP Clinic
+RESIDENT_00375,Active Ageing,2026-05-09,Dropped,Roadshow
+RESIDENT_01028,Active Ageing,2026-01-29,Active,GP Clinic
+RESIDENT_00990,Eat Drink Shop Healthy,2026-03-14,Dropped,App
+RESIDENT_00066,Healthier SG,2026-04-26,Dropped,Roadshow
+RESIDENT_01178,Diabetes Prevention,2026-05-12,Dropped,Roadshow
+RESIDENT_01446,Diabetes Prevention,2026-01-01,Dropped,GP Clinic
+RESIDENT_00399,Active Ageing,2026-04-21,Dropped,Polyclinic
+RESIDENT_00981,Active Ageing,2026-01-13,Active,App
+RESIDENT_00771,Eat Drink Shop Healthy,2026-01-15,Active,Roadshow
+RESIDENT_00408,Active Ageing,2026-01-31,Dropped,App
+RESIDENT_00953,Healthier SG,2026-05-05,Active,Employer
+RESIDENT_01098,Active Ageing,2026-04-20,Active,Employer
+RESIDENT_01189,Active Ageing,2026-02-25,Dropped,Roadshow
+RESIDENT_00948,Diabetes Prevention,2026-03-24,Dropped,Polyclinic
+RESIDENT_01422,Active Ageing,2026-03-17,Active,GP Clinic
+RESIDENT_00540,Weight Management,2026-01-07,Dropped,Polyclinic
+RESIDENT_00846,Active Ageing,2026-04-08,Dropped,Roadshow
+RESIDENT_00994,Diabetes Prevention,2026-03-04,Active,Employer
+RESIDENT_00330,Active Ageing,2026-04-17,Active,Roadshow
+RESIDENT_00861,I Quit (Tobacco),2026-03-11,Active,GP Clinic
+RESIDENT_01447,Weight Management,2026-04-29,Active,Roadshow
+RESIDENT_00509,Healthier SG,2026-02-21,Active,GP Clinic
+RESIDENT_00466,Weight Management,2026-05-21,Active,Employer
+RESIDENT_00685,Weight Management,2026-03-31,Dropped,Roadshow
+RESIDENT_00571,Weight Management,2026-04-09,Dropped,Employer
+RESIDENT_01500,Weight Management,2026-03-14,Active,Polyclinic
+RESIDENT_01090,Healthier SG,2026-05-17,Active,Roadshow
+RESIDENT_00057,Healthier SG,2026-05-14,Active,GP Clinic
+RESIDENT_01080,Healthier SG,2026-01-28,Active,App
+RESIDENT_00008,Weight Management,2026-04-15,Active,GP Clinic
+RESIDENT_00621,I Quit (Tobacco),2026-05-20,Dropped,Roadshow
+RESIDENT_00925,Eat Drink Shop Healthy,2026-04-25,Active,Employer
+RESIDENT_00312,Eat Drink Shop Healthy,2026-04-22,Active,Polyclinic
+RESIDENT_00316,I Quit (Tobacco),2026-02-04,Active,App
+RESIDENT_00555,Active Ageing,2026-04-16,Active,GP Clinic
+RESIDENT_00801,Eat Drink Shop Healthy,2026-01-18,Dropped,App
+RESIDENT_00969,Diabetes Prevention,2026-02-04,Dropped,Polyclinic
+RESIDENT_00797,Active Ageing,2026-02-28,Dropped,Employer
+RESIDENT_00838,Weight Management,2026-02-28,Active,App
+RESIDENT_00638,Diabetes Prevention,2026-03-24,Dropped,Employer
+RESIDENT_00188,I Quit (Tobacco),2026-01-25,Active,Employer
+RESIDENT_00221,Healthier SG,2026-05-06,Active,App
+RESIDENT_00077,Eat Drink Shop Healthy,2026-05-29,Dropped,Roadshow
+RESIDENT_00599,Active Ageing,2026-03-20,Dropped,Employer
+RESIDENT_01277,Diabetes Prevention,2026-01-29,Dropped,App
+RESIDENT_00338,Eat Drink Shop Healthy,2026-01-20,Active,Employer
+RESIDENT_00877,Healthier SG,2026-04-03,Active,Polyclinic
+RESIDENT_01289,Eat Drink Shop Healthy,2026-05-27,Active,App
+RESIDENT_00688,Healthier SG,2026-01-05,Dropped,Employer
+RESIDENT_00181,I Quit (Tobacco),2026-04-01,Active,Polyclinic
+RESIDENT_00560,Weight Management,2026-05-20,Active,App
+RESIDENT_01076,Diabetes Prevention,2026-05-21,Active,Roadshow
+RESIDENT_00217,Eat Drink Shop Healthy,2026-04-26,Active,App
+RESIDENT_00033,Healthier SG,2026-02-05,Active,App
+RESIDENT_00351,Healthier SG,2026-04-17,Dropped,GP Clinic
+RESIDENT_00059,Weight Management,2026-04-26,Active,Employer
+RESIDENT_00099,I Quit (Tobacco),2026-04-29,Active,GP Clinic
+RESIDENT_00764,Eat Drink Shop Healthy,2026-05-12,Dropped,Polyclinic
+RESIDENT_01405,Healthier SG,2026-02-14,Active,Polyclinic
+RESIDENT_00539,Diabetes Prevention,2026-04-25,Active,Roadshow
+RESIDENT_00615,Eat Drink Shop Healthy,2026-01-14,Dropped,Polyclinic
+RESIDENT_01115,I Quit (Tobacco),2026-03-06,Dropped,Polyclinic
+RESIDENT_00311,Eat Drink Shop Healthy,2026-02-05,Dropped,Roadshow
+RESIDENT_00618,Eat Drink Shop Healthy,2026-04-13,Dropped,GP Clinic
+RESIDENT_00814,Weight Management,2026-05-29,Active,App
+RESIDENT_01092,Weight Management,2026-05-21,Dropped,GP Clinic
+RESIDENT_00759,I Quit (Tobacco),2026-03-08,Active,Polyclinic
+RESIDENT_01093,I Quit (Tobacco),2026-02-19,Dropped,App
+RESIDENT_01398,Active Ageing,2026-01-20,Active,Roadshow
+RESIDENT_01261,Active Ageing,2026-05-28,Active,Roadshow
+RESIDENT_00233,Diabetes Prevention,2026-02-27,Dropped,GP Clinic
+RESIDENT_00099,Diabetes Prevention,2026-01-27,Active,Polyclinic
+RESIDENT_01118,I Quit (Tobacco),2026-02-06,Active,App
+RESIDENT_00105,Diabetes Prevention,2026-01-17,Active,App
+RESIDENT_01274,Eat Drink Shop Healthy,2026-03-25,Active,Polyclinic
+RESIDENT_00808,I Quit (Tobacco),2026-01-16,Dropped,Polyclinic
+RESIDENT_01179,Weight Management,2026-03-06,Dropped,Employer
+RESIDENT_00409,Eat Drink Shop Healthy,2026-01-08,Active,Employer
+RESIDENT_00907,I Quit (Tobacco),2026-05-10,Active,GP Clinic
+RESIDENT_01069,I Quit (Tobacco),2026-04-05,Active,Employer
+RESIDENT_00491,Healthier SG,2026-04-11,Dropped,Polyclinic
+RESIDENT_01370,I Quit (Tobacco),2026-04-19,Dropped,Roadshow
+RESIDENT_00490,Healthier SG,2026-01-17,Dropped,Polyclinic
+RESIDENT_00087,Weight Management,2026-04-26,Active,App
+RESIDENT_00442,Healthier SG,2026-02-19,Active,Polyclinic
+RESIDENT_00547,I Quit (Tobacco),2026-03-04,Active,App
+RESIDENT_00712,Diabetes Prevention,2026-01-18,Active,Polyclinic
+RESIDENT_00138,Weight Management,2026-01-20,Active,Roadshow
+RESIDENT_00761,Healthier SG,2026-04-15,Active,Polyclinic
+RESIDENT_00985,Weight Management,2026-01-30,Dropped,App
+RESIDENT_00179,Weight Management,2026-03-27,Active,Employer
+RESIDENT_00313,Eat Drink Shop Healthy,2026-01-14,Dropped,GP Clinic
+RESIDENT_00511,Healthier SG,2026-05-14,Active,App
+RESIDENT_00010,Eat Drink Shop Healthy,2026-03-11,Active,App
+RESIDENT_00257,Weight Management,2026-02-20,Active,Employer
+RESIDENT_01115,Healthier SG,2026-02-28,Dropped,Employer
+RESIDENT_00351,I Quit (Tobacco),2026-01-21,Active,Employer
+RESIDENT_00666,Diabetes Prevention,2026-05-16,Active,Employer
+RESIDENT_00093,Diabetes Prevention,2026-04-30,Dropped,GP Clinic
+RESIDENT_00265,Weight Management,2026-02-24,Active,Roadshow
+RESIDENT_00611,Weight Management,2026-02-09,Dropped,App
+RESIDENT_01095,Weight Management,2026-05-01,Active,App
+RESIDENT_00725,I Quit (Tobacco),2026-03-12,Active,Employer
+RESIDENT_00082,I Quit (Tobacco),2026-02-12,Active,Employer
+RESIDENT_00895,I Quit (Tobacco),2026-02-04,Active,Roadshow
+RESIDENT_01200,Eat Drink Shop Healthy,2026-03-02,Active,Polyclinic
+RESIDENT_01203,I Quit (Tobacco),2026-02-05,Active,Polyclinic
+RESIDENT_00909,Diabetes Prevention,2026-01-06,Dropped,Polyclinic
+RESIDENT_01463,Diabetes Prevention,2026-01-04,Active,Polyclinic
+RESIDENT_00743,Healthier SG,2026-01-10,Active,Roadshow
+RESIDENT_00200,I Quit (Tobacco),2026-01-20,Active,App
+RESIDENT_00264,Healthier SG,2026-05-11,Active,GP Clinic
+RESIDENT_00716,Healthier SG,2026-02-09,Active,Employer
+RESIDENT_00064,Healthier SG,2026-01-01,Dropped,App
+RESIDENT_00600,Weight Management,2026-05-31,Active,App
+RESIDENT_00798,I Quit (Tobacco),2026-05-26,Dropped,Roadshow
+RESIDENT_01239,Active Ageing,2026-02-07,Active,Roadshow
+RESIDENT_00626,Active Ageing,2026-04-19,Active,Employer
+RESIDENT_00638,Eat Drink Shop Healthy,2026-02-26,Dropped,Roadshow
+RESIDENT_00452,Healthier SG,2026-05-31,Active,Roadshow
+RESIDENT_00329,Diabetes Prevention,2026-02-14,Active,GP Clinic
+RESIDENT_00755,Healthier SG,2026-02-04,Active,Employer
+RESIDENT_00227,Healthier SG,2026-01-11,Active,App
+RESIDENT_00101,Healthier SG,2026-02-24,Active,App
+RESIDENT_00310,Active Ageing,2026-01-24,Active,GP Clinic
+RESIDENT_01445,I Quit (Tobacco),2026-02-08,Dropped,App
+RESIDENT_00897,Eat Drink Shop Healthy,2026-01-19,Dropped,Roadshow
+RESIDENT_01083,I Quit (Tobacco),2026-04-24,Dropped,App
+RESIDENT_00597,Eat Drink Shop Healthy,2026-04-20,Active,Employer
+RESIDENT_00121,Active Ageing,2026-01-21,Active,GP Clinic
+RESIDENT_00687,Eat Drink Shop Healthy,2026-05-23,Active,App
+RESIDENT_01457,Active Ageing,2026-05-06,Active,Employer
+RESIDENT_01133,Diabetes Prevention,2026-01-18,Active,Roadshow
+RESIDENT_00988,Weight Management,2026-03-14,Active,App
+RESIDENT_00923,I Quit (Tobacco),2026-03-05,Active,Polyclinic
+RESIDENT_00399,I Quit (Tobacco),2026-05-03,Dropped,Polyclinic
+RESIDENT_00633,Active Ageing,2026-01-29,Active,Roadshow
+RESIDENT_01343,Active Ageing,2026-04-29,Dropped,Roadshow
+RESIDENT_00008,Eat Drink Shop Healthy,2026-02-26,Active,Polyclinic
+RESIDENT_01233,I Quit (Tobacco),2026-01-19,Active,Polyclinic
+RESIDENT_00085,Eat Drink Shop Healthy,2026-01-17,Active,GP Clinic
+RESIDENT_00135,Active Ageing,2026-03-23,Dropped,Roadshow
+RESIDENT_00172,Healthier SG,2026-05-31,Dropped,GP Clinic
+RESIDENT_00947,Weight Management,2026-04-03,Active,GP Clinic
+RESIDENT_00815,Healthier SG,2026-04-28,Active,Roadshow
+RESIDENT_00654,Eat Drink Shop Healthy,2026-01-22,Active,GP Clinic
+RESIDENT_00073,I Quit (Tobacco),2026-01-22,Active,Polyclinic
+RESIDENT_01415,Eat Drink Shop Healthy,2026-01-08,Active,Polyclinic
+RESIDENT_01448,Active Ageing,2026-01-10,Active,GP Clinic
+RESIDENT_01317,Diabetes Prevention,2026-01-04,Dropped,Employer
+RESIDENT_00424,Active Ageing,2026-01-07,Dropped,Polyclinic
+RESIDENT_00884,I Quit (Tobacco),2026-04-26,Active,GP Clinic
+RESIDENT_00593,Eat Drink Shop Healthy,2026-02-24,Dropped,Employer
+RESIDENT_01217,Active Ageing,2026-03-30,Active,Polyclinic
+RESIDENT_00503,Eat Drink Shop Healthy,2026-03-18,Active,Roadshow
+RESIDENT_00733,Eat Drink Shop Healthy,2026-05-04,Dropped,Polyclinic
+RESIDENT_01461,Weight Management,2026-01-05,Active,Polyclinic
+RESIDENT_01210,Healthier SG,2026-01-27,Active,Polyclinic
+RESIDENT_00878,Weight Management,2026-04-15,Dropped,App
+RESIDENT_00534,Eat Drink Shop Healthy,2026-04-16,Active,Employer
+RESIDENT_00444,I Quit (Tobacco),2026-01-11,Active,GP Clinic
+RESIDENT_01436,Active Ageing,2026-05-04,Active,Employer
+RESIDENT_00879,Active Ageing,2026-02-08,Active,App
+RESIDENT_00534,Active Ageing,2026-03-08,Dropped,Polyclinic
+RESIDENT_00304,Healthier SG,2026-05-20,Active,App
+RESIDENT_00331,Healthier SG,2026-03-28,Active,GP Clinic
+RESIDENT_01030,I Quit (Tobacco),2026-01-01,Dropped,Roadshow
+RESIDENT_00773,Diabetes Prevention,2026-04-30,Active,GP Clinic
+RESIDENT_00061,Healthier SG,2026-03-29,Dropped,Roadshow
+RESIDENT_00613,Healthier SG,2026-03-31,Active,Polyclinic
+RESIDENT_00430,Diabetes Prevention,2026-02-26,Dropped,App
+RESIDENT_01376,I Quit (Tobacco),2026-01-31,Active,Polyclinic
+RESIDENT_00460,Healthier SG,2026-02-13,Dropped,GP Clinic
+RESIDENT_00975,Active Ageing,2026-04-29,Active,Polyclinic
+RESIDENT_01061,Healthier SG,2026-05-24,Active,App
+RESIDENT_01091,I Quit (Tobacco),2026-05-30,Active,App
+RESIDENT_01148,Eat Drink Shop Healthy,2026-05-02,Active,App
+RESIDENT_01444,Active Ageing,2026-04-28,Active,Roadshow
+RESIDENT_00327,Weight Management,2026-03-27,Active,GP Clinic
+RESIDENT_00690,Weight Management,2026-01-19,Active,GP Clinic
+RESIDENT_00660,Diabetes Prevention,2026-05-08,Active,Polyclinic
+RESIDENT_00011,Healthier SG,2026-04-19,Dropped,App
+RESIDENT_00068,Healthier SG,2026-05-14,Dropped,App
+RESIDENT_00752,Active Ageing,2026-01-10,Active,GP Clinic
+RESIDENT_01072,I Quit (Tobacco),2026-03-16,Active,Polyclinic
+RESIDENT_00965,Diabetes Prevention,2026-05-08,Active,GP Clinic
+RESIDENT_00151,Healthier SG,2026-01-24,Active,Roadshow
+RESIDENT_01228,Active Ageing,2026-03-15,Active,Roadshow
+RESIDENT_01161,Eat Drink Shop Healthy,2026-03-23,Dropped,App
+RESIDENT_00557,Healthier SG,2026-05-21,Active,Polyclinic
+RESIDENT_00621,Eat Drink Shop Healthy,2026-05-21,Active,GP Clinic
+RESIDENT_00844,Diabetes Prevention,2026-03-16,Active,App
+RESIDENT_00249,Weight Management,2026-05-31,Active,GP Clinic
+RESIDENT_00641,Healthier SG,2026-03-18,Active,GP Clinic
+RESIDENT_00260,Healthier SG,2026-02-03,Active,Roadshow
+RESIDENT_00007,Active Ageing,2026-05-01,Active,Roadshow
+RESIDENT_01080,I Quit (Tobacco),2026-04-03,Active,App
+RESIDENT_00186,Active Ageing,2026-02-14,Active,Roadshow
+RESIDENT_01326,Active Ageing,2026-02-16,Active,GP Clinic
+RESIDENT_00708,Weight Management,2026-02-16,Dropped,Polyclinic
+RESIDENT_00905,Diabetes Prevention,2026-05-19,Dropped,GP Clinic
+RESIDENT_00074,Active Ageing,2026-05-23,Dropped,Roadshow
+RESIDENT_01424,Healthier SG,2026-01-28,Active,Polyclinic
+RESIDENT_01111,Eat Drink Shop Healthy,2026-02-21,Active,GP Clinic
+RESIDENT_01139,I Quit (Tobacco),2026-05-30,Dropped,Polyclinic
+RESIDENT_01222,Active Ageing,2026-02-08,Active,App
+RESIDENT_01322,Active Ageing,2026-01-29,Dropped,Roadshow
+RESIDENT_00886,Weight Management,2026-04-23,Active,Roadshow
+RESIDENT_00136,Active Ageing,2026-03-04,Active,Roadshow
+RESIDENT_00352,Weight Management,2026-02-07,Active,GP Clinic
+RESIDENT_00464,Eat Drink Shop Healthy,2026-02-26,Dropped,Polyclinic
+RESIDENT_00227,Active Ageing,2026-02-13,Active,Polyclinic
+RESIDENT_01135,Active Ageing,2026-05-26,Active,Employer
+RESIDENT_01498,Diabetes Prevention,2026-03-10,Active,Employer
+RESIDENT_00346,I Quit (Tobacco),2026-04-02,Active,Employer
+RESIDENT_00405,Diabetes Prevention,2026-03-25,Active,GP Clinic
+RESIDENT_00611,Active Ageing,2026-05-03,Dropped,Employer
+RESIDENT_00382,Weight Management,2026-01-22,Active,App
+RESIDENT_00704,I Quit (Tobacco),2026-02-10,Active,Roadshow
+RESIDENT_01173,I Quit (Tobacco),2026-05-14,Active,Polyclinic
+RESIDENT_01200,Active Ageing,2026-01-01,Dropped,GP Clinic
+RESIDENT_00741,Active Ageing,2026-05-03,Active,Roadshow
+RESIDENT_00073,Healthier SG,2026-01-01,Dropped,App
+RESIDENT_01215,Healthier SG,2026-05-11,Active,GP Clinic
+RESIDENT_01436,Diabetes Prevention,2026-05-28,Active,Polyclinic
+RESIDENT_01195,I Quit (Tobacco),2026-03-06,Active,GP Clinic
+RESIDENT_00080,I Quit (Tobacco),2026-05-30,Active,Employer
+RESIDENT_01268,I Quit (Tobacco),2026-05-03,Active,Employer
+RESIDENT_00439,I Quit (Tobacco),2026-04-05,Active,Polyclinic
+RESIDENT_01020,Eat Drink Shop Healthy,2026-04-05,Active,Roadshow
+RESIDENT_00489,Healthier SG,2026-04-23,Dropped,Roadshow
+RESIDENT_01240,Healthier SG,2026-01-19,Active,Polyclinic
+RESIDENT_01440,Diabetes Prevention,2026-01-29,Active,Roadshow
+RESIDENT_00283,Active Ageing,2026-03-17,Active,App
+RESIDENT_01349,Diabetes Prevention,2026-02-26,Active,Employer
+RESIDENT_01070,Healthier SG,2026-02-05,Active,App
+RESIDENT_00769,Active Ageing,2026-03-23,Active,Polyclinic
+RESIDENT_01297,Active Ageing,2026-01-17,Active,Roadshow
+RESIDENT_01443,Eat Drink Shop Healthy,2026-01-06,Active,App
+RESIDENT_00422,Active Ageing,2026-05-26,Active,App
+RESIDENT_00724,Active Ageing,2026-04-28,Active,App
+RESIDENT_00519,Active Ageing,2026-05-30,Dropped,Roadshow
+RESIDENT_00853,Eat Drink Shop Healthy,2026-05-06,Active,Employer
+RESIDENT_00336,Eat Drink Shop Healthy,2026-04-19,Active,Roadshow
+RESIDENT_00524,Active Ageing,2026-02-14,Active,GP Clinic
+RESIDENT_01314,Active Ageing,2026-05-14,Dropped,Employer
+RESIDENT_00916,Active Ageing,2026-01-13,Active,App
+RESIDENT_01429,Healthier SG,2026-01-20,Active,Polyclinic
+RESIDENT_01023,I Quit (Tobacco),2026-05-14,Active,Roadshow
+RESIDENT_00293,Healthier SG,2026-05-24,Active,Employer
+RESIDENT_00463,Diabetes Prevention,2026-02-21,Active,GP Clinic
+RESIDENT_00081,Healthier SG,2026-03-27,Active,Polyclinic
+RESIDENT_00877,Active Ageing,2026-01-05,Active,App
+RESIDENT_00005,Diabetes Prevention,2026-05-06,Active,App
+RESIDENT_00801,Active Ageing,2026-05-12,Active,App
+RESIDENT_00953,I Quit (Tobacco),2026-02-10,Active,GP Clinic
+RESIDENT_01293,Active Ageing,2026-01-01,Active,Employer
+RESIDENT_01338,Healthier SG,2026-03-09,Active,GP Clinic
+RESIDENT_00888,Healthier SG,2026-02-26,Active,App
+RESIDENT_00143,Healthier SG,2026-04-10,Active,Roadshow
+RESIDENT_00270,Eat Drink Shop Healthy,2026-02-04,Active,GP Clinic
+RESIDENT_00752,Healthier SG,2026-03-02,Dropped,Roadshow
+RESIDENT_01435,Weight Management,2026-05-10,Dropped,Employer
+RESIDENT_00408,Diabetes Prevention,2026-02-15,Active,Polyclinic
+RESIDENT_00486,Active Ageing,2026-02-23,Active,App
+RESIDENT_01161,Healthier SG,2026-03-17,Active,Roadshow
+RESIDENT_00485,Eat Drink Shop Healthy,2026-05-20,Active,App
+RESIDENT_01124,Active Ageing,2026-03-13,Active,Roadshow
+RESIDENT_01008,Active Ageing,2026-04-03,Active,Employer
+RESIDENT_01186,Active Ageing,2026-02-27,Active,App
+RESIDENT_00269,I Quit (Tobacco),2026-05-21,Dropped,GP Clinic
+RESIDENT_00813,Healthier SG,2026-05-28,Active,App
+RESIDENT_00577,Weight Management,2026-01-14,Active,Roadshow
+RESIDENT_01244,I Quit (Tobacco),2026-04-08,Active,App
+RESIDENT_00541,I Quit (Tobacco),2026-02-04,Active,GP Clinic
+RESIDENT_00945,Active Ageing,2026-05-14,Active,Polyclinic
+RESIDENT_00761,I Quit (Tobacco),2026-05-10,Active,Polyclinic
+RESIDENT_00523,Weight Management,2026-02-16,Dropped,Polyclinic
+RESIDENT_00734,Active Ageing,2026-04-26,Active,GP Clinic
+RESIDENT_01073,Eat Drink Shop Healthy,2026-03-16,Dropped,Roadshow
+RESIDENT_00376,Eat Drink Shop Healthy,2026-01-17,Dropped,Employer
+RESIDENT_00421,Diabetes Prevention,2026-05-05,Dropped,Employer
+RESIDENT_00606,Weight Management,2026-04-25,Active,App
+RESIDENT_00370,Diabetes Prevention,2026-01-31,Dropped,GP Clinic
+RESIDENT_01097,Eat Drink Shop Healthy,2026-02-18,Active,Polyclinic
+RESIDENT_00913,Healthier SG,2026-01-24,Dropped,GP Clinic
+RESIDENT_01389,Diabetes Prevention,2026-01-28,Active,App
+RESIDENT_00906,I Quit (Tobacco),2026-04-10,Dropped,App
+RESIDENT_00278,Active Ageing,2026-05-23,Active,Roadshow
+RESIDENT_01256,Active Ageing,2026-01-14,Active,Employer
+RESIDENT_01133,Active Ageing,2026-01-21,Active,GP Clinic
+RESIDENT_00921,Diabetes Prevention,2026-05-12,Dropped,Roadshow
+RESIDENT_01418,I Quit (Tobacco),2026-01-31,Active,Roadshow
+RESIDENT_00543,Healthier SG,2026-02-09,Dropped,App
+RESIDENT_01303,I Quit (Tobacco),2026-01-27,Dropped,GP Clinic
+RESIDENT_01222,Eat Drink Shop Healthy,2026-01-04,Active,Roadshow
+RESIDENT_00713,Diabetes Prevention,2026-01-04,Active,App
+RESIDENT_00237,Eat Drink Shop Healthy,2026-02-05,Active,App
+RESIDENT_01346,Diabetes Prevention,2026-02-03,Active,App
+RESIDENT_00649,I Quit (Tobacco),2026-02-18,Dropped,Roadshow
+RESIDENT_01312,Weight Management,2026-04-20,Active,Roadshow
+RESIDENT_00887,Eat Drink Shop Healthy,2026-01-02,Active,Employer
+RESIDENT_00748,Eat Drink Shop Healthy,2026-02-08,Active,GP Clinic
+RESIDENT_01379,Eat Drink Shop Healthy,2026-04-17,Active,Polyclinic
+RESIDENT_00887,Active Ageing,2026-03-18,Active,GP Clinic
+RESIDENT_01159,Weight Management,2026-03-15,Active,App
+RESIDENT_01124,Diabetes Prevention,2026-03-07,Active,App
+RESIDENT_00998,Active Ageing,2026-05-28,Dropped,GP Clinic
+RESIDENT_00481,Eat Drink Shop Healthy,2026-05-19,Dropped,Roadshow
+RESIDENT_00733,Healthier SG,2026-04-08,Active,App
+RESIDENT_00530,Active Ageing,2026-01-02,Active,Roadshow
+RESIDENT_00287,I Quit (Tobacco),2026-04-17,Dropped,App
+RESIDENT_00900,Active Ageing,2026-02-27,Active,App
+RESIDENT_00927,I Quit (Tobacco),2026-05-08,Active,Roadshow
+RESIDENT_00542,Weight Management,2026-05-16,Active,GP Clinic
+RESIDENT_00168,Healthier SG,2026-02-27,Active,Roadshow
+RESIDENT_00304,I Quit (Tobacco),2026-05-15,Dropped,GP Clinic
+RESIDENT_00569,Eat Drink Shop Healthy,2026-02-13,Active,GP Clinic
+RESIDENT_00032,Active Ageing,2026-05-13,Dropped,Employer
+RESIDENT_01252,Healthier SG,2026-02-13,Active,GP Clinic
+RESIDENT_01404,Eat Drink Shop Healthy,2026-01-20,Active,GP Clinic
+RESIDENT_00259,Eat Drink Shop Healthy,2026-03-24,Dropped,GP Clinic
+RESIDENT_00891,I Quit (Tobacco),2026-04-26,Dropped,Roadshow
+RESIDENT_00058,I Quit (Tobacco),2026-04-27,Active,App
+RESIDENT_00610,Active Ageing,2026-04-10,Active,Roadshow
+RESIDENT_00442,I Quit (Tobacco),2026-04-05,Dropped,App
+RESIDENT_01089,Diabetes Prevention,2026-03-31,Active,Roadshow
+RESIDENT_00139,Active Ageing,2026-02-02,Active,Polyclinic
+RESIDENT_00268,Eat Drink Shop Healthy,2026-04-20,Dropped,Employer
+RESIDENT_00392,Weight Management,2026-01-27,Active,GP Clinic
+RESIDENT_01318,I Quit (Tobacco),2026-03-26,Active,Roadshow
+RESIDENT_00463,Active Ageing,2026-03-03,Active,Employer
+RESIDENT_00306,Healthier SG,2026-05-16,Active,Employer
+RESIDENT_01370,Diabetes Prevention,2026-04-26,Active,App
+RESIDENT_00473,Diabetes Prevention,2026-01-18,Active,App
+RESIDENT_01340,Diabetes Prevention,2026-03-03,Active,Polyclinic
+RESIDENT_00389,Healthier SG,2026-05-12,Active,GP Clinic
+RESIDENT_01404,Active Ageing,2026-04-24,Active,App
+RESIDENT_01405,Weight Management,2026-03-16,Dropped,Roadshow
+RESIDENT_00600,I Quit (Tobacco),2026-02-19,Dropped,Polyclinic
+RESIDENT_00534,Diabetes Prevention,2026-02-08,Active,GP Clinic
