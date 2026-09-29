@@ -1,0 +1,59 @@
+# Narrative gate (SPEC.md 11.1). Manual only.
+#   layers = static,data  needs no secrets: content checks, the gold rebuild and reference answers.
+#   layers = all          also runs the graph check and the published data agent. It needs an Entra app with
+#                         a federated credential for this repo (secrets AZURE_CLIENT_ID, AZURE_TENANT_ID),
+#                         Fabric workspace access for that app, and the repo variables FABRIC_WORKSPACE_ID,
+#                         FABRIC_GRAPH_MODEL_ID, FABRIC_DATA_AGENT_ID. See ASSUMPTIONS.md 3b.9.
+name: validate-narrative
+
+on:
+  workflow_dispatch:
+    inputs:
+      layers:
+        description: "Layers to run"
+        type: choice
+        options: ["static,data", "all"]
+        default: "static,data"
+      runs:
+        description: "Live layer: data-agent calls per question"
+        default: "3"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Content checks + narrative gate (static, data)
+        run: make -C content/assets validate
+      - name: Azure login (live layer)
+        if: inputs.layers == 'all'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+      - name: Narrative gate (all layers)
+        if: inputs.layers == 'all'
+        env:
+          AZURE_ENV_NAME: ci
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          FABRIC_WORKSPACE_ID: ${{ vars.FABRIC_WORKSPACE_ID }}
+          FABRIC_GRAPH_MODEL_ID: ${{ vars.FABRIC_GRAPH_MODEL_ID }}
+          FABRIC_DATA_AGENT_ID: ${{ vars.FABRIC_DATA_AGENT_ID }}
+        run: make -C content/assets validate-live ENV=ci RUNS=${{ inputs.runs }}
+      - name: Upload the report
+        if: always() && inputs.layers == 'all'
+        uses: actions/upload-artifact@v4
+        with:
+          name: narrative-validation
+          path: demos/NARRATIVE-VALIDATION-*.md

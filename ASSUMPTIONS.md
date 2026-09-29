@@ -255,7 +255,8 @@ Where an entry changes something SPEC.md states, it says so.
   `PATCH …/staging/datasources/{id}/elements?id=` and verifies 4/4 selected in the published stage.
   `ask.py` treats that prefix as an error.
 - **3.12** The instructions gained "Counting rules": count distinct residents over one relationship, and sanity-check
-  the totals against `Region.resident_count`. They are defensive only. The measured failure was 3.11.
+  the totals against `Region.resident_count`. They are defensive only. The measured failure was 3.11. (Superseded by 3b.3–3b.4: the rules now live in
+  the data source instructions, and the agent reads gold aggregates.)
 - **3.13** `scripts/fabric/ask.py` queries the published agent through its MCP endpoint
   (`/v1/mcp/workspaces/{ws}/dataagents/{id}/agent`, tool `DataAgent_Resident360_Ontology_Agent`, argument
   `userQuestion`), because the Assistants-style endpoint is deprecated. An answer takes 30–45 s.
@@ -274,3 +275,60 @@ Where an entry changes something SPEC.md states, it says so.
 - **3.17** The Fabric tenant setting was renamed to **"Users can create Ontology (preview) items"** (Microsoft Fabric
   section). Without it the ontology create call returns 403 `FeatureNotAvailable`. Data agent creation did not need a
   new setting in the MCAPS tenant.
+
+## Phase 3b: narrative gate
+
+### Gate and fill
+
+- **3b.1** `--fill` replaces `{{ref:<question_id>.<field>}}` with `<!--ref:key-->value<!--/ref-->`, so the value stays
+  visible in the rendered Markdown and a re-fill finds it again. Values come only from `reference-answers.json` (the
+  local gold build, rounded as in `r360.py`), never from a portal run. A re-fill is idempotent; `--check` fails when
+  a filled value is stale. `check-content.py` accepts both forms. Rahim's beats and the three lab pages carry 22 values.
+- **3b.2** Live verdicts. Per data-agent answer the judge needs: ≥ 3 group rows (a Markdown table wins over prose),
+  the exact reference count in each row, rank within ±1, the share within ±0.1 percentage points **when the answer
+  quotes a percent**, the distinct total where the question has one (248), no `resident_id` and no tool error.
+  Questions are marked `strict` or `advisory` in `question-bank.md`. **Strict:** every run must pass (SPEC.md 11.1,
+  "any run outside tolerance"). **Advisory:** a miss is a WARN and does not fail the gate.
+- **3b.3** Three platform facts shaped the live layer. (a) The data agent's ontology query tool returns **at most
+  200 rows**; a query that returns one row per resident is cut off, and the agent either reports low counts (19–44
+  instead of 76–82) or declines to answer. (b) Example queries (`fewShots`) are **not supported** for ontology data
+  sources: `POST …/staging/datasources/{id}/fewShots` returns 400. (c) Data source instructions
+  (`PATCH …/staging/datasources/{id}` with `instructions`) **are** supported and published. `40-data-agent.py` now
+  deploys two blocks from `data-agent-instructions.md`: the agent instructions and the data source instructions
+  (graph schema, flag conditions, GQL shapes, the 200-row limit).
+- **3b.4** **Adds to the SPEC.md ontology:** gold aggregates on the entity nodes, in the style of the existing
+  `Region.resident_count` and `Programme.enrolled_residents`: `Region.disengaged_residents`,
+  `Region.disengaged_share_pct` and `Programme.disengaged_enrolled`. With traversal only, the programmes question
+  passed 0–2 of 3 runs and one region run divided by the wrong total (60.0% for North). With the aggregates, both strict
+  questions pass every run. The data layer proves the aggregates equal the traversal counts, and the graph check runs
+  both the traversal GQL and the aggregate GQL. Changing `r360.py` means `deploy.sh <env> --from 20`.
+- **3b.5** `q_dropped_attended_heldin` stays **advisory and traversal-only** (no aggregate). It is the multi-hop
+  beat (Resident → attended → EventOccurrence → heldIn → Region, rows overlap) that the bridge spotlight explains, and
+  it runs into the 200-row limit in some runs. Measured over two 3-run passes: exact region counts in 2 of 6 runs; in
+  the other 4 the agent declined to give counts because its tool returned "200 of 1,137 matched rows", and said so
+  rather than guessing. No run volunteered the distinct total. No beat was cut. Rewritten: the bridge spotlight (step 5)
+  presents a live mismatch as a talking point and shows the canonical GQL; the Fabric step and Lab 4 checkpoints accept
+  ±1 rank.
+- **3b.6** The **graph check** runs the canonical GQL in `question-bank.md` directly on the graph model
+  (`POST /v1/workspaces/{ws}/GraphModels/{id}/executeQuery?preview=true`, 2–17 s) and requires the reference answers
+  exactly before any data-agent call. A failure there means the published data is wrong; a pass with a failing agent
+  run means the agent wrote a different query.
+
+### Live runs and capacity
+
+- **3b.7** On **F2**, a burst of data-agent calls (each one runs several GQL queries) returns 429
+  `CapacityLimitExceeded`, and a later OneLake upload hit repeated 503s. `--pause 20` (the default) spaces the calls.
+  `capacity.sh suspend` then `resume` clears the carried-forward overage in about 2 minutes. F2 is enough for the
+  build and the gate. For the workshop day, when 20 attendees can ask at once, consider F4 (about US$0.76/h in
+  swedencentral, twice F2); this is not measured yet (Phase 5 dry run).
+- **3b.8** The coach routing row (Fabric IQ call for Mei, none for Rahim) is **SKIP** until Phase 4 adds the Fabric IQ
+  connection and `lab3_tools.py --fabric`, which asserts it.
+- **3b.9** `make validate` (in `content/assets/`, where SPEC.md places the Makefile) runs `check-content.py` and the
+  static and data layers with `--check`; `make validate-live ENV=<env>` runs all layers. The CI workflow
+  `validate-narrative.yml` is manual (`workflow_dispatch`). `static,data` needs no secrets. `all` needs an Entra app with
+  a federated credential for the repo (secrets `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`), Fabric workspace access for that
+  app and the repo variables `FABRIC_WORKSPACE_ID`, `FABRIC_GRAPH_MODEL_ID`, `FABRIC_DATA_AGENT_ID`. None are set up,
+  and whether a service principal may call an ontology-backed data agent is **not verified**; run the live layer
+  locally with a user token.
+- **3b.10** The report is `demos/NARRATIVE-VALIDATION-<date>.md`; a later run on the same day overwrites it. It keeps
+  every raw answer in a `<details>` block so a failure can be read without re-running.

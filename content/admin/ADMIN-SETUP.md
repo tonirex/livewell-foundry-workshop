@@ -77,7 +77,7 @@ About 1.5 h end to end.
 | 5 Knowledge base | `python content/assets/build-kb.py` (Phase 4) | 5 min | `livewell-guides-kb` answers with a citation |
 | 6 MCP server | `azd deploy mcp-activities` (Phase 4) | 5 min | `MCP_URL` responds |
 | 7 Attendees | `bash scripts/seed-attendees.sh mcaps --lab-accounts` | 2 min | Every row shows `added` or `exists` |
-| 8 Proof | `python scripts/smoke-test.py` and `python scripts/validate-narrative.py` (Phase 5 / 3b) | 10 min | Both green |
+| 8 Proof | `python scripts/smoke-test.py` (Phase 5), `make -C content/assets validate`, then `make -C content/assets validate-live ENV=mcaps` (graph check + 9 data-agent calls, ≈ 8 min) | 15 min | All green; report in `demos/NARRATIVE-VALIDATION-<date>.md` |
 | 9 Pause | `bash scripts/capacity.sh suspend mcaps` | 1 min | Capacity `Paused` |
 
 > **Always provision through `scripts/provision.sh`.** azd reads `infra/main.bicepparam` *before* its
@@ -119,6 +119,9 @@ python scripts/gen-citizens.py --from-onelake --check    # citizens.json agrees 
 | Data agent reports a backend graph error | The graph has not loaded yet. Run `deploy.sh <env> --only 35` |
 | Step 20 fails inside the notebook | Open `load_resident360` in the workspace to see the failing cell. The capacity must be Active |
 | You changed the blueprint | `deploy.sh <env> --from 30`. The ontology is updated in place, then refreshed and republished |
+| You changed `scripts/r360.py` (gold build or aggregates) | `deploy.sh <env> --from 20`: the notebook imports `r360.py`, so the tables, graph and agent all follow |
+| Data agent: 429 `CapacityLimitExceeded`, or OneLake 503s during step 20 | F2 is throttled after a burst of calls. `scripts/capacity.sh suspend <env>` then `resume <env>` clears the carried-forward overage (≈ 2 min). `validate-narrative.py` waits 20 s between calls by default (`--pause`) |
+| Data agent says the result was cut off, or gives counts far below the reference | Its query tool reads at most 200 rows. Check the data source instructions were published (`deploy.sh <env> --only 40`) and compare with the canonical GQL in `question-bank.md` |
 
 ### T-1: dry run
 
@@ -260,6 +263,7 @@ Gotchas:
 | [capacity.sh](../../scripts/capacity.sh) | `status`, `suspend` or `resume` the Fabric capacity |
 | [fabric/deploy.sh](../../scripts/fabric/deploy.sh) | Resident 360 on Fabric: workspace, lakehouse and load, ontology, graph refresh, data agent, env IDs; `--from`, `--only`, `--skip-upload` |
 | [fabric/ask.py](../../scripts/fabric/ask.py) | Ask the published data agent a question over MCP; `--json` |
+| [validate-narrative.py](../../scripts/validate-narrative.py) | Narrative gate: `--layers static,data,live` (or `all`), `--fill`, `--check`, `--runs`, `--pause`, `--questions`; writes `reference-answers.json` and `demos/NARRATIVE-VALIDATION-<date>.md`. `make -C content/assets validate` / `validate-live` |
 | [gen-citizens.py](../../scripts/gen-citizens.py) | `citizens.json` from the gold build; `--check`, `--from-onelake` |
 | [seed-attendees.sh](../../scripts/seed-attendees.sh) | Lab accounts / file / guests → project, search, tracing and Fabric access; `--remove`, `--dry-run` |
 | [render-values.py](../../scripts/render-values.py) | `.azure/<env>/.env` → `content/config/values.md` |

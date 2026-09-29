@@ -48,6 +48,8 @@ Steps:
    ```
 
    Expect the trace to show a Fabric IQ MCP call. Latency of **30-90 s** is normal for the preview path.
+   The reference answer ranks **<!--ref:q_disengaged_regions.top_region-->North<!--/ref-->** first (<!--ref:q_disengaged_regions.top_share_pct-->20.0<!--/ref-->% of
+   its residents are disengaged), then <!--ref:q_disengaged_regions.second_region-->West<!--/ref--> (<!--ref:q_disengaged_regions.second_share_pct-->17.1<!--/ref-->%).
 6. Start a new conversation as Rahim. Send (`lab1_prediabetes_eat`):
 
    ```text
@@ -102,7 +104,7 @@ Keep Fabric disabled in local experiments unless the facilitator confirms the sh
 
 ✅ **Learned** that Fabric IQ is for governed business data and ontology questions, not individual citizen self-care advice.
 
-Paste into the checkpoint form: the trace line showing the Fabric IQ MCP call for `fabric_q_disengaged_regions`, the grouped-by-region answer, and confirmation that `lab1_prediabetes_eat` produced no Fabric call. The top region should match `content/fabric/reference-answers.json` generated in Phase 3b, and the answer must not include any `resident_id`.
+Paste into the checkpoint form: the trace line showing the Fabric IQ MCP call for `fabric_q_disengaged_regions`, the grouped-by-region answer, and confirmation that `lab1_prediabetes_eat` produced no Fabric call. The top region should be **<!--ref:q_disengaged_regions.top_region-->North<!--/ref-->** (±1 rank, from `content/fabric/reference-answers.json`), and the answer must not include any `resident_id`.
 
 ## Troubleshooting
 

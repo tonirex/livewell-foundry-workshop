@@ -1,0 +1,135 @@
+{
+  "_generated_by": "scripts/validate-narrative.py (data layer) from the scripts/r360.py gold build",
+  "_do_not_edit": "Regenerate: python scripts/validate-narrative.py --layers data",
+  "_synthetic": "Aggregates over synthetic residents. Quote these numbers, never numbers from a portal run.",
+  "rahim": {
+    "region": "North",
+    "planning_area": "Woodlands",
+    "age_band": "60-64",
+    "screening_risk": "High",
+    "latest_glucose_mmol": 6.4,
+    "avg_daily_steps": 3100.0,
+    "avg_mvpa_min": 9.1,
+    "nsc_progress_pct": 22.0,
+    "programmes_dropped": 1,
+    "dropped_programmes": [
+      "Healthier SG"
+    ],
+    "events_attended": 0,
+    "events_booked": 2,
+    "meal_logs": 8,
+    "healthpoints_balance": 120,
+    "region_psi": 60,
+    "region_is_hazy": 1,
+    "is_disengaged": 1
+  },
+  "q_disengaged_regions": {
+    "grain": "home region (Resident livesIn Region)",
+    "total_residents": 1500,
+    "disengaged_total": 212,
+    "disengaged_share_pct": 14.1,
+    "rows": [
+      {
+        "region": "North",
+        "residents": 300,
+        "disengaged": 60,
+        "share_pct": 20.0
+      },
+      {
+        "region": "West",
+        "residents": 316,
+        "disengaged": 54,
+        "share_pct": 17.1
+      },
+      {
+        "region": "Central",
+        "residents": 312,
+        "disengaged": 41,
+        "share_pct": 13.1
+      },
+      {
+        "region": "East",
+        "residents": 282,
+        "disengaged": 33,
+        "share_pct": 11.7
+      },
+      {
+        "region": "North-East",
+        "residents": 290,
+        "disengaged": 24,
+        "share_pct": 8.3
+      }
+    ],
+    "top_region": "North",
+    "top_share_pct": 20.0,
+    "second_region": "West",
+    "second_share_pct": 17.1,
+    "lowest_region": "North-East",
+    "lowest_share_pct": 8.3
+  },
+  "q_dropped_attended_heldin": {
+    "grain": "region where the attended event occurrence was held (EventOccurrence heldIn Region)",
+    "distinct_residents": 248,
+    "rows": [
+      {
+        "region": "Central",
+        "residents": 95
+      },
+      {
+        "region": "West",
+        "residents": 57
+      },
+      {
+        "region": "North",
+        "residents": 52
+      },
+      {
+        "region": "East",
+        "residents": 51
+      },
+      {
+        "region": "North-East",
+        "residents": 51
+      }
+    ],
+    "top_region": "Central",
+    "top_residents": 95
+  },
+  "q_programmes_disengaged_enrolled": {
+    "grain": "programme (Resident enrolledIn Programme), distinct disengaged residents",
+    "rows": [
+      {
+        "programme_name": "Healthier SG",
+        "disengaged_enrolled": 82,
+        "disengaged_dropped": 58
+      },
+      {
+        "programme_name": "Eat Drink Shop Healthy",
+        "disengaged_enrolled": 80,
+        "disengaged_dropped": 53
+      },
+      {
+        "programme_name": "Weight Management",
+        "disengaged_enrolled": 78,
+        "disengaged_dropped": 61
+      },
+      {
+        "programme_name": "Diabetes Prevention",
+        "disengaged_enrolled": 77,
+        "disengaged_dropped": 59
+      },
+      {
+        "programme_name": "Active Ageing",
+        "disengaged_enrolled": 76,
+        "disengaged_dropped": 53
+      },
+      {
+        "programme_name": "I Quit (Tobacco)",
+        "disengaged_enrolled": 59,
+        "disengaged_dropped": 38
+      }
+    ],
+    "top_programme": "Healthier SG",
+    "top_disengaged_enrolled": 82
+  }
+}

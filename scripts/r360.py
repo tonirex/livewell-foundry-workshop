@@ -251,8 +251,11 @@ def build() -> dict[str, list[dict]]:
         "region_psi": rows[0]["region_psi"],
         "region_is_hazy": rows[0]["region_is_hazy"],
         "resident_count": len(rows),
+        "disengaged_residents": sum(r["is_disengaged"] for r in rows),
+        "disengaged_share_pct": round(100 * sum(r["is_disengaged"] for r in rows) / len(rows), 1),
     } for reg, rows in sorted(by_region.items())]
 
+    disengaged = {row["resident_id"] for row in r360 if row["is_disengaged"] == 1}
     by_prog = defaultdict(lambda: {"residents": set(), "dropped": 0, "first": None})
     for en in enrolments:
         s = by_prog[en["programme_name"]]
@@ -260,9 +263,12 @@ def build() -> dict[str, list[dict]]:
         s["dropped"] += 1 if en["status"] == "Dropped" else 0
         if en["enrol_date"] and (s["first"] is None or en["enrol_date"] < s["first"]):
             s["first"] = en["enrol_date"]
+    # Gold aggregates on the dims (like resident_count / enrolled_residents) keep officer questions to one row
+    # per group: the data agent's ontology query tool returns at most 200 rows (ASSUMPTIONS.md 3b.3).
     dim_programme = [{
         "programme_name": name, "enrolled_residents": len(s["residents"]),
         "dropped_count": s["dropped"], "first_enrolment": s["first"],
+        "disengaged_enrolled": len(s["residents"] & disengaged),
     } for name, s in sorted(by_prog.items())]
 
     return {

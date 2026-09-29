@@ -44,7 +44,9 @@ Cost Management query 2023-11-01, Fabric capacity suspend/resume 2023-11-01). Fa
 | Ontology item (create / updateDefinition / getDefinition) | `/v1/workspaces/{ws}/items` with `type: Ontology` (Lab 28 part layout) | Preview |
 | Graph model refresh | `…/items/{graph}/jobs/refreshGraph/instances` | Preview |
 | Graph GQL query (instance check) | `/v1/workspaces/{ws}/graphModels/{id}/executeQuery?beta=true` | Beta |
+| Graph GQL query (Phase 3b graph check) | `/v1/workspaces/{ws}/GraphModels/{id}/executeQuery?preview=true`; `status.code` `00000`, rows in `result.data` | Preview |
 | Data agent management | `/v1/workspaces/{ws}/dataAgents/{id}/staging/{settings,datasources,…/elements,publish}` | Preview; the same calls as `fabric-data-agent-sdk` 0.1.32a0 (not installed) |
+| Data source instructions (Phase 3b) | `PATCH …/staging/datasources/{id}` with `instructions`; published with the agent. `…/fewShots` answers 400 for ontology sources | Preview |
 | Data agent MCP endpoint | `/v1/mcp/workspaces/{ws}/dataagents/{id}/agent`, MCP protocol 2025-06-18 | Preview |
 | OneLake file read | `https://onelake.dfs.fabric.microsoft.com/{ws}/{item}/Files/…` (x-ms-version 2023-11-03) | GA |
 

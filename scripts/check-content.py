@@ -359,8 +359,9 @@ def check_narrative(r: Report, prompts: dict) -> None:
         if last and last[-1][2] == "fabric":
             problems.append(f"resident_id {m.group(0)} appears in a fabric beat")
     refs = set(re.findall(r"\{\{ref:([a-z0-9_.\[\]-]+)\}\}", body))
+    refs |= set(re.findall(r"<!--ref:([a-z0-9_.\[\]-]+)-->", text))
     if not refs:
-        problems.append("narrative has no {{ref:...}} placeholders")
+        problems.append("narrative has no {{ref:...}} placeholders or filled <!--ref:...--> values")
     r.check(f"narrative beats ({len(beats)} beats, {len(fabric_questions)} Mei questions, {len(refs)} refs)", problems)
 
 
