@@ -50,7 +50,7 @@ organisation, except where noted.
 | Setting | Value | Why |
 |---|---|---|
 | Users can create Fabric items | Enabled (group) | Lakehouse, notebook, ontology, data agent |
-| Ontology item (preview) | Enabled (group) | `resident_ontology` |
+| Users can create Ontology (preview) items | Enabled (group) | `resident_ontology`. Formerly "Enable Ontology item (preview)"; without it `30-ontology.py` gets 403 `FeatureNotAvailable` |
 | Fabric data agent | Enabled (group) | `Resident360 Ontology Agent` |
 | Users can use Copilot and other features powered by Azure OpenAI | Enabled (group) | Data agent runtime |
 | Data sent to Azure OpenAI can be processed outside your capacity's geographic region… | Enabled | Enable even though Sweden Central is in the EU |

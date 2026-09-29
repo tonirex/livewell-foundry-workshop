@@ -4,6 +4,25 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Phase 3: minimal Resident 360 on Fabric (`phase-3-fabric`)
+
+- `scripts/fabric/deploy.sh [env] [--from NN] [--only NN] [--skip-upload]` runs six idempotent steps with
+  per-step timings: `10-workspace.sh`, `20-lakehouse-load.sh`, `30-ontology.py`, `35-graph-refresh.py`,
+  `40-data-agent.py` and `90-write-env.py`. The shared helpers live in `fabriclib.py` and `notebook.py`.
+- `content/assets/load_resident360.ipynb` imports `scripts/r360.py` from OneLake and writes the six Delta tables.
+  It exports summary and CSV files for the local checks.
+- The ontology `resident_ontology` (4 entity types, 4 relationship types) is rendered from
+  `content/fabric/ontology.blueprint.yaml`. The graph refresh runs through the job API, and a GQL check confirms
+  the instance counts.
+- The data agent `Resident360 Ontology Agent` is created, its entity types are selected, and it is published.
+  `scripts/fabric/ask.py` queries it over MCP.
+- `scripts/gen-citizens.py --from-onelake` rebuilds `citizens.json` from the lakehouse export.
+- Instructions: counting rules. Tenant setting renamed ("Users can create Ontology (preview) items").
+  `teardown.sh` clears the new `FABRIC_*` keys.
+- Verified in the `mcaps` environment: the table counts, the graph instances and the data agent answer all match
+  the local reference. A full run takes 17–20 minutes on F2. `35-graph-refresh.py` reuses the refresh that the
+  ontology update starts instead of running a second one.
+
 ### Phase 2: infrastructure and admin scripts (`phase-2-infra`)
 
 - Bicep (`infra/`): Foundry account and project (model-router, gpt-4.1-mini, text-embedding-3-large;

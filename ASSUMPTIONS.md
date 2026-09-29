@@ -12,7 +12,7 @@ Where an entry changes something SPEC.md states, it says so.
 | Guest Wi-Fi SSID and code | `workshop.guest_wifi` (rendered on the deck logistics slide) | TODO |
 | Sponsor subscription ID and tenant ID | `environments.sponsor` and `infra/env/sponsor.bicepparam` (Phase 2) | TODO |
 | Sponsor facilitator UPN(s) | `environments.sponsor.facilitator_upns` | TODO |
-| Fabric Administrator role for the MCAPS facilitator account | Entra ID → Roles → Fabric Administrator (or activate Global Administrator in PIM). The account holds only Global Reader, so `GET /v1/admin/tenantsettings` returns 403 and preflight check 8 fails | TODO: tenant settings in `content/admin/TENANT-BOOTSTRAP.md` (ontology preview, data agent, Copilot/Azure OpenAI, cross-geo) may block Phase 3 |
+| Fabric Administrator role for the MCAPS facilitator account | Entra ID → Roles → Fabric Administrator (or activate Global Administrator in PIM). Needed for the tenant settings in `content/admin/TENANT-BOOTSTRAP.md` | Done 2026-09-29: "Users can create Ontology (preview) items" enabled; Phase 3 deploy green |
 | Fabric tenant sign-up (MCAPS tenant has never used Fabric) | A tenant user signs in once at app.fabric.microsoft.com | Done 2026-09-29: F2 `fablivewellmcaps` created by `provision.sh mcaps` |
 
 ## Phase 0: bootstrap
@@ -59,7 +59,7 @@ Where an entry changes something SPEC.md states, it says so.
 - **1.11** `fact_event_attendance` holds distinct (resident, event occurrence) attended pairs (2,718).
   `resident_360.events_attended` counts attended booking rows (2,721 in total), as the kit does.
 - **1.12** `scripts/r360.py` is a pure-stdlib mirror of the Fabric loader. The Phase 3 notebook must implement the same
-  logic, and Phase 3b's `validate-narrative.py` compares the two.
+  logic, and Phase 3b's `validate-narrative.py` compares the two. (Superseded by 3.2: the notebook imports `r360.py`.)
 - **1.13** `content/data/citizens.json` (12 citizens) is generated from `r360.py` output by `scripts/gen-citizens.py`:
   Rahim, one disengaged and one engaged resident per region, and one unscreened resident. Condition flags use synthetic
   thresholds: glucose ≥ 6.1, systolic BP ≥ 140, cholesterol ≥ 6.2, BMI ≥ 27.5.
@@ -203,3 +203,74 @@ Where an entry changes something SPEC.md states, it says so.
   names. `azd down` deletes output keys from `.azure/<env>/.env`, so an output named `FABRIC_BRIDGE` silently reset the
   override after teardown #1. The outputs are now `LIVEWELL_FABRIC_BRIDGE` and `LIVEWELL_PROJECT_MODE`.
 - **2.20** On Windows, Git Bash cannot see the `fab.cmd` shim through `command -v fab`, so `scripts/lib/common.sh` falls back to `fab.cmd`.
+
+## Phase 3: minimal Resident 360 on Fabric
+
+### Lakehouse and load
+
+- **3.1** `lh_resident360` is created **without schemas**, as Microsoft Learn Lab 28 does. Tables use bare names
+  under `Tables/`, and the ontology bindings omit `sourceSchema` (`schema: ""` in the blueprint). A schema-enabled
+  lakehouse would need `schema: dbo` and `TABLE_SCHEMA = "dbo"` in the notebook.
+- **3.2** **Supersedes 1.12:** the notebook does not re-implement the gold logic in PySpark. `20-lakehouse-load.sh`
+  uploads `scripts/r360.py` to `Files/livewell/scripts/` next to the kit files, and the notebook imports it. Spark only
+  turns the rows into Delta tables, so Fabric and the local scripts cannot drift. `notebook.py verify` compares the
+  six lakehouse table counts, Rahim and the top disengaged region with the local build.
+- **3.3** The notebook's default lakehouse is set two ways: `metadata.dependencies.lakehouse` is injected at import
+  time, and `fab job run -C` passes `defaultLakehouse` in the run configuration. It runs on the starter pool. A run
+  takes about 3 minutes on F2.
+- **3.4** Fabric CLI 1.7.0 quirks: `fab cp -r` from a local folder is `NotSupported`, so files are copied one at a time
+  (about 15 s each). `fab import` needs `--format .ipynb` (with the dot). `fab` prints errors on stdout, so the scripts
+  capture its output and show it only on failure.
+- **3.5** The notebook also exports `Files/export/resident_360.csv`, `fact_programme_enrolment.csv` and
+  `load_summary.json`. `gen-citizens.py --from-onelake` reads the CSVs over OneLake rather than the SQL endpoint, so it
+  needs no ODBC driver. It fails if the result differs from the local build.
+
+### Ontology and graph
+
+- **3.6** `30-ontology.py` uses the generic `POST /v1/workspaces/{ws}/items` (type `Ontology`) with Lab 28's definition
+  parts: entity types, `NonTimeSeries` data bindings, relationship types and contextualizations. IDs are
+  deterministic, so a re-run calls `updateDefinition` and keeps the item ID that the data agent references.
+  `--recreate` deletes the ontology first and issues a new ID; re-run step 40 after it.
+- **3.7** `displayNamePropertyId` follows the blueprint's `display_name_property` (`event_name` for EventOccurrence),
+  not the key property as in Lab 28. Fabric accepted it.
+- **3.8** Creating the ontology provisions a child graph model `resident_ontology_graph_<ontology id>`. The public job
+  API `POST /v1/workspaces/{ws}/items/{graph}/jobs/refreshGraph/instances` works (5.5–9 minutes on F2), so the
+  portal step (Schedule → Refresh now) is only a fallback. Creating or updating the ontology starts a refresh on its
+  own, so `35-graph-refresh.py` waits for a running refresh and starts a new one only when none is running (or with
+  `--force`). This halved step 35 in the verification runs (1,059 s with two refreshes, then 518 s with one).
+- **3.9** `35-graph-refresh.py` checks entity instances with GQL through the preview
+  `POST /v1/workspaces/{ws}/graphModels/{id}/executeQuery?beta=true`. It expects 1,500 Resident, 5 Region,
+  2,510 EventOccurrence and 6 Programme nodes, and 1,500 / 2,718 / 2,510 / 3,004 edges. If that preview API changes,
+  the check degrades to a warning.
+
+### Data agent
+
+- **3.10** **Changes the Phase 3 prompt** ("definition parts + publish_info.json, or the SDK"): `40-data-agent.py`
+  calls the public data agent management REST API that `fabric-data-agent-sdk` 0.1.32 wraps. That API covers staging
+  settings (`aiInstructions`), staging datasources (ontology as `FabricItem`), datasource elements and
+  `staging/publish`. It needs no SDK install, which suits ARM64 and Codespaces.
+- **3.11** A newly added ontology source has **no entity types selected** (`selectionState: None`). The agent still
+  answers, but it prefixes "There's content here that I can't work with" and then **invents** a table: 95k residents
+  and a different ranking on every call. The script selects every entity type through
+  `PATCH …/staging/datasources/{id}/elements?id=` and verifies 4/4 selected in the published stage.
+  `ask.py` treats that prefix as an error.
+- **3.12** The instructions gained "Counting rules": count distinct residents over one relationship, and sanity-check
+  the totals against `Region.resident_count`. They are defensive only. The measured failure was 3.11.
+- **3.13** `scripts/fabric/ask.py` queries the published agent through its MCP endpoint
+  (`/v1/mcp/workspaces/{ws}/dataagents/{id}/agent`, tool `DataAgent_Resident360_Ontology_Agent`, argument
+  `userQuestion`), because the Assistants-style endpoint is deprecated. An answer takes 30–45 s.
+- **3.14** The Azure CLI user token (`az account get-access-token --resource https://api.fabric.microsoft.com`) is
+  accepted by every Fabric call in Phase 3: items, ontology, jobs, graph GQL, data agent and MCP. `fab` is used only
+  for the file-system style steps.
+
+### Environment and access
+
+- **3.15** `90-write-env.py` writes `FABRIC_WORKSPACE_ID`, `FABRIC_WORKSPACE_URL`, `FABRIC_LAKEHOUSE_ID`,
+  `FABRIC_ONTOLOGY_ID`, `FABRIC_GRAPH_MODEL_ID`, `FABRIC_DATA_AGENT_ID` and `FABRIC_DATA_AGENT_URL` with
+  `azd env set`. None of them is a Bicep output name (see 2.19). `teardown.sh` clears all of them. The data agent
+  portal URL pattern (`/groups/{ws}/aiskills/{id}`) is not verified.
+- **3.16** Attendees get workspace **Viewer** from `seed-attendees.sh`. Whether Viewer is enough to query an
+  ontology-backed data agent is **not verified** with a non-admin account yet; it is checked in the Phase 5 dry run.
+- **3.17** The Fabric tenant setting was renamed to **"Users can create Ontology (preview) items"** (Microsoft Fabric
+  section). Without it the ontology create call returns 403 `FeatureNotAvailable`. Data agent creation did not need a
+  new setting in the MCAPS tenant.

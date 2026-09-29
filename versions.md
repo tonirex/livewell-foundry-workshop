@@ -15,6 +15,7 @@ Last checked: 2026-09-29 (Phase 2). Re-check before each delivery with `bash scr
 
 Verified end to end on 2026-09-29 (Phase 2, `mcaps` environment): az 2.87.0, azd 1.34.2, Bicep 0.47.16,
 azd extension `azure.ai.agents` 1.0.0-beta.17, fab 1.7.0, Git Bash (Git for Windows) on Windows ARM64.
+Phase 3 (`scripts/fabric/deploy.sh mcaps`) verified on 2026-09-29 with the same tools.
 
 ## Azure resource API versions (Bicep, `infra/`)
 
@@ -34,6 +35,18 @@ azd extension `azure.ai.agents` 1.0.0-beta.17, fab 1.7.0, Git Bash (Git for Wind
 
 Management-plane REST calls in `scripts/` use the same versions (Search usages and name check 2025-05-01,
 Cost Management query 2023-11-01, Fabric capacity suspend/resume 2023-11-01). Fabric data plane: REST `v1`.
+
+## Fabric REST surfaces (Phase 3, `scripts/fabric/`)
+
+| Surface | Endpoint | Status |
+|---|---|---|
+| Items, lakehouse tables, job scheduler | `/v1/workspaces/{ws}/items`, `…/lakehouses/{id}/tables`, `…/items/{id}/jobs/{type}/instances` | GA |
+| Ontology item (create / updateDefinition / getDefinition) | `/v1/workspaces/{ws}/items` with `type: Ontology` (Lab 28 part layout) | Preview |
+| Graph model refresh | `…/items/{graph}/jobs/refreshGraph/instances` | Preview |
+| Graph GQL query (instance check) | `/v1/workspaces/{ws}/graphModels/{id}/executeQuery?beta=true` | Beta |
+| Data agent management | `/v1/workspaces/{ws}/dataAgents/{id}/staging/{settings,datasources,…/elements,publish}` | Preview; the same calls as `fabric-data-agent-sdk` 0.1.32a0 (not installed) |
+| Data agent MCP endpoint | `/v1/mcp/workspaces/{ws}/dataagents/{id}/agent`, MCP protocol 2025-06-18 | Preview |
+| OneLake file read | `https://onelake.dfs.fabric.microsoft.com/{ws}/{item}/Files/…` (x-ms-version 2023-11-03) | GA |
 
 ## Python packages (Builder rail and scripts)
 
@@ -71,6 +84,6 @@ PTU deployments and partner models are never used.
 | Memory (Foundry Agent Service) | Lab 3 | Conversation-scoped preferences in instructions |
 | Connected agents / multi-agent | Lab 3 | Single agent with specialist instruction blocks |
 | Fabric IQ tool (Ontology Agent via OneLake Catalog) | Fabric step, Lab 4 | Facilitator-only demo from `demos/`; pre-computed numbers from `scripts/r360.py` |
-| Fabric ontology (preview) and Ontology Agent | Phase 3 | Fabric data agent over the lakehouse tables |
+| Fabric ontology (preview), graph model and data agent over the ontology | Phase 3 | Fabric data agent over the lakehouse tables |
 | Hosted agents (Agent Framework) | Lab 4 optional | Prompt agent published to Teams / M365 |
 | Foundry MCP server | Admin | `az` and SDK scripts |

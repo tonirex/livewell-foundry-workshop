@@ -72,7 +72,7 @@ About 1.5 h end to end.
 |---|---|---|---|
 | 1 Provision | `bash scripts/provision.sh mcaps --what-if` | ≈ 15 min | "provisioned mcaps" and `content/config/values.md` written |
 | 2 Guardrails | `bash scripts/cost-guardrails.sh mcaps` | 1 min | All PASS; budget alerts at US$150 and US$300 listed |
-| 3 Resident 360 on Fabric | `bash scripts/fabric/deploy.sh mcaps` (Phase 3) | 30–45 min | 5 tables, ontology, graph refresh Completed, data agent published |
+| 3 Resident 360 on Fabric | `bash scripts/fabric/deploy.sh mcaps` | ≈ 17–20 min | 6 tables, ontology 4/4 with instances, graph refresh Completed, data agent published |
 | 4 Fabric IQ connection | Runbook step in [fabric-step.md](../labs/fabric-step.md) (Phase 4 helper) | 2 min | `FABRIC_IQ_CONNECTION_ID` in `.azure/mcaps/.env` |
 | 5 Knowledge base | `python content/assets/build-kb.py` (Phase 4) | 5 min | `livewell-guides-kb` answers with a citation |
 | 6 MCP server | `azd deploy mcp-activities` (Phase 4) | 5 min | `MCP_URL` responds |
@@ -88,6 +88,37 @@ About 1.5 h end to end.
 
 Re-run step 7 after step 3 so that attendees also get **Viewer** on the Fabric workspace, which gives read access to
 the data agent.
+
+#### Step 3 in detail: `scripts/fabric/deploy.sh`
+
+Needs `az login` and `fab auth login` as the facilitator, the capacity **Active** (`scripts/capacity.sh resume`), and the
+tenant settings above. Every step checks before it creates, so re-running is safe. After a failure, resume with
+`--from NN`. Use `--only NN` for one step and `--skip-upload` to reuse the files already in OneLake.
+
+| Step | What it does | Typical time (F2) |
+|---|---|---|
+| 10 workspace | `HPB Resident 360` on the capacity; facilitators as workspace Admin | 1 min |
+| 20 lakehouse-load | `lh_resident360`; uploads the kit files and `r360.py` (one file at a time); imports and runs `load_resident360`; checks the 6 tables, Rahim and the headline answer against the local build | 6–8 min |
+| 30 ontology | `resident_ontology` from `content/fabric/ontology.blueprint.yaml` (create, or update in place). Either one starts a graph refresh | 2 min first time, then < 1 min |
+| 35 graph-refresh | Waits for the refresh that step 30 started (or starts one) and counts nodes and edges with GQL | 8–9 min |
+| 40 data-agent | `Resident360 Ontology Agent`: instructions, ontology source, **all entity types selected**, publish | 1 min |
+| 90 write-env | `FABRIC_*` IDs and URLs into `.azure/<env>/.env` | 1 min |
+
+Then check the agent from the command line (30–45 s per answer):
+
+```bash
+python scripts/fabric/ask.py "Which regions have the highest share of disengaged residents?"
+# North 60/300 = 20.0%, then West 17.1%, Central 13.1%, East 11.7%, North-East 8.3%
+python scripts/gen-citizens.py --from-onelake --check    # citizens.json agrees with the lakehouse
+```
+
+| Symptom | Fix |
+|---|---|
+| Step 30: 403 `FeatureNotAvailable` | Tenant setting **Users can create Ontology (preview) items** is off, or has not propagated yet (wait 15–60 min) |
+| Data agent answers "There's content here that I can't work with" and then gives numbers | Its entity types are not selected, so the numbers are invented. Run `deploy.sh <env> --only 40`, then check again |
+| Data agent reports a backend graph error | The graph has not loaded yet. Run `deploy.sh <env> --only 35` |
+| Step 20 fails inside the notebook | Open `load_resident360` in the workspace to see the failing cell. The capacity must be Active |
+| You changed the blueprint | `deploy.sh <env> --from 30`. The ontology is updated in place, then refreshed and republished |
 
 ### T-1: dry run
 
@@ -227,6 +258,9 @@ Gotchas:
 | [provision.sh](../../scripts/provision.sh) | Env + parameters + optional what-if + `azd provision` + values sheet |
 | [cost-guardrails.sh](../../scripts/cost-guardrails.sh) | Asserts the §13 controls; month-to-date cost; `--pause-fabric`, `--max-usd N` |
 | [capacity.sh](../../scripts/capacity.sh) | `status`, `suspend` or `resume` the Fabric capacity |
+| [fabric/deploy.sh](../../scripts/fabric/deploy.sh) | Resident 360 on Fabric: workspace, lakehouse and load, ontology, graph refresh, data agent, env IDs; `--from`, `--only`, `--skip-upload` |
+| [fabric/ask.py](../../scripts/fabric/ask.py) | Ask the published data agent a question over MCP; `--json` |
+| [gen-citizens.py](../../scripts/gen-citizens.py) | `citizens.json` from the gold build; `--check`, `--from-onelake` |
 | [seed-attendees.sh](../../scripts/seed-attendees.sh) | Lab accounts / file / guests → project, search, tracing and Fabric access; `--remove`, `--dry-run` |
 | [render-values.py](../../scripts/render-values.py) | `.azure/<env>/.env` → `content/config/values.md` |
 | [teardown.sh](../../scripts/teardown.sh) | Fabric workspace → `azd down --purge` → verify; `--pause-only` |

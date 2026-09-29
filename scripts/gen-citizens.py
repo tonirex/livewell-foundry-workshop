@@ -1,8 +1,8 @@
 """Generate content/data/citizens.json -- the profile tool's data -- from resident_360.
 
 citizens.json is NEVER hand-written (SPEC.md §3.3): it is derived from the same gold build the
-Fabric notebook produces (mirrored locally by scripts/r360.py), so every profile answer agrees with
-the Fabric aggregates. It holds Rahim (RESIDENT_00061) plus a small, deterministic set of demo
+Fabric notebook produces (the notebook imports scripts/r360.py), so every profile answer agrees with
+the Fabric aggregates. --from-onelake reads the rows the notebook exported from the lakehouse instead. It holds Rahim (RESIDENT_00061) plus a small, deterministic set of demo
 personas (one disengaged and one engaged resident per region, plus one unscreened resident).
 
 The get_citizen_profile tool (Lab 3) only ever returns the row of the SESSION resident; the other
@@ -10,15 +10,20 @@ personas exist so facilitators can demo "show me another resident's profile" bei
 so attendees can switch persona in the Builder rail.
 
 Usage:
-    python scripts/gen-citizens.py           # write content/data/citizens.json
-    python scripts/gen-citizens.py --check   # exit 1 if the committed file is stale
+    python scripts/gen-citizens.py                 # write content/data/citizens.json
+    python scripts/gen-citizens.py --check         # exit 1 if the committed file is stale
+    python scripts/gen-citizens.py --from-onelake  # build from the loaded lakehouse (Files/export/resident_360.csv)
+                                                   # and fail if it differs from the local gold build
 """
 
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
+import io
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -77,8 +82,43 @@ def to_profile(row: dict, programmes: list[dict], persona: dict | None) -> dict:
     }
 
 
-def build() -> dict:
-    t = r360.build()
+def _typed(value: str):
+    """Undo the CSV export: '' -> None, whole numbers -> int, decimals -> float, else text."""
+    if value == "":
+        return None
+    if value.lstrip("-").isdigit():
+        return int(value)
+    try:
+        return float(value)
+    except ValueError:
+        return value
+
+
+def onelake_tables() -> dict:
+    """resident_360 + fact_programme_enrolment as exported by load_resident360.ipynb to Files/export/."""
+    sys.path.insert(0, str(ROOT / "scripts" / "fabric"))
+    import fabriclib as fl  # noqa: PLC0415
+
+    fab = fl.Fabric()
+    ws, lh = os.environ.get("FABRIC_WORKSPACE_ID", ""), os.environ.get("FABRIC_LAKEHOUSE_ID", "")
+    if not (ws and lh):
+        n = fl.names()
+        ws = ws or fab.workspace_id(n["fabric_workspace"]) or ""
+        lh = lh or (fab.item_id(ws, "Lakehouse", n["lakehouse"]) if ws else "") or ""
+    if not (ws and lh):
+        raise SystemExit("Fabric workspace / lakehouse not found: run scripts/fabric/deploy.sh")
+    out = {}
+    for name in ("resident_360", "fact_programme_enrolment"):
+        raw = fab.onelake_read(ws, lh, f"Files/export/{name}.csv")
+        if raw is None:
+            raise SystemExit(f"Files/export/{name}.csv not found: re-run scripts/fabric/deploy.sh --only 20")
+        out[name] = [{k: _typed(v) for k, v in row.items()}
+                     for row in csv.DictReader(io.StringIO(raw.decode("utf-8")))]
+    return out
+
+
+def build(t: dict | None = None) -> dict:
+    t = t or r360.build()
     rahim = r360.load_rahim()
     rows = {r["resident_id"]: r for r in t["resident_360"]}
     progs: dict[str, list[dict]] = {}
@@ -111,8 +151,18 @@ def build() -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser(description="Generate citizens.json from resident_360")
     ap.add_argument("--check", action="store_true", help="fail if the committed file is stale")
+    ap.add_argument("--from-onelake", action="store_true",
+                    help="read resident_360 from the loaded lakehouse (needs az login + deploy.sh)")
     args = ap.parse_args()
     text = json.dumps(build(), indent=2, ensure_ascii=False) + "\n"
+    if args.from_onelake:
+        lake = json.dumps(build(onelake_tables()), indent=2, ensure_ascii=False) + "\n"
+        if lake != text:
+            print("DIFFERS: citizens built from the lakehouse do not match the local gold build "
+                  "(re-run scripts/fabric/deploy.sh --only 20)")
+            return 1
+        print("OK: citizens built from the lakehouse match the local gold build")
+        text = lake
     if args.check:
         if not OUT.exists() or OUT.read_text(encoding="utf-8") != text:
             print("STALE: content/data/citizens.json -- run python scripts/gen-citizens.py")
