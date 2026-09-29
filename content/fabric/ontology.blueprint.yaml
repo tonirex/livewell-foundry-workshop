@@ -56,6 +56,8 @@ entity_types:
       - { name: region_psi,     column: region_psi,     type: BigInt }
       - { name: region_is_hazy, column: region_is_hazy, type: BigInt }
       - { name: resident_count, column: resident_count, type: BigInt }
+      - { name: disengaged_residents, column: disengaged_residents, type: BigInt }
+      - { name: disengaged_share_pct, column: disengaged_share_pct, type: Double }
 
   - id: EventOccurrence
     display_name: Event occurrence
@@ -82,6 +84,7 @@ entity_types:
       - { name: enrolled_residents, column: enrolled_residents, type: BigInt }
       - { name: dropped_count,      column: dropped_count,      type: BigInt }
       - { name: first_enrolment,    column: first_enrolment,    type: DateTime }
+      - { name: disengaged_enrolled, column: disengaged_enrolled, type: BigInt }
 
 relationship_types:
   - id: livesIn

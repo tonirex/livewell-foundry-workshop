@@ -23,6 +23,58 @@ exactly **three** questions, each tied to one lab checkpoint. Every `fabric` bea
 3. `q_programmes_disengaged_enrolled` — Mei is reviewing which programme teams to brief first. The
    Programme-Insights specialist answers from Fabric; the coach turns it into a one-line brief per programme.
 
+## Canonical GQL (the graph check)
+
+`scripts/validate-narrative.py --layers live` runs these queries directly on the ontology's graph model
+(`GraphModels/{id}/executeQuery`, preview) and requires the reference answers exactly, before it asks the
+data agent. If the graph check passes and the data agent does not, the data is right and the variance is
+in the agent's question-to-GQL step. Facilitators can show these in the bridge spotlight as "what the
+agent should write".
+
+```gql name=q_disengaged_regions
+MATCH (r:Resident)-[:livesIn]->(g:Region)
+RETURN g.region AS region, count(r) AS residents, sum(r.is_disengaged) AS disengaged
+GROUP BY region ORDER BY disengaged DESC
+```
+
+```gql name=q_dropped_attended_heldin
+MATCH (r:Resident)-[:attended]->(o:EventOccurrence)-[:heldIn]->(g:Region)
+WHERE r.programmes_dropped >= 1
+RETURN g.region AS region, count(DISTINCT r.resident_id) AS residents
+GROUP BY region ORDER BY residents DESC
+```
+
+```gql name=q_dropped_attended_heldin.distinct_residents
+MATCH (r:Resident)-[:attended]->(o:EventOccurrence)
+WHERE r.programmes_dropped >= 1
+RETURN count(DISTINCT r.resident_id) AS residents
+```
+
+```gql name=q_programmes_disengaged_enrolled
+MATCH (r:Resident)-[:enrolledIn]->(p:Programme)
+WHERE r.is_disengaged = 1
+RETURN p.programme_name AS programme_name, count(DISTINCT r.resident_id) AS disengaged_enrolled
+GROUP BY programme_name ORDER BY disengaged_enrolled DESC
+```
+
+The two disengaged questions also have ready-made counts on the entity nodes (gold aggregates built by
+`scripts/r360.py`, like `Region.resident_count`). They return one row per group, so they stay well under
+the data agent's 200-row query limit; the data source instructions point the agent at them first. The
+graph check requires them to equal the traversal counts above.
+
+```gql name=q_disengaged_regions.gold
+MATCH (g:Region)
+RETURN g.region AS region, g.disengaged_residents AS disengaged, g.resident_count AS residents,
+       g.disengaged_share_pct AS share_pct
+ORDER BY share_pct DESC
+```
+
+```gql name=q_programmes_disengaged_enrolled.gold
+MATCH (p:Programme)
+RETURN p.programme_name AS programme_name, p.disengaged_enrolled AS disengaged_enrolled
+ORDER BY disengaged_enrolled DESC
+```
+
 ## Exploration questions (not in the narrative; for facilitators and curious participants)
 
 Aggregate-only, adapted from the Resident 360 kit question bank (MIT, see NOTICE.md). They are not gated.

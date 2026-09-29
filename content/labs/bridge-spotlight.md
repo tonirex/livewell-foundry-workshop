@@ -65,6 +65,13 @@ This is a facilitator-led spotlight. Slides-only when the Lab 3 Fabric step is l
    ```
 
    The ontology traversal is `enrolledIn` → `attended` → `heldIn`, keeping home region and event region apart.
+   The reference answer is <!--ref:q_dropped_attended_heldin.distinct_residents-->248<!--/ref--> residents, with
+   <!--ref:q_dropped_attended_heldin.top_region-->Central<!--/ref--> hosting the most of them (<!--ref:q_dropped_attended_heldin.top_residents-->95<!--/ref-->).
+   Multi-hop answers over the preview ontology can vary between runs, so a live mismatch is a talking point, not a failure.
+   Show the query the agent should have written (the canonical GQL in `content/fabric/question-bank.md`) and point out
+   why it counts inside one grouped query: the agent's query tool caps the rows it reads, so listing residents one by one
+   undercounts. When the agent says its result was cut off and declines to give counts, that is the behaviour you want
+   from a governed agent: it does not guess.
 6. Mention the optional Forgebook notebook by name: `Microsoft IQ in Foundry` on `microsoft-foundry.github.io/forgebook`.
 7. Close on the extended arc: **Unify → Govern → Personalise → Converse → Coach & Act**.
 

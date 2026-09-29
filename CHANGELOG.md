@@ -4,6 +4,28 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Phase 3b: narrative gate (`phase-3b-narrative-gate`)
+
+- `scripts/validate-narrative.py` with three layers (`--layers static,data,live` or `all`), `--fill`, `--check`,
+  `--runs`, `--pause`, `--questions`. Static: beats, seats, sources, prompts, glossary spelling, no `resident_id`,
+  numbers only through `{{ref:...}}`, filled values current. Data: rebuilds Resident 360 with `r360.py`, checks
+  joins, glossary rules, Rahim across citizens.json, intake documents and story, and writes
+  `content/fabric/reference-answers.json`. Live: a graph check (canonical GQL on the graph model), then three
+  data-agent calls per fabric question with latency, judged against the reference; writes
+  `demos/NARRATIVE-VALIDATION-<date>.md` with every raw answer.
+- `--fill` wrote 22 reference values into `content/narrative/rahim.md`, `bridge-spotlight.md`, `fabric-step.md` and
+  `lab-04.md` as `<!--ref:key-->value<!--/ref-->` markers; `check-content.py` accepts them.
+- Ontology: gold aggregates `Region.disengaged_residents`, `Region.disengaged_share_pct` and
+  `Programme.disengaged_enrolled` (built by `r360.py`), so the two strict questions read one row per group.
+- Data agent: `40-data-agent.py` deploys and publishes **data source instructions** (graph schema, flag conditions,
+  GQL shapes, the 200-row query limit) alongside the agent instructions. Example queries are not supported for
+  ontology sources.
+- `question-bank.md`: canonical GQL per question (traversal and aggregate), used by the graph check and the bridge
+  spotlight.
+- `content/assets/Makefile` (`make validate`, `validate-live`, `fill`) and the manual CI workflow
+  `.github/workflows/validate-narrative.yml`.
+- ADMIN-SETUP: the proof step, F2 throttling and 200-row troubleshooting rows, and the script reference.
+
 ### Phase 3: minimal Resident 360 on Fabric (`phase-3-fabric`)
 
 - `scripts/fabric/deploy.sh [env] [--from NN] [--only NN] [--skip-upload]` runs six idempotent steps with

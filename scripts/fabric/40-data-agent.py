@@ -6,11 +6,14 @@ Uses the public Fabric data agent management API (the same calls as fabric-data-
   PATCH /v1/workspaces/{ws}/dataAgents/{id}/staging/settings            aiInstructions
   POST  /v1/workspaces/{ws}/dataAgents/{id}/staging/datasources         ontology as a FabricItem source
   PATCH /v1/workspaces/{ws}/dataAgents/{id}/staging/datasources/{ds}/elements?id=  select every entity type
+  PATCH /v1/workspaces/{ws}/dataAgents/{id}/staging/datasources/{ds}    data source instructions
   POST  /v1/workspaces/{ws}/dataAgents/{id}/staging/publish             publish
 A newly added ontology source has NO entity types selected (selectionState "None"); the agent then cannot
 query and answers "There's content here that I can't work with" followed by invented numbers.
-Instructions are the `data-agent-instructions` block of content/fabric/data-agent-instructions.md.
-For ontology sources, instructions are the only tuning mechanism (no example queries).
+Agent instructions are the `data-agent-instructions` block of content/fabric/data-agent-instructions.md and
+the ontology source's instructions its `datasource-instructions` block (they steer the GQL the agent writes).
+For ontology sources, instructions are the only tuning mechanism: POST .../fewShots answers 400 "Few shot
+examples are not supported for Ontology data sources".
 
 Idempotent: re-running re-applies the instructions, adds the ontology source only if missing and republishes.
 
@@ -34,11 +37,10 @@ DESCRIPTION = ("Aggregate-only questions for HPB programme officers over the syn
                "ontology (resident_ontology). Synthetic data.")
 
 
-def instructions_text() -> str:
-    m = re.search(r"```text name=data-agent-instructions\n(.*?)\n```", INSTRUCTIONS.read_text(encoding="utf-8"),
-                  re.S)
+def instructions_text(name: str = "data-agent-instructions") -> str:
+    m = re.search(rf"```text name={re.escape(name)}\n(.*?)\n```", INSTRUCTIONS.read_text(encoding="utf-8"), re.S)
     if not m:
-        raise SystemExit(f"no ```text name=data-agent-instructions block in {INSTRUCTIONS}")
+        raise SystemExit(f"no ```text name={name} block in {INSTRUCTIONS}")
     return m.group(1).strip()
 
 
@@ -52,9 +54,12 @@ def main() -> int:
     ap.add_argument("--dry-run", action="store_true", help="print the instructions and exit")
     a = ap.parse_args()
     text = instructions_text()
+    ds_text = instructions_text("datasource-instructions")
     if a.dry_run:
         print(text)
-        print(f"\n({len(text)} characters)")
+        print(f"\n({len(text)} characters)\n")
+        print(ds_text)
+        print(f"\n({len(ds_text)} characters)")
         return 0
 
     n = fl.names()
@@ -117,6 +122,13 @@ def main() -> int:
     fl.say(f"  PASS  {len(elements)} entity types selected ({len(todo)} changed): "
            + ", ".join(sorted(e["displayName"] for e in elements)))
 
+    fab.call("PATCH", f"{base}/staging/datasources/{ds_id}", {"instructions": ds_text})
+    staged_ds = fab.get(f"{base}/staging/datasources/{ds_id}") or {}
+    same = (staged_ds.get("instructions") or "").strip() == ds_text
+    fl.say(f"  {'PASS' if same else 'FAIL'}  staging data source instructions ({len(ds_text)} characters)")
+    if not same:
+        return 1
+
     if a.no_publish:
         fl.say("  WARN  --no-publish: the agent is not published, so Foundry's Fabric IQ tool cannot see it")
     else:
@@ -124,9 +136,11 @@ def main() -> int:
         pub = fab.get(f"{base}/settings") or {}
         pub_src = fab.get(f"{base}/datasources") or {}
         pub_el = fab.get_all(f"{base}/datasources/{ds_id}/elements")
+        pub_ds = fab.get(f"{base}/datasources/{ds_id}") or {}
         ok = ((pub.get("aiInstructions") or "").strip() == text and mentions(pub_src, onto)
+              and (pub_ds.get("instructions") or "").strip() == ds_text
               and pub_el and all(e.get("isSelected") for e in pub_el))
-        fl.say(f"  {'PASS' if ok else 'FAIL'}  published: instructions, ontology source, "
+        fl.say(f"  {'PASS' if ok else 'FAIL'}  published: instructions, ontology source + its instructions, "
                f"{sum(1 for e in pub_el if e.get('isSelected'))}/{len(pub_el)} entity types selected")
         if not ok:
             fl.say(f"        settings={json.dumps(pub)[:300]} datasources={json.dumps(pub_src)[:300]}")

@@ -43,7 +43,10 @@ Watch the facilitator demo; here is what to look for:
    Which programmes have the most disengaged residents enrolled?
    ```
 
-   Look for a Fabric-routed aggregate answer grouped by programme and no resident-level detail.
+   Look for a Fabric-routed aggregate answer grouped by programme and no resident-level detail. The reference
+   answer puts **<!--ref:q_programmes_disengaged_enrolled.top_programme-->Healthier SG<!--/ref-->** first
+   (<!--ref:q_programmes_disengaged_enrolled.top_disengaged_enrolled-->82<!--/ref--> disengaged residents enrolled). The top programmes
+   are close, so ±1 rank is a pass.
 5. Watch the hosted deploy path. The facilitator uses Foundry Toolkit for VS Code or `azd ai agent`, attaches the RAI policy with `rai_config`, and deploys **`livewell-workshop-hosted`**.
 6. Smoke test the hosted endpoint with Python or curl. The endpoint is read from the values sheet shown on screen and is never written into this page.
 7. Open the hosted-agent trace and compare it with the playground trace.

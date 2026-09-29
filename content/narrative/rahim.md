@@ -67,9 +67,9 @@ these decisions is visible in a trace and scored by evaluators.
 ## Chapter 3 — "It's hazy today — what can I do indoors?" (Lab 3 · Tools, MCP & Memory)
 
 **[ch3.1 · seat: citizen · source: profile · prompt: lab3_profile_tailored]** The coach now reads Rahim's own
-profile — the governed extract of his Resident 360 row: age band {{ref:rahim.age_band}}, screening risk
-{{ref:rahim.screening_risk}}, about {{ref:rahim.avg_daily_steps}} steps a day, and his region flagged hazy
-(PSI {{ref:rahim.region_psi}}). Its one suggestion for the week fits all of that, with the evidence listed.
+profile — the governed extract of his Resident 360 row: age band <!--ref:rahim.age_band-->60-64<!--/ref-->, screening risk
+<!--ref:rahim.screening_risk-->High<!--/ref-->, about <!--ref:rahim.avg_daily_steps-->3,100<!--/ref--> steps a day, and his region flagged hazy
+(PSI <!--ref:rahim.region_psi-->60<!--/ref-->). Its one suggestion for the week fits all of that, with the evidence listed.
 
 **[ch3.2 · seat: citizen · source: mcp · prompt: lab3_hazy_indoor_signup]** "It's hazy today — what can I do
 indoors near Woodlands, and can you sign me up?" The coach finds indoor, pre-diabetes-friendly morning
@@ -88,9 +88,9 @@ plan. The coach hands off to its Nutrition and Activity specialists and merges o
 **[ch3.6 · seat: officer · source: fabric · prompt: fabric_q_disengaged_regions]** *(Fabric step)* Across town,
 Mei Lin is planning the next re-engagement roadshow and asks the same coach: "Which regions have the
 highest share of disengaged residents?" The coach routes her — and only her — to the Fabric IQ tool. The
-published Resident360 Ontology Agent answers in aggregate: {{ref:q_disengaged_regions.top_region}} leads at
-{{ref:q_disengaged_regions.top_share_pct}}%, followed by {{ref:q_disengaged_regions.second_region}} at
-{{ref:q_disengaged_regions.second_share_pct}}%. The coach suggests pairing the top region with the indoor,
+published Resident360 Ontology Agent answers in aggregate: <!--ref:q_disengaged_regions.top_region-->North<!--/ref--> leads at
+<!--ref:q_disengaged_regions.top_share_pct-->20.0<!--/ref-->%, followed by <!--ref:q_disengaged_regions.second_region-->West<!--/ref--> at
+<!--ref:q_disengaged_regions.second_share_pct-->17.1<!--/ref-->%. The coach suggests pairing the top region with the indoor,
 hazy-day-friendly activities it just found for Rahim — without ever naming him.
 
 ## Chapter 4 — LiveWell goes live (Lab 4 · Multi-agent & Hosted deploy)
@@ -101,8 +101,8 @@ as a hosted agent behind the (simulated) Healthy 365 channel, governed by the sa
 
 **[ch4.2 · seat: officer · source: fabric · prompt: lab4_q_programmes_disengaged]** Mei asks the
 Programme-Insights specialist which programmes have the most disengaged residents enrolled. It answers from
-Fabric: {{ref:q_programmes_disengaged_enrolled.top_programme}} has the most
-({{ref:q_programmes_disengaged_enrolled.top_disengaged_enrolled}}). The coach drafts a one-line brief for that
+Fabric: <!--ref:q_programmes_disengaged_enrolled.top_programme-->Healthier SG<!--/ref--> has the most
+(<!--ref:q_programmes_disengaged_enrolled.top_disengaged_enrolled-->82<!--/ref-->). The coach drafts a one-line brief for that
 programme team. Same agent, two doors: the portal for people, the endpoint for systems.
 
 ## Chapter 5 — Two IQs, one agent (Bridge spotlight)
@@ -111,8 +111,8 @@ programme team. Same agent, two doors: the portal for people, the endpoint for s
 multi-hop question the cohort first met in their Fabric workshop: among residents who dropped a programme,
 how many still attended an event, by the region where the event was held? The ontology's named edges
 (`enrolledIn` → `attended` → `heldIn`) keep "home region" and "event region" apart;
-{{ref:q_dropped_attended_heldin.distinct_residents}} residents qualify, with
-{{ref:q_dropped_attended_heldin.top_region}} hosting the most. The coach suggests "come-back" booths at the
+<!--ref:q_dropped_attended_heldin.distinct_residents-->248<!--/ref--> residents qualify, with
+<!--ref:q_dropped_attended_heldin.top_region-->Central<!--/ref--> hosting the most. The coach suggests "come-back" booths at the
 busiest event regions.
 
 **The extended arc.** Unify → Govern → Personalise → Converse → **Coach & Act**. Foundry IQ grounds the coach in
