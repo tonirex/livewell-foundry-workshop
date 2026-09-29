@@ -2,7 +2,8 @@
 # Minimal LiveWell ontology over lh_resident360 (SPEC.md §9, step 30).
 # scripts/fabric/30-ontology.py renders this blueprint into the Fabric ontology item definition
 # (definition.json, .platform, EntityTypes/{id}/definition.json, EntityTypes/{id}/DataBindings/*.json,
-# RelationshipTypes/{id}/definition.json) and POSTs it to /v1/workspaces/{ws}/ontologies.
+# RelationshipTypes/{id}/definition.json, RelationshipTypes/{id}/Contextualizations/*.json) and POSTs it to
+# /v1/workspaces/{ws}/items (type Ontology), or updates the definition when the ontology already exists.
 #
 # Binding rule inherited from the Resident 360 kit (lab4): every entity type binds to an ENTITY-GRAIN
 # table (one row per key). Relationships bind to the table whose rows ARE the links.
@@ -12,7 +13,7 @@ ontology:
   name: resident_ontology
   description: "LiveWell minimal Resident 360 ontology: residents, regions, event occurrences and programmes. Synthetic data."
   lakehouse: lh_resident360
-  schema: dbo
+  schema: ""        # lh_resident360 is created without schemas (Microsoft Learn Lab 28 parity); "dbo" if schema-enabled
 
 entity_types:
   - id: Resident

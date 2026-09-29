@@ -100,8 +100,8 @@ if [ -n "$LEFT" ]; then bad "workshop resources still present:"; echo "$LEFT" | 
 else ok "no resources tagged workshop=livewell env=$ENV remain"; fi
 
 # 4 Clear runtime IDs that no longer exist (lab pages use names; the next provision rewrites the rest).
-for key in FABRIC_WORKSPACE_ID FABRIC_WORKSPACE_URL FABRIC_LAKEHOUSE_ID FABRIC_ONTOLOGY_ID \
-           FABRIC_DATA_AGENT_ID FABRIC_IQ_CONNECTION_ID BUDGET_START_DATE; do
+for key in FABRIC_WORKSPACE_ID FABRIC_WORKSPACE_URL FABRIC_LAKEHOUSE_ID FABRIC_ONTOLOGY_ID FABRIC_GRAPH_MODEL_ID \
+           FABRIC_DATA_AGENT_ID FABRIC_DATA_AGENT_URL FABRIC_IQ_CONNECTION_ID BUDGET_START_DATE; do
   if [ -n "${!key:-}" ]; then azd_ env set "$key" "" >/dev/null; fi
 done
 rm -f "$ROOT/content/config/values.md"

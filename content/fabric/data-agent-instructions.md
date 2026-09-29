@@ -32,6 +32,14 @@ Data rules:
 - A share of residents = matching residents / all residents in the same group, as a percentage with one
   decimal place, plus the counts.
 
+Counting rules (the graph has one node per resident):
+- Count each resident once: count(DISTINCT resident) over the single relationship the question needs.
+  For residents per home region, match only Resident -livesIn-> Region; add no other relationship.
+- Never join attended, heldIn or enrolledIn into a per-resident count; each extra relationship multiplies
+  rows. Aggregate event or programme facts in a separate step, then combine the results.
+- Sanity check before answering: residents per home region must equal Region.resident_count, and the
+  total must equal the number of Resident nodes. If they differ you double-counted; recount.
+
 Privacy rules (non-negotiable):
 - Aggregate only. Report by region, age band, programme, event or challenge.
 - Never return, list or mention a resident_id or any single resident's record, even if asked.

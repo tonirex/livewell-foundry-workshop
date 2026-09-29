@@ -1,11 +1,15 @@
-"""Local, pure-Python mirror of content/assets/load_resident360.ipynb (the Fabric loader).
+"""Minimal LiveWell Resident 360 gold build: the single source of the loader logic.
 
 It rebuilds the minimal LiveWell Resident 360 from the vendored kit files plus the generated
-activity/screening/PSI files and Rahim's pinned overlay, with the SAME logic the Fabric notebook
-runs in PySpark. It is used by:
+activity/screening/PSI files and Rahim's pinned overlay. The Fabric notebook
+content/assets/load_resident360.ipynb uploads this module to Files/livewell/scripts/ and imports it,
+so Fabric and the local scripts run the SAME code; the notebook only converts the rows to Delta tables.
+It is used by:
 
+* content/assets/load_resident360.ipynb -> the six Delta tables in lh_resident360
 * scripts/gen-citizens.py        -> content/data/citizens.json (profile tool)
 * scripts/validate-narrative.py  -> data layer + content/fabric/reference-answers.json (Phase 3b)
+* scripts/fabric/notebook.py     -> verifies the lakehouse counts against this build
 
 No pandas / Spark needed (stdlib only), so it runs anywhere, including Windows ARM64.
 

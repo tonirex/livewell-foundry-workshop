@@ -1,0 +1,139 @@
+#!/usr/bin/env python3
+"""Step 40: create AND publish the Fabric data agent "Resident360 Ontology Agent" over resident_ontology.
+
+Uses the public Fabric data agent management API (the same calls as fabric-data-agent-sdk 0.1.32):
+  POST  /v1/workspaces/{ws}/dataAgents                                  create (GET first)
+  PATCH /v1/workspaces/{ws}/dataAgents/{id}/staging/settings            aiInstructions
+  POST  /v1/workspaces/{ws}/dataAgents/{id}/staging/datasources         ontology as a FabricItem source
+  PATCH /v1/workspaces/{ws}/dataAgents/{id}/staging/datasources/{ds}/elements?id=  select every entity type
+  POST  /v1/workspaces/{ws}/dataAgents/{id}/staging/publish             publish
+A newly added ontology source has NO entity types selected (selectionState "None"); the agent then cannot
+query and answers "There's content here that I can't work with" followed by invented numbers.
+Instructions are the `data-agent-instructions` block of content/fabric/data-agent-instructions.md.
+For ontology sources, instructions are the only tuning mechanism (no example queries).
+
+Idempotent: re-running re-applies the instructions, adds the ontology source only if missing and republishes.
+
+  python scripts/fabric/40-data-agent.py [--no-publish] [--dry-run]     (normally run by deploy.sh)
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import sys
+import time
+import urllib.parse
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import fabriclib as fl  # noqa: E402
+
+INSTRUCTIONS = fl.ROOT / "content" / "fabric" / "data-agent-instructions.md"
+DESCRIPTION = ("Aggregate-only questions for HPB programme officers over the synthetic LiveWell Resident 360 "
+               "ontology (resident_ontology). Synthetic data.")
+
+
+def instructions_text() -> str:
+    m = re.search(r"```text name=data-agent-instructions\n(.*?)\n```", INSTRUCTIONS.read_text(encoding="utf-8"),
+                  re.S)
+    if not m:
+        raise SystemExit(f"no ```text name=data-agent-instructions block in {INSTRUCTIONS}")
+    return m.group(1).strip()
+
+
+def mentions(obj, needle: str) -> bool:
+    return needle.lower() in json.dumps(obj).lower()
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--no-publish", action="store_true")
+    ap.add_argument("--dry-run", action="store_true", help="print the instructions and exit")
+    a = ap.parse_args()
+    text = instructions_text()
+    if a.dry_run:
+        print(text)
+        print(f"\n({len(text)} characters)")
+        return 0
+
+    n = fl.names()
+    agent_name, onto_name = n["data_agent"], n["ontology"]
+    fab = fl.Fabric()
+    ws = fab.workspace_id(n["fabric_workspace"])
+    if not ws:
+        raise SystemExit(f"workspace \"{n['fabric_workspace']}\" not found: run 10-workspace.sh")
+    onto = fab.item_id(ws, "Ontology", onto_name)
+    if not onto:
+        raise SystemExit(f"ontology {onto_name} not found: run 30-ontology.py")
+
+    agent = fab.item_id(ws, "DataAgent", agent_name)
+    if agent:
+        fl.say(f"  PASS  data agent exists ({agent})")
+    else:
+        res = fab.lro("POST", f"/v1/workspaces/{ws}/dataAgents",
+                      {"displayName": agent_name, "description": DESCRIPTION}, what=f"create {agent_name}")
+        agent = (res or {}).get("id") or fab.item_id(ws, "DataAgent", agent_name)
+        if not agent:
+            raise SystemExit(f"{agent_name} not found after create")
+        fl.say(f"  PASS  data agent created ({agent})")
+    base = f"/v1/workspaces/{ws}/dataAgents/{agent}"
+
+    fab.call("PATCH", f"{base}/staging/settings", {"aiInstructions": text})
+    staged = fab.get(f"{base}/staging/settings") or {}
+    same = (staged.get("aiInstructions") or "").strip() == text
+    fl.say(f"  {'PASS' if same else 'FAIL'}  staging instructions ({len(text)} characters)")
+    if not same:
+        return 1
+
+    sources = fab.get(f"{base}/staging/datasources") or {}
+    if mentions(sources, onto):
+        fl.say(f"  PASS  ontology source {onto_name} already staged")
+    else:
+        body = {"type": "FabricItem",
+                "itemReference": {"referenceType": "ById", "itemId": onto, "workspaceId": ws}}
+        fab.lro("POST", f"{base}/staging/datasources", body, what="add ontology source")
+        for _ in range(12):
+            sources = fab.get(f"{base}/staging/datasources") or {}
+            if mentions(sources, onto):
+                break
+            time.sleep(5)
+        if not mentions(sources, onto):
+            fl.say(f"  FAIL  ontology source not visible in staging: {json.dumps(sources)[:600]}")
+            return 1
+        fl.say(f"  PASS  ontology source {onto_name} added")
+
+    ds_id = next((d["id"] for d in (sources.get("value") or []) if mentions(d, onto)), onto)
+    elements = fab.get_all(f"{base}/staging/datasources/{ds_id}/elements")
+    todo = [e for e in elements if not e.get("isSelected")]
+    for e in todo:
+        fab.call("PATCH", f"{base}/staging/datasources/{ds_id}/elements?id={urllib.parse.quote(e['id'])}",
+                 {"isSelected": True})
+    elements = fab.get_all(f"{base}/staging/datasources/{ds_id}/elements")
+    unselected = [e["displayName"] for e in elements if not e.get("isSelected")]
+    if not elements or unselected:
+        fl.say(f"  FAIL  entity types not selected: {unselected or 'no elements listed'}")
+        return 1
+    fl.say(f"  PASS  {len(elements)} entity types selected ({len(todo)} changed): "
+           + ", ".join(sorted(e["displayName"] for e in elements)))
+
+    if a.no_publish:
+        fl.say("  WARN  --no-publish: the agent is not published, so Foundry's Fabric IQ tool cannot see it")
+    else:
+        fab.lro("POST", f"{base}/staging/publish", {"publishedDescription": DESCRIPTION}, what="publish")
+        pub = fab.get(f"{base}/settings") or {}
+        pub_src = fab.get(f"{base}/datasources") or {}
+        pub_el = fab.get_all(f"{base}/datasources/{ds_id}/elements")
+        ok = ((pub.get("aiInstructions") or "").strip() == text and mentions(pub_src, onto)
+              and pub_el and all(e.get("isSelected") for e in pub_el))
+        fl.say(f"  {'PASS' if ok else 'FAIL'}  published: instructions, ontology source, "
+               f"{sum(1 for e in pub_el if e.get('isSelected'))}/{len(pub_el)} entity types selected")
+        if not ok:
+            fl.say(f"        settings={json.dumps(pub)[:300]} datasources={json.dumps(pub_src)[:300]}")
+            return 1
+    print(json.dumps({"FABRIC_DATA_AGENT_ID": agent}))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

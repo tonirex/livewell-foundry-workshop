@@ -242,7 +242,7 @@ raw = open(sys.argv[1], encoding="utf-8").read()
 data = json.loads(raw[raw.index("{"):])
 want = {
     "Users can create Fabric items": ("FabricGAWorkloads", "create"),
-    "Ontology item (preview)": ("ontology", None),
+    "Users can create Ontology (preview) items": ("ontology", None),
     "Fabric data agent": ("dataagent", "aiskill"),
     "Copilot / Azure OpenAI features": ("AISkillArtifactTenantSwitch", "CopilotTenantSwitch"),
     "Cross-geo processing for AI": ("AllowGeoProcessing", "crossgeoprocessing"),
