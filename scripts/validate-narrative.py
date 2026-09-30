@@ -15,8 +15,9 @@ Layers (--layers static,data,live or all; default static,data):
   live    Asks the published Fabric data agent each question-bank question --runs times (default 3) with
           your Azure CLI token: no resident_id, grouped, exact counts, order within +-1 rank of the reference,
           latency logged (expect 30-90 s, flag > 120 s). "strict" questions fail the gate; "advisory" ones only
-          warn. The coach-routing check (the LiveWell agent calls Fabric IQ for Mei and never for Rahim) needs
-          the Phase 4 agent and reports SKIP until then.
+          warn. The coach-routing row (the LiveWell agent calls Fabric IQ for Mei and never for Rahim) is read
+          from the latest Lab 3 Builder run with the Fabric step (content/assets/.runs/lab3-*.json, written by
+          `make -C content/assets validate-rail`); SKIP when there is none.
 
   python scripts/validate-narrative.py                           # static + data, offline, a few seconds
   python scripts/validate-narrative.py --fill                    # fill or refresh {{ref:...}} values first
@@ -763,9 +764,25 @@ def live_layer(g: Gate, ref: dict, prompts: dict, qrows: dict, runs: int, only: 
         if slow:
             g.add(L, f"{q}: {len(slow)} answer(s) slower than {SLOW_S} s", "WARN",
                   [f"run {r['run']}: {r['seconds']:.0f} s" for r in slow])
-    g.add(L, "coach routing via the LiveWell agent (Fabric IQ call for Mei, none for Rahim)", "SKIP",
-          ["needs the Fabric IQ connection and a LiveWell agent (Phase 4: lab3_tools.py --fabric asserts it)"])
+    g.add(L, *coach_routing())
     return records
+
+
+def coach_routing() -> tuple[str, str, list[str]]:
+    """The coach-routing row comes from the latest Lab 3 Builder run with --fabric (lab3_tools.py records the
+    two checks in content/assets/.runs/lab3-<INITIALS>.json; validate-builder-rail.py runs it as INITIALS=test)."""
+    name = "coach routing via the LiveWell agent (Fabric IQ call for Mei, none for Rahim)"
+    need = ["fabric_q_disengaged_regions: Fabric IQ tool called",
+            "lab1_prediabetes_eat on the Fabric coach: no Fabric call"]
+    runs = sorted((ROOT / "content" / "assets" / ".runs").glob("lab3-*.json"), key=lambda p: p.stat().st_mtime)
+    for path in reversed(runs):
+        checks = json.loads(path.read_text(encoding="utf-8")).get("results", {}).get("checks", {})
+        if all(k in checks for k in need):
+            when = dt.datetime.fromtimestamp(path.stat().st_mtime).strftime("%Y-%m-%d %H:%M")
+            details = [f"{path.name} ({when}): " + "; ".join(f"{k} = {'PASS' if checks[k] else 'FAIL'}" for k in need)]
+            return name, "PASS" if all(checks[k] for k in need) else "FAIL", details
+    return name, "SKIP", ["no Lab 3 run with the Fabric step yet: `make -C content/assets validate-rail` "
+                          "(or `lab3_tools.py --fabric`) records it"]
 
 
 # ---------------------------------------------------------------------------------------------------

@@ -97,23 +97,26 @@ else:
 
 # Model deployments
 cap = int(models.get("tpm_cap_thousands", 100))
-allowed = {models["default"], models["fallback"], models["embeddings"]}
+emb_cap = int(models.get("embedding_tpm_cap_thousands", cap))
+mem_cap = int(models.get("memory_tpm_cap_thousands", cap))
+allowed = {models["default"], models["fallback"], models["memory"], models["embeddings"]}
 deps = load("deployments").get("value", [])
 if not deps:
     bad("no model deployments found (Foundry account missing?)")
 for dep in deps:
     sku = dep.get("sku", {}); m = dep.get("properties", {}).get("model", {})
     label = f"deployment {dep['name']} ({m.get('format')}/{m.get('name')} {m.get('version')}, {sku.get('name')} {sku.get('capacity')}K TPM)"
+    limit = {models["embeddings"]: emb_cap, models["memory"]: mem_cap}.get(dep["name"], cap)
     if "provisioned" in sku.get("name", "").lower():
         bad(label + " — PTU is forbidden")
     elif sku.get("name") != models.get("deployment_type", "GlobalStandard"):
         bad(label + " — must be GlobalStandard")
-    elif int(sku.get("capacity", 0)) > cap:
-        bad(label + f" — above the {cap}K TPM cap")
+    elif int(sku.get("capacity", 0)) > limit:
+        bad(label + f" — above the {limit}K TPM cap")
     elif m.get("format") not in ("OpenAI", "Microsoft"):
         bad(label + " — partner models are forbidden")
     elif dep["name"] not in allowed:
-        warn(label + " — not one of the three workshop deployments")
+        warn(label + " — not one of the four workshop deployments")
     else:
         ok(label)
 

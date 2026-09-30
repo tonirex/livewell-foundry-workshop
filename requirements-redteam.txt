@@ -1,0 +1,9 @@
+# Facilitator-only red-team scan (scripts/red-team.py). Install into its own venv: PyRIT pins its own
+# dependencies, so keep it out of the Builder-rail environment. Tested versions: versions.md.
+#   python -m venv .venv-redteam
+#   .venv-redteam/bin/python -m pip install -r requirements-redteam.txt      # Windows: .venv-redteam\Scripts\python.exe
+azure-ai-evaluation[redteam]==1.18.7
+azure-ai-projects==2.6.1
+azure-identity>=1.19
+openai>=1.99
+pyyaml>=6.0

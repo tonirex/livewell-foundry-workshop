@@ -16,6 +16,7 @@ __pycache__/
 build/
 dist/
 .venv/
+.venv-redteam/
 venv/
 .python-version
 .pytest_cache/
@@ -51,6 +52,12 @@ node_modules/
 # --- Generated at runtime ------------------------------------------------------
 content/config/values.md
 *.log
+# copied from content/data/activities.json + citizens.json by the azd prepackage hook (azure.yaml)
+content/assets/mcp-activities/activities.json
+content/assets/mcp-activities/citizens.json
+# Builder-rail run artefacts (lab scripts, validate-builder-rail.py, eval runs)
+content/assets/.runs/
+content/eval/.runs/
 
 # --- OS / editor ---------------------------------------------------------------
 .DS_Store

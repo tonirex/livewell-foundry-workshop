@@ -21,9 +21,10 @@ param projectMode = readEnvironmentVariable('MODE', 'shared-project')
 param searchSku = readEnvironmentVariable('SEARCH_SKU', 'basic')
 param searchLocation = readEnvironmentVariable('SEARCH_LOCATION', '')
 param fabricSku = 'F2'
-param chatTpmCapThousands = 100
+param chatTpmCapThousands = 400
 param embeddingTpmCapThousands = 100
 param mcpMinReplicas = int(readEnvironmentVariable('MCP_MIN_REPLICAS', '0'))
+param mcpImage = readEnvironmentVariable('SERVICE_MCP_ACTIVITIES_IMAGE_NAME', '')
 
 param budgetAmountUsd = 300
 param budgetStartDate = readEnvironmentVariable('BUDGET_START_DATE', '')
@@ -39,3 +40,12 @@ param extraTags = {
   purpose: 'dry-run'
   owner: 'antonia-chen'
 }
+
+// MCAPS policy "StorageAccount_PublicNetwork_Modify" forces publicNetworkAccess=Disabled unless this tag is
+// present. ASSUMPTIONS.md 4.4.
+param storagePolicyOptOutTag = {
+  SecurityControl: 'Ignore'
+}
+
+// Allow = Entra-only public access so Lab 2 can publish evaluation runs; Deny = Search + trusted services only.
+param storageNetworkDefaultAction = 'Allow'

@@ -49,8 +49,9 @@ For every FAIL, preflight prints the quota-request link. Typical asks on a fresh
 | Quota | Needed | Where |
 |---|---|---|
 | Fabric capacity units in `swedencentral` | 2 CU (F2) | Azure portal → Quotas → Microsoft Fabric |
-| `model-router` Global Standard | 100K TPM | Foundry portal → Management center → Quota |
-| `gpt-4.1-mini` Global Standard | 100K TPM | Same |
+| `model-router` Global Standard | 400K TPM | Foundry portal → Management center → Quota |
+| `gpt-4.1-mini` Global Standard | 400K TPM (fallback, Lab 2 judges, memory extraction) | Same |
+| `gpt-5.4-mini` Global Standard | 200K TPM (Lab 3 coach with memory) | Same |
 | `text-embedding-3-large` Global Standard | 100K TPM | Same |
 | Azure AI Search Basic in `swedencentral` | 1 service | Usually available; preflight checks it |
 
@@ -73,12 +74,13 @@ About 1.5 h end to end.
 | 1 Provision | `bash scripts/provision.sh mcaps --what-if` | ≈ 15 min | "provisioned mcaps" and `content/config/values.md` written |
 | 2 Guardrails | `bash scripts/cost-guardrails.sh mcaps` | 1 min | All PASS; budget alerts at US$150 and US$300 listed |
 | 3 Resident 360 on Fabric | `bash scripts/fabric/deploy.sh mcaps` | ≈ 17–20 min | 6 tables, ontology 4/4 with instances, graph refresh Completed, data agent published |
-| 4 Fabric IQ connection | Runbook step in [fabric-step.md](../labs/fabric-step.md) (Phase 4 helper) | 2 min | `FABRIC_IQ_CONNECTION_ID` in `.azure/mcaps/.env` |
-| 5 Knowledge base | `python content/assets/build-kb.py` (Phase 4) | 5 min | `livewell-guides-kb` answers with a citation |
-| 6 MCP server | `azd deploy mcp-activities` (Phase 4) | 5 min | `MCP_URL` responds |
-| 7 Attendees | `bash scripts/seed-attendees.sh mcaps --lab-accounts` | 2 min | Every row shows `added` or `exists` |
-| 8 Proof | `python scripts/smoke-test.py` (Phase 5), `make -C content/assets validate`, then `make -C content/assets validate-live ENV=mcaps` (graph check + 9 data-agent calls, ≈ 8 min) | 15 min | All green; report in `demos/NARRATIVE-VALIDATION-<date>.md` |
-| 9 Pause | `bash scripts/capacity.sh suspend mcaps` | 1 min | Capacity `Paused` |
+| 4 Knowledge base | `python scripts/build-kb.py` | 5 min | `livewell-guides-kb` answers with a citation (`--check` re-tests it) |
+| 5 MCP server | `azd deploy mcp-activities` | 5 min | `MCP_URL` responds |
+| 6 Tool connections | `python scripts/connect-tools.py` | 2 min | Activities MCP and Fabric IQ connections; `/profile/me` 200, another resident 403; `FABRIC_IQ_CONNECTION_ID` in `.azure/mcaps/.env` |
+| 7 Hosted agent (Lab 4) | Repo `.venv` active: `azd deploy livewell-workshop-hosted`, then `python scripts/hosted-postdeploy.py --verify` | ≈ 8 min | Agent active; a week plan comes back as evidence JSON; the blocklisted prompt is blocked ([README](../assets/hosted-agent-example/README.md)) |
+| 8 Attendees | `bash scripts/seed-attendees.sh mcaps --lab-accounts` | 2 min | Every row shows `added` or `exists` |
+| 9 Proof | `python scripts/smoke-test.py` (Phase 5), `make -C content/assets validate`, then `make -C content/assets validate-live ENV=mcaps` (graph check + 9 data-agent calls, ≈ 8 min) | 15 min | All green; report in `demos/NARRATIVE-VALIDATION-<date>.md` |
+| 10 Pause | `bash scripts/capacity.sh suspend mcaps` | 1 min | Capacity `Paused` |
 
 > **Always provision through `scripts/provision.sh`.** azd reads `infra/main.bicepparam` *before* its
 > preprovision hook runs. The script runs `scripts/select-params.py` first, which copies
@@ -86,8 +88,9 @@ About 1.5 h end to end.
 > `azd provision` still works once that file exists. If the hook had to regenerate anything, it stops with "re-run"
 > so a stale file can never deploy the wrong environment.
 
-Re-run step 7 after step 3 so that attendees also get **Viewer** on the Fabric workspace, which gives read access to
-the data agent.
+Re-run step 8 after step 3 so that attendees also get **Viewer** on the Fabric workspace, which gives read access to
+the data agent. The Lab 2 guardrail (`livewell-guardrails`) is applied by the postprovision hook
+(`scripts/apply-guardrail.py`) on every provision; `--check` reports drift.
 
 #### Step 3 in detail: `scripts/fabric/deploy.sh`
 
@@ -126,6 +129,13 @@ python scripts/gen-citizens.py --from-onelake --check    # citizens.json agrees 
 ### T-1: dry run
 
 - `bash scripts/capacity.sh resume mcaps`, then run the whole day with a lab account in a private browser window.
+- Builder rail end to end: `make -C content/assets validate-rail` (Labs 1–4 as `INITIALS=test`, ≈ 20 min; report in
+  `content/assets/.runs/builder-rail-<date>.md`). It fails if a key signal is missing or an agent is left behind.
+- Red team for the Lab 2 facilitator demo, in its own venv (PyRIT pins its own dependencies):
+  `python -m venv .venv-redteam && .venv-redteam/bin/pip install -r requirements-redteam.txt`, then
+  `INITIALS=fac .venv-redteam/bin/python scripts/red-team.py` (full scan, 192 attacks, ≈ US$8, estimated 30 min) or
+  `--lite` (20 attacks, ≈ US$0.85, ≈ 3 min). It creates a temporary guarded coach, scans it and deletes it; keep the
+  ASR scorecard it prints for Lab 2.
 - Record the demos (Phase 5 `demos/`) and fill in `demos/DRY-RUN-<date>.md`.
 - `bash scripts/cost-guardrails.sh mcaps --max-usd 150`, then `bash scripts/capacity.sh suspend mcaps`.
 
@@ -169,8 +179,10 @@ US$ list prices, September 2026 (SPEC.md §13). The cohort is 20 people × 150 r
 Controls built into the template and checked by [cost-guardrails.sh](../../scripts/cost-guardrails.sh):
 
 - One shared search service and knowledge base. Twenty Basic services would cost about $1,475/month.
-- `model-router` is the default deployment. Every deployment is Global Standard, capped at 100K TPM, with no PTU
-  and no partner models.
+- `model-router` is the default deployment. Every deployment is Global Standard with no PTU and no partner models.
+  `model-router` and `gpt-4.1-mini` are capped at 400K TPM, `gpt-5.4-mini` (Lab 3 memory coach) at 200K and
+  embeddings at 100K. Pay-as-you-go tokens mean the cap costs nothing by itself; at 100K, three Lab 3 coaches
+  running at once already hit HTTP 429.
 - Red teaming is run by the facilitator. The participant "lite" run (10 prompts × 2 strategies) costs about $17 in total.
 - Bing grounding is off: there is no connection.
 - The budget alerts at US$150 and US$300 (actual spend) and emails the facilitators plus the subscription Owners and Contributors.
@@ -189,7 +201,7 @@ type. Cost Management lags by up to 24 h.
 | Azure AI Search Basic `srch-livewell-<env>` | ≈ US$0.10/h (≈ $74/month) | Delete with `teardown.sh` at T+1; do not keep an environment "just in case" |
 | MCP app with `MCP_MIN_REPLICAS=1` | A few US$/day | Re-provision with the default (0) after the workshop |
 | ACR Basic | ≈ US$0.17/day | `teardown.sh` |
-| Hosted agent (Lab 4 facilitator demo) | Container compute while running | Delete it after the demo |
+| Hosted agent (Lab 4 facilitator demo) | Container compute (0.5 vCPU / 1 GiB) only while a session is active; nothing when idle | `azd ai agent delete livewell-workshop-hosted` after the workshop, or `teardown.sh` |
 | Red-team scans | $20–$60 per 1M evaluation tokens | Facilitator only; never loop them |
 | Log Analytics / App Insights | Per GB ingested (capped at 1 GB/day) | `teardown.sh` |
 
@@ -202,8 +214,11 @@ type. Cost Management lags by up to 24 h.
 | Facilitators | Search Service Contributor + Search Index Data Contributor | Search service | `rbac.bicep` |
 | Facilitators | Storage Blob Data Contributor, AcrPush | Storage, ACR | `rbac.bicep` |
 | Project managed identity | Search Index Data Reader, AcrPull | Search, ACR | `rbac.bicep` |
+| Project managed identity | Foundry User (memory calls the deployments as the project; 401 without it) | Foundry account | `rbac.bicep` |
+| Project managed identity | Storage Blob Data Contributor (evaluation uploads) | Storage | `rbac.bicep` |
 | Search managed identity | Cognitive Services User, Storage Blob Data Reader | Foundry account, storage | `rbac.bicep` |
 | MCP app identity | AcrPull | ACR | `infra/modules/containerapps.bicep` |
+| Hosted agent identity (`livewell-workshop-hosted`) | Foundry User | Project | `scripts/hosted-postdeploy.py` (azd postdeploy hook; the identity only exists after the first deploy) |
 | Attendees | Foundry User | Project | `seed-attendees.sh` |
 | Attendees | Search Index Data Reader | Search service | `seed-attendees.sh` |
 | Attendees | Log Analytics Reader | Application Insights | `seed-attendees.sh` (Tracing tab) |
@@ -225,6 +240,18 @@ Gotchas:
 - `azd down` removes every role assignment with the resource group. `seed-attendees.sh` must be re-run after
   each re-provision.
 - Guests (B2B) must redeem the invitation before role assignments show up in the portal. Lab accounts are simpler.
+
+### Evaluation uploads
+
+`lab2_govern.py` scores locally by default and prints the headline. `--upload` also publishes the run to the project's
+**Evaluations** page through the project's storage connection (the knowledge storage account). The account allows
+public network access with Entra ID only (`storageNetworkDefaultAction='Allow'`, ASSUMPTIONS 4.4 and 4.15), so the
+upload works from a laptop or Codespace. The red-team script's `--upload` uses the same path.
+
+If a tenant requires the account to be locked down, set `storageNetworkDefaultAction = 'Deny'` in the env's
+`.bicepparam` and re-provision. Uploads then fail from outside Azure: the scripts say "upload to Foundry failed …
+scored locally instead", and the local scores are still valid. To publish a run in that mode, add your IP with
+`az storage account network-rule add` for the upload and remove it afterwards.
 
 ## Backup plans
 
@@ -250,7 +277,8 @@ Gotchas:
 | Fabric API `UserNotLicensed` | Sign in once at app.fabric.microsoft.com with that account to get the free Fabric licence |
 | Fabric capacity: "Tenant ... wasn't recognized by Microsoft Fabric" | The tenant has never signed up for Fabric. A tenant admin signs in once at app.fabric.microsoft.com, then re-run `provision.sh`. Until then, `azd env set FABRIC_BRIDGE false` provisions everything else |
 | Search: `ResourcesForSkuUnavailable` | The region has no capacity for new search services (seen in swedencentral for Basic **and** serverless). `azd env set SEARCH_LOCATION francecentral` (fallback `uksouth`, `switzerlandnorth`) and re-provision. Only the search service moves; Foundry reaches it over its managed identity. Record the block in `region_matrix.capacity_notes.search` so preflight catches it |
-| `agent definition not found for service hosted-agent-example` | The `azure.ai.agents` azd extension needs the inline agent definition in `azure.yaml` (kept in the repo; do not delete it) |
+| `agent definition not found for service livewell-workshop-hosted` | The `azure.ai.agents` azd extension needs the inline agent definition in `azure.yaml`, and the service key must equal its `name` |
+| Hosted agent: 424 `session_not_ready`, or `postdeploy` hook failed | See the troubleshooting table in [hosted-agent-example/README.md](../assets/hosted-agent-example/README.md) |
 | Git Bash: paths like `C:/Program Files/Git/subscriptions/...` | Use the scripts; `scripts/lib/common.sh` sets `MSYS_NO_PATHCONV=1` |
 
 ## Script reference
@@ -265,6 +293,13 @@ Gotchas:
 | [fabric/ask.py](../../scripts/fabric/ask.py) | Ask the published data agent a question over MCP; `--json` |
 | [validate-narrative.py](../../scripts/validate-narrative.py) | Narrative gate: `--layers static,data,live` (or `all`), `--fill`, `--check`, `--runs`, `--pause`, `--questions`; writes `reference-answers.json` and `demos/NARRATIVE-VALIDATION-<date>.md`. `make -C content/assets validate` / `validate-live` |
 | [gen-citizens.py](../../scripts/gen-citizens.py) | `citizens.json` from the gold build; `--check`, `--from-onelake` |
+| [apply-guardrail.py](../../scripts/apply-guardrail.py) | `livewell-guardrails` + blocklist from `guardrails.yaml` onto every deployment (postprovision hook); `--check` |
+| [build-kb.py](../../scripts/build-kb.py) | Foundry IQ knowledge base `livewell-guides-kb` + its MCP connection; `--source onelake`, `--check` |
+| [connect-tools.py](../../scripts/connect-tools.py) | Activities MCP and Fabric IQ connections, profile tool URL, access checks; `--check` |
+| [hosted-postdeploy.py](../../scripts/hosted-postdeploy.py) | Hosted agent: identity RBAC + guardrail (azd postdeploy hook); `--check`, `--verify` |
+| [gen-schemas.py](../../scripts/gen-schemas.py) | Navigator JSON schemas and the hosted agent's `livewell.json` from the prompts and `livewell_common.py`; `--check` |
+| [validate-builder-rail.py](../../scripts/validate-builder-rail.py) | Runs Labs 1–4 as `INITIALS=test` with `--cleanup`, checks the key signals (KB citation, injected flyer blocked, ≥ 2 tools, Fabric for Mei and not for Rahim, hosted agent) and that nothing is left behind; `--labs`, `--fabric`, `--report`. `make -C content/assets validate-rail` |
+| [red-team.py](../../scripts/red-team.py) | AI Red Teaming Agent scan of a temporary guarded coach (or `--agent NAME`); `--lite`, `--yes`, `--upload`, `--parallel`. Needs `.venv-redteam` (`requirements-redteam.txt`) |
 | [seed-attendees.sh](../../scripts/seed-attendees.sh) | Lab accounts / file / guests → project, search, tracing and Fabric access; `--remove`, `--dry-run` |
 | [render-values.py](../../scripts/render-values.py) | `.azure/<env>/.env` → `content/config/values.md` |
 | [teardown.sh](../../scripts/teardown.sh) | Fabric workspace → `azd down --purge` → verify; `--pause-only` |

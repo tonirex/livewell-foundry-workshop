@@ -29,11 +29,23 @@ hooks:
       run: python scripts/select-params.py --hook
       interactive: false
       continueOnError: false
+  # Lab 2 blocklist items (not in Bicep: single-item GET returns 400 and breaks what-if).
+  postprovision:
+    posix:
+      shell: sh
+      run: python3 scripts/apply-guardrail.py
+      interactive: false
+      continueOnError: false
+    windows:
+      shell: pwsh
+      run: python scripts/apply-guardrail.py
+      interactive: false
+      continueOnError: false
 
 services:
-  # Lab 3 — activities MCP server (FastMCP, streamable HTTP at /mcp) on Azure Container Apps.
-  # Bicep creates a placeholder app tagged azd-service-name=mcp-activities; `azd deploy mcp-activities`
-  # builds the image remotely in ACR and swaps it in (Phase 4).
+  # Lab 3 — activities MCP server (FastMCP, streamable HTTP at /mcp) + the Navigator profile OpenAPI
+  # (/openapi.json, session resident only) on Azure Container Apps. Bicep creates the app (placeholder
+  # image until the first deploy; afterwards SERVICE_MCP_ACTIVITIES_IMAGE_NAME keeps the deployed image).
   mcp-activities:
     project: content/assets/mcp-activities
     host: containerapp
@@ -41,18 +53,28 @@ services:
     docker:
       path: Dockerfile
       remoteBuild: true
+    # Single source of truth is content/data/*.json; copy them into the build context (git-ignored).
+    hooks:
+      prepackage:
+        posix:
+          shell: sh
+          run: cp ../../data/activities.json ../../data/citizens.json ./
+        windows:
+          shell: pwsh
+          run: Copy-Item ../../data/activities.json, ../../data/citizens.json ./ -Force
 
-  # Lab 4 — facilitator-only hosted agent (livewell-workshop-hosted). Deployed with the azd AI agents
-  # extension (`azd deploy hosted-agent-example`) once Phase 4 adds main.py / requirements.txt. The
-  # extension targets the project in AZURE_AI_PROJECT_ID / AZURE_AI_PROJECT_ENDPOINT (Bicep outputs).
-  hosted-agent-example:
+  # Lab 4 — facilitator-only hosted agent: the Lab 4 sequential team (Agent Framework) behind a Responses
+  # endpoint. Code deploy (no Docker): `azd deploy livewell-workshop-hosted`; see
+  # content/assets/hosted-agent-example/README.md. The service key must equal `name` (azd postdeploy looks
+  # the agent up by the key). The extension targets AZURE_AI_PROJECT_ID / AZURE_AI_PROJECT_ENDPOINT (Bicep).
+  livewell-workshop-hosted:
     project: content/assets/hosted-agent-example
     host: azure.ai.agent
     language: python
     kind: hosted
     name: livewell-workshop-hosted
     displayName: LiveWell Coach (hosted)
-    description: LiveWell Coach packaged as a hosted agent (Responses protocol), facilitator demo in Lab 4.
+    description: LiveWell Coach team (Nutrition, Activity, Coach) as a hosted agent, facilitator demo in Lab 4.
     metadata:
       tags:
         - LiveWell
@@ -74,3 +96,21 @@ services:
       resources:
         cpu: "0.5"
         memory: 1Gi
+    # Postdeploy hook (scripts/hosted-postdeploy.py), run with the repo .venv active:
+    # * grants the agent identity (created on first deploy) Foundry User on the project, which it needs to
+    #   call the models and read the tool connections;
+    # * attaches livewell-guardrails. The extension does not expand ${VAR} in `policies` for hosted agents
+    #   and a literal ID would tie this file to one tenant, so the hook publishes a new version with
+    #   rai_config = the full resource ID of livewell-guardrails.
+    hooks:
+      postdeploy:
+        posix:
+          shell: sh
+          run: python3 ../../../scripts/hosted-postdeploy.py
+          interactive: false
+          continueOnError: false
+        windows:
+          shell: pwsh
+          run: python ../../../scripts/hosted-postdeploy.py
+          interactive: false
+          continueOnError: false

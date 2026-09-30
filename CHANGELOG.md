@@ -4,6 +4,47 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Phase 4: Builder-rail code (`phase-4-labs`)
+
+- `content/assets/common/livewell_common.py`: shared helper for every lab. It covers settings from `.env` and the
+  azd env, `livewell-<INITIALS>-<role>` naming with protected prefixes, strict schemas with a guide-id enum, retries
+  on transient errors, tools (KB, activities MCP with approvals, Fabric IQ, profile function, memory), `ask()` with
+  function calls, approvals and guardrail blocks, hosted-agent routing, Lab 2 evaluation helpers, Agent Framework
+  helpers, recorded checks, and `cleanup()`.
+- Lab scripts in `# %%` cell form with `# 👉` retype lines, `--verbose` and `--cleanup`:
+  `lab1_knowledge.py` (`--intake`), `lab2_govern.py` (`--eval-all`, `--no-eval`, `--upload`), `lab3_tools.py`
+  (`--fabric`, `--no-memory`) and `lab4_multiagent.py` (`--fabric`, `--no-handoff`; sequential and handoff Agent
+  Framework teams, Fabric insights agent, hosted-agent smoke test).
+- Guardrail: `content/config/guardrails.yaml` drives the Bicep blocklist, the policy and the deployment
+  attachments; `scripts/apply-guardrail.py` (postprovision) syncs the blocklist items and repairs drift (`--check`).
+- `scripts/build-kb.py`: Foundry IQ knowledge base `livewell-guides-kb` (Blob or OneLake source) plus its MCP
+  connection and a retrieval check.
+- `content/assets/mcp-activities/`: FastMCP activities server (`find_activities`, `register_interest`) plus the
+  session-scoped profile REST/OpenAPI endpoint, deployed with `azd deploy mcp-activities`.
+- `scripts/connect-tools.py`: activities MCP and Fabric IQ connections, with end-to-end checks.
+- `content/assets/hosted-agent-example/`: Agent Framework hosted agent `livewell-workshop-hosted` (code deploy), and
+  `scripts/hosted-postdeploy.py` (azd postdeploy hook). The hook grants the agent identity Foundry User and attaches
+  `livewell-guardrails`; `--check` and `--verify` are available.
+- `content/eval/livewell-eval.jsonl` (30 rows) and the custom evaluator `advice_matches_conditions.py`.
+- `scripts/red-team.py` and `requirements-redteam.txt`: facilitator AI Red Teaming Agent scan (lite ≈ US$0.85,
+  full ≈ US$8), with the cost printed before the scan starts.
+- `scripts/validate-builder-rail.py`: runs Labs 1–4 as `INITIALS=test`, checks the SPEC signals and leftovers, and
+  writes a report.
+- `scripts/gen-schemas.py` and `content/config/schemas/`: paste-ready Navigator schemas plus the hosted agent's
+  `livewell.json`.
+- Makefile targets `notebooks`, `validate-rail` and `clean-agents`. `validate-narrative.py` now reads the
+  coach-routing row from the Lab 3 run.
+- Models: `gpt-5.4-mini` deployment (200K TPM) for the Lab 3 coach with memory. Chat TPM caps go from 100K to 400K.
+  RBAC is added for memory (the project identity) and the hosted agent identity.
+- Storage: MCAPS policy opt-out tag, a resource-instance rule for Search, and `storageNetworkDefaultAction`
+  (`Allow` by default: Entra-only public access, so Lab 2 and the red team can publish evaluation runs; `Deny`
+  admits only Search and trusted services).
+- Prompts: the `nutrition` and `activity` specialist blocks now end every answer with the guide ids used (moved
+  from the `handoff` block), so the Lab 4 sequential Coach can cite them; `livewell.json` regenerated.
+- Docs: lab pages 1–4 (Builder sections, JSON schema instead of JSON object, troubleshooting), ADMIN-SETUP
+  (T-3 steps 4–7, the T-1 rail validation and red team, cost and RBAC rows, script reference), versions.md,
+  ASSUMPTIONS 4.1–4.23.
+
 ### Phase 3b: narrative gate (`phase-3b-narrative-gate`)
 
 - `scripts/validate-narrative.py` with three layers (`--layers static,data,live` or `all`), `--fill`, `--check`,

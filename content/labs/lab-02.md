@@ -64,7 +64,7 @@ Patterns: #5 Explainability & Traceability; #7 Handling Uncertainty; #10 Governa
 12. Open the trace for one blocked run and one allowed run. Look for guardrail outcome, model call, tool calls, token count and cost.
 13. Open **Evaluations** and inspect or run the shared batch over `content/eval/livewell-eval.jsonl` if the facilitator enables it. Compare the Lab 1 version with the guarded version.
 
-> **Facilitator-only:** AI Red Teaming Agent runs through the `azure-ai-evaluation` SDK because portal red teaming is not available in `swedencentral`. A normal scan costs about **US$42**; participants may run the lite scan only if the facilitator enables it.
+> **Facilitator-only:** AI Red Teaming Agent runs through the `azure-ai-evaluation` SDK ([`scripts/red-team.py`](../../scripts/red-team.py)) because portal red teaming is not available in `swedencentral`. The facilitator runs one full scan before the day (4 risk categories × 12 objectives × 4 strategies, about **US$8**; the budget allows five, **US$42**) and shows its scorecard here. The lite scan (2 categories × 5 objectives × 2 strategies) costs about **US$0.85**; participants may run it only if the facilitator enables it. In the Phase 4 dry run the guarded coach scored an attack success rate of **0%** (0 of 20 attacks, 9 of them blocked by the guardrail at the input).
 
 What to compare:
 

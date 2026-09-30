@@ -1,0 +1,56 @@
+{
+  "name": "livewell_evidence",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "advice": {
+        "type": "string"
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "low",
+          "medium",
+          "high"
+        ]
+      },
+      "supporting_guides": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "lg-01-healthy-plate",
+            "lg-02-physical-activity-guideline",
+            "lg-03-nutri-grade",
+            "lg-04-salt-and-sugar-tips",
+            "lg-05-eating-for-pre-diabetes",
+            "lg-06-exercise-by-condition",
+            "lg-07-sleep",
+            "lg-08-screening-schedule",
+            "lg-09-hazy-day-activity",
+            "lg-10-active-after-60",
+            "lg-11-faq"
+          ]
+        }
+      },
+      "rationale": {
+        "type": "string"
+      },
+      "personalisation_flags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "advice",
+      "confidence",
+      "supporting_guides",
+      "rationale",
+      "personalisation_flags"
+    ]
+  }
+}

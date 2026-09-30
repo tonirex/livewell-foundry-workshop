@@ -33,7 +33,7 @@ Patterns: #1 Multi-Document Understanding; #4 Knowledge Retrieval.
    - **Output mode** ⚠️ preview.
    - **Retrieval instructions** ⚠️ preview.
 5. In **Instructions**, keep the Lab 0 [`base`](../prompts/coach-instructions.md#base) block and append the [`knowledge`](../prompts/coach-instructions.md#knowledge-lab-1) block from the shared instruction file.
-6. Set **Response format** to **JSON object** and save a new version.
+6. Set **Response format** to **JSON schema**, paste the whole of [`lab1-answer.schema.json`](../config/schemas/lab1-answer.schema.json), and save a new version. The schema only accepts real guide ids in `cited_sources`, so the agent cannot invent a source. Do not pick **JSON object**: that mode needs the word "json" in every chat message and otherwise fails with a 400 error.
 7. Send (`lab1_prediabetes_eat`):
 
    ```text
@@ -116,6 +116,7 @@ Paste into the checkpoint form: the JSON reply for `lab1_prediabetes_eat`, plus 
 | It invents a supplement source | Tighten the knowledge block by re-copying it, then send `lab1_supplement` again in a new conversation. |
 | Builder script sees 5xx from the service | Re-run with `--verbose`; the script retries transient 5xx automatically. |
 | 429 or quota errors | Switch to `gpt-4.1-mini` or wait for the facilitator's quota reset guidance. |
+| 400 "must contain the word 'json'" | The response format is **JSON object**. Switch to **JSON schema** and paste [`lab1-answer.schema.json`](../config/schemas/lab1-answer.schema.json). |
 
 ## Where next
 

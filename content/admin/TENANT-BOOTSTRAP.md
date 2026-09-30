@@ -75,8 +75,8 @@ On a fresh subscription, expect to request:
 
 - **Fabric capacity units:** 2 CU in `swedencentral`. This is often 0 on a new subscription. The Fabric trial is refused;
   the workshop needs a paid F2 or larger.
-- **Foundry model quota** in `swedencentral`: `model-router`, `gpt-4.1-mini` and `text-embedding-3-large`,
-  100K TPM each, Global Standard.
+- **Foundry model quota** in `swedencentral`, Global Standard: `model-router` and `gpt-4.1-mini` 400K TPM each,
+  `gpt-5.4-mini` 200K TPM (Lab 3 coach with memory), `text-embedding-3-large` 100K TPM.
 
 Lead time for quota can be several business days. Start this at T-10 (see [ADMIN-SETUP.md](ADMIN-SETUP.md#t-10-quota-requests)).
 

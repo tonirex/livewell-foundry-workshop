@@ -1,6 +1,6 @@
 # versions.md: pinned tools, SDKs and preview surfaces
 
-Last checked: 2026-09-29 (Phase 2). Re-check before each delivery with `bash scripts/preflight.sh <env>`.
+Last checked: 2026-09-30 (Phase 4). Re-check before each delivery with `bash scripts/preflight.sh <env>`.
 
 ## Participant / facilitator tooling
 
@@ -54,14 +54,24 @@ Cost Management query 2023-11-01, Fabric capacity suspend/resume 2023-11-01). Fa
 
 | Package | Pin | Notes |
 |---|---|---|
-| `azure-ai-projects` | `>=2.0.0` (2.7.0 current) | New Agents API (`agents.create_version`, Responses) |
-| `azure-identity` | `>=1.19` | `DefaultAzureCredential` / device code |
-| `openai` | `>=1.99` | Responses client from `project.get_openai_client()` |
+| `azure-ai-projects` | `>=2.0.0` (2.6.1 tested) | New Agents API (`agents.create_version`, `create_version_from_code`, Responses, `get_openai_client(agent_name=...)` for hosted agents) |
+| `azure-identity` | `>=1.19` (1.25.3 tested) | `DefaultAzureCredential` / device code |
+| `openai` | `>=1.99` (3.17.0 tested) | Responses client from `project.get_openai_client()` |
 | `azure-search-documents` | `==12.1.0b1` | Foundry IQ knowledge base API (per microsoft/iq-series); 12.1.0b2 exists but is not validated |
-| `azure-ai-evaluation` | `>=1.10` (1.18.7 current) | Groundedness, relevance, safety evaluators |
-| `agent-framework` | `>=1.0` (1.19.0 current) | Hosted agent (Lab 4 optional) |
-| `mcp` | `<2` | FastMCP activities server; mcp 2.x changed the server API (casepal lesson) |
+| `azure-ai-evaluation` | `>=1.10` (1.18.7 tested) | Groundedness, relevance, safety evaluators |
+| `agent-framework-core` | `>=1.19,<2` (1.19.0 tested) | Lab 4: `Agent`, agent middleware (`text_only`) |
+| `agent-framework-foundry` | `>=1.13,<2` (1.13.1 tested) | Lab 4: `FoundryChatClient`, hosted MCP tools |
+| `agent-framework-orchestrations` | `>=1.2,<2` (1.2.0 tested) | Lab 4: `SequentialBuilder(output_from="all")`, `HandoffBuilder` (autonomous mode) |
+| `agent-framework-foundry-hosting` | `==1.0.0b260918` (hosted agent only) | `ResponsesHostServer`; pinned with the rest in `content/assets/hosted-agent-example/requirements.txt` |
+| `mcp` | `<2` (1.30.0 tested) | FastMCP activities server; mcp 2.x changed the server API (casepal lesson) |
 | `pyyaml`, `python-pptx`, `fpdf2`, `jupytext` | see `requirements.txt` | Content build (deck, guide PDFs, notebooks) |
+
+Facilitator red team (`requirements-redteam.txt`, its own venv): `azure-ai-evaluation[redteam]==1.18.7`, which
+brings PyRIT 0.11.0 and pins its own dependencies.
+
+Verified end to end on 2026-09-30 (Phase 4, `mcaps` environment): Labs 1–4 with `INITIALS=test`, hosted agent
+`livewell-workshop-hosted` deployed with azd extension `azure.ai.agents` 1.0.0-beta.17 (code deploy,
+`python_3_13`, remote build), red-team lite scan.
 
 ## Models
 
@@ -69,9 +79,10 @@ Deployment names equal model names (see `models:` in `content/config/workshop.ya
 
 | Role | Model | SKU | Region |
 |---|---|---|---|
-| Default | model-router | GlobalStandard, 100K TPM cap | swedencentral (availability is checked in Phase 2 preflight) |
-| Fallback | gpt-4.1-mini | GlobalStandard, 100K TPM cap | swedencentral |
-| Embeddings | text-embedding-3-large | GlobalStandard | swedencentral |
+| Default | model-router | GlobalStandard, 400K TPM cap | swedencentral (availability is checked in Phase 2 preflight) |
+| Fallback | gpt-4.1-mini (2025-04-14) | GlobalStandard, 400K TPM cap | swedencentral (also Lab 2 judges, memory extraction, KB query planning) |
+| Memory coach | gpt-5.4-mini (2026-03-17) | GlobalStandard, 200K TPM cap | swedencentral (Lab 3 coach with memory; retirement 2027-09-21) |
+| Embeddings | text-embedding-3-large | GlobalStandard, 100K TPM cap | swedencentral |
 
 PTU deployments and partner models are never used.
 
@@ -83,9 +94,9 @@ PTU deployments and partner models are never used.
 | Model router | Lab 0 | Fixed `gpt-4.1-mini` deployment |
 | Guardrails (new Foundry portal) and custom blocklists | Lab 2 | Content filter on the deployment; prebuilt demo agent `livewell-demo-guarded` |
 | Prompt shields / indirect-attack detection | Lab 2 | Instruction-level defence plus a facilitator demo |
-| Memory (Foundry Agent Service) | Lab 3 | Conversation-scoped preferences in instructions |
+| Memory (Foundry Agent Service) | Lab 3 | Conversation-scoped preferences in instructions; the coach with memory runs on `gpt-5.4-mini` (memory is not searched behind model-router) |
 | Connected agents / multi-agent | Lab 3 | Single agent with specialist instruction blocks |
 | Fabric IQ tool (Ontology Agent via OneLake Catalog) | Fabric step, Lab 4 | Facilitator-only demo from `demos/`; pre-computed numbers from `scripts/r360.py` |
 | Fabric ontology (preview), graph model and data agent over the ontology | Phase 3 | Fabric data agent over the lakehouse tables |
-| Hosted agents (Agent Framework) | Lab 4 optional | Prompt agent published to Teams / M365 |
+| Hosted agents (Agent Framework, code deploy) | Lab 4 facilitator demo | Run the same team locally (`lab4_multiagent.py` section 4); prompt agent published to Teams / M365 |
 | Foundry MCP server | Admin | `az` and SDK scripts |

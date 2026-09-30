@@ -17,7 +17,7 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
-SKIP_DIRS = {".git", ".venv", "venv", "node_modules", "_refs", ".azure", "__pycache__", "out"}
+SKIP_DIRS = {".git", ".venv", ".venv-redteam", ".runs", "venv", "node_modules", "_refs", ".azure", "__pycache__", "out"}
 TEXT_EXT = {".md", ".json", ".yaml", ".yml", ".py", ".txt", ".csv", ".sh", ".ps1", ".bicep", ".jsonl", ".ipynb"}
 
 GUID_RE = re.compile(r"\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b")
@@ -45,7 +45,7 @@ LAB_SECTIONS = [
     "Where next",
 ]
 LAB_PAGES = ["lab-00", "lab-01", "lab-02", "lab-03", "lab-04", "fabric-step", "bridge-spotlight"]
-COACH_BLOCKS = ["base", "knowledge", "safety", "tools", "fabric", "nutrition", "activity", "insights"]
+COACH_BLOCKS = ["base", "knowledge", "safety", "tools", "fabric", "nutrition", "activity", "insights", "handoff", "merge"]
 
 
 class Report:
@@ -444,7 +444,7 @@ def check_fabric_blueprint(r: Report) -> None:
 
 def check_generators(r: Report) -> None:
     problems = []
-    for script in ("gen-activity.py", "gen-citizens.py"):
+    for script in ("gen-activity.py", "gen-citizens.py", "gen-schemas.py"):
         res = subprocess.run([sys.executable, str(ROOT / "scripts" / script), "--check"],
                              cwd=ROOT, capture_output=True, text=True, encoding="utf-8")
         if res.returncode != 0:

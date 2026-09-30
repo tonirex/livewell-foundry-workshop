@@ -322,7 +322,9 @@ Where an entry changes something SPEC.md states, it says so.
   build and the gate. For the workshop day, when 20 attendees can ask at once, consider F4 (about US$0.76/h in
   swedencentral, twice F2); this is not measured yet (Phase 5 dry run).
 - **3b.8** The coach routing row (Fabric IQ call for Mei, none for Rahim) is **SKIP** until Phase 4 adds the Fabric IQ
-  connection and `lab3_tools.py --fabric`, which asserts it.
+  connection and `lab3_tools.py --fabric`, which asserts it. *Phase 4:* the live layer now reads that row from the
+  latest Lab 3 Builder run with the Fabric step (`content/assets/.runs/lab3-*.json`, written by
+  `make -C content/assets validate-rail`) and reports SKIP only when there is none.
 - **3b.9** `make validate` (in `content/assets/`, where SPEC.md places the Makefile) runs `check-content.py` and the
   static and data layers with `--check`; `make validate-live ENV=<env>` runs all layers. The CI workflow
   `validate-narrative.yml` is manual (`workflow_dispatch`). `static,data` needs no secrets. `all` needs an Entra app with
@@ -332,3 +334,139 @@ Where an entry changes something SPEC.md states, it says so.
   locally with a user token.
 - **3b.10** The report is `demos/NARRATIVE-VALIDATION-<date>.md`; a later run on the same day overwrites it. It keeps
   every raw answer in a `<details>` block so a failure can be read without re-running.
+
+## Phase 4: Builder-rail code
+
+### Guardrail
+
+- **4.1** One source of truth: `content/config/guardrails.yaml`. `infra/modules/foundry.bicep` loads it to create the
+  blocklist `livewell-medication-dosage` and the policy `livewell-guardrails`, and attaches the policy to the three
+  chat deployments (`model-router`, `gpt-4.1-mini`, `gpt-5.4-mini`; embeddings excluded). Because the deployments
+  carry it, even Lab 2's "bare" v1 (agent `rai_config` = `Microsoft.DefaultV2`) blocks some red flags: DefaultV2
+  blocked the injected flyer (jailbreak) and usually the medication prompt (content filter). The Lab 2 headline
+  names the layers that fired, so the v1-vs-v2 difference stays visible.
+- **4.2** The Cognitive Services RP answers GET on a single `raiBlocklistItems/{name}` with HTTP 400 in every API
+  version (LIST and PUT work), which makes `azd provision --preview` / what-if fail. Bicep therefore creates the
+  blocklist without items and the azd postprovision hook `scripts/apply-guardrail.py` PUTs them (idempotent;
+  `--check` reports drift).
+- **4.3** ARM filter names, verified on `Microsoft.CognitiveServices` 2025-06-01: groundedness is
+  **`Ungrounded Material`** (`Groundedness` is rejected), Prompt Shields indirect is `Indirect Attack`. Deployments
+  reference the policy by name; an **agent** `rai_config` needs the **full ARM ID**
+  (`<account id>/raiPolicies/livewell-guardrails`, exposed as `lw.rai_policy_id()` and the azd output
+  `LIVEWELL_RAI_POLICY_ID`). The agent path does not scan the system instructions against the blocklist; a judge
+  call does (4.13), so no instruction block may contain a blocklisted phrase.
+- **4.14** Tenant governance automation can rewrite a custom RAI policy after provisioning. In the MCAPS tenant
+  `livewell-guardrails` was replaced by a single "Indirect Attack" filter with no blocklist. `apply-guardrail.py`
+  re-asserts the policy body and the attachments; run it (or `--check`) on the workshop morning (ADMIN-SETUP).
+
+### Knowledge, storage and tools
+
+- **4.4** The MCAPS policy `StorageAccount_PublicNetwork_Modify` forces `publicNetworkAccess=Disabled` on storage
+  unless the resource or group carries `SecurityControl=Ignore`. `infra/env/mcaps.bicepparam` sets that tag
+  (`storagePolicyOptOutTag`). The storage firewall's default action is a parameter, `storageNetworkDefaultAction`:
+  **Allow** since 2026-09-30 (4.15), still Entra-only (shared keys and anonymous blob access disabled). With `Deny`
+  only the search service (resource-instance rule; its managed identity reads the guides across regions,
+  francecentral → swedencentral) and trusted Azure services get in, and `build-kb.py` adds the caller's IP for the
+  upload only. Microsoft Defender adds its own `StorageDataScanner` rule, which what-if shows as a removal; that is
+  expected noise.
+- **4.5** Knowledge base `livewell-guides-kb`: indexed Blob source (OneLake Files via `--source onelake`), reasoning
+  effort **low**, **extractive** output (the agent writes the answer and cites guide ids), `gpt-4.1-mini` for query
+  planning. The search service supports KB API versions 2025-11-01-preview, 2026-04-01 (GA) and
+  2026-05-01-preview; the agent reaches the KB through its MCP endpoint on 2026-05-01-preview via the
+  `livewell-guides-kb-mcp` connection (project managed identity). A vague query ("based on my profile…") returns
+  nothing, so the knowledge block tells the agent to search by topic.
+- **4.6** Activities MCP server: FastMCP on `mcp<2`, Container App scaling to zero by default. The first call after
+  idle waits about 25 s, so the labs call `lw.warm_activities()` first and the workshop day provisions with
+  `MCP_MIN_REPLICAS=1`. `register_interest` is not idempotent, so a response that can include an approval round is
+  never retried on timeout.
+- **4.7** The Navigator `livewell-profile` OpenAPI tool is served by the same container: `GET /profile/me` (or the
+  session resident's id) returns the profile without `resident_id` or `persona_note`; any other id gets 403;
+  `/openapi.json` has `operationId` `get_citizen_profile`. The Builder rail answers the same function locally from
+  `content/data/citizens.json`.
+- **4.8** Fabric IQ connection `livewell-fabric-resident360`: RemoteTool with **UserEntraToken** (audience
+  `https://analysis.windows.net/powerbi/api`) to the data agent's MCP endpoint, created by `connect-tools.py` (needs
+  Foundry Project Manager). The docs recommend managed OAuth or a BYO Entra app and list UserEntraToken for private
+  link; it works here on the public host. A Fabric IQ call takes 60–126 s, so those calls use a 300 s timeout, and the
+  capacity must be **Active**.
+
+### Models, memory and output format
+
+- **4.9** Memory (preview): the memory store calls the chat and embedding deployments as the **project** managed
+  identity, which therefore needs Foundry User on the account (`infra/modules/rbac.bicep`); without it memory search
+  fails with 401. Memory search does not run behind `model-router` (no `memory_search_call` is emitted), so the coach
+  with memory runs on a fixed deployment. Scopes must match `[A-Za-z0-9_-]` (`livewell-<INITIALS>`).
+- **4.10** The Lab 3 coach with memory runs on **`gpt-5.4-mini`** (200K TPM cap; retirement 2027-09-21), approved by
+  Antonia. On `gpt-4.1-mini`, strict JSON plus tools sometimes repeated the whole reply (19 copies in one response),
+  skipped the knowledge base or invented guide ids. The memory store's own chat model, the Lab 2 judges and KB query
+  planning stay on `gpt-4.1-mini`.
+- **4.11** Structured output uses a strict **JSON schema**, never `json_object`: a prompt agent with `json_object`
+  fails every request with HTTP 400 ("input messages must contain the word 'json'"; instructions do not count). The
+  schemas carry an **enum of guide ids**, which stops invented citations. `scripts/gen-schemas.py` writes the
+  paste-ready Navigator schemas (`content/config/schemas/`) and the hosted agent's `livewell.json`; `--check` keeps
+  them in step.
+- **4.12** Chat deployments are capped at **400K TPM** (`gpt-5.4-mini` 200K, embeddings 100K). SPEC.md asks for a cap
+  "e.g. 100K", but at 100K three Lab 3 coaches running at once already hit 429. Global Standard is pay-per-token, so a
+  higher cap costs nothing by itself. `chatTpmCapThousands` allows up to 1000.
+
+### Evaluation
+
+- **4.13** Lab 2 judges run on `gpt-4.1-mini`, which carries the guardrail, and a judge prompt embeds the red-flag
+  text, so the blocklist blocks the judge. Red-flag and routing rows are therefore scored with code metrics only
+  (`safe_outcome`, `route_match`, blocked); the LLM judges score grounded, non-blocked rows. `safe_outcome` also
+  accepts route `refuse` on a red-flag row (declining the water-only plan is safe; one run chose it over
+  `clinician`), while `route_match` stays strict. The default participant
+  run scores a 6-row subset (`--eval-all` runs all 30) to protect TPM. `task_adherence` is effectively pass/fail.
+- **4.15** Evaluation results stay local by default; `--upload` publishes them to the project through its storage
+  connection (the knowledge account), which needs the project identity's Blob role and network access. **Decided
+  2026-09-30 (Antonia): allow public network access** (`storageNetworkDefaultAction='Allow'`, Entra-only; shared
+  keys stay disabled), so Lab 2 and the red-team script can publish runs from laptops. Set `'Deny'` to lock the
+  account down again; uploads then fail from outside Azure and the scripts keep the local scores.
+
+### Multi-agent and Agent Framework
+
+- **4.16** Specialists are **function tools** (`livewell-nutrition`, `livewell-activity`) that the script answers by
+  calling the specialist agents: the v2 prompt-agent API has no connected-agent tool. Only the coach holds
+  `register_interest`, so only the coach can ask for approval. The Activity specialist can call `find_activities`
+  itself; the Lab 3 compound check accepts a search done by the coach or through that specialist.
+- **4.17** Agent Framework (Lab 4) quirks. (a) A downstream agent fails intermittently ("the model deployment
+  encountered an error") when the conversation holds another agent's MCP call and result items; a `text_only`
+  agent middleware passes text-only messages. (b) `SequentialBuilder` returns only the last agent unless
+  `output_from="all"`. (c) `HandoffBuilder` needs local agents with
+  `require_per_service_call_history_persistence=True`; without autonomous mode an agent that answers without handing
+  off ends the run, so Nutrition runs in autonomous mode with one turn and a "then hand off" rule. (d) Installing the
+  Agent Framework packages moves `azure-ai-projects` to 2.6.1, which is the tested version. (e) `text_only` drops the
+  specialists' citation annotations, so the tool-less Coach can only copy guide ids that appear in their text: one
+  validation run returned an empty `supporting_guides`. The `nutrition` and `activity` blocks therefore end every
+  answer with the guide ids used (this line moved there from the `handoff` block).
+
+### Hosted agent
+
+- **4.18** The `policies` block in `azure.yaml` is **not env-expanded** for hosted agents, and a bad policy id
+  **fails open**. The azd postdeploy hook `scripts/hosted-postdeploy.py` therefore attaches `livewell-guardrails` (full
+  ARM ID) itself. Code-deployed versions reject a JSON `create_version` ("code_configuration is not supported"), so the
+  hook downloads the deployed code and re-creates the version with `create_version_from_code`: **each deploy adds two
+  versions**, the second one guarded. `--verify` sends the blocklisted prompt and expects a block.
+- **4.19** The hosted agent's own identity needs **Foundry User on the project**; without it the container crashes at
+  start-up (reading connections) and every call returns 424 `session_not_ready`. The identity exists only after the
+  first deploy, so the hook grants the role (project scope, ARM REST, retries until the principal replicates). A
+  cold start after scale-to-zero can also return 424 `session_not_ready` once; `lw.retry` treats that code as
+  transient (at least 15 s between tries) and Lab 4 records a failed check instead of crashing if it persists.
+- **4.20** Hosted agents answer only on the agent endpoint (`{project}/agents/<name>/endpoint/protocols/openai`), not
+  through `agent_reference` on the project endpoint. `lw.ask` routes hosted agents there. **Unverified:** that a
+  participant with only Foundry User can call the endpoint; Lab 4 keeps the hosted agent a facilitator demo.
+- **4.21** `azd ai agent run` uses `uv` when it is on `PATH`; behind corporate TLS inspection `uv` fails the TLS
+  handshake. Uninstalling it or removing it from `PATH` makes azd fall back to pip (hosted README troubleshooting).
+
+### Red team and validation
+
+- **4.22** AI Red Teaming Agent runs through `azure-ai-evaluation[redteam]` (PyRIT) in its own venv
+  (`.venv-redteam`, `requirements-redteam.txt`), because PyRIT pins its own dependencies. SPEC.md says "≈ US$42/scan"
+  in the lab table but budgets five scans for US$42 in the cost table; `scripts/red-team.py` follows the cost table
+  (US$0.042 per attack): full scan 192 attacks ≈ US$8, lite 20 attacks ≈ US$0.85. It scans a temporary guarded coach
+  and deletes it; results stay local unless `--upload` (4.15). Lite run on 2026-09-30: ASR 0% (0/20; 9 blocked at the
+  input).
+- **4.23** `scripts/validate-builder-rail.py` runs each lab as a subprocess (`INITIALS=test`, `--cleanup`,
+  `LIVEWELL_AUTO_APPROVE=1`, `--fabric` for Labs 3 and 4 when FABRIC_BRIDGE is on), reads the checks each lab records in
+  `content/assets/.runs/<lab>-test.json`, maps the SPEC.md signals onto them, and fails if any agent or memory store
+  named `livewell-test-*` is left. The Lab 4 hosted signal is SKIP when the hosted agent is not deployed. Lab 2 uses
+  the default 6-row eval subset.

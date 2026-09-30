@@ -36,11 +36,13 @@ You will attach the shared Foundry IQ knowledge base, add the `knowledge` instru
 
    > 📸 **Screenshot slot** · `screenshots/lab-01/05-knowledge-instructions.png` · Instructions with base plus knowledge blocks saved
 
-6. Set the response format to JSON.
+6. Set the response format to the Lab 1 JSON schema.
 
-   **Response format → JSON object → Save**
+   **Response format → JSON schema → paste all of [`lab1-answer.schema.json`](../config/schemas/lab1-answer.schema.json) → Save**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-01/06-json-response-format.png` · Response format set to JSON object
+   Do not pick **JSON object**: it needs the word "json" in every chat message and otherwise returns a 400 error. The schema also limits `cited_sources` to the real guide ids.
+
+   > 📸 **Screenshot slot** · `screenshots/lab-01/06-json-response-format.png` · Response format set to JSON schema with livewell_answer pasted
 
 7. Ask the pre-diabetes food question.
 

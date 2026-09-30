@@ -84,6 +84,7 @@ def main() -> int:
         ("Project deep link", portal_link()),
         ("Default model deployment", models["default"]),
         ("Fallback model deployment", models["fallback"]),
+        ("Memory coach deployment (Lab 3)", models["memory"]),
         ("Embedding deployment", models["embeddings"]),
         ("Knowledge base", names["knowledge_base"]),
         ("Search service", g("AZURE_SEARCH_SERVICE_NAME")),

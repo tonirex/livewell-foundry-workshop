@@ -313,6 +313,7 @@
       "description": "Lab 3 pattern #2 Evidence-Based Decision Support.",
       "required": ["advice", "confidence", "supporting_guides", "rationale", "personalisation_flags"],
       "enums": {"confidence": ["low", "medium", "high"]}
-    }
+    },
+    "guide_id_enum": "cited_sources (Lab 1) and supporting_guides (Lab 3) accept only the guide ids = file stems of content/knowledge/livewell-guides/lg-*.md. Paste-ready schemas: content/config/schemas/ (scripts/gen-schemas.py)."
   }
 }

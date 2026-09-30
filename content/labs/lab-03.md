@@ -31,8 +31,8 @@ Patterns: #2 Evidence-Based Decision Support; #3 Workflow Orchestration; #6 Huma
 4. Configure MCP approval:
    - `find_activities` needs no approval.
    - `register_interest` must require approval before the tool call proceeds.
-5. Enable **Memory** ⚠️ preview if it is available in your project. If it is not available, skip only the memory checkpoint.
-6. In **Instructions**, keep the base, knowledge and safety blocks, then append the [`tools`](../prompts/coach-instructions.md#tools-lab-3) block. Save a new version.
+5. Enable **Memory** ⚠️ preview if it is available in your project, and switch the agent **Model** to **`gpt-5.4-mini`**: memory is not searched when the agent runs on `model-router`. If memory is not available, stay on `model-router` and skip only the memory checkpoint.
+6. In **Instructions**, keep the base, knowledge and safety blocks, then append the [`tools`](../prompts/coach-instructions.md#tools-lab-3) block. Set **Response format** → **JSON schema** and paste all of [`lab3-evidence.schema.json`](../config/schemas/lab3-evidence.schema.json) in place of the Lab 1 schema. Save a new version.
 7. Send (`lab3_profile_tailored`):
 
    ```text
@@ -88,10 +88,10 @@ What the script does per cell:
 1. Loads the session resident from [citizens.json](../data/citizens.json).
 2. Creates `get_citizen_profile` as a client-side FUNCTION tool with a strict schema.
 3. Answers that function locally from `content/data/citizens.json` and only for the session resident.
-4. Attaches the activities MCP connection **`livewell-activities-mcp`** with approval required for `register_interest`.
-5. Enables memory when the project exposes the preview capability.
-6. Creates or updates **`livewell-<INITIALS>-nutrition`** and **`livewell-<INITIALS>-activity`** specialists, then connects them to the coach.
-7. Runs the profile, activity, approval, memory and specialist prompts.
+4. Attaches the activities MCP connection **`livewell-activities-mcp`** with approval required for `register_interest`, and wakes the MCP server (it scales to zero between sessions, so the first call can take ~25 s).
+5. Enables memory when the project exposes the preview capability. The coach with memory runs on **`gpt-5.4-mini`** because memory is not searched behind `model-router`.
+6. Creates or updates **`livewell-<INITIALS>-nutrition`** and **`livewell-<INITIALS>-activity`** specialists and gives them to the coach as function tools: the script runs each specialist when the coach calls it and returns the answer.
+7. Runs the profile, activity, approval, memory and specialist prompts. Replies use the strict evidence schema, where `supporting_guides` only accepts real guide ids.
 
 Use `--verbose` for tool-call and approval details. Use `--cleanup` to delete only `livewell-<INITIALS>-*` agents. Lines to retype are marked `# 👉`.
 
@@ -113,7 +113,8 @@ Paste into the checkpoint form: the trace tool-call list for `lab3_hazy_indoor_s
 | Approval card is not shown | Check MCP approval settings. `register_interest` must require approval; `find_activities` can be auto-approved. |
 | Agent registers without approval | Stop using that version. Reconfigure MCP approval and re-copy the [`tools`](../prompts/coach-instructions.md#tools-lab-3) block. |
 | Memory ⚠️ preview is not available | Skip the memory checkpoint and continue with profile + MCP. |
-| Memory recall ignores preferences | Use a new conversation after `lab3_memory_set`, and allow time for memory processing. |
+| Memory recall ignores preferences | Use a new conversation after `lab3_memory_set`, and allow time for memory processing. Check the agent model is `gpt-5.4-mini`, not `model-router`. |
+| 400 "must contain the word 'json'" | The response format is **JSON object**. Switch to **JSON schema** and paste [`lab3-evidence.schema.json`](../config/schemas/lab3-evidence.schema.json). |
 | Tool call returns another resident or prints the resident identifier | Use the Builder function tool path or re-check the OpenAPI backend; the lab allows only the session resident. |
 | 5xx or MCP timeout | Retry once; the Builder script handles transient 5xx and the MCP server may take a moment to wake. |
 
