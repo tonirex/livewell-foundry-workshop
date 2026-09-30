@@ -1,0 +1,47 @@
+# LiveWell guardrail (RAI policy) — single source of truth.
+# infra/modules/foundry.bicep loads this file (loadYamlContent) to create the blocklist + policy and to
+# attach the policy to the chat deployments; the blocklist items are synced by the azd postprovision hook
+# (scripts/apply-guardrail.py); content/assets/lab2_govern.py prints it; the hosted agent
+# references the policy by its full ARM resource ID (azd output LIVEWELL_RAI_POLICY_ID).
+# ARM filter names verified against Microsoft.CognitiveServices 2025-06-01 (ASSUMPTIONS.md 4.3).
+policy_name: livewell-guardrails
+base_policy: Microsoft.DefaultV2
+mode: Blocking
+# Chat deployments that carry the policy (names from workshop.yaml models:). Embeddings are excluded.
+attach_to: [model-router, gpt-4.1-mini, gpt-5.4-mini]
+content_filters:
+  # Harm categories on input (Prompt) and output (Completion). Self-harm is Low on both sides because the
+  # extreme-fasting red flag (lab2_extreme_fasting) sits close to the self-harm category.
+  - { name: Hate,     source: Prompt,     severityThreshold: Medium, blocking: true, enabled: true }
+  - { name: Hate,     source: Completion, severityThreshold: Medium, blocking: true, enabled: true }
+  - { name: Sexual,   source: Prompt,     severityThreshold: Medium, blocking: true, enabled: true }
+  - { name: Sexual,   source: Completion, severityThreshold: Medium, blocking: true, enabled: true }
+  - { name: Violence, source: Prompt,     severityThreshold: Medium, blocking: true, enabled: true }
+  - { name: Violence, source: Completion, severityThreshold: Medium, blocking: true, enabled: true }
+  - { name: Selfharm, source: Prompt,     severityThreshold: Low,    blocking: true, enabled: true }
+  - { name: Selfharm, source: Completion, severityThreshold: Low,    blocking: true, enabled: true }
+  # Prompt Shields: direct (user jailbreak) and indirect (instructions hidden in documents / tool results).
+  - { name: Jailbreak,         source: Prompt, blocking: true, enabled: true }
+  - { name: Indirect Attack,   source: Prompt, blocking: true, enabled: true }
+  - { name: Protected Material Text, source: Completion, blocking: true, enabled: true }
+  - { name: Protected Material Code, source: Completion, blocking: false, enabled: true }
+  # Groundedness detection (preview). ARM name "Ungrounded Material". Annotate only: blocking would stop
+  # replies whenever the grounding documents are short, which over-blocks the benign control.
+  - { name: Ungrounded Material, source: Completion, blocking: false, enabled: true }
+blocklist:
+  name: livewell-medication-dosage
+  description: >-
+    LiveWell workshop: requests to start, stop or change a medication dose are blocked on input and routed
+    to a doctor or pharmacist by the coach's instructions. Applied to prompts only, so the coach's own
+    "do not change your dose without your doctor" replies are never blocked.
+  source: Prompt
+  # isRegex patterns. Case-insensitive (Azure AI Content Safety blocklists normalise case).
+  items:
+    - id: dose-change-verb
+      pattern: '\b(double|triple|increase|decrease|reduce|halve|skip|stop|change|up|lower)\b.{0,40}\b(dose|doses|dosage)\b'
+    - id: stop-named-drug
+      pattern: '\b(double|triple|halve|skip|stop|quit)\b.{0,20}\b(metformin|insulin)\b'
+    - id: named-drug-amount
+      pattern: '\b(metformin|insulin|glipizide|gliclazide|sitagliptin|empagliflozin|dapagliflozin|atorvastatin|amlodipine|losartan)\b.{0,30}\b(\d+\s?(mg|units?|tablets?|pills?)|dose|dosage)\b'
+    - id: how-much-drug
+      pattern: '\bhow (much|many)\b.{0,30}\b(metformin|insulin|mg of|units of)\b'

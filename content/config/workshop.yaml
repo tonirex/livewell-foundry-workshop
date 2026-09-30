@@ -70,13 +70,17 @@ names:
 models:
   default: "model-router"
   fallback: "gpt-4.1-mini"
+  memory: "gpt-5.4-mini"             # Lab 3 coach with memory (memory search does not run behind model-router)
   embeddings: "text-embedding-3-large"
   deployment_type: "GlobalStandard"
-  tpm_cap_thousands: 100
+  tpm_cap_thousands: 400             # model-router and gpt-4.1-mini each; Lab 2 judges + ~30 people need it
+  memory_tpm_cap_thousands: 200
+  embedding_tpm_cap_thousands: 100
   forbidden: ["PTU", "partner models (Anthropic, Mistral, Cohere)"]
   quota_usage_names:   # az cognitiveservices usage list -> OpenAI.GlobalStandard.<name>
     model-router: "ModelRouter"
     gpt-4.1-mini: "gpt4.1-mini"
+    gpt-5.4-mini: "gpt-5.4-mini"
     text-embedding-3-large: "text-embedding-3-large"
 
 # ---------------------------------------------------------------------------

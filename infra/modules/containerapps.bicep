@@ -14,6 +14,9 @@ param logAnalyticsId string
 @maxValue(2)
 param mcpMinReplicas int = 0
 
+@description('Image last deployed by `azd deploy mcp-activities` (SERVICE_MCP_ACTIVITIES_IMAGE_NAME). Empty = placeholder, so re-provisioning never reverts a deployed server.')
+param mcpImage string = ''
+
 resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
   name: acrName
   location: location
@@ -102,7 +105,7 @@ resource mcpApp 'Microsoft.App/containerApps@2024-03-01' = {
       containers: [
         {
           name: 'mcp-activities'
-          image: 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+          image: empty(mcpImage) ? 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest' : mcpImage
           resources: {
             cpu: json('0.25')
             memory: '0.5Gi'

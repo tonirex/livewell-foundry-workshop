@@ -59,10 +59,15 @@ param searchSku string = 'basic'
 
 @description('Region for the search service ONLY when the main region is capacity-blocked for new search services (empty = location). Exception to the one-region rule, recorded in ASSUMPTIONS.md.')
 param searchLocation string = ''
-@description('TPM cap (thousands) for each chat deployment (model-router, fallback). Global Standard only.')
+@description('TPM cap (thousands) for model-router and gpt-4.1-mini each. Global Standard only (pay per token, so the cap has no fixed cost). 400K keeps ~30 participants plus the Lab 2 judges out of throttling.')
 @minValue(10)
-@maxValue(150)
-param chatTpmCapThousands int = 100
+@maxValue(1000)
+param chatTpmCapThousands int = 400
+
+@description('TPM cap (thousands) for the memory-coach deployment (gpt-5.4-mini, Lab 3 coach with memory).')
+@minValue(10)
+@maxValue(1000)
+param memoryTpmCapThousands int = 200
 
 @description('TPM cap (thousands) for the embeddings deployment.')
 @minValue(10)
@@ -71,12 +76,16 @@ param embeddingTpmCapThousands int = 100
 
 param modelRouterVersion string = '2025-11-18'
 param fallbackModelVersion string = '2025-04-14'
+param memoryModelVersion string = '2026-03-17'
 param embeddingModelVersion string = '1'
 
 @description('MCP server min replicas. 0 between sessions; 1 on the workshop day.')
 @minValue(0)
 @maxValue(2)
 param mcpMinReplicas int = 0
+
+@description('Last deployed MCP server image (azd writes SERVICE_MCP_ACTIVITIES_IMAGE_NAME after `azd deploy`). Empty = placeholder.')
+param mcpImage string = ''
 
 param budgetAmountUsd int = 300
 param budgetAlertThresholdsUsd array = [
@@ -93,6 +102,16 @@ param currentMonthStart string = utcNow('yyyy-MM-01')
 
 @description('Extra tags (e.g. cost centre). workshop / env / azd-env-name are always applied.')
 param extraTags object = {}
+
+@description('Tag that opts the knowledge storage account out of a tenant policy forcing publicNetworkAccess=Disabled (MCAPS: {SecurityControl: \'Ignore\'}). See ASSUMPTIONS.md 4.4.')
+param storagePolicyOptOutTag object = {}
+
+@description('Knowledge storage firewall default action. Allow: Entra-only public access, so Lab 2 can publish evaluation runs from laptops (decided 2026-09-30). Deny: Search + trusted services only (ASSUMPTIONS.md 4.15).')
+@allowed([
+  'Allow'
+  'Deny'
+])
+param storageNetworkDefaultAction string = 'Allow'
 
 // -------------------------------------------------------------------------------------------------
 
@@ -146,6 +165,18 @@ var deployments = [
     }
   }
   {
+    name: models.memory
+    model: {
+      format: 'OpenAI'
+      name: models.memory
+      version: memoryModelVersion
+    }
+    sku: {
+      name: models.deployment_type
+      capacity: memoryTpmCapThousands
+    }
+  }
+  {
     name: models.embeddings
     model: {
       format: 'OpenAI'
@@ -176,6 +207,9 @@ module storage 'modules/storage.bicep' = {
     tags: tags
     name: 'stlivewell${environmentName}${token}'
     containerName: n.knowledgeContainer
+    searchServiceId: search.outputs.id
+    policyOptOutTag: storagePolicyOptOutTag
+    networkDefaultAction: storageNetworkDefaultAction
   }
 }
 
@@ -200,6 +234,7 @@ module containers 'modules/containerapps.bicep' = {
     mcpAppName: n.mcpApp
     logAnalyticsId: monitoring.outputs.logAnalyticsId
     mcpMinReplicas: mcpMinReplicas
+    mcpImage: mcpImage
   }
 }
 
@@ -279,6 +314,7 @@ output FOUNDRY_PROJECT_ENDPOINT string = foundry.outputs.projectEndpoint
 output AZURE_OPENAI_ENDPOINT string = foundry.outputs.openAiEndpoint
 output AZURE_AI_MODEL_DEPLOYMENT_NAME string = models.default
 output AZURE_AI_FALLBACK_DEPLOYMENT_NAME string = models.fallback
+output AZURE_AI_MEMORY_DEPLOYMENT_NAME string = models.memory
 output AZURE_AI_EMBEDDING_DEPLOYMENT_NAME string = models.embeddings
 
 output AZURE_SEARCH_SERVICE_NAME string = search.outputs.name
@@ -286,6 +322,8 @@ output AZURE_SEARCH_ENDPOINT string = search.outputs.endpoint
 output AZURE_SEARCH_LOCATION string = empty(searchLocation) ? location : searchLocation
 output AZURE_SEARCH_CONNECTION_NAME string = n.searchConnection
 output AZURE_SEARCH_CONNECTION_ID string = foundry.outputs.searchConnectionId
+output LIVEWELL_RAI_POLICY_NAME string = foundry.outputs.raiPolicyName
+output LIVEWELL_RAI_POLICY_ID string = foundry.outputs.raiPolicyId
 output AZURE_STORAGE_ACCOUNT_NAME string = storage.outputs.name
 output AZURE_STORAGE_BLOB_ENDPOINT string = storage.outputs.blobEndpoint
 output KNOWLEDGE_CONTAINER string = n.knowledgeContainer

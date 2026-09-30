@@ -22,6 +22,8 @@ LOCATION="${AZURE_LOCATION:-$(cfg names.location)}"
 RG="${AZURE_RESOURCE_GROUP:-$(cfg names.resource_group)}"
 FABRIC_BRIDGE="${FABRIC_BRIDGE:-$(cfg modes.fabric_bridge)}"
 TPM="$(cfg models.tpm_cap_thousands)"
+EMB_TPM="$(cfg models.embedding_tpm_cap_thousands)"
+MEM_TPM="$(cfg models.memory_tpm_cap_thousands)"
 LINKS=()
 TMPD="$(mktempdir)"; trap 'rm -rf "$TMPD"' EXIT
 
@@ -156,7 +158,7 @@ else
 fi
 
 # 6 ----------------------------------------------------------------------------------------------
-log "6/8 Foundry model quota and availability (Global Standard, ${TPM}K TPM each)"
+log "6/8 Foundry model quota and availability (Global Standard, chat ${TPM}K / memory ${MEM_TPM}K / embeddings ${EMB_TPM}K TPM)"
 USAGES="$(azq cognitiveservices usage list -l "$LOCATION" -o json || echo '[]')"
 MODELS="$(azq cognitiveservices model list -l "$LOCATION" -o json || echo '[]')"
 ACCOUNT="$(cfg names.foundry_account)"
@@ -165,15 +167,16 @@ QNAMES="$(cfg_json models.quota_usage_names)"
 printf '%s' "$USAGES" >"$TMPD/usages.json"; printf '%s' "$MODELS" >"$TMPD/models.json"; printf '%s' "$DEPLOYED" >"$TMPD/deployed.json"
 while IFS=$'\t' read -r status msg; do
   if [ "$status" = "ok" ]; then ok "$msg"; else bad "$msg"; LINKS+=("models"); fi
-done < <(pyrun - "$TPM" "$QNAMES" "$TMPD/usages.json" "$TMPD/models.json" "$TMPD/deployed.json" \
-  "$(cfg models.default)" "$(cfg models.fallback)" "$(cfg models.embeddings)" <<'EOF'
+done < <(pyrun - "$QNAMES" "$TMPD/usages.json" "$TMPD/models.json" "$TMPD/deployed.json" \
+  "$(cfg models.default)=$TPM" "$(cfg models.fallback)=$TPM" "$(cfg models.memory)=$MEM_TPM" \
+  "$(cfg models.embeddings)=$EMB_TPM" <<'EOF'
 import json, sys
-tpm = int(sys.argv[1]); qnames = json.loads(sys.argv[2])
+qnames = json.loads(sys.argv[1])
 load = lambda p: json.loads(open(p, encoding="utf-8").read() or "[]")
-usages, models, deployed = load(sys.argv[3]), load(sys.argv[4]), load(sys.argv[5])
-wanted = sys.argv[6:]
+usages, models, deployed = load(sys.argv[2]), load(sys.argv[3]), load(sys.argv[4])
+wanted = [(a.rsplit("=", 1)[0], int(a.rsplit("=", 1)[1])) for a in sys.argv[5:]]
 mine = {d["name"]: d.get("sku", {}).get("capacity", 0) for d in deployed}
-for m in wanted:
+for m, need in wanted:
     offers = [x for x in models if x.get("model", {}).get("name") == m
               and any(s.get("name") == "GlobalStandard" for s in x["model"].get("skus", []))]
     ga = [x for x in offers if x["model"].get("lifecycleStatus") in ("GenerallyAvailable", "Legacy", "Stable")]
@@ -184,10 +187,10 @@ for m in wanted:
         print(f"bad\t{m}: no GlobalStandard quota entry"); continue
     free = q["limit"] - q["currentValue"] + mine.get(m, 0)
     versions = ",".join(sorted({x["model"]["version"] for x in (ga or offers)}))
-    if free >= tpm:
+    if free >= need:
         print(f"ok\t{m} ({versions}): quota {int(q['currentValue'])}/{int(q['limit'])}K used, {int(free)}K free")
     else:
-        print(f"bad\t{m}: only {int(free)}K TPM free (need {tpm}K)")
+        print(f"bad\t{m}: only {int(free)}K TPM free (need {need}K)")
 EOF
 )
 

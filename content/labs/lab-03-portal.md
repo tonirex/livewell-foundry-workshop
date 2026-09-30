@@ -40,17 +40,19 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
 
    > 📸 **Screenshot slot** · `screenshots/lab-03/06-register-interest-approval.png` · register_interest configured to require approval
 
-7. Enable memory for the agent.
+7. Enable memory for the agent and switch it to the memory model.
 
-   **Memory (Preview) → Enable memory → Create / select memory store → Save**
+   **Memory (Preview) → Enable memory → Create / select memory store → Save**, then **Model → `gpt-5.4-mini` → Save**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-03/07-enable-memory-preview.png` · Memory preview enabled for the agent
+   Memory is not searched when the agent runs on `model-router`, so the Lab 3 coach runs on `gpt-5.4-mini`.
 
-8. Append the `tools` instruction block from [coach-instructions.md](../prompts/coach-instructions.md).
+   > 📸 **Screenshot slot** · `screenshots/lab-03/07-enable-memory-preview.png` · Memory preview enabled for the agent, model gpt-5.4-mini
 
-   **Instructions → paste after `safety` block → Save**
+8. Append the `tools` instruction block from [coach-instructions.md](../prompts/coach-instructions.md) and switch to the evidence schema.
 
-   > 📸 **Screenshot slot** · `screenshots/lab-03/08-tools-instructions.png` · Instructions with tools block appended
+   **Instructions → paste after `safety` block**, then **Response format → JSON schema → replace with all of [`lab3-evidence.schema.json`](../config/schemas/lab3-evidence.schema.json) → Save**
+
+   > 📸 **Screenshot slot** · `screenshots/lab-03/08-tools-instructions.png` · Instructions with tools block appended and livewell_evidence schema set
 
 9. Save a tools-and-memory version.
 

@@ -32,7 +32,7 @@ type deploymentType = {
   sku: {
     name: 'GlobalStandard'
     @minValue(1)
-    @maxValue(200)
+    @maxValue(1000)
     capacity: int
   }
 }
@@ -70,9 +70,42 @@ resource modelDeployments 'Microsoft.CognitiveServices/accounts/deployments@2025
     properties: {
       model: d.model
       versionUpgradeOption: 'NoAutoUpgrade'
+      raiPolicyName: contains(guardrail.attach_to, d.name) ? raiPolicy.name : null
     }
   }
 ]
+
+// Lab 2 guardrail: medication-dosage blocklist + RAI policy `livewell-guardrails`, defined once in
+// content/config/guardrails.yaml and attached to the chat deployments above.
+var guardrail = loadYamlContent('../../content/config/guardrails.yaml')
+
+resource blocklist 'Microsoft.CognitiveServices/accounts/raiBlocklists@2025-06-01' = {
+  parent: account
+  name: guardrail.blocklist.name
+  properties: {
+    description: guardrail.blocklist.description
+  }
+}
+
+// Blocklist items are NOT declared here: the RP returns 400 on GET of a single raiBlocklistItems
+// resource, which breaks what-if. The azd postprovision hook (scripts/apply-guardrail.py) syncs them.
+
+resource raiPolicy 'Microsoft.CognitiveServices/accounts/raiPolicies@2025-06-01' = {
+  parent: account
+  name: guardrail.policy_name
+  properties: {
+    basePolicyName: guardrail.base_policy
+    mode: guardrail.mode
+    contentFilters: guardrail.content_filters
+    customBlocklists: [
+      {
+        blocklistName: blocklist.name
+        blocking: true
+        source: guardrail.blocklist.source
+      }
+    ]
+  }
+}
 
 resource project 'Microsoft.CognitiveServices/accounts/projects@2025-06-01' = {
   parent: account
@@ -169,3 +202,5 @@ output projectPrincipalId string = project.identity.principalId
 output projectEndpoint string = project.properties.endpoints['AI Foundry API']
 output searchConnectionId string = searchConnection.id
 output appInsightsConnectionId string = appInsightsConnection.id
+output raiPolicyName string = raiPolicy.name
+output raiPolicyId string = raiPolicy.id

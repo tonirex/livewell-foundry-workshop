@@ -1,0 +1,2 @@
+# mcp<2: the workshop pins the 1.x FastMCP API (mcp.server.fastmcp). See versions.md.
+mcp>=1.13,<2

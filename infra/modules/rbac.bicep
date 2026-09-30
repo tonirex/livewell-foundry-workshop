@@ -148,6 +148,30 @@ resource projectAcrPull 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   }
 }
 
+// Memory (preview): the memory store calls the chat + embedding deployments as the project identity.
+// Without Foundry User on the account, memory search fails with 401 (ASSUMPTIONS.md 4.9).
+resource projectFoundryUser 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: account
+  name: guid(account.id, projectPrincipalId, roles.foundryUser)
+  properties: {
+    principalId: projectPrincipalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roles.foundryUser)
+  }
+}
+
+// Evaluations: `evaluate(azure_ai_project=...)` uploads results through the project's storage connection
+// as the project identity; without this it fails with ResourceMsiTokenDoesntHavePermissionsOnStorage.
+resource projectBlobContributor 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: storage
+  name: guid(storage.id, projectPrincipalId, roles.storageBlobDataContributor)
+  properties: {
+    principalId: projectPrincipalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roles.storageBlobDataContributor)
+  }
+}
+
 // --- Search managed identity (knowledge source ingestion + knowledge base model calls) --------------
 
 resource searchCognitiveUser 'Microsoft.Authorization/roleAssignments@2022-04-01' = {

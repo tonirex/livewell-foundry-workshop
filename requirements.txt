@@ -4,6 +4,9 @@ azure-identity>=1.19
 openai>=1.99
 azure-search-documents==12.1.0b1
 azure-ai-evaluation>=1.10
+agent-framework-core>=1.19,<2
+agent-framework-foundry>=1.13,<2
+agent-framework-orchestrations>=1.2,<2
 mcp<2
 pyyaml>=6.0
 python-pptx>=1.0
