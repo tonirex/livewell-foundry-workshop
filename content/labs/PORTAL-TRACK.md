@@ -2,7 +2,7 @@
 
 This portal-only track is for 🟢 Navigator participants who want a click-by-click, screenshot-led path through the workshop. You will use the Microsoft Foundry portal only: no code, no terminal, no SDK, and no notebooks.
 
-Screenshots are captured later in Phase 5 by the `demos/` screenshot capture with Playwright. Until those files exist, every walkthrough uses text-only screenshot slots so link checkers do not fail.
+Screenshots come from the live portal, captured with Playwright by `demos/capture-screenshots.py` (facilitator demo agents, names only). A step whose screenshot exists shows it as an image. A step still waiting for one keeps a text-only screenshot slot, so link checkers never fail.
 
 ## Naming rules
 
@@ -24,10 +24,13 @@ Each lab step has a screenshot slot in this exact format:
 
 > 📸 **Screenshot slot** · `screenshots/lab-01/03-connect-foundry-iq.png` · Knowledge panel with livewell-guides-kb selected
 
+Once its PNG exists, `python demos/capture-screenshots.py --link` rewrites the slot as `![caption](path)`. The capture still finds linked slots by their path, so re-capturing after a portal change needs no edits.
+
 Rules for screenshot authors:
 
 - Keep screenshot paths relative to `content/labs/`.
 - Use `screenshots/lab-0N/NN-short-slug.png`.
-- Do not convert slots into markdown images or links until Phase 5 assets exist.
+- Convert a slot to an image only after reviewing its PNG against the caption; `--link` converts only slots whose PNG exists.
+- `python demos/capture-screenshots.py --list-missing` lists empty slots, including the ones taken by hand with a lab account.
 - Capture only names shown in [workshop.yaml](../config/workshop.yaml), never tenant IDs, subscription IDs, endpoints, keys, or real email domains.
 

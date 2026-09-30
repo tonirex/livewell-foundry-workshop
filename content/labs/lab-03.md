@@ -12,7 +12,7 @@ Patterns: #2 Evidence-Based Decision Support; #3 Workflow Orchestration; #6 Huma
 
 ## Foundry features covered
 
-- OpenAPI tool **`livewell-profile`** for the resident profile extract.
+- OpenAPI tool **`livewell_profile`** for the resident profile extract.
 - Function tool path for Builder: `get_citizen_profile` with a strict schema and local execution.
 - MCP tool from project connection **`livewell-activities-mcp`**, with `register_interest` requiring approval and `find_activities` allowed without approval.
 - Memory ⚠️ preview for stated preferences across conversations.
@@ -26,9 +26,9 @@ Patterns: #2 Evidence-Based Decision Support; #3 Workflow Orchestration; #6 Huma
 ## 🟢 Navigator
 
 1. Open your guarded **`livewell-<initials>`** agent.
-2. Add the profile API: **Tools** → **Add** → **Browse all tools** → **Custom** → **OpenAPI**. Use the **Profile OpenAPI URL on the values sheet**. Name the tool **`livewell-profile`**.
-3. Add the activities MCP: **Tools** → **Add** → **Browse all tools** → **Custom** → **Model Context Protocol (MCP)**. Select the project connection **`livewell-activities-mcp`**.
-4. Configure MCP approval:
+2. Add the profile API: **Tools** → **Add** → **Add tools** → **Custom** → **OpenAPI tool** → **Create**. Name the tool **`livewell_profile`** (the portal does not accept dashes in tool names) and paste a one-line description. Keep **Authentication method** on **Anonymous**. Open the **Profile OpenAPI spec URL on the values sheet** in a new browser tab, copy all of the JSON, paste it into **OpenAPI 3.0+ schema** and select **Create tool**.
+3. Add the activities MCP: **Tools** → **Add** → **Add tools** → **Configured** → select the project connection **`livewell-activities-mcp`** → **Add tool**. (**Custom** → **Model Context Protocol (MCP)** would create a new connection instead.)
+4. Configure MCP approval (tool row → **Actions** → **Configure**):
    - `find_activities` needs no approval.
    - `register_interest` must require approval before the tool call proceeds.
 5. Enable **Memory** ⚠️ preview if it is available in your project, and switch the agent **Model** to **`gpt-5.4-mini`**: memory is not searched when the agent runs on `model-router`. If memory is not available, stay on `model-router` and skip only the memory checkpoint.
@@ -46,7 +46,7 @@ Patterns: #2 Evidence-Based Decision Support; #3 Workflow Orchestration; #6 Huma
    It's hazy today. What can I do indoors near Woodlands, and can you sign me up?
    ```
 
-   Expect profile + activity lookup in the trace. Approve the card only when the agent asks to register interest.
+   Expect profile + activity lookup in the trace. The coach registers interest only after a clear yes, so if it lists options and asks first, reply `Yes, please sign me up for the first indoor option you found.` in the same chat. Approve the card only when the agent asks to register interest, and pick **Approve → Approve once** (the *Always approve* options skip later approvals).
 9. Set memory. Send (`lab3_memory_set`):
 
    ```text

@@ -8,31 +8,31 @@ This is a watch-along for the facilitator demo. Foundry User participants observ
 
    **Build → Agents → Search `livewell-workshop-hosted`**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-04/01-find-hosted-agent.png` · Agents list filtered to livewell-workshop-hosted
+   ![Agents list filtered to livewell-workshop-hosted](screenshots/lab-04/01-find-hosted-agent.png)
 
 2. Open the hosted agent details.
 
    **Agents → `livewell-workshop-hosted` → Overview / Playground**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-04/02-open-hosted-agent.png` · Hosted agent page opened in the Foundry portal
+   ![Hosted agent page opened in the Foundry portal](screenshots/lab-04/02-open-hosted-agent.png)
 
 3. Open the versions view.
 
    **Agent page → Versions**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-04/03-hosted-agent-versions.png` · Version history for livewell-workshop-hosted
+   ![Version history for livewell-workshop-hosted](screenshots/lab-04/03-hosted-agent-versions.png)
 
 4. Inspect the active version details without changing traffic.
 
    **Versions → Active version → Details**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-04/04-active-version-details.png` · Active hosted-agent version details
+   ![Active hosted-agent version details](screenshots/lab-04/04-active-version-details.png)
 
 5. Watch the facilitator send a grounded food prompt.
 
    **Playground → New chat → Message box → Send**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-04/05-hosted-agent-food-prompt.png` · Hosted agent responding with JSON and a citation
+   ![Hosted agent responding with JSON and a citation](screenshots/lab-04/05-hosted-agent-food-prompt.png)
 
    Prompt `lab1_prediabetes_eat`:
 
@@ -44,7 +44,7 @@ This is a watch-along for the facilitator demo. Foundry User participants observ
 
    **Response metrics → Traces → Conversation → Response**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-04/06-hosted-agent-trace.png` · Trace for the hosted-agent response
+   ![Trace for the hosted-agent response](screenshots/lab-04/06-hosted-agent-trace.png)
 
 7. Look at the disabled deployment or publishing controls from a Foundry User account.
 
@@ -62,7 +62,7 @@ This is a watch-along for the facilitator demo. Foundry User participants observ
 
    **Project Manager account → Agent page → Deploy / Publish**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-04/09-project-manager-publish-path.png` · Facilitator view with deployment and publishing controls available
+   ![Facilitator view with deployment and publishing controls available](screenshots/lab-04/09-project-manager-publish-path.png)
 
 ## What you should see
 

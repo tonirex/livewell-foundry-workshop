@@ -8,37 +8,41 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
 
    **Build → Agents → `livewell-<initials>` → Configure**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-03/01-open-guarded-agent.png` · Agent configuration page after Lab 2
+   ![Agent configuration page after Lab 2](screenshots/lab-03/01-open-guarded-agent.png)
 
 2. Start adding the profile OpenAPI tool.
 
-   **Tools → Add → Browse all tools → Custom → OpenAPI**
+   **Tools → Add → Add tools → Custom → OpenAPI tool → Create**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-03/02-add-openapi-tool.png` · Tool catalog showing Custom OpenAPI
+   ![Tool catalog showing Custom OpenAPI](screenshots/lab-03/02-add-openapi-tool.png)
 
-3. Create the `livewell-profile` tool from the spec URL shown on the facilitator values sheet.
+3. Create the `livewell_profile` tool from the spec on the facilitator values sheet. The form has no import-from-URL option. Open the **Profile OpenAPI spec URL** in a new browser tab, select all of the JSON and copy it.
 
-   **OpenAPI → Name `livewell-profile` → Import from URL → Add**
+   **OpenAPI → Name `livewell_profile` → Description → Authentication method `Anonymous` → OpenAPI 3.0+ schema: paste → Create tool**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-03/03-livewell-profile-spec.png` · OpenAPI form with livewell-profile named and imported
+   - Use an underscore: the portal does not accept spaces or dashes in custom tool names.
+   - Description, for example: `Profile of the signed-in resident. Always pass resident_id 'me'.`
+   - The pasted spec already carries the server URL, so no other field is needed.
 
-4. Start adding the activities MCP tool.
+   ![OpenAPI form with livewell_profile named and the spec pasted](screenshots/lab-03/03-livewell-profile-spec.png)
 
-   **Tools → Add → Browse all tools → Custom → MCP tool**
+4. Start adding the activities MCP tool. The **Configured** tab lists the project's existing tool connections.
 
-   > 📸 **Screenshot slot** · `screenshots/lab-03/04-add-mcp-tool.png` · Tool catalog showing Custom MCP tool
+   **Tools → Add → Add tools → Configured**
 
-5. Select the existing workshop MCP connection.
+   ![Configured tab listing the livewell-activities-mcp connection](screenshots/lab-03/04-add-mcp-tool.png)
 
-   **MCP tool → Existing connection → `livewell-activities-mcp` → Connect**
+5. Select the existing workshop MCP connection and add it.
 
-   > 📸 **Screenshot slot** · `screenshots/lab-03/05-select-activities-mcp.png` · MCP connection livewell-activities-mcp selected
+   **Configured → `livewell-activities-mcp` → Add tool**
+
+   ![livewell-activities-mcp selected on the Configured tab](screenshots/lab-03/05-select-activities-mcp.png)
 
 6. Require approval for the write action.
 
-   **MCP tool row → Configure → Approval setting → require approval for `register_interest` → Apply**
+   **MCP tool row → Actions → Configure → Approval setting → require approval for `register_interest` (keep `find_activities` under "Tools that don't require approval") → Update**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-03/06-register-interest-approval.png` · register_interest configured to require approval
+   ![register_interest configured to require approval](screenshots/lab-03/06-register-interest-approval.png)
 
 7. Enable memory for the agent and switch it to the memory model.
 
@@ -46,25 +50,25 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
 
    Memory is not searched when the agent runs on `model-router`, so the Lab 3 coach runs on `gpt-5.4-mini`.
 
-   > 📸 **Screenshot slot** · `screenshots/lab-03/07-enable-memory-preview.png` · Memory preview enabled for the agent, model gpt-5.4-mini
+   ![Memory preview enabled for the agent, model gpt-5.4-mini](screenshots/lab-03/07-enable-memory-preview.png)
 
 8. Append the `tools` instruction block from [coach-instructions.md](../prompts/coach-instructions.md) and switch to the evidence schema.
 
    **Instructions → paste after `safety` block**, then **Response format → JSON schema → replace with all of [`lab3-evidence.schema.json`](../config/schemas/lab3-evidence.schema.json) → Save**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-03/08-tools-instructions.png` · Instructions with tools block appended and livewell_evidence schema set
+   ![Instructions with tools block appended and livewell_evidence schema set](screenshots/lab-03/08-tools-instructions.png)
 
 9. Save a tools-and-memory version.
 
    **Versions → Save / Create version → Name `v3-tools-memory` → Save**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-03/09-save-v3-tools-memory.png` · Version list showing v3 tools and memory version
+   ![Version list showing v3 tools and memory version](screenshots/lab-03/09-save-v3-tools-memory.png)
 
 10. Ask for tailored advice from the profile.
 
     **Chat → New chat → Message box → Send**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-03/10-profile-tailored-answer.png` · Answer tailored to profile, low steps, and elevated glucose
+    ![Answer tailored to profile, low steps, and elevated glucose](screenshots/lab-03/10-profile-tailored-answer.png)
 
     Prompt `lab3_profile_tailored`:
 
@@ -76,13 +80,13 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
 
     **Response metrics → Traces → tool calls → `get_citizen_profile` and knowledge span**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-03/11-profile-trace.png` · Trace showing profile and knowledge tool calls
+    ![Trace showing profile and knowledge tool calls](screenshots/lab-03/11-profile-trace.png)
 
 12. Ask for an indoor Woodlands activity and registration.
 
     **Chat → Message box → Send**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-03/12-hazy-indoor-signup.png` · Activity recommendation with registration approval pending
+    ![Activity recommendation with registration approval pending](screenshots/lab-03/12-hazy-indoor-signup.png)
 
     Prompt `lab3_hazy_indoor_signup`:
 
@@ -90,17 +94,23 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
     It's hazy today. What can I do indoors near Woodlands, and can you sign me up?
     ```
 
-13. Approve the registration card once.
+    The coach registers interest only after a clear yes. If it lists options and asks which one, reply in the same chat:
 
-    **Approval card → Approve once**
+    ```text
+    Yes, please sign me up for the first indoor option you found.
+    ```
 
-    > 📸 **Screenshot slot** · `screenshots/lab-03/13-approve-register-interest.png` · MCP approval card for register_interest approved once
+13. Approve the registration card once. **Approve** opens a menu: pick **Approve once**. *Always approve this tool* and *Always approve all tools* skip later approvals.
+
+    **Approval card → Approve → Approve once**
+
+    ![Approve menu on the register_interest card, with Approve once first](screenshots/lab-03/13-approve-register-interest.png)
 
 14. Store a preference in memory.
 
     **Chat → Message box → Send**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-03/14-memory-set.png` · Agent acknowledges morning preference and swimming dislike
+    ![Agent acknowledges morning preference and swimming dislike](screenshots/lab-03/14-memory-set.png)
 
     Prompt `lab3_memory_set`:
 
@@ -112,7 +122,7 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
 
     **Chat → New chat → Message box → Send**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-03/15-memory-recall-new-chat.png` · New chat respects morning preference and avoids swimming
+    ![New chat respects morning preference and avoids swimming](screenshots/lab-03/15-memory-recall-new-chat.png)
 
     Prompt `lab3_memory_recall`:
 
@@ -120,29 +130,29 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
     Any activities you would suggest for me next week?
     ```
 
-16. Optional Fabric step: add the published Fabric IQ data agent from the OneLake Catalog.
+16. Optional Fabric step: add the published Fabric IQ data agent from the OneLake Catalog. The catalog takes a few seconds to load; filter by keyword `Resident360`.
 
-    **Tools → Add → Fabric IQ → OneLake Catalog → Resident360 Ontology Agent**
+    **Tools → Add → Add tools → Configured → Fabric IQ (OneLake Catalog) → Add tool → Resident360 Ontology Agent → Add**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-03/16-fabric-iq-onelake-catalog.png` · Fabric IQ picker with Resident360 Ontology Agent selected
+    ![OneLake Catalog with Resident360 Ontology Agent selected](screenshots/lab-03/16-fabric-iq-onelake-catalog.png)
 
 17. If the connection already exists, attach it instead of browsing the catalog.
 
-    **Tools → Add → Fabric IQ → Existing connection → `livewell-fabric-resident360`**
+    **Tools → Add → Add tools → Configured → `livewell-fabric-resident360` → Add tool**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-03/17-existing-fabric-connection.png` · Existing Fabric IQ connection livewell-fabric-resident360 selected
+    ![Existing connection livewell-fabric-resident360 selected on the Configured tab](screenshots/lab-03/17-existing-fabric-connection.png)
 
 18. Append the `fabric` instruction block when Fabric IQ is attached.
 
     **Instructions → paste `fabric` block after `tools` block → Save**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-03/18-fabric-instructions.png` · Fabric routing rules appended to instructions
+    ![Fabric routing rules appended to instructions](screenshots/lab-03/18-fabric-instructions.png)
 
 19. Ask the programme-level Fabric question.
 
     **Chat → New chat → Message box → Send**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-03/19-fabric-disengaged-regions.png` · Aggregated region answer with no resident_id
+    ![Aggregated region answer with no resident_id](screenshots/lab-03/19-fabric-disengaged-regions.png)
 
     Prompt `fabric_q_disengaged_regions`:
 
@@ -154,13 +164,13 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
 
     **Response metrics → Traces → Fabric IQ / MCP call**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-03/20-fabric-iq-trace.png` · Trace showing Fabric IQ call for the officer question
+    ![Trace showing Fabric IQ call for the officer question](screenshots/lab-03/20-fabric-iq-trace.png)
 
 21. Confirm a citizen knowledge question does not call Fabric.
 
     **Chat → New chat → Message box → Send**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-03/21-no-fabric-for-citizen-question.png` · Trace for food question showing knowledge/profile but no Fabric IQ call
+    ![Trace for food question showing knowledge/profile but no Fabric IQ call](screenshots/lab-03/21-no-fabric-for-citizen-question.png)
 
     Prompt `lab1_prediabetes_eat`:
 
@@ -174,7 +184,8 @@ Profile advice is tailored to the signed-in synthetic resident and cites guides.
 
 ## If something looks different
 
-- ⚠️ OpenAPI import labels and spec URL entry points vary; use the facilitator values sheet and keep the tool name `livewell-profile`.
+- ⚠️ The OpenAPI form takes a pasted schema, not a URL. Copy the JSON from the values sheet's spec URL, and keep the tool name `livewell_profile` (dashes are rejected).
+- ⚠️ **Custom → Model Context Protocol (MCP)** creates a *new* connection. Use it only if `livewell-activities-mcp` is missing from **Configured**: paste the **Activities MCP server** URL from the values sheet as the endpoint and set **Authentication** to **Unauthenticated**.
 - ⚠️ Memory is preview and may appear under a different panel; if it is unavailable, complete the tool steps and watch the facilitator memory demo.
 - ⚠️ Fabric IQ is preview; if OneLake Catalog browsing is unavailable, use `livewell-fabric-resident360` or the facilitator's prepared agent.
 - If registration runs without approval, stop using that chat and reconfigure approval for `register_interest`.

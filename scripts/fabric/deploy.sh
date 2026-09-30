@@ -45,5 +45,6 @@ done
 echo
 log "done in $((SECONDS - TOTAL0))s"
 for t in "${TIMINGS[@]}"; do printf '  %s\n' "$t"; done
+pyrun "$ROOT/scripts/render-values.py" "$AZURE_ENV_NAME" || warn "values sheet not refreshed: python scripts/render-values.py $AZURE_ENV_NAME"
 echo "  Next: bash scripts/seed-attendees.sh $AZURE_ENV_NAME (Fabric Viewer + data agent access), then"
 echo "        python scripts/fabric/ask.py \"Which regions have the highest share of disengaged residents?\""

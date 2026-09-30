@@ -38,8 +38,8 @@ Prerequisites the facilitator completed:
 Steps:
 
 1. Open your Lab 3 agent.
-2. Go to **Tools** → **Add tool** → **Fabric IQ** → **OneLake Catalog** ⚠️ preview.
-3. Pick **`Resident360 Ontology Agent`**, or select the existing connection **`livewell-fabric-resident360`** if the facilitator pre-created it.
+2. Go to **Tools** → **Add** → **Add tools** → **Configured** → **Fabric IQ (OneLake Catalog)** ⚠️ preview → **Add tool**, and filter the catalog by `Resident360`.
+3. Pick **`Resident360 Ontology Agent`** → **Add**, or, if the facilitator pre-created it, select the existing connection **`livewell-fabric-resident360`** on the **Configured** tab → **Add tool**.
 4. In **Instructions**, append the `fabric` block from [coach-instructions.md](../prompts/coach-instructions.md). Link to the file; do not copy from this lab page.
 5. Start a new conversation as Mei, the programme officer. Send (`fabric_q_disengaged_regions`):
 

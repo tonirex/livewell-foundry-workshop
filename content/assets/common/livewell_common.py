@@ -536,6 +536,25 @@ def profile_tool():
     )
 
 
+PROFILE_OPENAPI_NAME = "livewell_profile"
+
+
+def profile_openapi_tool(spec_url: str | None = None):
+    """The Navigator's `livewell_profile` tool: the MCP app's /openapi.json, anonymous, run server-side.
+    Portal agents cannot answer client-side function calls, so facilitator demo agents use this one."""
+    import urllib.request
+
+    url = spec_url or os.environ.get("PROFILE_OPENAPI_URL", "")
+    if not url:
+        raise SystemExit("PROFILE_OPENAPI_URL is not set; run python scripts/connect-tools.py first.")
+    spec = retry(lambda: json.loads(urllib.request.urlopen(url, timeout=90).read()), what="profile OpenAPI spec")
+    m = models()
+    return m.OpenApiTool(openapi=m.OpenApiFunctionDefinition(
+        name=PROFILE_OPENAPI_NAME, spec=spec, auth=m.OpenApiAnonymousAuthDetails(),
+        description="Profile of the signed-in resident (age band, region, screening risk, conditions, steps, "
+                    "MVPA, programmes, region hazy flag). Always pass resident_id 'me'."))
+
+
 # --- memory (preview) ---------------------------------------------------------------------------------
 CREATED_STORES: set[str] = set()
 

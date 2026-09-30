@@ -7,7 +7,7 @@ Two tools over MCP streamable HTTP at ``/mcp``:
 * ``register_interest`` -- WRITE. Record a resident's interest in one activity. Configure the Foundry
   MCP tool with *approval required* for it, so the coach must wait for a human "yes".
 
-Plus the Navigator OpenAPI tool ``livewell-profile`` (spec at ``/openapi.json``):
+Plus the Navigator OpenAPI tool ``livewell_profile`` (spec at ``/openapi.json``):
 
 * ``GET /profile/{resident_id}`` (operationId ``get_citizen_profile``) -- the signed-in resident's
   profile from ``content/data/citizens.json``. Only the session resident (``me`` or

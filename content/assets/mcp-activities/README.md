@@ -5,7 +5,7 @@ Lab 3 tool server on Azure Container Apps (`ca-mcp-activities-<env>`), one conta
 | Path | What | Used by |
 |---|---|---|
 | `/mcp` | FastMCP streamable HTTP: `find_activities` (read) and `register_interest` (write) over `content/data/activities.json` | MCP tool from project connection `livewell-activities-mcp` |
-| `/openapi.json`, `/profile/{resident_id}` | OpenAPI 3.0 `get_citizen_profile` over `content/data/citizens.json`, **session resident only** (`me`; any other id gets 403) | Navigator OpenAPI tool `livewell-profile` |
+| `/openapi.json`, `/profile/{resident_id}` | OpenAPI 3.0 `get_citizen_profile` over `content/data/citizens.json`, **session resident only** (`me`; any other id gets 403) | Navigator OpenAPI tool `livewell_profile` |
 | `/healthz` | Liveness plus activity and registration counts | `scripts/smoke-test.py`, facilitators |
 
 Synthetic data, no authentication, registrations held in memory (gone when the app scales to zero).

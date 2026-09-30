@@ -29,7 +29,8 @@ All figures come from `python scripts/r360.py` (and, from Phase 3b, `scripts/val
 | Fabric tool alive | Send `fabric_q_disengaged_regions` to `livewell-demo-fabric` | Trace shows the Fabric IQ call; North ranks first |
 | Knowledge base alive | Send `lab1_prediabetes_eat` to `livewell-demo-kb` | ≥ 1 citation to `lg-05-eating-for-pre-diabetes` |
 | MCP alive | `GET /health` on `ca-mcp-activities-<env>` | 200 |
-| Demo videos ready | `demos/` recordings open in a local player (Phase 5) | Plays offline |
+| Demo videos ready | `demos/videos/<lab>-<date>.webm` from `python demos/record-demos.py` (T-1) open in a local player | Plays offline |
+| Smoke test | `python scripts/smoke-test.py --demo-agents` | 7/7 PASS |
 | Wi-Fi slide | SSID/code from `content/config/workshop.yaml` | Correct values (TODO until confirmed) |
 
 ## Morning: L100, everyone (9:00–12:15)
