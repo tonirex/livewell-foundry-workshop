@@ -29,18 +29,31 @@ hooks:
       run: python scripts/select-params.py --hook
       interactive: false
       continueOnError: false
-  # Lab 2 blocklist items (not in Bicep: single-item GET returns 400 and breaks what-if).
+  # Lab 2 blocklist items (not in Bicep: single-item GET returns 400 and breaks what-if), then the values
+  # sheet (content/config/values.md) is regenerated from the new outputs.
   postprovision:
     posix:
       shell: sh
-      run: python3 scripts/apply-guardrail.py
+      run: python3 scripts/apply-guardrail.py && python3 scripts/render-values.py
       interactive: false
       continueOnError: false
     windows:
       shell: pwsh
-      run: python scripts/apply-guardrail.py
+      run: python scripts/apply-guardrail.py; if ($LASTEXITCODE -eq 0) { python scripts/render-values.py }; exit $LASTEXITCODE
       interactive: false
       continueOnError: false
+  # Refresh the values sheet after every `azd deploy` (MCP URL, profile spec URL, hosted agent name).
+  postdeploy:
+    posix:
+      shell: sh
+      run: python3 scripts/render-values.py
+      interactive: false
+      continueOnError: true
+    windows:
+      shell: pwsh
+      run: python scripts/render-values.py
+      interactive: false
+      continueOnError: true
 
 services:
   # Lab 3 — activities MCP server (FastMCP, streamable HTTP at /mcp) + the Navigator profile OpenAPI

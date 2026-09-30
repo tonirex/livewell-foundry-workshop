@@ -11,7 +11,7 @@ Last checked: 2026-09-30 (Phase 4). Re-check before each delivery with `bash scr
 | Azure CLI (`az`) | ≥ 2.75 | `az cognitiveservices`, `az role assignment` |
 | Azure Developer CLI (`azd`) | ≥ 1.31 (1.34 available) | `azd provision`, `azd down --purge` |
 | Fabric CLI (`fab`) | `ms-fabric-cli==1.7.0` | Workspace, lakehouse, notebook, ontology import |
-| Node | 20 LTS (demos only) | Playwright recorder |
+| Playwright for Python | `playwright>=1.47` (1.63.0 tested), `requirements-demos.txt` | Facilitator demo kit (`demos/`): drives the installed Microsoft Edge (`channel="msedge"`), so no browser download |
 
 Verified end to end on 2026-09-29 (Phase 2, `mcaps` environment): az 2.87.0, azd 1.34.2, Bicep 0.47.16,
 azd extension `azure.ai.agents` 1.0.0-beta.17, fab 1.7.0, Git Bash (Git for Windows) on Windows ARM64.
@@ -72,6 +72,12 @@ brings PyRIT 0.11.0 and pins its own dependencies.
 Verified end to end on 2026-09-30 (Phase 4, `mcaps` environment): Labs 1–4 with `INITIALS=test`, hosted agent
 `livewell-workshop-hosted` deployed with azd extension `azure.ai.agents` 1.0.0-beta.17 (code deploy,
 `python_3_13`, remote build), red-team lite scan.
+
+Phase 5 (`mcaps`): `scripts/smoke-test.py` 7/7, `demos/create-demo-agents.py` (5 agents plus the `livewell-eval`
+dataset), and portal screenshots and videos with Playwright 1.63.0 and Edge on Windows ARM64. Portal surfaces
+the demo kit depends on (the new Foundry portal at `ai.azure.com`, "New Foundry" toggle on): agent playground
+(model picker, Knowledge → Connect to Foundry IQ, Tools → Add, response format), trace dialog, Knowledge, Memory,
+Guardrails and Evaluations pages. The playground accepts only png, jpg, jpeg, webp, gif and pdf attachments.
 
 ## Models
 

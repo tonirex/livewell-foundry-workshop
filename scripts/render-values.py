@@ -6,6 +6,9 @@
 The values sheet is what facilitators put on screen at T-0 (SPEC.md §12.1): project endpoint, agent and
 resource names, lab-account pattern, Wi-Fi. Lab pages only ever use NAMES; runtime values live here.
 Missing values (e.g. Fabric IDs before Phase 3) render as "(not yet provisioned)".
+
+It is regenerated automatically after every deploy: the azd postprovision and postdeploy hooks
+(azure.yaml), scripts/provision.sh, scripts/fabric/deploy.sh and scripts/connect-tools.py all call it.
 """
 from __future__ import annotations
 
@@ -70,6 +73,10 @@ def main() -> int:
         pid = v.get("AZURE_AI_PROJECT_ID")
         return f"https://ai.azure.com/resource/overview?wsid={pid}" if pid else MISSING
 
+    def hosted() -> str:
+        # Name only: the postdeploy hook publishes a newer version than the one azd records in .env.
+        return v.get("AGENT_LIVEWELL_WORKSHOP_HOSTED_NAME") or MISSING
+
     count = int(lab.get("count", 20) or 20)
     prefix = lab.get("prefix", "hpb.lab")
     accounts = f"{prefix}01 ... {prefix}{count:02d}" + (f" @ {tenant_domain}" if tenant_domain else "")
@@ -90,11 +97,13 @@ def main() -> int:
         ("Search service", g("AZURE_SEARCH_SERVICE_NAME")),
         ("Activities MCP server", g("MCP_URL")),
         ("MCP project connection", names["mcp_connection"]),
+        ("Profile OpenAPI spec URL (Lab 3)", g("PROFILE_OPENAPI_URL")),
         ("Fabric workspace", f"{names['fabric_workspace']} — {fabric_ws_url}"),
         ("Fabric data agent", names["data_agent"]),
         ("Fabric IQ connection", v.get("FABRIC_IQ_CONNECTION_ID") and names["fabric_connection"] or MISSING),
         ("Your agent name", ws["agent_naming"]["portal_agent"] + "  (Navigator)"),
         ("Builder agents", ws["agent_naming"]["builder_agent"] + "  (Builder)"),
+        ("Hosted agent (Lab 4, facilitator)", hosted()),
         ("Lab accounts", accounts),
         ("Guest Wi-Fi", f"{ws['guest_wifi']['ssid']} / {ws['guest_wifi']['code']}"),
     ]

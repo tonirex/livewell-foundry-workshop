@@ -59,7 +59,7 @@ names:
   appinsights_connection: "livewell-appinsights"   # project connection to Application Insights (tracing)
   mcp_app: "ca-mcp-activities-<env>"
   mcp_connection: "livewell-activities-mcp"        # project connection to the activities MCP server
-  profile_openapi_tool: "livewell-profile"         # Navigator OpenAPI tool over the profile endpoint
+  profile_openapi_tool: "livewell_profile"         # Navigator OpenAPI tool over the profile endpoint
   fabric_connection: "livewell-fabric-resident360" # project connection created by Add tool -> Fabric IQ
   kb_mcp_connection: "livewell-guides-kb-mcp"      # project connection to the knowledge base MCP endpoint
   hosted_agent: "livewell-workshop-hosted"         # Lab 4 facilitator hosted agent (protected prefix)

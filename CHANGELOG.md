@@ -4,6 +4,48 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Phase 5: Proof & demo kit (`phase-5-proof`)
+
+- `scripts/smoke-test.py` (SPEC §11.2): temporary `livewell-smoke-*` agents built from the demo-agent definitions
+  check the MCP server, knowledge base citation, guardrail, ≥ 2 tools, Fabric for Mei and not for Rahim, and the
+  hosted agent, then print the cost since provision. `--demo-agents` tests the facilitator agents at T-0. It exits 1
+  on a failure or a leftover agent. Verified 7/7 in `mcaps`.
+- `demos/create-demo-agents.py`: the five portal-track reference agents `livewell-demo-{lab0,kb,guarded,tools,fabric}`
+  from the same instruction blocks, schemas, tools and guardrail as the lab pages. All tools run server-side (the
+  profile tool is an OpenAPI tool), so they work in the playground. Re-runs are idempotent (definition hash in the
+  version metadata). It also registers the `livewell-eval` dataset that the Lab 2 portal evaluation picks.
+  `livewell_common.profile_openapi_tool()` is shared with the smoke test.
+- `demos/portal.py`, `demos/scenes.py`, `demos/capture-screenshots.py`, `demos/record-demos.py`: Playwright (Edge)
+  kit for the new Foundry portal. It covers a one-time sign-in with a kept profile, 11 scenes that fill the Navigator
+  screenshot slots, `--list-missing` and `--link`, and one captioned WebM per lab. Scenes never save; IDs, endpoints
+  and e-mails are rewritten and the account button is masked. `requirements-demos.txt` (Playwright ≥ 1.47).
+- `content/labs/screenshots/`: Navigator screenshots for Labs 0–4, linked into the portal lab pages. Five slots stay
+  manual (two lab-account sign-in shots, two Foundry User views of the hosted agent, and the v1/v2 evaluation
+  comparison).
+- `demos/DRY-RUN-TEMPLATE.md`: dry-run report (gates, timed run of show per rail, open questions from
+  ASSUMPTIONS, findings with severity, cost and cleanup, sign-off) that Phase 6 works from.
+- The values sheet refreshes by itself: the `postprovision` hook (after the guardrail), a new project `postdeploy`
+  hook, `scripts/fabric/deploy.sh` and `scripts/connect-tools.py` all run `render-values.py`. The sheet adds the
+  profile OpenAPI URL (Lab 3) and the hosted agent name (Lab 4).
+- Lab 1 portal: step 3 names the Connect to Foundry IQ dialog fields, and step 4 opens the knowledge base page
+  directly (it opens on its settings).
+- Lab 2 portal: the injected flyer is pasted below the prompt instead of attached. The playground accepts only
+  image and PDF attachments, and a rejected `.md` file blocks Send. Step 13 opens the blocked run from the agent's
+  Traces tab (a guardrail-blocked chat turn has no metrics row or Traces button). Step 15 follows the live
+  evaluation wizard: row Version picker, `livewell-eval` dataset, Context set to Not available, and seven evaluators
+  instead of the 22 suggested.
+- Lab 3: the profile tool is `livewell_profile` (the portal rejects dashes in OpenAPI tool names) in the lab pages,
+  answer keys, `connect-tools.py` and the demo agents. The portal OpenAPI step pastes the schema from the values
+  sheet (Tools → Add → Add tools → Custom → OpenAPI tool). The MCP server and the Fabric IQ tool are added from the
+  **Configured** tab of Select a tool (project connections), and the MCP approval rule is edited from the tool
+  row's Actions → Configure. The Fabric step picks the Resident360 ontology agent in the OneLake Catalog. The
+  register-interest prompt adds a "yes" follow-up because the coach asks before it signs Mei up. The approval step
+  now reads **Approve → Approve once**, because Approve has become a split button.
+- `scripts/check-content.py` skips the gitignored `demos/.playwright` (browser profile) and `demos/runs`.
+- Docs: ADMIN-SETUP (demo-agent step at T-3, screenshot and video capture at T-1, smoke test at T-0, backups,
+  script reference), run of show T-0 checklist, PORTAL-TRACK slot rules, versions.md (Playwright 1.63.0, portal
+  surfaces), ASSUMPTIONS 5.x.
+
 ### Phase 4: Builder-rail code (`phase-4-labs`)
 
 - `content/assets/common/livewell_common.py`: shared helper for every lab. It covers settings from `.env` and the

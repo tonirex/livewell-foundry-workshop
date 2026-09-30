@@ -2,14 +2,14 @@
 """Create the Lab 3 tool connections in the shared project (facilitator, once per environment).
 
   1. `livewell-activities-mcp`: RemoteTool connection (no auth, metadata type custom_MCP) to the activities
-     MCP server on Container Apps (`MCP_URL`). Navigator attaches it with Tools -> MCP -> Existing connection;
+     MCP server on Container Apps (`MCP_URL`). Navigator attaches it with Tools -> Add tools -> Configured;
      lab3_tools.py references it by name.
   2. `livewell-fabric-resident360` (only when FABRIC_BRIDGE=true): RemoteTool connection with UserEntraToken
      (identity passthrough, audience https://analysis.windows.net/powerbi/api) to the published data agent's
      MCP endpoint `https://api.fabric.microsoft.com/v1/mcp/workspaces/<ws>/dataagents/<id>/agent`. The Fabric IQ
      tool (`fabric_iq_preview`) uses it, so each lab account queries Fabric as itself.
-  3. azd env: PROFILE_OPENAPI_URL (Navigator `livewell-profile` tool), FABRIC_IQ_SERVER_URL and
-     FABRIC_IQ_CONNECTION_ID, then `python scripts/render-values.py` puts them on the values sheet.
+  3. azd env: PROFILE_OPENAPI_URL (Navigator `livewell_profile` tool), FABRIC_IQ_SERVER_URL and
+     FABRIC_IQ_CONNECTION_ID, then runs `scripts/render-values.py` to put them on the values sheet.
   4. Checks: /healthz, /openapi.json (operationId get_citizen_profile), /profile/me 200 and another resident 403.
 
     python scripts/connect-tools.py            # create/update + checks
@@ -151,7 +151,10 @@ def main() -> int:
     for r in rows:
         print(f"  {r[0]:<{w}}  {r[1]:<30}  {r[2]}")
     if not args.check:
-        log("values: PROFILE_OPENAPI_URL set; run python scripts/render-values.py to refresh the values sheet")
+        rendered = subprocess.run([sys.executable, str(ROOT / "scripts" / "render-values.py"), env.get("AZURE_ENV_NAME", "")],
+                                  cwd=ROOT, check=False).returncode == 0
+        if not rendered:
+            log("values sheet not refreshed: run python scripts/render-values.py")
     return 0 if ok else 1
 
 

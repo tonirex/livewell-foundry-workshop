@@ -119,6 +119,12 @@ Windows on ARM: some wheels are x64-only. Use an x64 Python, or Codespaces.
 - [Answer keys](content/answer-keys/) for the paste-the-output checkpoints.
 - [Fabric bridge inputs](content/fabric/): ontology blueprint, data-agent instructions, Mei's question bank.
 - Deck: `deck/LiveWell-Foundry-Workshop-Day1.pptx` (built by `deck/build_deck.py`).
+- Proof and demo kit (`pip install -r requirements-demos.txt`):
+  [smoke test](scripts/smoke-test.py) (end-to-end check of the live environment, run T-1 and on the morning),
+  [demo agents](demos/create-demo-agents.py) (the five `livewell-demo-*` agents and the `livewell-eval` dataset),
+  [screenshots](demos/capture-screenshots.py) (fills the portal-track 📸 slots; `--list-missing`, `--link`),
+  [demo videos](demos/record-demos.py) (one captioned walkthrough per lab, not committed), and the
+  [dry-run template](demos/DRY-RUN-TEMPLATE.md).
 
 </details>
 
@@ -135,7 +141,8 @@ content/
   prompts/        test-prompts.json, coach-instructions.md
   answer-keys/    checkpoint validators
   fabric/         ontology blueprint, data-agent instructions, question bank
-scripts/          generators (gen-activity.py, gen-citizens.py), r360.py, check-content.py, build-guides-pdf.py
+scripts/          generators (gen-activity.py, gen-citizens.py), r360.py, check-content.py, smoke-test.py, build-guides-pdf.py
+demos/            demo agents, screenshot capture, demo recorder (portal.py, scenes.py), DRY-RUN-TEMPLATE.md
 deck/             build_deck.py + the pptx
 ```
 

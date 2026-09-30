@@ -20,37 +20,37 @@ Use a personal laptop, an InPrivate browser window, and the `hpb.labNN` account 
 
    **Home → Projects → `livewell-workshop` → Open**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-00/03-open-livewell-project.png` · Project picker with livewell-workshop selected
+   ![Project picker with livewell-workshop selected](screenshots/lab-00/03-open-livewell-project.png)
 
 4. Take the quick portal tour without changing anything.
 
    **Build → Agents → Knowledge → Evaluations → Guardrails**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-00/04-portal-tour-build.png` · Build area showing Agents, Knowledge, Evaluations, and Guardrails
+   ![Build area showing Agents, Knowledge, Evaluations, and Guardrails](screenshots/lab-00/04-portal-tour-build.png)
 
 5. Start a new prompt agent.
 
    **Build → Agents → + New agent → Build an agent**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-00/05-new-agent-menu.png` · New agent menu with Build an agent selected
+   ![New agent menu with Build an agent selected](screenshots/lab-00/05-new-agent-menu.png)
 
 6. Name your agent and choose the workshop router model.
 
    **Create an agent → Agent name `livewell-<initials>` → Model `model-router` → Create**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-00/06-name-model-router.png` · Create dialog showing livewell initials name and model-router
+   ![Create dialog showing livewell initials name and model-router](screenshots/lab-00/06-name-model-router.png)
 
 7. Paste the `base` instruction block from [coach-instructions.md](../prompts/coach-instructions.md) and save.
 
    **Playground → Instructions → paste `base` block → Save**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-00/07-base-instructions-saved.png` · Instructions panel with the base block saved
+   ![Instructions panel with the base block saved](screenshots/lab-00/07-base-instructions-saved.png)
 
 8. Start a chat and send prompt `lab0_hi`.
 
    **Chat → New chat → Message box → Send**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-00/08-lab0-hi.png` · Chat response introducing LiveWell Coach and stating it is not a doctor
+   ![Chat response introducing LiveWell Coach and stating it is not a doctor](screenshots/lab-00/08-lab0-hi.png)
 
    Prompt `lab0_hi`:
 
@@ -62,7 +62,7 @@ Use a personal laptop, an InPrivate browser window, and the `hpb.labNN` account 
 
    **Chat → Message box → Send**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-00/09-lab0-am-i-diabetic.png` · Refusal to diagnose with advice to speak to a doctor
+   ![Refusal to diagnose with advice to speak to a doctor](screenshots/lab-00/09-lab0-am-i-diabetic.png)
 
    Prompt `lab0_am_i_diabetic`:
 
@@ -74,13 +74,13 @@ Use a personal laptop, an InPrivate browser window, and the `hpb.labNN` account 
 
     **Response metrics → Traces → Conversation → Response**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-00/10-refusal-trace.png` · Trace view for the diagnosis refusal response
+    ![Trace view for the diagnosis refusal response](screenshots/lab-00/10-refusal-trace.png)
 
 11. Send the router comparison prompt on `model-router`.
 
     **Configure → Model `model-router` → Save → Chat → New chat → Message box → Send**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-00/11-router-compare-model-router.png` · model-router answer to the walking routine prompt
+    ![model-router answer to the walking routine prompt](screenshots/lab-00/11-router-compare-model-router.png)
 
     Prompt `lab0_router_compare`:
 
@@ -92,19 +92,19 @@ Use a personal laptop, an InPrivate browser window, and the `hpb.labNN` account 
 
     **Response metrics → Traces → Response → Metadata → Model**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-00/12-router-chosen-model-trace.png` · Trace metadata showing the chosen model for model-router
+    ![Trace metadata showing the chosen model for model-router](screenshots/lab-00/12-router-chosen-model-trace.png)
 
 13. Compare with the fallback model.
 
     **Configure → Model `gpt-4.1-mini` → Save → Chat → New chat → Message box → Send**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-00/13-compare-gpt-41-mini.png` · gpt-4.1-mini answer to the same walking routine prompt
+    ![gpt-4.1-mini answer to the same walking routine prompt](screenshots/lab-00/13-compare-gpt-41-mini.png)
 
 14. Switch your agent back to `model-router` for the rest of the portal track.
 
     **Configure → Model `model-router` → Save**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-00/14-switch-back-model-router.png` · Agent configuration saved with model-router restored
+    ![Agent configuration saved with model-router restored](screenshots/lab-00/14-switch-back-model-router.png)
 
 ## What you should see
 

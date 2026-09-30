@@ -1,0 +1,5 @@
+# Facilitator demo kit (demos/portal.py, demos/record-demos.py, demos/capture-screenshots.py).
+# Install into the repo .venv; Playwright drives the installed Microsoft Edge (channel "msedge"), so no
+# browser download is needed. Tested versions: versions.md.
+#   .venv/bin/python -m pip install -r requirements-demos.txt      # Windows: .venv\Scripts\python.exe
+playwright>=1.47

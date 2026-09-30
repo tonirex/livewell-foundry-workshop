@@ -17,7 +17,8 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
-SKIP_DIRS = {".git", ".venv", ".venv-redteam", ".runs", "venv", "node_modules", "_refs", ".azure", "__pycache__", "out"}
+SKIP_DIRS = {".git", ".venv", ".venv-redteam", ".runs", "venv", "node_modules", "_refs", ".azure", "__pycache__", "out",
+             ".playwright", "runs"}  # demos/.playwright (browser profile) and demos/runs (capture dumps) are gitignored
 TEXT_EXT = {".md", ".json", ".yaml", ".yml", ".py", ".txt", ".csv", ".sh", ".ps1", ".bicep", ".jsonl", ".ipynb"}
 
 GUID_RE = re.compile(r"\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b")

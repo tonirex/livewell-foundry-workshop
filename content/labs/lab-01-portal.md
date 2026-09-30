@@ -8,25 +8,25 @@ You will attach the shared Foundry IQ knowledge base, add the `knowledge` instru
 
    **Build → Agents → `livewell-<initials>` → Configure**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-01/01-open-agent-configure.png` · Agent configuration page for livewell initials agent
+   ![Agent configuration page for livewell initials agent](screenshots/lab-01/01-open-agent-configure.png)
 
 2. Start the Foundry IQ connection flow.
 
    **Knowledge → Add → Connect to Foundry IQ**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-01/02-knowledge-add-foundry-iq.png` · Knowledge Add menu with Connect to Foundry IQ selected
+   ![Knowledge Add menu with Connect to Foundry IQ selected](screenshots/lab-01/02-knowledge-add-foundry-iq.png)
 
 3. Select the shared workshop knowledge base.
 
-   **Connect to Foundry IQ → `livewell-guides-kb` → Add**
+   **Connect to Foundry IQ → Connection `livewell-search` → Knowledge base `livewell-guides-kb` → Connect**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-01/03-connect-foundry-iq.png` · Knowledge panel with livewell-guides-kb selected
+   ![Knowledge panel with livewell-guides-kb selected](screenshots/lab-01/03-connect-foundry-iq.png)
 
 4. Review the knowledge-base settings without changing names.
 
-   **Build → Knowledge → Knowledge bases → `livewell-guides-kb` → Settings**
+   **Build → Knowledge → Knowledge bases → `livewell-guides-kb`** (the page opens on its settings; do not select **Save**)
 
-   > 📸 **Screenshot slot** · `screenshots/lab-01/04-kb-settings-preview.png` · Retrieval reasoning effort, output mode, and retrieval instructions visible
+   ![Retrieval reasoning effort, output mode, and retrieval instructions visible](screenshots/lab-01/04-kb-settings-preview.png)
 
    ⚠️ Foundry IQ portal settings are preview. The facilitator expects retrieval reasoning effort, output mode, and retrieval instructions to be pre-set for the shared `livewell-guides-kb`.
 
@@ -34,7 +34,7 @@ You will attach the shared Foundry IQ knowledge base, add the `knowledge` instru
 
    **Build → Agents → `livewell-<initials>` → Instructions → paste after `base` block → Save**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-01/05-knowledge-instructions.png` · Instructions with base plus knowledge blocks saved
+   ![Instructions with base plus knowledge blocks saved](screenshots/lab-01/05-knowledge-instructions.png)
 
 6. Set the response format to the Lab 1 JSON schema.
 
@@ -42,13 +42,13 @@ You will attach the shared Foundry IQ knowledge base, add the `knowledge` instru
 
    Do not pick **JSON object**: it needs the word "json" in every chat message and otherwise returns a 400 error. The schema also limits `cited_sources` to the real guide ids.
 
-   > 📸 **Screenshot slot** · `screenshots/lab-01/06-json-response-format.png` · Response format set to JSON schema with livewell_answer pasted
+   ![Response format set to JSON schema with livewell_answer pasted](screenshots/lab-01/06-json-response-format.png)
 
 7. Ask the pre-diabetes food question.
 
    **Chat → New chat → Message box → Send**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-01/07-prediabetes-json-answer.png` · JSON answer with cited_sources populated
+   ![JSON answer with cited_sources populated](screenshots/lab-01/07-prediabetes-json-answer.png)
 
    Prompt `lab1_prediabetes_eat`:
 
@@ -60,19 +60,19 @@ You will attach the shared Foundry IQ knowledge base, add the `knowledge` instru
 
    **Answer → Citations / Sources → `lg-05-eating-for-pre-diabetes`**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-01/08-lg05-citation.png` · Citation panel showing lg-05 or another allowed LiveWell guide
+   ![Citation panel showing lg-05 or another allowed LiveWell guide](screenshots/lab-01/08-lg05-citation.png)
 
 9. Open the trace and find the Foundry IQ retrieval span.
 
    **Response metrics → Traces → Conversation → Foundry IQ / knowledge span**
 
-   > 📸 **Screenshot slot** · `screenshots/lab-01/09-knowledge-trace.png` · Trace showing knowledge-base retrieval before the answer
+   ![Trace showing knowledge-base retrieval before the answer](screenshots/lab-01/09-knowledge-trace.png)
 
 10. Ask the supplement question in a new chat.
 
     **Chat → New chat → Message box → Send**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-01/10-supplement-no-source.png` · JSON answer routing to clinician with no cited source
+    ![JSON answer routing to clinician with no cited source](screenshots/lab-01/10-supplement-no-source.png)
 
     Prompt `lab1_supplement`:
 
@@ -84,7 +84,7 @@ You will attach the shared Foundry IQ knowledge base, add the `knowledge` instru
 
     **Answer JSON → `route` → `cited_sources`**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-01/11-json-route-clinician.png` · route clinician and empty cited_sources for the supplement prompt
+    ![route clinician and empty cited_sources for the supplement prompt](screenshots/lab-01/11-json-route-clinician.png)
 
 ## What you should see
 

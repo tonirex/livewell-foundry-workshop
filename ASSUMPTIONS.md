@@ -112,7 +112,7 @@ Where an entry changes something SPEC.md states, it says so.
   checks pass before Phase 5 captures them.
 - **1.30** Lab pages refer to later-phase files (`content/assets/*.py`, `content/eval/livewell-eval.jsonl`,
   `content/fabric/reference-answers.json`, admin runbooks) as code spans until those files exist.
-- **1.31** Names added beyond SPEC: `livewell-activities-mcp` (MCP connection), `livewell-profile` (OpenAPI tool),
+- **1.31** Names added beyond SPEC: `livewell-activities-mcp` (MCP connection), `livewell_profile` (OpenAPI tool),
   `livewell-fabric-resident360` (Fabric IQ connection), `livewell-guides-kb-mcp` (KB MCP connection),
   `livewell-workshop-hosted` (hosted agent), `livewell-guardrails` (RAI policy), `livewell-medication-dosage` (blocklist),
   `livewell-guides-kb` / `livewell-guides-ks` (knowledge base and source), and demo agents `livewell-demo-lab0|kb|guarded|tools|fabric`.
@@ -379,7 +379,7 @@ Where an entry changes something SPEC.md states, it says so.
   idle waits about 25 s, so the labs call `lw.warm_activities()` first and the workshop day provisions with
   `MCP_MIN_REPLICAS=1`. `register_interest` is not idempotent, so a response that can include an approval round is
   never retried on timeout.
-- **4.7** The Navigator `livewell-profile` OpenAPI tool is served by the same container: `GET /profile/me` (or the
+- **4.7** The Navigator `livewell_profile` OpenAPI tool is served by the same container: `GET /profile/me` (or the
   session resident's id) returns the profile without `resident_id` or `persona_note`; any other id gets 403;
   `/openapi.json` has `operationId` `get_citizen_profile`. The Builder rail answers the same function locally from
   `content/data/citizens.json`.
@@ -470,3 +470,107 @@ Where an entry changes something SPEC.md states, it says so.
   `content/assets/.runs/<lab>-test.json`, maps the SPEC.md signals onto them, and fails if any agent or memory store
   named `livewell-test-*` is left. The Lab 4 hosted signal is SKIP when the hosted agent is not deployed. Lab 2 uses
   the default 6-row eval subset.
+
+## Phase 5: proof and demo kit
+
+### Demo agents and dataset
+
+- **5.1** The facilitator demo agents `livewell-demo-*` (`demos/create-demo-agents.py`) reuse the portal track's
+  instruction blocks, response formats and guardrail, but **every tool runs server-side**: portal agents cannot answer
+  client-side function calls, so `livewell_profile` is an OpenAPI tool over the MCP app's `/openapi.json` (anonymous
+  auth, `resident_id` `me`) instead of the builder-rail function tool. A new version is created only when the
+  definition hash changes, so the demo agents stay at **v1** unless a block changes; captions that mention v2/v3 are
+  shown on v1 and the capture log notes it (`demo agent shows v1`).
+- **5.2** The demo memory store `livewell-demo-memory` uses scope `{{$userId}}`, so every signed-in viewer (facilitator,
+  co-facilitator, recording account) gets separate memories, as in the portal.
+- **5.3** `livewell-eval` is registered with a **version derived from the file's SHA-256** (first 8 hex digits):
+  re-running the script is a no-op until `content/eval/livewell-eval.jsonl` changes, and old versions stay available
+  for earlier evaluation runs.
+- **5.4** The azd env keeps `AGENT_LIVEWELL_WORKSHOP_HOSTED_VERSION=3` (the version azd deployed) while the live hosted
+  agent is at v4 (the postdeploy hook adds the guarded version, 4.18). The values sheet therefore shows the hosted
+  agent **name only**; the agent endpoint serves the latest version.
+
+### Smoke test
+
+- **5.5** `scripts/smoke-test.py` builds temporary `livewell-smoke-*` agents from the demo definitions (or tests the
+  demo agents with `--demo-agents`) and runs the checks in parallel. The Tools check retries once: the model sometimes
+  answers the sign-up question from the knowledge base and profile alone. A `register_interest` approval, if asked, is
+  denied so nothing is written. The Fabric check accepts the agent's top region if it is in the reference top two
+  (close shares). Cost is read from Cost Management at resource-group scope and needs Cost Management Reader or
+  Reader; without it the report says "unavailable" and the checks still decide the exit code. Run on 2026-09-30: 7/7.
+
+### Screenshots and videos
+
+- **5.6** Capture and recording use **Playwright for Python** (1.63.0, Edge channel, 1440×900, en-SG,
+  Asia/Singapore, light theme) with a persistent profile in `demos/.playwright/` (git-ignored). The first run is
+  **headed**: the facilitator signs in once, then the scripts pick the account on "Pick an account" by themselves
+  (`LIVEWELL_PORTAL_ACCOUNT`, default the `az account show` user). Headless works after that for screenshots; videos
+  are always headed.
+- **5.7** Redaction is layered: an init script rewrites tenant and subscription IDs, service endpoints, `*.onmicrosoft.com`
+  and **real** e-mail addresses in the portal's text (synthetic addresses in the content, such as
+  `…@example.invalid` in the injected flyer, stay readable); the account button is hidden; screenshots also mask
+  known identity regions; videos cloak the Microsoft sign-in pages. **Every PNG and video must still be reviewed**
+  before it is linked or shared.
+- **5.8** Videos (`demos/videos/<lab>-<date>.webm`) are **not committed**: they are large and date-bound. Share them
+  with the co-facilitators; the run of show points to the folder.
+- **5.9** Captures come from the **demo agents**, not a participant's agents, so names read `livewell-demo-*` instead
+  of `livewell-<initials>-*`. The model comparison in Lab 0 (00/13–00/14) switches the model **without saving**; the
+  playground answers with the unsaved selection, and a reload shows model-router again.
+- **5.10** The playground accepts only png, jpg, jpeg, webp, gif and pdf attachments, and a failed chip blocks Send.
+  Lab 2 step 4 therefore has participants **paste** the flyer text, not attach `flyer-injected.md` (lab-02-portal.md,
+  scenes.py, and eval row lw-07 all paste it).
+- **5.11** The knowledge base page opens directly on its settings (there is no Settings tab); Lab 1 step 4 says so and
+  tells participants not to select **Save**.
+- **5.12** Five slots stay **manual** (`demos/scenes.py` `MANUAL`): 00/01 and 00/02 (InPrivate sign-in and Authenticator
+  registration, which need a fresh lab account), 04/07 and 04/08 (the disabled Deploy/Publish controls and the My role
+  view, which need a Foundry User lab account), and 02/16 (needs two completed portal evaluation runs,
+  for `livewell-demo-kb` and `livewell-demo-guarded`, which take several minutes each and cost tokens).
+  `capture-screenshots.py --list-missing` lists them.
+- **5.13** `--link` rewrites a slot as a Markdown image only when its PNG exists; slots are still found by path after
+  linking, so a re-capture overwrites the same file and the lab text does not change.
+
+### Dry run
+
+- **5.14** CasePal's current `main` has no `demos/` folder to copy, so `demos/DRY-RUN-TEMPLATE.md` follows the
+  shape of the Phase 4 validation report and SPEC.md §15 (gates, timed run of show, questions, findings, screenshots
+  and videos, cost, sign-off).
+
+### Lab 2 portal findings
+
+- **5.15** A run the guardrail blocks shows a red "blocked by a safety and security control" banner in the chat but no
+  response-metrics row and no Traces button. It does appear in the agent's **Traces** tab as a `Failed` trace whose
+  Input + Output pane shows the same alert, so Lab 2 step 13 opens it from there (`Run.blocked_trace`, which waits up
+  to 4 minutes for ingestion). A run the model refuses in its own words keeps the normal metrics row and trace link.
+- **5.16** The evaluation wizard with an existing dataset has eight steps (Target, Scope, Frequency, Data, Field
+  mapping, Configure agents, Criteria, Review), and **Next** stays disabled until the dataset preview loads. Each
+  target row has its own Version picker. Field mapping auto-detects `query`, `ground_truth` and the `sample.*`
+  fields, but maps **Context** to `{{item.source_prompt_id}}`; the lab sets it to **Not available** (the only
+  alternatives are dataset columns). Groundedness is still offered without a Context mapping.
+- **5.17** The wizard auto-suggests 22–23 evaluators. The lab keeps seven (TaskAdherence, IntentResolution,
+  ToolCallAccuracy, Relevance, Groundedness from the builder rail's set, plus SelfHarm and IndirectAttack for the
+  guardrail story) to keep a 30-row run short and cheap. The builder rail's custom `advice_matches_conditions`
+  evaluator is not in the portal catalogue. Nothing was submitted from the portal during Phase 5.
+
+### Lab 3 portal findings
+
+- **5.18** The portal's **Create an OpenAPI tool** form rejects custom tool names with spaces or dashes ("Custom tool
+  name should not contain spaces or dashes"), although the SDK accepts them. The profile tool is renamed
+  `livewell_profile` everywhere (config, `livewell_common.PROFILE_OPENAPI_NAME`, lab pages, demo agents) so both
+  rails use one name. The form has no import-from-URL option: it takes Name, a required Description, Authentication
+  method and a pasted OpenAPI 3.0+ schema. The served `/openapi.json` carries an absolute `servers` URL, so the
+  participant copies it from the values-sheet URL and pastes it as-is.
+- **5.19** The Tools **Add** menu offers **Add tools**, which opens **Select a tool** with Configured / Catalog / Custom tabs
+  (there is no Fabric IQ entry in Catalog). **Configured** lists the project's tool connections, including
+  `livewell-activities-mcp` and `livewell-fabric-resident360`, plus **Fabric IQ (OneLake Catalog)**; an MCP connection already attached
+  to the agent as an MCP tool is hidden. Selecting a connection and **Add tool** attaches it directly. **Custom → Model Context Protocol (MCP)**
+  always creates a new connection (Name, endpoint, Authentication: Key-based / OAuth Identity Passthrough / Microsoft Entra /
+  Unauthenticated), so the labs route the MCP and Fabric steps through **Configured**. **Fabric IQ (OneLake Catalog) → Add tool**
+  opens an embedded OneLake Catalog (slow to load) where `Resident360 Ontology Agent` is found by keyword. The MCP row's
+  **Actions → Configure** dialog holds the allowed tools, the approval setting and "Tools that don't require approval", saved
+  with **Update**. Screenshots 03/04-05 are taken on `livewell-demo-guarded` because the tools demo agent already has the MCP tool.
+- **5.20** The playground approval card's **Approve** is a split button: it opens a menu with **Approve once**, **Always
+  approve this tool** and **Always approve all tools** (**Deny** is a plain button). The labs say **Approve → Approve once**,
+  so later calls still ask, and they do not claim a scope for the *Always* options. The OpenAPI schema field is a CodeMirror
+  editor (textbox "OpenAPI 3.0+ schema"). The capture scripts' redaction rewrites the endpoint host in editable areas to
+  `your-endpoint` rather than `<endpoint>`, because the editor reads DOM edits back and would otherwise reject the schema's
+  server URL.
