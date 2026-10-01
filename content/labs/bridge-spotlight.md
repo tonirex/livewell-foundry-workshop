@@ -73,7 +73,7 @@ This is a facilitator-led spotlight. Slides-only when the Lab 3 Fabric step is l
    undercounts. When the agent says its result was cut off and declines to give counts, that is the behaviour you want
    from a governed agent: it does not guess.
 
-   > 📸 **Screenshot slot** · `screenshots/bridge/01-mei-multi-hop-answer.png` · Mei's multi-hop answer on livewell-demo-fabric: residents who dropped a programme, by event region
+   ![Mei's multi-hop answer on livewell-demo-fabric: residents who dropped a programme, by event region](screenshots/bridge/01-mei-multi-hop-answer.png)
 
    Open the trace and select the Fabric IQ span (`DataAgent_Resident360_Ontology_Agent`). What to observe:
 
@@ -81,7 +81,7 @@ This is a facilitator-led spotlight. Slides-only when the Lab 3 Fabric step is l
    - **Duration:** a single tool call of 30-90 s. Everything the Fabric data agent does happens inside that one span.
    - **Output:** counts by the region where the events were held, never a list of residents.
 
-   > 📸 **Screenshot slot** · `screenshots/bridge/02-fabric-iq-trace.png` · Foundry trace: one Fabric IQ call with the aggregate userQuestion in and the answer out
+   ![Foundry trace: one Fabric IQ call with the aggregate userQuestion in and the answer out](screenshots/bridge/02-fabric-iq-trace.png)
 6. Show what happened inside Fabric. The Foundry trace stops at the tool boundary: it cannot show how the data agent
    rewrote the question, which GQL it ran or which rows came back. The facilitator visualiser reads the data agent's
    own run steps (its Assistants endpoint, ⚠️ preview) and draws them as one HTML page:
@@ -102,15 +102,16 @@ This is a facilitator-led spotlight. Slides-only when the Lab 3 Fabric step is l
    | Reference check | Ticks against `content/fabric/reference-answers.json`: <!--ref:q_dropped_attended_heldin.distinct_residents-->248<!--/ref--> distinct residents, <!--ref:q_dropped_attended_heldin.top_region-->Central<!--/ref--> first. The region rows add up to more than 248 because someone who attended events in two regions counts in both. |
    | Answer | The text the coach receives: aggregate counts only, no resident named. |
 
-   > 📸 **Screenshot slot** · `screenshots/bridge/03-fabric-steps-overview.png` · fabric-steps.py: the Foundry trace view next to the steps inside Fabric, and the ontology path with attended and heldIn highlighted
+   ![fabric-steps.py: the Foundry trace view next to the steps inside Fabric, and the ontology path with attended and heldIn highlighted](screenshots/bridge/03-fabric-steps-overview.png)
 
-   > 📸 **Screenshot slot** · `screenshots/bridge/04-fabric-steps-queries.png` · fabric-steps.py: the rewritten question, generated GQL and rows per event region
+   ![fabric-steps.py: the rewritten question, generated GQL and rows per event region](screenshots/bridge/04-fabric-steps-queries.png)
 
-   > 📸 **Screenshot slot** · `screenshots/bridge/05-fabric-steps-check.png` · fabric-steps.py: check against the reference answer and the talking points
+   ![fabric-steps.py: check against the reference answer and the talking points](screenshots/bridge/05-fabric-steps-check.png)
 
    Runs are saved to `demos/runs/` (git-ignored). Workspace and artifact ids are stripped before saving. When the
    Fabric capacity is paused or throttled (HTTP 429), use `--replay`: it renders the latest saved run, or the sample
-   in `demos/samples/`, with no capacity at all. Save that sample at the dry run with `--save-sample` and commit it.
+   in `demos/samples/`, with no capacity at all. A sample from a live run (2026-10-01) is committed; refresh it with
+   `--save-sample` and commit it if the data or the data agent's instructions change.
 
    **Recording.** `python demos/record-demos.py --lab bridge` records this step end to end: the question in the
    playground, the Fabric IQ trace, then the visualiser page. The file is `demos/videos/bridge-<YYYY-MM-DD>.webm`.

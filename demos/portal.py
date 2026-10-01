@@ -425,12 +425,38 @@ def open_trace(page, *, timeout: float = 240) -> bool:
     return False
 
 
-def trace_span(page, pattern: str) -> bool:
-    """In an open trace dialog, select the first span whose label matches `pattern` (regex, case-insensitive)."""
+def trace_expand(page, rounds: int = 8) -> int:
+    """Expand every collapsed row of an open trace dialog's tree; it sometimes opens with the agent span collapsed,
+    which hides the tool spans. Returns how many rows were expanded."""
     tree = page.get_by_role("dialog").last.get_by_role("group", name=re.compile("trace tree", re.I))
+    opened = 0
+    for _ in range(rounds):
+        row = tree.locator("[role=button][aria-expanded='false']").first
+        try:
+            if not row.count():
+                break
+            toggle = row.locator("[class*='toggleBtn']").first
+            (toggle if toggle.count() else row).click(timeout=3000)
+        except Exception:
+            break
+        opened += 1
+        time.sleep(0.8)
+    return opened
+
+
+def trace_span(page, pattern: str) -> bool:
+    """In an open trace dialog, select the first span whose label matches `pattern` (regex, case-insensitive).
+    Agent and conversation rows are skipped (their labels carry the agent name, e.g. livewell-demo-fabric, and
+    clicking one can collapse it) unless the pattern asks for invoke_agent."""
+    trace_expand(page)
+    tree = page.get_by_role("dialog").last.get_by_role("group", name=re.compile("trace tree", re.I))
+    skip = None if re.search(r"invoke", pattern, re.I) else re.compile(r"^\s*(invoke\s*agent|conversation)\b", re.I)
     with contextlib.suppress(Exception):
-        span = tree.get_by_role("button", name=re.compile(pattern, re.I)).first
-        if span.count():
+        spans = tree.get_by_role("button", name=re.compile(pattern, re.I))
+        for i in range(spans.count()):
+            span = spans.nth(i)
+            if skip and skip.search(span.inner_text(timeout=2000)):
+                continue
             span.scroll_into_view_if_needed(timeout=3000)
             span.click(timeout=3000)
             time.sleep(2)

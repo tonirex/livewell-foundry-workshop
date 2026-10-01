@@ -4,6 +4,43 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Builder evidence and Fabric F4 (`builder-evidence`)
+
+Evidence that the Builder-rail scripts work, and the Bridge captured live. Details in ASSUMPTIONS 3b.7, 4.16, 4.23
+and 6.8.
+
+- **Fabric F4.** F2 was throttled (429 `RequestBlocked`) after a day of testing; F4 cleared it in about 4 minutes.
+  The SKU is now a parameter: `FABRIC_SKU` (default F2) in `infra/env/*.bicepparam`, `azd env set FABRIC_SKU F4`,
+  and `scripts/capacity.sh scale F2|F4 <env>` to change it in seconds. `cost-guardrails.sh` prices F2 and F4 and
+  warns when the capacity and `FABRIC_SKU` disagree; `preflight.sh` checks the CU quota for the chosen SKU.
+  ADMIN-SETUP covers the quota, the 429 fix and the cost (F4 ≈ US$0.76/h, F2 ≈ US$0.36/h).
+- **Bridge captured live.** `fabric-steps.py bridge` ran on F4 (123 s, one 3-hop GQL query, 5/5 reference counts).
+  The run is committed as `demos/samples/fabric-steps-q_dropped_attended_heldin.json`, so `--replay` works on the
+  day with no capacity, and screenshots bridge/01-05 are filled.
+- **Terminal evidence recorder.** `demos/record-terminal.py NAME -- <command>` records a script's output with real
+  timings (asciinema `.cast`), a full-page PNG and a replay video (`demos/videos/`, git-ignored). Local paths are
+  redacted, and `--render` re-redacts and re-renders an existing cast. The 2026-10-01 set (Lab 0 router picks,
+  Builder Labs 1-4, the Bridge replay) is indexed in `demos/evidence/2026-10-01/README.md`.
+- **Lab 3 specialists.** The coach's `tools` instructions told it both to search the knowledge base before food or
+  activity advice and to ask the specialists for plans, so it sometimes planned from the knowledge base itself and
+  `lab3_specialists` failed. The rule now says plans come from the specialists when the coach has them (ask both,
+  keep their guide ids) and from the knowledge base otherwise. A/B probe: both specialists consulted 9/9 vs 7/9.
+- **Validator.** `validate-builder-rail.py` deletes stale `livewell-test-*` agents and memory stores from an earlier
+  interrupted run before it starts, so the leftover check only fails on this run's leftovers.
+- **Trace screenshots.** The portal's trace dialog sometimes opens with the agent span collapsed or before every span
+  has arrived, and a span pattern such as `fabric` also matched the agent row (`livewell-demo-fabric`), so lab-03/11,
+  lab-03/20, lab-03/23 and bridge/02 showed the agent's instructions instead of the tool call. `portal.trace_expand`
+  opens the tree, `trace_span` skips agent and conversation rows, and `scenes.Run.trace` reopens a partial trace.
+  Lab 3 steps 19-21 now say the coach asks before `register_interest`, so the approval card follows Rahim's "yes"
+  (ASSUMPTIONS 5.21).
+- **Red-team memory pollution.** Lab 3's prediabetes prompt was blocked in the portal (self-harm, medium) but passed
+  through the SDK. The cause: the cloud red team runs as the facilitator, so `livewell-demo-tools`' memory tool saved
+  its attack summaries (starvation diets, self-harm, poisoning) into the facilitator's memory scope, and memory search
+  fed them back into ordinary chats. The consent line that `lw.ask` adds hid it from the validators. The scope was
+  cleared, and the prompt now passes 6/6 without the consent line. New `scripts/reset-demo-memory.py` lists your
+  scope, flags residue and `--reset`s it; `red-team-cloud.py` clears it after each run (`--keep-memory` skips), and
+  `smoke-test.py` fails on residue. Lab 2 uses it as a second red-team teaching point (ASSUMPTIONS 5.22).
+
 ### Navigator feedback (`navigator-feedback`)
 
 Facilitator feedback on the 🟢 Navigator rail, so each lab has something concrete to show on the day. Details and
@@ -43,8 +80,8 @@ live results are in ASSUMPTIONS 6.1–6.8.
   step 6 shows what the trace cannot: `demos/fabric-steps.py` reads the data agent's own run steps (rewrite,
   generated GQL, rows) and renders one HTML page with the ontology path, a timeline, the queries, a check against
   `reference-answers.json` and talking points. `--replay` works with the capacity paused, from `demos/runs/` or a
-  sample in `demos/samples/` saved at the dry run (`--save-sample`; none is committed yet because F2 was
-  throttled). Five Bridge screenshot slots; `record-demos.py --lab bridge` records the step to
+  sample in `demos/samples/` (`--save-sample`; see Builder evidence above for the committed one). Five Bridge
+  screenshot slots; `record-demos.py --lab bridge` records the step to
   `demos/videos/bridge-<date>.webm` (git-ignored).
 - Demo kit: `scenes.py` adds the ladder, programme-fit and Bridge scenes and parses slots from
   `bridge-spotlight.md` too; renamed Lab 2 and Lab 3 screenshots follow the new step numbers.

@@ -4,7 +4,8 @@
 Each lab runs as `python content/assets/labN_*.py --cleanup` with INITIALS=test (or --initials) and
 LIVEWELL_AUTO_APPROVE=1, exactly as a participant would. Every lab records its checks in
 content/assets/.runs/<lab>-<initials>.json (livewell_common.expect); this script reads them, adds the
-semantic signals below, then makes sure nothing of livewell-<initials>-* is left behind.
+semantic signals below, then makes sure nothing of livewell-<initials>-* is left behind (items an
+interrupted earlier run left are deleted before the labs start and don't count).
 
 Semantic signals (SPEC.md phase 4 verification):
   * Lab 1: the knowledge base is cited
@@ -102,6 +103,7 @@ def signal_rows(runs: dict[str, dict], fabric: bool) -> list[tuple[str, str, str
 
 
 def leftovers() -> list[str]:
+    """Delete and return every livewell-<initials>-* agent and memory store."""
     from common import livewell_common as lw
 
     prefix = f"livewell-{lw.initials()}-"
@@ -143,6 +145,9 @@ def main() -> int:
 
     lw.initials()
     fabric = lw.fabric_enabled(args.fabric)
+    stale = leftovers()  # an interrupted earlier run must not fail this one
+    if stale:
+        print(f"[validate] cleared {len(stale)} item(s) left by an earlier run: {', '.join(stale)}", flush=True)
     runs = {}
     for key in [k.strip() for k in args.labs.split(",") if k.strip()]:
         if key not in LABS:

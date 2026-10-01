@@ -14,6 +14,8 @@ a pass/fail table plus the total cost since provision (Cost Management, resource
                       (+-1); lab1_prediabetes_eat on the same agent does NOT call Fabric (FABRIC_BRIDGE only)
   * Hosted agent      livewell-workshop-hosted (if deployed) answers lab4_week_plan_handoff with evidence
                       JSON that cites a guide, under livewell-guardrails
+  * Demo memory       your scope in livewell-demo-memory holds no red-team attack summaries
+                      (scripts/reset-demo-memory.py; they make the Lab 3 demo agents trip the content filter)
 
     python scripts/smoke-test.py                   # temporary agents, ~3-5 min
     python scripts/smoke-test.py --demo-agents     # T-0: test the livewell-demo-* agents (never deleted)
@@ -148,6 +150,18 @@ def check_fabric(agent) -> list:
              f"tools {', '.join(sorted(set(rahim.tool_names))) or 'none'} ({rahim.seconds:.0f}s)")]
 
 
+def check_memory() -> list:
+    """Your scope in the demo memory store must not hold red-team attack summaries (ASSUMPTIONS 5.22)."""
+    spec = importlib.util.spec_from_file_location("reset_demo_memory", ROOT / "scripts" / "reset-demo-memory.py")
+    mem = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mem)
+    found = mem.scope_memories()
+    flagged = mem.residue(found)
+    return [("Demo memory: no red-team residue in your scope", not flagged,
+             f"{len(found)} memories, {len(flagged)} flagged"
+             + ("; python scripts/reset-demo-memory.py --reset" if flagged else ""))]
+
+
 def check_hosted() -> list:
     import openai
 
@@ -254,7 +268,8 @@ def main() -> int:
         print(f"[smoke] agents: {', '.join(f'{a.name} v{a.version}' for a in agents.values())}", flush=True)
 
         jobs = {"mcp": check_mcp, "knowledge": lambda: check_knowledge(agents["knowledge"]),
-                "guarded": lambda: check_guardrail(agents["guarded"]), "tools": lambda: check_tools(agents["tools"])}
+                "guarded": lambda: check_guardrail(agents["guarded"]), "tools": lambda: check_tools(agents["tools"]),
+                "memory": check_memory}
         if fabric:
             jobs["fabric"] = lambda: check_fabric(agents["fabric"])
         if not args.no_hosted:

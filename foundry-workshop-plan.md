@@ -30,7 +30,8 @@ All figures come from `python scripts/r360.py` (and, from Phase 3b, `scripts/val
 | Knowledge base alive | Send `lab1_prediabetes_eat` to `livewell-demo-kb` | ≥ 1 citation to `lg-05-eating-for-pre-diabetes` |
 | MCP alive | `GET /health` on `ca-mcp-activities-<env>` | 200 |
 | Demo videos ready | `demos/videos/<lab>-<date>.webm` from `python demos/record-demos.py` (T-1) open in a local player | Plays offline |
-| Smoke test | `python scripts/smoke-test.py --demo-agents` | 7/7 PASS |
+| Smoke test | `python scripts/smoke-test.py --demo-agents` | 8/8 PASS (includes the demo-memory residue check) |
+| Demo memory clean | `python scripts/reset-demo-memory.py` (`--reset` if it flags residue after a red team) | Exit 0, 0 flagged |
 | Wi-Fi slide | SSID/code from `content/config/workshop.yaml` | Correct values (TODO until confirmed) |
 
 ## Morning: L100, everyone (9:00–12:15)

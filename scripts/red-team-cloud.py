@@ -32,11 +32,17 @@ attack success, and the table flags those as "[n safe?]".
 Cost: the AI evaluations meter (ADMIN-SETUP cost table) plus the target's model tokens (about 0.6 M input and
 0.13 M output tokens per agent in the validation run). Never loop it. Needs Foundry User (or higher) on the
 project; the region must support cloud red teaming (swedencentral does, validated 1 Oct 2026).
+
+Memory: the attacks are sent as the person who starts the run, so a target with memory (livewell-demo-tools)
+writes the attack summaries into YOUR `{{$userId}}` memory scope. They then leak into your own portal demos and
+trip the content filter (ASSUMPTIONS 5.22). The script therefore clears your scope in the demo memory store when
+the runs finish (scripts/reset-demo-memory.py --reset); pass --keep-memory to skip that.
 """
 from __future__ import annotations
 
 import argparse
 import datetime as dt
+import importlib.util
 import json
 import pathlib
 import re
@@ -86,6 +92,29 @@ def target_for(name: str):
         desc = TOOL_DESCRIPTIONS.get(tname) or (t.get("openapi") or {}).get("description") or t.get("description")
         tools.append({"name": tname, "description": desc or t["type"]})
     return m.AzureAIAgentTarget(name=name, version=str(latest["version"]), tool_descriptions=tools)
+
+
+def has_memory(name: str) -> bool:
+    latest = lw.project().agents.get(name).versions["latest"]
+    return any(str(t.get("type", "")).startswith("memory") for t in latest["definition"].get("tools", []))
+
+
+def memory_module():
+    spec = importlib.util.spec_from_file_location("reset_demo_memory", ROOT / "scripts" / "reset-demo-memory.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def clear_red_team_memory() -> None:
+    """Delete the caller's demo-memory scope once the attacks are done (memory updates land a few seconds late)."""
+    time.sleep(60)
+    mem = memory_module()
+    found = mem.scope_memories()
+    flagged = mem.residue(found)
+    ok = mem.reset() if found else True
+    lw.say(f"[red team] cleared your demo memory scope ({len(found)} memories, {len(flagged)} red-team residue): "
+           f"{'ok' if ok else 'FAILED, run python scripts/reset-demo-memory.py --reset'}")
 
 
 def make_taxonomy(target, stamp: str, out: pathlib.Path):
@@ -171,6 +200,8 @@ def main() -> int:
     ap.add_argument("--taxonomy-only", action="store_true", help="generate and print the taxonomy, no attacks")
     ap.add_argument("--yes", action="store_true", help="do not ask before spending")
     ap.add_argument("--report", metavar="EVAL_ID", help="reprint the table for an earlier red team (no new runs)")
+    ap.add_argument("--keep-memory", action="store_true",
+                    help="do not clear your demo memory scope after the run (it holds the attack summaries)")
     args = ap.parse_args()
     lw.load_settings()
 
@@ -193,6 +224,12 @@ def main() -> int:
         return 0
     lw.say(f"[red team] {len(agents)} target(s) x strategies {', '.join(strategies)} x {args.turns} turns, "
            f"{len(CRITERIA)} evaluators. Billed on the AI evaluations meter plus model tokens.")
+    memory_targets = [a for a in agents if has_memory(a)]
+    if memory_targets:
+        lw.say(f"[red team] {', '.join(memory_targets)} has memory: the attacks are saved to YOUR memory scope and "
+               + ("kept (--keep-memory). Clear it before you demo: python scripts/reset-demo-memory.py --reset"
+                  if args.keep_memory else "the script clears it when the runs finish. If you stop the script "
+                  "early, run python scripts/reset-demo-memory.py --reset afterwards."))
     if not args.yes and input("Run it? [y/N] ").strip().lower() not in ("y", "yes"):
         lw.say("cancelled")
         return 1
@@ -227,6 +264,11 @@ def main() -> int:
     report = next((getattr(r, "report_url", None) for r in done.values() if getattr(r, "report_url", None)), None)
     print(f"\nPortal: Foundry > Evaluations > Red team > {red_team.name}" + (f"\n{report}" if report else ""))
     print(f"Per-attack conversations: {out}")
+    if memory_targets and not args.keep_memory:
+        if len(done) == len(runs):
+            clear_red_team_memory()
+        else:
+            lw.say("[red team] runs still in progress: when they finish, run python scripts/reset-demo-memory.py --reset")
     return 0
 
 
