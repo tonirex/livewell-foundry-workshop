@@ -6,10 +6,10 @@ the Cognitive Services RP answers GET on a single raiBlocklistItems resource wit
 which makes `azd provision --preview` / what-if fail on every run (ASSUMPTIONS.md 4.2). This script PUTs
 each item (idempotent) and deletes items that are no longer in the YAML.
 
-It also re-asserts the policy body and the deployment attachments, because tenant governance automation
-can rewrite a custom RAI policy after provisioning (seen in a Microsoft-internal tenant: the policy was
-replaced by a single "Indirect Attack" filter with no blocklist; ASSUMPTIONS.md 4.14). Run it on the
-morning of the workshop, or at least `--check`.
+It also re-asserts the policy body and each deployment's guardrail (`deployment_policy`, or the custom policy
+for names in `attach_to`), because tenant governance automation can rewrite a custom RAI policy after
+provisioning (seen in a Microsoft-internal tenant: the policy was replaced by a single "Indirect Attack" filter
+with no blocklist; ASSUMPTIONS.md 4.14). Run it on the morning of the workshop, or at least `--check`.
 
     python scripts/apply-guardrail.py            # reads AZURE_* from the azd env / process env
     python scripts/apply-guardrail.py --check    # report only, exit 1 on any drift
@@ -79,14 +79,17 @@ def main() -> int:
     live = (arm.get(policy_url, ok_404=True) or {}).get("properties")
     policy_drift = policy_diff(policy_body["properties"], live)
 
-    # 3. Chat deployments carry the policy.
+    # 3. Deployment guardrails: the platform default, unless a deployment is listed in attach_to.
     deployments = {d["name"]: d for d in arm.get_all(f"{account}/deployments?api-version={API}")}
-    attach_drift = [n for n in cfg["attach_to"]
-                    if n in deployments and deployments[n]["properties"].get("raiPolicyName") != cfg["policy_name"]]
+    attached = cfg.get("attach_to") or []
+    default = cfg.get("deployment_policy") or "Microsoft.DefaultV2"
+    want_policy = {n: cfg["policy_name"] if n in attached else default for n in deployments}
+    attach_drift = [n for n, p in want_policy.items() if deployments[n]["properties"].get("raiPolicyName") != p]
+    layout = ", ".join(f"{n}={p}" for n, p in sorted(want_policy.items()))
 
     print(f"[guardrail] {bl['name']}: {len(current)} items, drift={item_drift or 'none'}")
     print(f"[guardrail] policy {cfg['policy_name']}: drift={policy_drift or 'none'}")
-    print(f"[guardrail] attached to {', '.join(cfg['attach_to'])}: drift={attach_drift or 'none'}")
+    print(f"[guardrail] deployments {layout}: drift={attach_drift or 'none'}")
     if args.check:
         return 1 if (item_drift or policy_drift or attach_drift) else 0
 
@@ -106,11 +109,11 @@ def main() -> int:
         d = deployments[name]
         body = {"sku": d["sku"], "properties": {**{k: v for k, v in d["properties"].items()
                                                    if k in ("model", "versionUpgradeOption", "currentCapacity")},
-                                                "raiPolicyName": cfg["policy_name"]}}
+                                                "raiPolicyName": want_policy[name]}}
         body["properties"].pop("currentCapacity", None)
         arm.call("PUT", f"{account}/deployments/{name}?api-version={API}", body)
-        print(f"[guardrail] attached policy to {name}")
-    print(f"[guardrail] in sync: {len(wanted)} items; policy {cfg['policy_name']} on {', '.join(cfg['attach_to'])}")
+        print(f"[guardrail] set {name} guardrail to {want_policy[name]}")
+    print(f"[guardrail] in sync: {len(wanted)} items; policy {cfg['policy_name']}; deployments {layout}")
     return 0
 
 

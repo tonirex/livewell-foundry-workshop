@@ -742,7 +742,8 @@ class Run:
     response_ids: list[str] = field(default_factory=list)
     seconds: float = 0.0
     replies: int = 0
-
+    annotations: list[str] = field(default_factory=list)  # filters that scored the turn but did not block it
+    model: str = ""  # the model that answered; for model-router, the model it routed to
     @property
     def tool_names(self) -> list[str]:
         return [c.name for c in self.tool_calls]
@@ -775,8 +776,8 @@ class Run:
             data = self.json()
         except Exception:
             pass
-        return {"agent": self.agent, "version": self.version, "blocked": self.blocked,
-                "block_reason": self.block_reason, "seconds": round(self.seconds, 1),
+        return {"agent": self.agent, "version": self.version, "model": self.model, "blocked": self.blocked,
+                "block_reason": self.block_reason, "annotations": self.annotations, "seconds": round(self.seconds, 1),
                 "tools": [{k: v for k, v in asdict(c).items() if k != "output"} for c in self.tool_calls],
                 "kb_called": self.kb_called, "fabric_called": self.fabric_called, "citations": self.citations,
                 "json": data, "text": self.text, "response_ids": self.response_ids}
@@ -808,6 +809,21 @@ def _filter_reasons(obj: Any, path: str = "") -> list[str]:
 def _block_reason(err: Exception) -> str:
     reasons = sorted(set(_filter_reasons(getattr(err, "body", None))))
     return ", ".join(r for r in reasons if r not in ("content_filter_results", "content_filters")) or "content_filter"
+
+
+def filter_annotations(filters: Any) -> list[str]:
+    """Annotate vs block: a guardrail scores every turn. Categories under the policy's threshold are not
+    blocked; the response carries them in `content_filters` (for example "self_harm low"). This names them."""
+    notes = []
+    for f in filters or []:
+        for cat, v in ((f or {}).get("content_filter_results") or {}).items():
+            if not isinstance(v, dict) or v.get("filtered"):
+                continue
+            if v.get("severity") not in (None, "safe"):
+                notes.append(f"{cat} {v['severity']}")
+            if v.get("detected"):
+                notes.append(f"{cat} detected")
+    return sorted(set(notes))
 
 
 def _item_to_call(item: Any) -> ToolCall | None:
@@ -882,6 +898,9 @@ def ask(agent: Any, text: str | None = None, *, prompt_id: str | None = None,
             break
         run.response_ids.append(resp.id)
         previous = resp.id
+        run.model = getattr(resp, "model", "") or run.model
+        run.annotations = sorted(set(run.annotations) | set(
+            filter_annotations((getattr(resp, "model_extra", None) or {}).get("content_filters"))))
         details = getattr(resp, "incomplete_details", None)
         if getattr(resp, "status", "") == "incomplete" and "content_filter" in str(details):
             run.blocked, run.block_reason, run.text = True, "content_filter (output)", resp.output_text or ""
@@ -928,7 +947,9 @@ def show_run(run: Run, *, verbose: bool = False, max_chars: int = 1500) -> None:
     if run.blocked:
         say(f"{head}  BLOCKED by guardrail ({run.block_reason})")
     else:
-        say(f"{head}  tools: {', '.join(run.tool_names) or 'none'}")
+        say(f"{head}  tools: {', '.join(run.tool_names) or 'none'}"
+            + (f"  model: {run.model}" if run.model else "")
+            + (f"  annotated: {', '.join(run.annotations)}" if run.annotations else ""))
     if verbose:
         for c in run.tool_calls:
             say(f"   - {c.kind} {c.server + '.' if c.server else ''}{c.name} {_trunc(c.arguments, 200)}"
@@ -1046,8 +1067,8 @@ def run_async(coro: Any) -> Any:
 
 @functools.lru_cache(maxsize=None)
 def af_client(model: str | None = None):
-    """Agent Framework chat client on a project model deployment. Every call goes to the deployment, so
-    the deployment's guardrail (livewell-guardrails) applies to local agents too."""
+    """Agent Framework chat client on a project model deployment. Every call goes straight to the deployment, so
+    local agents run under the deployment's guardrail (the platform default), not an agent-level policy."""
     async def make():
         from agent_framework.foundry import FoundryChatClient
         from azure.identity.aio import AzureCliCredential, AzureDeveloperCliCredential, ChainedTokenCredential

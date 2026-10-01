@@ -15,7 +15,8 @@ Layers (--layers static,data,live or all; default static,data):
   live    Asks the published Fabric data agent each question-bank question --runs times (default 3) with
           your Azure CLI token: no resident_id, grouped, exact counts, order within +-1 rank of the reference,
           latency logged (expect 30-90 s, flag > 120 s). "strict" questions fail the gate; "advisory" ones only
-          warn. The coach-routing row (the LiveWell agent calls Fabric IQ for Mei and never for Rahim) is read
+          warn. The coach-routing row (the LiveWell agent calls Fabric IQ for Mei and for Rahim's age-band
+          cohort question only, never for his food question) is read
           from the latest Lab 3 Builder run with the Fabric step (content/assets/.runs/lab3-*.json, written by
           `make -C content/assets validate-rail`); SKIP when there is none.
 
@@ -82,7 +83,14 @@ LIVE_SHAPE = {
     "q_disengaged_regions": ("region", "disengaged", None),
     "q_programmes_disengaged_enrolled": ("programme_name", "disengaged_enrolled", None),
     "q_dropped_attended_heldin": ("region", "residents", "distinct_residents"),
+    "q_programme_fit": ("programme_name", "enrolled", None),
 }
+# More per-row counts that must match: returned by the main canonical GQL block, or by its own ``{q}.{key}``.
+EXTRA_COUNTS = {"q_programme_fit": ["dropped"]}
+# Answers may list these rows in any order (the agent sorts by drop-out %, the reference by count).
+UNORDERED = {"q_programme_fit"}
+# The data agent says "fewer than 5" instead of any count under 5 (data-agent-instructions.md).
+SMALL_CELL = 5
 GQL_RE = re.compile(r"^```gql name=([a-z0-9_.]+)\n(.*?)^```\s*$", re.MULTILINE | re.DOTALL)
 
 
@@ -199,11 +207,17 @@ def parse_beats(md: str) -> list[dict]:
 
 
 def parse_qbank() -> dict[str, dict]:
+    """Question-bank rows. Rows under a '## ... cohort question' heading are the citizen seat (the coach asks
+    Fabric an aggregate question for Rahim); every other row is one of Mei's officer questions."""
+    text = QBANK.read_text(encoding="utf-8")
+    heads = [(m.start(), m.group(1)) for m in re.finditer(r"^## (.+)$", text, flags=re.MULTILINE)]
     rows = {}
-    for m in QBANK_ROW_RE.finditer(QBANK.read_text(encoding="utf-8")):
+    for m in QBANK_ROW_RE.finditer(text):
         rest = m.group(4)
         gate = "advisory" if "advisory" in rest else "strict" if "strict" in rest else "?"
-        rows[m.group(1)] = {"question": m.group(2).strip(), "prompt": m.group(3), "gate": gate}
+        head = next((h for pos, h in reversed(heads) if pos < m.start()), "")
+        seat = "citizen" if re.search(r"cohort question", head, flags=re.IGNORECASE) else "officer"
+        rows[m.group(1)] = {"question": m.group(2).strip(), "prompt": m.group(3), "gate": gate, "seat": seat}
     return rows
 
 
@@ -257,26 +271,34 @@ def static_layer(g: Gate, ref: dict, prompts: dict, glossary: dict, qrows: dict)
             problems.append(f"{b['beat']}: seat {b['seat']}, but prompt {b['prompt']} is {prompts[b['prompt']].get('seat')}")
     g.check(L, f"every beat has a seat, a source and a known prompt ({len(beats)} beats)", problems)
 
-    # 2. citizen beats never Fabric; officer beats always Fabric
+    # 2. citizen beats use Fabric only for the aggregate cohort question; officer beats always Fabric
     problems = []
+    cohort_q = {q for q, r in qrows.items() if r["seat"] == "citizen"}
     for b in beats:
-        if b["seat"] == "citizen" and b["source"] == "fabric":
-            problems.append(f"{b['beat']}: citizen beat uses source fabric")
+        if (b["seat"] == "citizen" and b["source"] == "fabric"
+                and prompts.get(b["prompt"], {}).get("question_id") not in cohort_q):
+            problems.append(f"{b['beat']}: citizen beat uses source fabric outside the cohort question")
         if b["seat"] == "officer" and b["source"] != "fabric":
             problems.append(f"{b['beat']}: officer beat uses source {b['source']}")
     for pid, p in prompts.items():
-        if p.get("seat") == "citizen" and "fabric_iq" in (p.get("expected") or {}).get("tools", []):
-            problems.append(f"test-prompts.json: citizen prompt {pid} expects the fabric_iq tool")
+        if (p.get("seat") == "citizen" and "fabric_iq" in (p.get("expected") or {}).get("tools", [])
+                and p.get("question_id") not in cohort_q):
+            problems.append(f"test-prompts.json: citizen prompt {pid} expects the fabric_iq tool "
+                            "but is not the question-bank cohort question")
     citizen = sum(b["seat"] == "citizen" for b in beats)
-    g.check(L, f"Rahim's {citizen} citizen beats never use Fabric; Mei's beats always do", problems)
+    g.check(L, f"Rahim's {citizen} citizen beats use Fabric only for the aggregate cohort question; "
+               "Mei's beats always do", problems)
 
     # 3. fabric beat <-> test prompt <-> question bank
     problems = []
     fabric_beats = [b for b in beats if b["source"] == "fabric"]
+    officer_n = sum(r["seat"] == "officer" for r in qrows.values())
     if not qrows:
         problems.append("no questions found in the question-bank.md main table")
-    if len(qrows) > 3:
-        problems.append(f"question-bank.md has {len(qrows)} Mei questions (max 3)")
+    if officer_n > 3:
+        problems.append(f"question-bank.md has {officer_n} Mei questions (max 3)")
+    if len(cohort_q) > 1:
+        problems.append(f"question-bank.md has {len(cohort_q)} citizen cohort questions (max 1)")
     for q, row in qrows.items():
         p = prompts.get(row["prompt"])
         if p is None:
@@ -285,10 +307,13 @@ def static_layer(g: Gate, ref: dict, prompts: dict, glossary: dict, qrows: dict)
         exp = p.get("expected") or {}
         if p.get("question_id") != q:
             problems.append(f"{q}: prompt {row['prompt']} has question_id {p.get('question_id')}")
-        if p.get("seat") != "officer":
-            problems.append(f"{q}: prompt {row['prompt']} is not an officer prompt")
-        if p.get("text", "").strip() != row["question"]:
-            problems.append(f"{q}: question text differs between question-bank.md and test-prompts.json")
+        if p.get("seat") != row["seat"]:
+            problems.append(f"{q}: prompt {row['prompt']} is not a {row['seat']} prompt")
+        # Mei types the question herself; for Rahim the coach sends fabric_question on his behalf.
+        asked = p.get("fabric_question") if row["seat"] == "citizen" else p.get("text")
+        if (asked or "").strip() != row["question"]:
+            field = "fabric_question" if row["seat"] == "citizen" else "text"
+            problems.append(f"{q}: question text differs between question-bank.md and test-prompts.json ({field})")
         if exp.get("reference") != f"content/fabric/reference-answers.json#{q}":
             problems.append(f"{q}: expected.reference should be content/fabric/reference-answers.json#{q}")
         if "fabric_iq" not in exp.get("tools", []):
@@ -305,8 +330,12 @@ def static_layer(g: Gate, ref: dict, prompts: dict, glossary: dict, qrows: dict)
         if q not in gql:
             problems.append(f"{q}: no ```gql name={q}``` block in question-bank.md (the live graph check needs it)")
         total_key = LIVE_SHAPE.get(q, (None, None, None))[2]
-        if total_key and f"{q}.{total_key}" not in gql:
-            problems.append(f"{q}: no ```gql name={q}.{total_key}``` block in question-bank.md")
+        for key in [total_key] if total_key else []:
+            if f"{q}.{key}" not in gql:
+                problems.append(f"{q}: no ```gql name={q}.{key}``` block in question-bank.md")
+        for key in EXTRA_COUNTS.get(q, []):
+            if f"{q}.{key}" not in gql and not re.search(rf"\bAS {key}\b", gql.get(q, "")):
+                problems.append(f"{q}: the canonical GQL returns no {key} (AS {key}) and there is no {q}.{key} block")
         for name, text in gql.items():
             if name.startswith(q) and RESIDENT_ID_RE.search(text):
                 problems.append(f"{name}: canonical GQL names a resident_id")
@@ -317,7 +346,11 @@ def static_layer(g: Gate, ref: dict, prompts: dict, glossary: dict, qrows: dict)
     for pid, p in prompts.items():
         if p.get("seat") == "officer" and p.get("question_id") not in qrows:
             problems.append(f"test-prompts.json: officer prompt {pid} has no question-bank.md question")
-    g.check(L, f"{len(fabric_beats)} fabric beats <-> test prompts <-> {len(qrows)} question-bank questions", problems)
+        if p.get("seat") == "citizen" and p.get("question_id") and p["question_id"] not in cohort_q:
+            problems.append(f"test-prompts.json: citizen prompt {pid} has question_id {p['question_id']}, "
+                            "not the question-bank cohort question")
+    g.check(L, f"{len(fabric_beats)} fabric beats <-> test prompts <-> {len(qrows)} question-bank questions "
+               f"({officer_n} Mei, {len(cohort_q)} cohort)", problems)
 
     # 4. glossary: verbatim definitions + no spelling drift
     problems = []
@@ -359,7 +392,17 @@ def static_layer(g: Gate, ref: dict, prompts: dict, glossary: dict, qrows: dict)
     for b in fabric_beats:
         if RESIDENT_ID_RE.search(b["text"]):
             problems.append(f"{b['beat']}: fabric beat names a resident_id")
-    g.check(L, "no resident_id in officer prompts, question bank, fabric beats or reference answers", problems)
+    # The cohort question carries the age band only: nothing that narrows the group to Rahim.
+    rahim = ref.get("rahim", {})
+    narrowing = [w for w in ("Rahim", rahim.get("planning_area"), rahim.get("region")) if w]
+    for q in cohort_q:
+        asked = qrows[q]["question"] + " " + (prompts.get(qrows[q]["prompt"], {}).get("fabric_question") or "")
+        if RESIDENT_ID_RE.search(asked):
+            problems.append(f"{q}: the cohort question sent to Fabric names a resident_id")
+        problems += [f"{q}: the cohort question sent to Fabric mentions '{w}' (age band only)"
+                     for w in narrowing if re.search(rf"\b{re.escape(w)}\b", asked)]
+    g.check(L, "no resident_id in officer prompts, question bank, fabric beats or reference answers; "
+               "the cohort question names the age band only", problems)
 
     # 6. numbers only from the reference answers
     problems = []
@@ -536,8 +579,29 @@ def data_layer(g: Gate, t: dict, ref: dict, glossary: dict, check_only: bool) ->
     qh = ref["q_dropped_attended_heldin"]
     if max(r["residents"] for r in qh["rows"]) > qh["distinct_residents"]:
         problems.append("q_dropped_attended_heldin: a region has more residents than the distinct total")
+    qf = ref["q_programme_fit"]
+    mine = {p["programme_name"] for p in c.get("programmes", [])} if c else set()
+    if qf["age_band"] != facts["age_band"]:
+        problems.append(f"q_programme_fit: cohort age band {qf['age_band']} is not Rahim's {facts['age_band']}")
+    if {r["programme_name"] for r in qf["rows"]} != progs:
+        problems.append("q_programme_fit: rows do not cover every programme in dim_programme")
+    for r in qf["rows"]:
+        if not 0 <= r["dropped"] <= r["enrolled"] <= qf["cohort_residents"]:
+            problems.append(f"q_programme_fit: {r['programme_name']} dropped {r['dropped']} / enrolled "
+                            f"{r['enrolled']} / cohort {qf['cohort_residents']} out of order")
+        if r["enrolled"] < SMALL_CELL:
+            problems.append(f"q_programme_fit: {r['programme_name']} has {r['enrolled']} enrolled (< {SMALL_CELL}); "
+                            "the data agent would hide it")
+    if qf["recommended_programme"] in mine:
+        problems.append(f"q_programme_fit: recommends {qf['recommended_programme']}, which Rahim is already in")
+    if qf["dropped_programme"] not in facts["dropped_programmes"]:
+        problems.append(f"q_programme_fit: {qf['dropped_programme']} is not a programme Rahim dropped")
+    if qf["recommended_dropped"] < SMALL_CELL:
+        problems.append(f"q_programme_fit: the recommended programme's drop-out count is under {SMALL_CELL}; "
+                        "the coach could not quote it")
     g.check(L, "reference answers add up and match the gold aggregates (Region.resident_count / "
-               "disengaged_residents / disengaged_share_pct, Programme.disengaged_enrolled, distinct totals)", problems)
+               "disengaged_residents / disengaged_share_pct, Programme.disengaged_enrolled, distinct totals; "
+               "programme fit: Rahim's age band, a programme he is not in)", problems)
 
     new = json.dumps(ref, indent=2, ensure_ascii=False) + "\n"
     old = REF_JSON.read_text(encoding="utf-8") if REF_JSON.exists() else None
@@ -614,14 +678,24 @@ def judge(q: str, answer: str, refq: dict, is_error: bool) -> tuple[list[str], l
     if len(found) < need:
         problems.append(f"not grouped: {len(found)} {label_key} rows recognised (need >= {need})")
     rank = {r[label_key]: i for i, r in enumerate(rows)}
-    value = {r[label_key]: r[count_key] for r in rows}
+    checks = [count_key] + EXTRA_COUNTS.get(q, [])
     for lab, nums in found:
-        if value[lab] not in nums:
-            shown = ", ".join(f"{n:g}" for n in nums)
-            problems.append(f"{lab}: reference {count_key} = {value[lab]}, the answer shows {shown}")
+        row = next(r for r in rows if r[label_key] == lab)
+        for key in checks:
+            want = row[key]
+            if want < SMALL_CELL:
+                if want in nums:
+                    problems.append(f"{lab}: shows {key} = {want}; counts under {SMALL_CELL} must read "
+                                    f"'fewer than {SMALL_CELL}'")
+                elif SMALL_CELL not in nums and want != 0:
+                    problems.append(f"{lab}: reference {key} = {want} (under {SMALL_CELL}), the answer shows neither "
+                                    f"it nor 'fewer than {SMALL_CELL}'")
+            elif want not in nums:
+                shown = ", ".join(f"{n:g}" for n in nums)
+                problems.append(f"{lab}: reference {key} = {want}, the answer shows {shown}")
     expected = sorted((lab for lab, _ in found), key=rank.get)
     for pos, (lab, _) in enumerate(found):
-        if abs(pos - expected.index(lab)) > 1:
+        if q not in UNORDERED and abs(pos - expected.index(lab)) > 1:
             problems.append(f"{lab} is listed at position {pos + 1}; reference position {expected.index(lab) + 1} (> +-1 rank)")
     if total_key and refq[total_key] not in numbers(answer):
         problems.append(f"the answer does not give the total {total_key} = {refq[total_key]}")
@@ -678,9 +752,10 @@ def graph_check(g: Gate, ref: dict, qrows: dict, only: list[str]) -> None:
         if only and q not in only:
             continue
         label_key, count_key, total_key = LIVE_SHAPE[q]
-        jobs = [(q, None)] + ([(f"{q}.{total_key}", total_key)] if total_key else [])
-        jobs += [(f"{q}.gold", None)] if f"{q}.gold" in gql else []
-        for name, tkey in jobs:
+        jobs = [(q, "rows", count_key)] + ([(f"{q}.{total_key}", "total", total_key)] if total_key else [])
+        jobs += [(f"{q}.{key}" if f"{q}.{key}" in gql else q, "rows", key) for key in EXTRA_COUNTS.get(q, [])]
+        jobs += [(f"{q}.gold", "rows", count_key)] if f"{q}.gold" in gql else []
+        for name, kind, key in jobs:
             start = time.time()
             try:
                 status, _, body = fab.call("POST", f"/v1/workspaces/{ws}/GraphModels/{gid}/executeQuery?preview=true",
@@ -694,13 +769,14 @@ def graph_check(g: Gate, ref: dict, qrows: dict, only: list[str]) -> None:
             if code != "00000":
                 problems.append(f"{name}: GQL status {code}: {((body or {}).get('status') or {}).get('description')}")
                 continue
-            if tkey:
+            if kind == "total":
                 got = next(iter(data[0].values()), None) if data else None
-                if got != ref[q][tkey]:
-                    problems.append(f"{name}: graph says {got}, reference {ref[q][tkey]}")
+                if got != ref[q][key]:
+                    problems.append(f"{name}: graph says {got}, reference {ref[q][key]}")
                 continue
-            got = {row.get(label_key): row.get(count_key) for row in data}
-            want = {row[label_key]: row[count_key] for row in ref[q]["rows"]}
+            # A programme with no matching edge is absent from the result: compare it as 0.
+            got = {row.get(label_key): row.get(key) for row in data if row.get(key)}
+            want = {row[label_key]: row[key] for row in ref[q]["rows"] if row[key]}
             if got != want:
                 diff = sorted(k for k in set(got) | set(want) if got.get(k) != want.get(k))
                 problems.append(f"{name}: " + "; ".join(f"{k} graph {got.get(k)} vs reference {want.get(k)}"
@@ -733,7 +809,8 @@ def live_layer(g: Gate, ref: dict, prompts: dict, qrows: dict, runs: int, only: 
     for q, row in qrows.items():
         if only and q not in only:
             continue
-        text = prompts[row["prompt"]]["text"]
+        # Mei types the question herself; for Rahim's cohort question this is what the coach sends to Fabric.
+        text = row["question"]
         for i in range(1, runs + 1):
             if not first and pause:
                 time.sleep(pause)
@@ -771,9 +848,13 @@ def live_layer(g: Gate, ref: dict, prompts: dict, qrows: dict, runs: int, only: 
 def coach_routing() -> tuple[str, str, list[str]]:
     """The coach-routing row comes from the latest Lab 3 Builder run with --fabric (lab3_tools.py records the
     two checks in content/assets/.runs/lab3-<INITIALS>.json; validate-builder-rail.py runs it as INITIALS=test)."""
-    name = "coach routing via the LiveWell agent (Fabric IQ call for Mei, none for Rahim)"
+    name = ("coach routing via the LiveWell agent (Fabric IQ for Mei and for Rahim's age-band cohort question, "
+            "none for his food question)")
     need = ["fabric_q_disengaged_regions: Fabric IQ tool called",
-            "lab1_prediabetes_eat on the Fabric coach: no Fabric call"]
+            "lab1_prediabetes_eat on the Fabric coach: no Fabric call",
+            "lab3_programme_fit: Fabric IQ tool called",
+            "lab3_programme_fit: no resident_id or personal detail sent to Fabric",
+            "lab3_programme_fit: approval requested before register_interest"]
     runs = sorted((ROOT / "content" / "assets" / ".runs").glob("lab3-*.json"), key=lambda p: p.stat().st_mtime)
     for path in reversed(runs):
         checks = json.loads(path.read_text(encoding="utf-8")).get("results", {}).get("checks", {})
@@ -839,7 +920,7 @@ def write_report(g: Gate, records: list[dict], ref: dict, qrows: dict, prompts: 
         label_key, count_key, total_key = LIVE_SHAPE[q]
         rows = ref[q]["rows"]
         extra = [k for k in rows[0] if k not in (label_key, count_key)]
-        out += [f"**`{q}`** ({row['gate']}): {prompts[row['prompt']]['text']}", "",
+        out += [f"**`{q}`** ({row['gate']}, {row['seat']} seat): {row['question']}", "",
                 f"| {label_key} | {count_key} | " + " | ".join(extra) + " |",
                 "|---|---|" + "---|" * len(extra)]
         out += [f"| {r[label_key]} | {r[count_key]} | " + " | ".join(str(r[k]) for k in extra) + " |" for r in rows]

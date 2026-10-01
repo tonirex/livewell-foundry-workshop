@@ -1,14 +1,19 @@
 # LiveWell guardrail (RAI policy) — single source of truth.
-# infra/modules/foundry.bicep loads this file (loadYamlContent) to create the blocklist + policy and to
-# attach the policy to the chat deployments; the blocklist items are synced by the azd postprovision hook
-# (scripts/apply-guardrail.py); content/assets/lab2_govern.py prints it; the hosted agent
-# references the policy by its full ARM resource ID (azd output LIVEWELL_RAI_POLICY_ID).
+# infra/modules/foundry.bicep loads this file (loadYamlContent) to create the blocklist + policy and to set
+# each deployment's guardrail; the blocklist items are synced by the azd postprovision hook
+# (scripts/apply-guardrail.py); content/assets/lab2_govern.py prints it; agents (Lab 2 v2, demo agents,
+# the hosted agent) reference the policy by its full ARM resource ID (azd output LIVEWELL_RAI_POLICY_ID).
 # ARM filter names verified against Microsoft.CognitiveServices 2025-06-01 (ASSUMPTIONS.md 4.3).
 policy_name: livewell-guardrails
 base_policy: Microsoft.DefaultV2
 mode: Blocking
-# Chat deployments that carry the policy (names from workshop.yaml models:). Embeddings are excluded.
-attach_to: [model-router, gpt-4.1-mini, gpt-5.4-mini]
+# Guardrail on the model deployments. Every deployment keeps the platform default, and livewell-guardrails
+# is attached per agent (rai_config). An agent with no guardrail of its own inherits its deployment's policy,
+# and so do model calls made inside tools (Foundry IQ query planning). With the custom policy on the
+# deployments, Lab 2's v1 was never "bare" and the knowledge tool blocked red flags on v1 (ASSUMPTIONS.md 6.1).
+deployment_policy: Microsoft.DefaultV2
+# Deployments that carry livewell-guardrails instead (names from workshop.yaml models:). Empty on purpose.
+attach_to: []
 content_filters:
   # Harm categories on input (Prompt) and output (Completion). Self-harm is Low on both sides because the
   # extreme-fasting red flag (lab2_extreme_fasting) sits close to the self-harm category.

@@ -4,6 +4,55 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Navigator feedback (`navigator-feedback`)
+
+Facilitator feedback on the 🟢 Navigator rail, so each lab has something concrete to show on the day. Details and
+live results are in ASSUMPTIONS 6.1–6.8.
+
+- **Guardrails (all labs).** The model deployments now carry `Microsoft.DefaultV2` (`deployment_policy` in
+  `content/config/guardrails.yaml`, `infra/modules/foundry.bicep`). The custom `livewell-guardrails` policy is
+  attached per agent instead (Lab 2 v2, the guarded demo agents, the hosted agent). Before, every agent inherited the
+  custom policy from its deployment, so Lab 2's v1 blocked the red flags too and the custom guardrail showed no
+  benefit. `scripts/apply-guardrail.py --check` reports a per-deployment policy as drift.
+- **Lab 0: which model did the router pick?** The agent trace only says `model-router`. The lab now shows the
+  deployment Playground (model name under each answer) and the Monitor tab, and `demos/router-picks.py` prints the
+  chosen model per prompt from `response.model` and the preview `model_selection_details`. Slot 00/12 shows the
+  playground.
+- **Lab 2: guardrails, evaluations, red teaming.** The portal track runs a red-flag ladder on v1 (default policy)
+  and v2 (custom), explains **block vs annotate** (the severity threshold and the blocklist decide; annotate records
+  the category and lets the answer through), and shows the custom policy's deliberate over-block (dose reminder).
+  New prompts `lab2_skip_meals` and `lab2_benign_dose_reminder` (test-prompts, answer key).
+  Facilitator demos: `demos/guardrail-matrix.py` (red-flag and benign prompts × model choice × guardrail, printed
+  locally or as a portal evaluation with `--cloud`), and `scripts/red-team-cloud.py`, the cloud AI Red Teaming Agent
+  against named agent versions, including the agentic risk categories. Its results open under **Evaluations → Red
+  team**; `--report <eval id>` reprints the table and flags scored "successes" whose judge reason says the agent
+  refused. Lab 2 judges use code metrics for red-flag rows (`lab2_govern.py`).
+- **Lab 3 Fabric step: Programme fit.** A citizen reason to call Fabric: Rahim asks which programme people his age
+  stick with (`lab3_programme_fit`, narrative ch3.6). The coach asks Fabric one age-band question
+  (`q_programme_fit`), recommends the lowest drop-out programme he is not already in (Diabetes Prevention), finds
+  its intake session through MCP (ACT047, new `programme` field) and asks before `register_interest`. The ontology
+  gains a `droppedOut` edge (`scripts/r360.py`, `30-ontology.py`, blueprint); the data agent and the coach both
+  apply the "fewer than 5" rule. The data agent is told to run two queries and join them (one combined query
+  returned enrolled = dropped). `validate-narrative.py` and `check-content.py` allow exactly this one citizen
+  cohort question. `lab3_tools.py --fabric` and the portal Fabric step (slots 03/19–03/21) follow it.
+- **Lab 4: what is happening.** `lab-04.md` adds a component diagram, a who-does-what table linked to the Agent
+  Framework code in `lab4_multiagent.py` and `hosted-agent-example/main.py`, and sequence and hand-off diagrams.
+  `demos/lab4-devui.py` serves the same two workflows in Agent Framework DevUI (beta, `requirements-demos.txt`) for
+  a live graph and timeline; slots 04/10 and 04/11.
+- **Bridge spotlight (the "Lab 5" in the feedback).** Step 5 says what to observe in the Fabric IQ trace, and a new
+  step 6 shows what the trace cannot: `demos/fabric-steps.py` reads the data agent's own run steps (rewrite,
+  generated GQL, rows) and renders one HTML page with the ontology path, a timeline, the queries, a check against
+  `reference-answers.json` and talking points. `--replay` works with the capacity paused, from `demos/runs/` or a
+  sample in `demos/samples/` saved at the dry run (`--save-sample`; none is committed yet because F2 was
+  throttled). Five Bridge screenshot slots; `record-demos.py --lab bridge` records the step to
+  `demos/videos/bridge-<date>.webm` (git-ignored).
+- Demo kit: `scenes.py` adds the ladder, programme-fit and Bridge scenes and parses slots from
+  `bridge-spotlight.md` too; renamed Lab 2 and Lab 3 screenshots follow the new step numbers.
+  `capture-screenshots.py --link` writes LF and only touches pages it changes.
+- Docs: ADMIN-SETUP (captures, videos, backups, script reference), DRY-RUN-TEMPLATE, question bank, data-agent and
+  coach instructions, workshop.yaml region note for cloud red teaming, versions.md (DevUI), NOTICE and SPEC
+  (5 relationships).
+
 ### Phase 5: Proof & demo kit (`phase-5-proof`)
 
 - `scripts/smoke-test.py` (SPEC §11.2): temporary `livewell-smoke-*` agents built from the demo-agent definitions

@@ -1090,6 +1090,30 @@
       "cost_sgd": 0,
       "healthpoints_on_attendance": 10,
       "capacity": 30
+    },
+    {
+      "activity_id": "ACT047",
+      "name": "Diabetes Prevention Programme: Intake Session",
+      "category": "talk",
+      "programme": "Diabetes Prevention",
+      "organiser_type": "Community Club",
+      "venue": "Woodlands Community Club - Seminar Room",
+      "planning_area": "Woodlands",
+      "region": "North",
+      "indoor": true,
+      "hazy_day_ok": true,
+      "day_of_week": "Sat",
+      "start_time": "09:30",
+      "time_of_day": "morning",
+      "duration_min": 60,
+      "intensity": "light",
+      "condition_friendly": [
+        "pre-diabetes",
+        "seniors"
+      ],
+      "cost_sgd": 0,
+      "healthpoints_on_attendance": 10,
+      "capacity": 20
     }
   ]
 }

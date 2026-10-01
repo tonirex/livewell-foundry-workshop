@@ -120,7 +120,7 @@ Rahim (citizen)  ─┐                                   ┌─ Foundry IQ know
 Mei Lin (officer) ┘      │ memory · guardrails (RAI policy) · tracing         ├─ MCP tool: activities server (Container Apps) — approval before write
                          │ evaluations · red team · Control Plane            ├─ Fabric IQ tool: published Fabric data agent (OneLake Catalog → MCP, identity passthrough)
                          └─ Specialists: Nutrition · Activity · Programme-Insights
-Fabric (F2, same tenant, swedencentral): workspace "HPB Resident 360" → lh_resident360 (5 Delta tables) → resident_ontology (4 entities / 4 relationships) → Resident360 Ontology Agent (published)
+Fabric (F2, same tenant, swedencentral): workspace "HPB Resident 360" → lh_resident360 (7 Delta tables) → resident_ontology (4 entities / 5 relationships) → Resident360 Ontology Agent (published)
 Components demonstrated (put this as the "Foundry features you will touch" slide, grouped Build / Govern / Extend):
 
 Layer	Component	Status
@@ -194,7 +194,7 @@ preflight.sh (provider registration for Microsoft.Fabric, Microsoft.CognitiveSer
 Step	Tooling	Detail
 10 workspace	Fabric CLI (pip install ms-fabric-cli; fab auth login user/SP/MI)	fab create "HPB Resident 360.Workspace" -P capacityname=fablivewell<env>; fab acl set facilitators Admin
 20 lakehouse + data	fab create lh_resident360.Lakehouse; fab cp content/data/resident360/* …/Files/; fab import + fab start load_resident360.ipynb; poll until tables exist	Five Delta tables: resident_360 (wide gold: region, age band, steps, MVPA, sleep, meal stats, Healthpoints, screening risk, is_disengaged, region_is_hazy), dim_region, dim_event_occurrence (occurrence grain event_occurrence_id), fact_event_attendance (attended rows only), fact_programme_enrolment; upsert Rahim RESIDENT_00061 (§3.3); replace the Databricks activity table with generated activity_daily.csv
-30 ontology	Fabric REST POST /v1/workspaces/{ws}/ontologies with definition parts rendered from content/fabric/ontology.blueprint.yaml (definition.json, .platform, EntityTypes/{id}/definition.json, EntityTypes/{id}/DataBindings/*.json, RelationshipTypes/{id}/definition.json); model on Learn Lab 28 setup-ontology.ipynb; poll the LRO	resident_ontology: entities Resident, Region, EventOccurrence, Programme; relationships livesIn, attended, heldIn, enrolledIn; first binding non-timeseries
+30 ontology	Fabric REST POST /v1/workspaces/{ws}/ontologies with definition parts rendered from content/fabric/ontology.blueprint.yaml (definition.json, .platform, EntityTypes/{id}/definition.json, EntityTypes/{id}/DataBindings/*.json, RelationshipTypes/{id}/definition.json); model on Learn Lab 28 setup-ontology.ipynb; poll the LRO	resident_ontology: entities Resident, Region, EventOccurrence, Programme; relationships livesIn, attended, heldIn, enrolledIn, droppedOut; first binding non-timeseries
 35 graph refresh	Script if the API allows; otherwise a documented one-click (graph model resident_ontology_graph_* → Schedule → Refresh now); wait for Completed	Skipping this makes the data agent fail with a backend graph error
 40 data agent	REST POST /v1/workspaces/{ws}/dataAgents with draft and published stage parts + publish_info.json (or the Fabric data agent Python SDK from a notebook)	Resident360 Ontology Agent; instructions = content/fabric/data-agent-instructions.md (aggregate-only, HPB vocabulary, glossary-driven); verify it is published
 90 write env	Write workspace/ontology/data-agent IDs and workspace URL to .azure/<env>/.env	Lab pages use names only

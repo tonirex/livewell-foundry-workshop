@@ -111,6 +111,12 @@ relationship_types:
     target: { entity: Programme, key_column: programme_name }
     mapping_table: fact_programme_enrolment
 
+  - id: droppedOut
+    description: "A programme the resident enrolled in and then dropped out of (Dropped rows only). Every droppedOut pair is also an enrolledIn pair."
+    origin: { entity: Resident,  key_column: resident_id }
+    target: { entity: Programme, key_column: programme_name }
+    mapping_table: fact_programme_dropped
+
 graph_refresh:
   graph_model_prefix: "resident_ontology_graph_"
   note: "After creating the ontology, refresh the graph model (Schedule -> Refresh now) and wait for Completed, or the data agent fails with a backend graph error."

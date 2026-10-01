@@ -88,11 +88,13 @@ Use a personal laptop, an InPrivate browser window, and the `hpb.labNN` account 
     Plan a gentle 7-day walking routine for a 61-year-old who is just getting started, one line per day.
     ```
 
-12. Read which model the router selected.
+12. See which model the router selected. The agent's trace records the deployment name (`gen_ai.response.model: "model-router"`), not the model behind it, so read the choice from the model-router deployment's own playground. Each answer there shows the model that served it.
 
-    **Response metrics → Traces → Response → Metadata → Model**
+    **Build → Models → `model-router` → Playground → Message box: `Hi!` → Send → then the `lab0_router_compare` prompt → Send → read the model name under each answer**
 
-    ![Trace metadata showing the chosen model for model-router](screenshots/lab-00/12-router-chosen-model-trace.png)
+    ![model-router playground showing gpt-5-nano for Hi and gpt-5.6-luna for the walking plan](screenshots/lab-00/12-router-chosen-model-playground.png)
+
+    A greeting usually goes to a small, cheap model, such as `gpt-5-nano`. A plan for a 61-year-old goes to a larger one, such as `gpt-5.6-luna`. The router chooses per request, so your names can differ. The deployment's **Monitor** tab breaks the cost chart down by the underlying model.
 
 13. Compare with the fallback model.
 
@@ -108,12 +110,13 @@ Use a personal laptop, an InPrivate browser window, and the `hpb.labNN` account 
 
 ## What you should see
 
-Your `livewell-<initials>` agent greets warmly, says it is not a doctor, refuses to diagnose diabetes, and routes the user to a doctor. The router comparison produces two reasonable walking plans, and the trace for the `model-router` run shows the model selected for that request.
+Your `livewell-<initials>` agent greets warmly, says it is not a doctor, refuses to diagnose diabetes, and routes the user to a doctor. The router comparison produces two reasonable walking plans. The model-router playground shows a different underlying model for the greeting and for the plan.
 
 ## If something looks different
 
 - ⚠️ If the project picker or Build rail has moved, use the portal search box for `livewell-workshop` and `Agents`.
 - If `model-router` is not selectable, use `gpt-4.1-mini` and tell the facilitator before Lab 1.
 - If the response diagnoses you, re-paste the `base` block from [coach-instructions.md](../prompts/coach-instructions.md) and save.
-- If trace metadata does not show the router choice, capture the trace screenshot anyway and note the missing field.
+- The agent trace shows `model-router` as the model: that is the deployment name. Use the model-router playground (step 12) to see the underlying model.
+- If the model-router playground is not available to your role, note the gap and read the facilitator's demo of the router choice instead.
 

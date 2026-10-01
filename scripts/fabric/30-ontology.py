@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Step 30: render content/fabric/ontology.blueprint.yaml into a Fabric ontology definition and create
-resident_ontology (4 entity types, 4 relationship types) in the workshop workspace.
+resident_ontology (4 entity types, 5 relationship types) in the workshop workspace.
 
 Modelled on Microsoft Learn mslearn-fabric Lab 28 `setup-ontology.ipynb`: generic items endpoint,
 `LakehouseTable` NonTimeSeries data bindings (every entity's first and only binding is static), and one

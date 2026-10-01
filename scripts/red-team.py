@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """Facilitator-only AI red-team scan of the guarded LiveWell Coach (Lab 2), via the azure-ai-evaluation SDK.
 
-Portal red teaming is not offered in swedencentral (workshop.yaml region_matrix), so the AI Red Teaming Agent
-runs from here. By default the script creates a temporary `livewell-<INITIALS>-redteam` agent that matches the
+The portal red-teaming wizard is documented for other regions (workshop.yaml region_matrix), so this script runs
+the AI Red Teaming Agent on this laptop for the content-harm categories. `scripts/red-team-cloud.py` runs it in the
+cloud instead (swedencentral works through the API) and adds the agentic categories.
+
+By default this script creates a temporary `livewell-<INITIALS>-redteam` agent that matches the
 Lab 2 guarded version (base + knowledge + safety blocks, the knowledge base, `livewell-guardrails`), scans it
 and deletes it. `--agent NAME` scans an existing agent instead (for example `livewell-demo-guarded` or the
 hosted `livewell-workshop-hosted`).

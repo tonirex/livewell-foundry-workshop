@@ -29,9 +29,10 @@ image, no Docker or ACR push). The name has the protected `livewell-workshop-` p
 * **Coach** merges both answers into the Lab 3 evidence JSON; the schema only accepts real guide ids.
 * A `text_only` agent middleware passes earlier answers to each agent as plain text (another agent's MCP call
   items can make a model call fail). Every inner call has `store: False`.
-* **Guardrail.** Every model call goes to a project deployment that runs `livewell-guardrails`, and the agent
-  itself carries the same policy (`rai_config` = full resource ID of `livewell-guardrails`). An agent-level
-  policy replaces the deployment's; with it, a blocked prompt fails fast with HTTP 400 `content_filter`.
+* **Guardrail.** The agent carries `livewell-guardrails` (`rai_config` = its full resource ID), which screens
+  requests at the agent endpoint: a blocked prompt fails fast with HTTP 400 `content_filter` (`--verify`). The
+  model calls the team makes inside the container go straight to the project deployments, which run the platform
+  default `Microsoft.DefaultV2` (ASSUMPTIONS.md 6.1).
 
 ## Deploy (facilitator)
 

@@ -94,11 +94,11 @@ def _norm_condition(value: str) -> str:
 
 def _summary(a: dict[str, Any]) -> dict[str, Any]:
     keys = (
-        "activity_id", "name", "category", "venue", "planning_area", "region", "indoor", "hazy_day_ok",
-        "day_of_week", "start_time", "time_of_day", "duration_min", "intensity", "condition_friendly",
-        "cost_sgd", "healthpoints_on_attendance",
+        "activity_id", "name", "category", "programme", "venue", "planning_area", "region", "indoor",
+        "hazy_day_ok", "day_of_week", "start_time", "time_of_day", "duration_min", "intensity",
+        "condition_friendly", "cost_sgd", "healthpoints_on_attendance",
     )
-    return {k: a.get(k) for k in keys}
+    return {k: a[k] for k in keys if k in a}  # "programme" only on HPB programme intake sessions
 
 
 @mcp.tool()
@@ -109,6 +109,9 @@ def find_activities(
     time_of_day: str = "",
 ) -> dict[str, Any]:
     """Find community healthy-living activities in a Singapore planning area or region.
+
+    Results can include an HPB programme's intake session; those carry a "programme" field
+    (for example "Diabetes Prevention").
 
     Args:
         area: Planning area (for example "Woodlands") or region ("North", "West", "Central",

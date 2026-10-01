@@ -21,7 +21,7 @@ Patterns: revisit #1-#10; this spotlight adds no new build checkpoint.
 
 ## Story chapter
 
-[Chapter 5](../narrative/rahim.md#chapter-5--two-iqs-one-agent-bridge-spotlight) closes the arc by bringing Mei's multi-hop Fabric question back to the same coach. The named ontology edges keep home region and event region separate, while the coach stays aggregate-only. Rahim's story never needed Fabric; Mei's programme questions did.
+[Chapter 5](../narrative/rahim.md#chapter-5--two-iqs-one-agent-bridge-spotlight) closes the arc by bringing Mei's multi-hop Fabric question back to the same coach. The named ontology edges keep home region and event region separate, while the coach stays aggregate-only. Mei used Fabric to plan for whole regions; Rahim used it once, through one age-band cohort question that never carried his name, to pick the programme people like him stick with.
 
 ## 🟢 Navigator
 
@@ -72,8 +72,52 @@ This is a facilitator-led spotlight. Slides-only when the Lab 3 Fabric step is l
    why it counts inside one grouped query: the agent's query tool caps the rows it reads, so listing residents one by one
    undercounts. When the agent says its result was cut off and declines to give counts, that is the behaviour you want
    from a governed agent: it does not guess.
-6. Mention the optional Forgebook notebook by name: `Microsoft IQ in Foundry` on `microsoft-foundry.github.io/forgebook`.
-7. Close on the extended arc: **Unify → Govern → Personalise → Converse → Coach & Act**.
+
+   > 📸 **Screenshot slot** · `screenshots/bridge/01-mei-multi-hop-answer.png` · Mei's multi-hop answer on livewell-demo-fabric: residents who dropped a programme, by event region
+
+   Open the trace and select the Fabric IQ span (`DataAgent_Resident360_Ontology_Agent`). What to observe:
+
+   - **Input:** `userQuestion` is an aggregate question about residents and regions. No name or `resident_id` leaves the coach.
+   - **Duration:** a single tool call of 30-90 s. Everything the Fabric data agent does happens inside that one span.
+   - **Output:** counts by the region where the events were held, never a list of residents.
+
+   > 📸 **Screenshot slot** · `screenshots/bridge/02-fabric-iq-trace.png` · Foundry trace: one Fabric IQ call with the aggregate userQuestion in and the answer out
+6. Show what happened inside Fabric. The Foundry trace stops at the tool boundary: it cannot show how the data agent
+   rewrote the question, which GQL it ran or which rows came back. The facilitator visualiser reads the data agent's
+   own run steps (its Assistants endpoint, ⚠️ preview) and draws them as one HTML page:
+
+   ```powershell
+   python demos\fabric-steps.py bridge --open            # live: asks the published data agent (30-90 s)
+   python demos\fabric-steps.py --replay bridge --open   # no capacity needed: latest saved run, else demos\samples\
+   python demos\fabric-steps.py fit --open               # Rahim's Lab 3 programme-fit question (two queries, joined)
+   ```
+
+   The page has five parts. Walk them top to bottom:
+
+   | Part | What to point out |
+   |---|---|
+   | Foundry trace vs inside Fabric | The trace sees one call; inside it the data agent rewrote the question, generated GQL and ran it. |
+   | Ontology path | The traversed edges are highlighted: `attended`, then `heldIn`. The dashed `livesIn` edge was not used, so the grain is the event region, not the home region. |
+   | Timeline and queries | Each query card shows the rewrite, the generated GQL and the rows it read, with a bar per region. Compare with the canonical GQL from the question bank below it. |
+   | Reference check | Ticks against `content/fabric/reference-answers.json`: <!--ref:q_dropped_attended_heldin.distinct_residents-->248<!--/ref--> distinct residents, <!--ref:q_dropped_attended_heldin.top_region-->Central<!--/ref--> first. The region rows add up to more than 248 because someone who attended events in two regions counts in both. |
+   | Answer | The text the coach receives: aggregate counts only, no resident named. |
+
+   > 📸 **Screenshot slot** · `screenshots/bridge/03-fabric-steps-overview.png` · fabric-steps.py: the Foundry trace view next to the steps inside Fabric, and the ontology path with attended and heldIn highlighted
+
+   > 📸 **Screenshot slot** · `screenshots/bridge/04-fabric-steps-queries.png` · fabric-steps.py: the rewritten question, generated GQL and rows per event region
+
+   > 📸 **Screenshot slot** · `screenshots/bridge/05-fabric-steps-check.png` · fabric-steps.py: check against the reference answer and the talking points
+
+   Runs are saved to `demos/runs/` (git-ignored). Workspace and artifact ids are stripped before saving. When the
+   Fabric capacity is paused or throttled (HTTP 429), use `--replay`: it renders the latest saved run, or the sample
+   in `demos/samples/`, with no capacity at all. Save that sample at the dry run with `--save-sample` and commit it.
+
+   **Recording.** `python demos/record-demos.py --lab bridge` records this step end to end: the question in the
+   playground, the Fabric IQ trace, then the visualiser page. The file is `demos/videos/bridge-<YYYY-MM-DD>.webm`.
+   Videos are git-ignored: the facilitator records them during the dry run and shares them with co-facilitators
+   (see [ADMIN-SETUP](../admin/ADMIN-SETUP.md#t-1-dry-run)). Play it if the live demo is unavailable.
+7. Mention the optional Forgebook notebook by name: `Microsoft IQ in Foundry` on `microsoft-foundry.github.io/forgebook`.
+8. Close on the extended arc: **Unify → Govern → Personalise → Converse → Coach & Act**.
 
 Facilitator close-out prompts:
 

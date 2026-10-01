@@ -17,7 +17,7 @@ licensed under the MIT License, at commit:
 | Synthetic data files from `lab1-build-resident360/data/` (`challenges.csv`, `events_bookings.csv`, `evoucher_redemptions.csv`, `meal_logs.csv`, `programme_enrolments.csv`, `residents_reference.csv`, `rewards_healthpoints.json`) | `content/data/resident360/` | Vendored unchanged |
 | Scenario, persona "Rahim" (RESIDENT_00061), HPB vocabulary | `content/narrative/rahim.md`, `content/config/glossary.yaml`, `content/data/resident360/rahim.json` | Adapted; Rahim's row is re-pinned for LiveWell (see ASSUMPTIONS.md) |
 | Medallion gold logic (`resident_360`, `is_disengaged`, `region_is_hazy`, entity-grain dimensions) | `scripts/r360.py`, `content/assets/load_resident360.ipynb` (Phase 3) | Re-implemented |
-| Ontology blueprint (entities, relationships, binding rules) | `content/fabric/ontology.blueprint.yaml` | Adapted (minimal: 4 entities, 4 relationships) |
+| Ontology blueprint (entities, relationships, binding rules) | `content/fabric/ontology.blueprint.yaml` | Adapted (minimal: 4 entities, 5 relationships) |
 | Data-agent instructions and question bank (`lab4-ontology-dataagent/assets/data_agent_questions.md`) | `content/fabric/data-agent-instructions.md`, `content/fabric/question-bank.md` | Adapted |
 | Illustrative fallback PSI values | `scripts/gen-activity.py` → `content/data/resident360/air_quality_snapshot.csv` | Reused as a fixed snapshot |
 

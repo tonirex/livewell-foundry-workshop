@@ -6,7 +6,7 @@ content/assets/load_resident360.ipynb uploads this module to Files/livewell/scri
 so Fabric and the local scripts run the SAME code; the notebook only converts the rows to Delta tables.
 It is used by:
 
-* content/assets/load_resident360.ipynb -> the six Delta tables in lh_resident360
+* content/assets/load_resident360.ipynb -> the seven Delta tables in lh_resident360
 * scripts/gen-citizens.py        -> content/data/citizens.json (profile tool)
 * scripts/validate-narrative.py  -> data layer + content/fabric/reference-answers.json (Phase 3b)
 * scripts/fabric/notebook.py     -> verifies the lakehouse counts against this build
@@ -20,6 +20,7 @@ Tables produced (names match the lakehouse lh_resident360):
     dim_event_occurrence       one row per event occurrence (entity grain for EventOccurrence)
     fact_event_attendance      attended resident x occurrence pairs only (relationship: attended)
     fact_programme_enrolment   every enrolment row (relationship: enrolledIn)
+    fact_programme_dropped     Dropped enrolment rows only (relationship: droppedOut)
 
 Usage:
     python scripts/r360.py                 # print table counts, Rahim's row and reference answers
@@ -278,6 +279,8 @@ def build() -> dict[str, list[dict]]:
         "dim_event_occurrence": sorted(occurrences.values(), key=lambda x: x["event_occurrence_id"]),
         "fact_event_attendance": sorted(attended_pairs.values(), key=lambda x: (x["resident_id"], x["event_occurrence_id"])),
         "fact_programme_enrolment": enrolments,
+        # Ontology edges carry no properties, so "dropped out" is its own edge (like attended vs booked).
+        "fact_programme_dropped": [e for e in enrolments if e["status"] == "Dropped"],
     }
 
 
@@ -321,6 +324,30 @@ def reference_answers(t: dict[str, list[dict]]) -> dict:
                           "disengaged_dropped": len(v["dropped"])} for k, v in prog.items()),
                         key=lambda x: (-x["disengaged_enrolled"], x["programme_name"]))
 
+    # q_programme_fit -- Rahim's cohort ("people like me": residents in his age band), per programme: distinct
+    # residents enrolled and distinct residents who dropped out (droppedOut edge). The coach asks this on his
+    # behalf, then recommends the lowest drop-out programme he is not already in. Age band only (97 residents):
+    # adding screening risk shrinks the cohort to 20 and every drop-out count falls under the "fewer than 5" rule.
+    me = r360[load_rahim()["resident_id"]]
+    cohort = {k for k, r in r360.items() if r["age_band"] == me["age_band"]}
+    fit = defaultdict(lambda: {"enrolled": set(), "dropped": set()})
+    mine = set()
+    for en in t["fact_programme_enrolment"]:
+        if en["resident_id"] == me["resident_id"]:
+            mine.add(en["programme_name"])
+        if en["resident_id"] in cohort:
+            fit[en["programme_name"]]["enrolled"].add(en["resident_id"])
+            if en["status"] == "Dropped":
+                fit[en["programme_name"]]["dropped"].add(en["resident_id"])
+    fit_rows = sorted(({"programme_name": k, "enrolled": len(v["enrolled"]), "dropped": len(v["dropped"]),
+                        "dropout_pct": round(100 * len(v["dropped"]) / len(v["enrolled"]), 1)}
+                       for k, v in fit.items()),
+                      key=lambda x: (x["dropout_pct"], -x["enrolled"], x["programme_name"]))
+    best = next(r for r in fit_rows if r["programme_name"] not in mine)
+    left = next(r for r in fit_rows if r["programme_name"] in
+                {e["programme_name"] for e in t["fact_programme_enrolment"]
+                 if e["resident_id"] == me["resident_id"] and e["status"] == "Dropped"})
+
     total = len(r360)
     disengaged_total = sum(r["is_disengaged"] for r in r360.values())
     return {
@@ -349,6 +376,21 @@ def reference_answers(t: dict[str, list[dict]]) -> dict:
             "rows": programmes,
             "top_programme": programmes[0]["programme_name"],
             "top_disengaged_enrolled": programmes[0]["disengaged_enrolled"],
+        },
+        "q_programme_fit": {
+            "grain": "programme (Resident enrolledIn / droppedOut Programme), distinct residents in Rahim's age band",
+            "age_band": me["age_band"],
+            "cohort_residents": len(cohort),
+            "rows": fit_rows,
+            "smallest_group": min(r["enrolled"] for r in fit_rows),
+            "recommended_programme": best["programme_name"],
+            "recommended_enrolled": best["enrolled"],
+            "recommended_dropped": best["dropped"],
+            "recommended_dropout_pct": best["dropout_pct"],
+            "dropped_programme": left["programme_name"],
+            "dropped_programme_enrolled": left["enrolled"],
+            "dropped_programme_dropped": left["dropped"],
+            "dropped_programme_dropout_pct": left["dropout_pct"],
         },
     }
 

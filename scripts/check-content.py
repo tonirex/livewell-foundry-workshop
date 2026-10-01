@@ -324,9 +324,18 @@ def check_narrative(r: Report, prompts: dict) -> None:
     if len(loose) != len(beats):
         problems.append(f"{len(loose) - len(beats)} malformed beat tag(s)")
     qbank = (ROOT / "content" / "fabric" / "question-bank.md").read_text(encoding="utf-8")
-    main_q = set(re.findall(r"^\|\s*`(q_[a-z0-9_]+)`\s*\|", qbank, flags=re.MULTILINE))
+    row_re = re.compile(r"^\|\s*`(q_[a-z0-9_]+)`\s*\|", flags=re.MULTILINE)
+    cohort_head = re.search(r"^## [^\n]*cohort question[^\n]*$", qbank, flags=re.MULTILINE | re.IGNORECASE)
+    if cohort_head:
+        nxt = re.search(r"^## ", qbank[cohort_head.end():], flags=re.MULTILINE)
+        cohort_end = cohort_head.end() + (nxt.start() if nxt else len(qbank) - cohort_head.end())
+        cohort_q = set(row_re.findall(qbank[cohort_head.start():cohort_end]))
+        main_q = set(row_re.findall(qbank[:cohort_head.start()] + qbank[cohort_end:]))
+    else:
+        cohort_q, main_q = set(), set(row_re.findall(qbank))
     chapters = set()
     fabric_questions = set()
+    cohort_used = set()
     for beat, seat, source, pid in beats:
         chapters.add(beat.split(".")[0])
         if pid not in prompts:
@@ -335,20 +344,24 @@ def check_narrative(r: Report, prompts: dict) -> None:
         p = prompts[pid]
         if p.get("seat") != seat:
             problems.append(f"{beat}: seat {seat} but prompt {pid} is {p.get('seat')}")
-        if seat == "citizen" and source == "fabric":
-            problems.append(f"{beat}: citizen beat must never use source fabric")
+        if seat == "citizen" and source == "fabric" and p.get("question_id") not in cohort_q:
+            problems.append(f"{beat}: citizen beat may use source fabric only for the cohort question")
         if seat == "officer" and source != "fabric":
             problems.append(f"{beat}: officer beat must use source fabric")
         if source == "fabric":
             q = p.get("question_id")
             if not q:
                 problems.append(f"{beat}: fabric beat prompt {pid} has no question_id")
+            elif seat == "citizen":
+                cohort_used.add(q)
             elif q not in main_q:
                 problems.append(f"{beat}: question_id {q} not in question-bank.md main table")
             else:
                 fabric_questions.add(q)
     if len(main_q) > 3:
         problems.append(f"question-bank.md has {len(main_q)} Mei questions (max 3)")
+    if len(cohort_q) > 1:
+        problems.append(f"question-bank.md has {len(cohort_q)} cohort questions (max 1)")
     if len(fabric_questions) > 3:
         problems.append(f"narrative uses {len(fabric_questions)} Mei questions (max 3)")
     for ch in range(6):
@@ -363,7 +376,8 @@ def check_narrative(r: Report, prompts: dict) -> None:
     refs |= set(re.findall(r"<!--ref:([a-z0-9_.\[\]-]+)-->", text))
     if not refs:
         problems.append("narrative has no {{ref:...}} placeholders or filled <!--ref:...--> values")
-    r.check(f"narrative beats ({len(beats)} beats, {len(fabric_questions)} Mei questions, {len(refs)} refs)", problems)
+    r.check(f"narrative beats ({len(beats)} beats, {len(fabric_questions)} Mei questions, "
+            f"{len(cohort_used)} cohort question, {len(refs)} refs)", problems)
 
 
 def check_glossary(r: Report, glossary: dict) -> None:
@@ -438,9 +452,9 @@ def check_fabric_blueprint(r: Report) -> None:
     rels = bp.get("relationship_types", [])
     if len(ents) != 4:
         problems.append(f"blueprint has {len(ents)} entities (expected 4)")
-    if len(rels) != 4:
-        problems.append(f"blueprint has {len(rels)} relationships (expected 4)")
-    r.check("fabric ontology blueprint: 4 entities / 4 relationships", problems)
+    if len(rels) != 5:
+        problems.append(f"blueprint has {len(rels)} relationships (expected 5)")
+    r.check("fabric ontology blueprint: 4 entities / 5 relationships", problems)
 
 
 def check_generators(r: Report) -> None:
