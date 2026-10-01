@@ -1,0 +1,88 @@
+{
+ "tool": "demos/fabric-steps.py",
+ "captured_at": "2026-10-01T17:25:07+08:00",
+ "env": "mcaps",
+ "question_id": "q_dropped_attended_heldin",
+ "question": "Among residents who dropped a programme, how many attended at least one event, broken down by the region where those events were held?",
+ "run": {
+  "status": "completed",
+  "created_at": 1790846730,
+  "started_at": 1790846822,
+  "completed_at": 1790846825,
+  "last_error": null
+ },
+ "seconds": 123.2,
+ "steps": [
+  {
+   "type": "tool_calls",
+   "status": "completed",
+   "created_at": 1790846742,
+   "completed_at": 1790846742,
+   "last_error": null,
+   "tool_calls": [
+    {
+     "name": "generate.filename",
+     "arguments": "{\"natural_language_description\": \"For residents who dropped a programme (droppedOut), count distinct residents who attended at least one event occurrence, grouped by the region where those event occurrences were held (EventOccurrence region). Return one row per event region with the resident count.\"}",
+     "output": "{\"generated_filename\":\"result_0.json\"}"
+    }
+   ]
+  },
+  {
+   "type": "tool_calls",
+   "status": "completed",
+   "created_at": 1790846742,
+   "completed_at": 1790846820,
+   "last_error": null,
+   "tool_calls": [
+    {
+     "name": "analyze.database.execute",
+     "arguments": "{\"datasource_name\": \"resident_ontology\", \"datasource_type\": \"Ontology\", \"natural_language_query\": \"For residents who dropped a programme (droppedOut), count distinct residents who attended at least one event occurrence, grouped by the region where those event occurrences were held (EventOccurrence region). Return one row per event region with the resident count.\", \"code\": \"```ontology\\n{\\\"entitySelector\\\":{\\\"queryType\\\":\\\"GQL\\\",\\\"query\\\":\\\"MATCH (node_Resident:`Resident`)-[edge_droppedOut:`droppedOut`]->(node_Programme:`Programme`), (node_Resident)-[edge_attended:`attended`]->(node_EventOccurrence:`EventOccurrence`), (node_EventOccurrence)-[edge_heldIn:`heldIn`]->(node_Region:`Region`) RETURN node_Region.`region` AS `event_region`, COUNT(DISTINCT node_Resident.`resident_id`) AS `resident_count` GROUP BY event_region\\\"}}\\n```\"}",
+     "output": "| event_region | resident_count |\r\n|:-------------|:---------------|\r\n| North-East   | 51             |\r\n| Central      | 95             |\r\n| East         | 51             |\r\n| West         | 57             |\r\n| North        | 52             |"
+    }
+   ]
+  },
+  {
+   "type": "tool_calls",
+   "status": "completed",
+   "created_at": 1790846732,
+   "completed_at": 1790846820,
+   "last_error": null,
+   "tool_calls": [
+    {
+     "name": "trace.analyze_ontology",
+     "arguments": "{\"query\": \"For residents who dropped a programme (droppedOut), count distinct residents who attended at least one event occurrence, grouped by the region where those event occurrences were held (EventOccurrence region). Return one row per event region with the resident count.\"}",
+     "output": "| event_region | resident_count |\r\n|:-------------|:---------------|\r\n| North-East   | 51             |\r\n| Central      | 95             |\r\n| East         | 51             |\r\n| West         | 57             |\r\n| North        | 52             |"
+    }
+   ]
+  },
+  {
+   "type": "tool_calls",
+   "status": "completed",
+   "created_at": 1790846732,
+   "completed_at": 1790846742,
+   "last_error": null,
+   "tool_calls": [
+    {
+     "name": "analyze.database.nl2code",
+     "arguments": "{\"datasource_name\": \"resident_ontology\", \"datasource_type\": \"Ontology\", \"natural_language_query\": \"For residents who dropped a programme (droppedOut), count distinct residents who attended at least one event occurrence, grouped by the region where those event occurrences were held (EventOccurrence region). Return one row per event region with the resident count.\"}",
+     "output": "# Variation 1\n\n```ontology\n{\"entitySelector\":{\"queryType\":\"GQL\",\"query\":\"MATCH (node_Resident:`Resident`)-[edge_droppedOut:`droppedOut`]->(node_Programme:`Programme`), (node_Resident)-[edge_attended:`attended`]->(node_EventOccurrence:`EventOccurrence`), (node_EventOccurrence)-[edge_heldIn:`heldIn`]->(node_Region:`Region`) RETURN node_Region.`region` AS `event_region`, COUNT(DISTINCT node_Resident.`resident_id`) AS `resident_count` GROUP BY event_region\"}}\n```"
+    }
+   ]
+  },
+  {
+   "type": "tool_calls",
+   "status": "completed",
+   "created_at": 1790846732,
+   "completed_at": 1790846733,
+   "last_error": null,
+   "tool_calls": [
+    {
+     "name": "analyze.database.fewshots.loading",
+     "arguments": "{\"datasource_name\": \"resident_ontology\", \"datasource_type\": \"Ontology\"}",
+     "output": "Loaded 0 fewshots"
+    }
+   ]
+  }
+ ],
+ "answer": "Among residents who dropped a programme, Central has the most who still attended at least one event occurrence, followed by West, North, North‑East and East (using where events were held, not home region).\n\n| Event region | Residents who dropped a programme and attended ≥1 event |\n|--------------|--------------------------------------------------------|\n| Central      | 95                                                     |\n| West         | 57                                                     |\n| North        | 52                                                     |\n| North-East   | 51                                                     |\n| East         | 51                                                     |\n\nRelationships traversed: resident → droppedOut (programme) and resident → attended → event occurrence → heldIn (region)."
+}

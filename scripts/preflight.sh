@@ -8,7 +8,7 @@
 #   2 subscription/tenant match workshop.yaml
 #   3 region matrix (SPEC.md §8.2) + live region availability for every resource type
 #   4 resource providers registered (registers missing ones)
-#   5 Fabric CU quota in region (F2 = 2 CU)
+#   5 Fabric CU quota in region (FABRIC_SKU: F2 = 2 CU, F4 = 4 CU)
 #   6 Foundry model quota + availability for the three deployments (Global Standard)
 #   7 Azure AI Search Basic creatable (quota + name availability)
 #   8 caller is a Fabric administrator (tenant settings, SPEC.md §12.2)
@@ -142,17 +142,21 @@ done
 log "5/8 Fabric capacity quota"
 if [ "$FABRIC_BRIDGE" = "true" ]; then
   FAB_CAP="$(cfg names.fabric_capacity)"
+  FAB_SKU="${FABRIC_SKU:-F2}"; NEED_CU="${FAB_SKU#F}"
   USAGE="$(azq rest --method get --url "https://management.azure.com/subscriptions/$SUB_ID/providers/Microsoft.Fabric/locations/$LOCATION/usages?api-version=2023-11-01" -o json || true)"
   EXISTING_CU=0
-  if azq resource show -g "$RG" -n "$FAB_CAP" --resource-type Microsoft.Fabric/capacities -o none; then EXISTING_CU=2; fi
+  if azq resource show -g "$RG" -n "$FAB_CAP" --resource-type Microsoft.Fabric/capacities -o none; then
+    EXISTING_CU="$(azq resource show -g "$RG" -n "$FAB_CAP" --resource-type Microsoft.Fabric/capacities --query sku.name -o tsv || echo F2)"
+    EXISTING_CU="${EXISTING_CU#F}"
+  fi
   read -r CUR LIM <<<"$(pyrun -c 'import json,sys
 d=json.loads(sys.stdin.read() or "{}").get("value",[])
 cu=[u for u in d if "CapacityUnit" in u.get("name",{}).get("value","") or "CU" in u.get("name",{}).get("value","")]
 u=cu[0] if cu else (d[0] if d else {})
 print(int(u.get("currentValue",0)), int(u.get("limit",0)))' <<<"$USAGE")"
   FREE=$((LIM - CUR + EXISTING_CU))
-  if [ "$FREE" -ge 2 ]; then ok "Fabric CU quota $CUR/$LIM used in $LOCATION (F2 needs 2)"
-  else bad "Fabric CU quota $CUR/$LIM in $LOCATION — F2 needs 2 CU"; LINKS+=("fabric"); fi
+  if [ "$FREE" -ge "$NEED_CU" ]; then ok "Fabric CU quota $CUR/$LIM used in $LOCATION ($FAB_SKU needs $NEED_CU)"
+  else bad "Fabric CU quota $CUR/$LIM in $LOCATION — $FAB_SKU needs $NEED_CU CU"; LINKS+=("fabric"); fi
 else
   warn "FABRIC_BRIDGE=false — Fabric capacity checks skipped"
 fi

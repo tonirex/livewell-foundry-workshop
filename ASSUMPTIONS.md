@@ -323,6 +323,14 @@ Where an entry changes something SPEC.md states, it says so.
   `capacity.sh suspend` then `resume` clears the carried-forward overage in about 2 minutes. F2 is enough for the
   build and the gate. For the workshop day, when 20 attendees can ask at once, consider F4 (about US$0.76/h in
   swedencentral, twice F2); this is not measured yet (Phase 5 dry run).
+  *2026-10-01:* after a day of testing F2 sat in interactive rejection (429 `RequestBlocked`) for over an hour.
+  `capacity.sh scale F4 mcaps` resized it in seconds, and within about 4 minutes the Bridge question ran again (123 s,
+  three-hop GQL). Microsoft Learn: scaling up doubles the CUs, so the same carried-forward overage is burned down twice
+  as fast, but it is not an instant reset (suspend/resume is, and bills the overage). The mcaps env now stays on F4:
+  the three bicepparam files read `FABRIC_SKU` (default F2) and `azd env set FABRIC_SKU F4` was run, so a provision
+  does not shrink it back. `cost-guardrails.sh` accepts F2 or F4 and warns when the capacity and `FABRIC_SKU` differ;
+  `preflight.sh` checks the CU quota for `FABRIC_SKU`. Scale back with `capacity.sh scale F2 mcaps` plus
+  `azd env set FABRIC_SKU F2`.
 - **3b.8** The coach routing row (Fabric IQ call for Mei, none for Rahim) is **SKIP** until Phase 4 adds the Fabric IQ
   connection and `lab3_tools.py --fabric`, which asserts it. *Phase 4:* the live layer now reads that row from the
   latest Lab 3 Builder run with the Fabric step (`content/assets/.runs/lab3-*.json`, written by
@@ -430,7 +438,14 @@ Where an entry changes something SPEC.md states, it says so.
 - **4.16** Specialists are **function tools** (`livewell-nutrition`, `livewell-activity`) that the script answers by
   calling the specialist agents: the v2 prompt-agent API has no connected-agent tool. Only the coach holds
   `register_interest`, so only the coach can ask for approval. The Activity specialist can call `find_activities`
-  itself; the Lab 3 compound check accepts a search done by the coach or through that specialist.
+  itself; the Lab 3 compound check accepts a search done by the coach or through that specialist. With the original
+  rule ("for a meal plan ask the Nutrition specialist ...") the coach sometimes wrote the plans itself from the
+  knowledge base, because the earlier "search the knowledge base before giving food or activity advice" rule also
+  applies: `lab3_specialists` failed in the 2026-10-01 validation run, and an A/B probe (same coach, gpt-5.4-mini)
+  called both specialists 7/9 times with that wording and 9/9 with the current one ("Meal plans and exercise plans
+  come from the specialists when you have them ... Do not write these plans yourself"). Its last sentence ("Without
+  specialist tools, plan from the knowledge base") keeps the demo agents and the portal coach, which have no
+  specialists, answering as before (2/2 in the probe).
 - **4.17** Agent Framework (Lab 4) quirks. (a) A downstream agent fails intermittently ("the model deployment
   encountered an error") when the conversation holds another agent's MCP call and result items; a `text_only`
   agent middleware passes text-only messages. (b) `SequentialBuilder` returns only the last agent unless
@@ -473,8 +488,9 @@ Where an entry changes something SPEC.md states, it says so.
 - **4.23** `scripts/validate-builder-rail.py` runs each lab as a subprocess (`INITIALS=test`, `--cleanup`,
   `LIVEWELL_AUTO_APPROVE=1`, `--fabric` for Labs 3 and 4 when FABRIC_BRIDGE is on), reads the checks each lab records in
   `content/assets/.runs/<lab>-test.json`, maps the SPEC.md signals onto them, and fails if any agent or memory store
-  named `livewell-test-*` is left. The Lab 4 hosted signal is SKIP when the hosted agent is not deployed. Lab 2 uses
-  the default 6-row eval subset.
+  named `livewell-test-*` is left. Items an earlier, interrupted run left behind are deleted before the labs start
+  (and listed), so only this run's leftovers fail it. The Lab 4 hosted signal is SKIP when the hosted agent is not
+  deployed. Lab 2 uses the default 6-row eval subset.
 
 ## Phase 5: proof and demo kit
 
@@ -487,7 +503,8 @@ Where an entry changes something SPEC.md states, it says so.
   definition hash changes, so the demo agents stay at **v1** unless a block changes; captions that mention v2/v3 are
   shown on v1 and the capture log notes it (`demo agent shows v1`).
 - **5.2** The demo memory store `livewell-demo-memory` uses scope `{{$userId}}`, so every signed-in viewer (facilitator,
-  co-facilitator, recording account) gets separate memories, as in the portal.
+  co-facilitator, recording account) gets separate memories, as in the portal. Red-team and evaluation runs also
+  run as the caller and write into that scope (5.22).
 - **5.3** `livewell-eval` is registered with a **version derived from the file's SHA-256** (first 8 hex digits):
   re-running the script is a no-op until `content/eval/livewell-eval.jsonl` changes, and old versions stay available
   for earlier evaluation runs.
@@ -503,6 +520,10 @@ Where an entry changes something SPEC.md states, it says so.
   denied so nothing is written. The Fabric check accepts the agent's top region if it is in the reference top two
   (close shares). Cost is read from Cost Management at resource-group scope and needs Cost Management Reader or
   Reader; without it the report says "unavailable" and the checks still decide the exit code. Run on 2026-09-30: 7/7.
+  Its temporary agents have no memory, so a separate check reads your demo memory scope for red-team residue (5.22).
+  Run on 2026-10-01 with `--demo-agents`: 8/8, after a suspend/resume of the F4 capacity. Before it, Mei's question
+  came back "the ontology query is throttled": after a full day of Bridge, Lab 3 and capture runs, F4 throttled too.
+  The coach refused to guess the numbers, which is the behaviour the workshop wants.
 
 ### Screenshots and videos
 
@@ -579,6 +600,27 @@ Where an entry changes something SPEC.md states, it says so.
   editor (textbox "OpenAPI 3.0+ schema"). The capture scripts' redaction rewrites the endpoint host in editable areas to
   `your-endpoint` rather than `<endpoint>`, because the editor reads DOM edits back and would otherwise reject the schema's
   server URL.
+- **5.21** Programme fit in the playground (2026-10-01, `livewell-demo-fabric` v3, F4). The coach answers, then
+  **asks** before `register_interest` (its `fabric` rule), so the approval card appears only after Rahim replies yes;
+  steps 19-21 say so. Some portal runs were stopped by the content filter ("blocked by a safety and security
+  control") before any Fabric call while the same prompt went through the SDK. That was not intermittent: it was
+  red-team residue in the facilitator's demo memory (5.22), now cleared. The trace dialog sometimes opens with the
+  agent span collapsed or before every span has arrived;
+  `scenes.Run.trace` expands the tree (`portal.trace_expand`), skips the agent row when picking a span (a pattern
+  like `fabric` also matches `livewell-demo-fabric`) and reopens the dialog until the wanted span is there.
+- **5.22** **Red-team runs pollute the caller's demo memory.** The cloud red team (6.4) runs as the signed-in user,
+  so `livewell-demo-tools`' memory tool (scope `{{$userId}}` = `<oid>_<tid>`) summarised its 861 attack
+  conversations into the facilitator's own scope: 33 memories, most of them attack goals (starvation diets, self-harm,
+  poisoning, drugs). Memory search then injected them into ordinary chats such as `lab1_prediabetes_eat`, and the
+  output filter blocked the reply (self-harm, medium). Evidence, 2026-10-01: the block reproduced with DefaultV2
+  instead of the custom guardrail, on gpt-4.1-mini, and with the profile, knowledge base, activities, safety rules
+  or tool rules removed. It disappeared only when the memory tool was removed. The validators missed it because
+  `lw.ask` prepends the consent line, which changed retrieval enough to pass. Fix: `delete_scope` on that scope; the
+  same prompt without the consent line then passed 6/6 on `livewell-demo-tools` and `livewell-demo-fabric`.
+  Prevention: `scripts/reset-demo-memory.py` lists your scope and flags residue (exit 1), `--reset` clears it;
+  `red-team-cloud.py` clears it automatically after a run against memory-enabled targets (`--keep-memory` skips);
+  `smoke-test.py` fails on residue. Participants have their own scopes and are not affected unless they run a red
+  team themselves.
 
 ## Phase 6: Navigator feedback (2026-10-01)
 
@@ -617,7 +659,8 @@ Where an entry changes something SPEC.md states, it says so.
   reprints the table. So the `region_matrix.not_colocated.portal_red_teaming` note now applies only to the portal
   wizard: the API path works in swedencentral. Checked in the portal on 2026-10-01: **Evaluations → Red team** (Preview tab) lists
   `LiveWell red team 20261001-1235` as Completed with 5 issues over 2 runs, and the run also shows in the Evaluations
-  **Runs** list.
+  **Runs** list. The run left its attack summaries in the facilitator's demo memory, which later blocked Lab 3 portal
+  chats; the script now clears that scope afterwards (5.22).
 - **6.5** Which model the router chose is not in the agent trace (it shows `model-router`). It is visible in the
   **model-router deployment Playground** (the model name under each answer), in the deployment's **Monitor** tab (cost
   and requests by underlying model), as `response.model` in the Responses and Chat Completions APIs, and, with the
@@ -681,12 +724,13 @@ Where an entry changes something SPEC.md states, it says so.
   dashed), a timeline, one card per query with bars, a check against `reference-answers.json` and the answer.
   Workspace and artifact ids are stripped before saving. Its parsing and page were verified on 2026-10-01 against the
   live steps of a programme-fit run (two `nl2code` + `execute` pairs, which is the two-query rule working).
-  **Not yet verified live for the Bridge question:** F2 went into interactive rejection after the day's testing
-  (HTTP 429 `RequestBlocked`; every request moved the "blocked until" time about 2 minutes on, and 15 idle minutes did
-  not clear it). Antonia chose to ship without waiting or paying the overage for a suspend/resume. So no sample is
-  committed and slots bridge/01-05 are empty: at the dry run, run `fabric-steps.py bridge --save-sample`, commit the
-  sample, then `capture-screenshots.py --only bridge` and `record-demos.py --lab bridge`
-  (`demos/videos/bridge-<date>.webm`, git-ignored). On the day, `--replay` needs no capacity. Without a saved run the
-  `bridge` scene skips slots 03-05 and carries on. A trace with more detail (a span per GQL query) would need the
-  data agent itself to send spans to the project's Application Insights; no setting for that was found on Fabric
-  data agents (2026-10-01).
+  **Verified live for the Bridge question on 2026-10-01 (F4).** F2 had gone into interactive rejection after the
+  day's testing (HTTP 429 `RequestBlocked`; every request moved the "blocked until" time about 2 minutes on, and 15
+  idle minutes did not clear it). Scaling to F4 (3b.7) cleared it within about 4 minutes. The live run took 123 s,
+  generated **one** 3-hop GQL query (`droppedOut`, `attended`, `heldIn`, counting distinct residents) and matched
+  the reference counts 5/5 (Central 95, West 57, North 52, North-East 51, East 51). The sample is committed
+  (`demos/samples/fabric-steps-q_dropped_attended_heldin.json`), slots bridge/01-05 are captured, and the terminal
+  replay is in `demos/evidence/2026-10-01/`. On the day, `fabric-steps.py bridge --replay` needs no capacity; refresh
+  the sample with `--save-sample` only if the data changes. Without a saved run the `bridge` scene skips slots 03-05
+  and carries on. A trace with more detail (a span per GQL query) would need the data agent itself to send spans to
+  the project's Application Insights; no setting for that was found on Fabric data agents (2026-10-01).

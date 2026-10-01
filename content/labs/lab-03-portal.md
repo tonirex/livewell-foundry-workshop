@@ -149,11 +149,12 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
     ![Fabric routing rules appended to instructions](screenshots/lab-03/18-fabric-instructions.png)
 
 19. As Rahim, ask which programme people his age stick with. The coach reads his profile, asks Fabric one
-    age-band question, finds the intake session near Woodlands, then pauses on an approval card.
+    age-band question, finds the intake session near Woodlands and offers to sign him up. It asks before it calls
+    `register_interest`, so the approval card comes after he says yes (step 21).
 
     **Chat → New chat → Message box → Send**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-03/19-programme-fit-recommendation.png` · Recommendation with the age-band drop-out numbers and an approval card for register_interest
+    ![Recommendation from the age band's drop-out numbers, with the profile and Fabric IQ tool chips under the answer](screenshots/lab-03/19-programme-fit-recommendation.png)
 
     Prompt `lab3_programme_fit`:
 
@@ -165,13 +166,13 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
 
     **Response metrics → Traces → Fabric IQ / MCP call → Input**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-03/20-programme-fit-fabric-question.png` · Trace: profile call, then the Fabric IQ call whose userQuestion names only the age band
+    ![Trace: profile call, then the Fabric IQ call whose userQuestion names only the age band](screenshots/lab-03/20-programme-fit-fabric-question.png)
 
-21. Approve the sign-up for the intake session.
+21. Reply yes, then approve the sign-up for the intake session.
 
-    **Approval card → Approve → Approve once**
+    **Message box → "Yes, please sign me up" → Send → Approval card → Approve → Approve once**
 
-    > 📸 **Screenshot slot** · `screenshots/lab-03/21-programme-fit-approved.png` · register_interest approved for the Diabetes Prevention intake session
+    ![register_interest approved for the Diabetes Prevention intake session](screenshots/lab-03/21-programme-fit-approved.png)
 
 22. As Mei, ask the programme-level Fabric question.
 

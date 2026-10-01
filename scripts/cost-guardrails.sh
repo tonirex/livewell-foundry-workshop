@@ -6,8 +6,8 @@
 #
 # Checks: budget exists with alerts at the workshop.yaml thresholds (150/300 USD) · model deployments
 # Global Standard, capacity <= TPM cap, no PTU / partner models · exactly one search service, never
-# Standard tier, semantic + agentic-retrieval plans on Free · Fabric capacity F2 (state reported;
-# Active = billing) · MCP app minReplicas · Log Analytics daily cap · no Bing grounding connection ·
+# Standard tier, semantic + agentic-retrieval plans on Free · Fabric capacity F2 or F4 (FABRIC_SKU; state
+# reported; Active = billing) · MCP app minReplicas · Log Analytics daily cap · no Bing grounding connection ·
 # every resource tagged workshop=livewell + env=<env> · month-to-date cost for the resource group
 # (--max-usd fails the run above N).
 . "$(dirname "$0")/lib/common.sh"
@@ -159,12 +159,18 @@ for r in acrs:
 fab = load("fabric")
 if fab.get("sku"):
     state = fab.get("properties", {}).get("state", "?")
-    if fab["sku"].get("name") != "F2":
-        bad(f"Fabric capacity {fab['name']} is {fab['sku'].get('name')} (F2 only)")
+    sku, want = fab["sku"].get("name"), os.environ.get("FABRIC_SKU") or "F2"
+    rate = {"F2": 0.36, "F4": 0.76}.get(sku)
+    if rate is None:
+        bad(f"Fabric capacity {fab['name']} is {sku} (F2 or F4 only)")
+    elif sku != want:
+        warn(f"Fabric capacity {fab['name']} is {sku} but FABRIC_SKU={want}: the next provision resizes it "
+             f"(azd env set FABRIC_SKU {sku} keeps it)")
     else:
-        ok(f"Fabric capacity {fab['name']} F2")
+        ok(f"Fabric capacity {fab['name']} {sku}")
     msg = f"Fabric capacity state {state}"
-    (warn(msg + " — billing ~US$0.36/h; pause when idle: scripts/capacity.sh suspend") if state == "Active" else ok(msg))
+    (warn(msg + f" — billing ~US${rate or 0.36:.2f}/h; pause when idle: scripts/capacity.sh suspend")
+     if state == "Active" else ok(msg))
     print(f"FABRIC_STATE={state}", file=open(os.path.join(d, "fabric.state"), "w"))
 elif fab == {}:
     warn("no Fabric capacity (FABRIC_BRIDGE=false or not provisioned)")

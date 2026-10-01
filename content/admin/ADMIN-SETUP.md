@@ -48,7 +48,7 @@ For every FAIL, preflight prints the quota-request link. Typical asks on a fresh
 
 | Quota | Needed | Where |
 |---|---|---|
-| Fabric capacity units in `swedencentral` | 2 CU (F2) | Azure portal → Quotas → Microsoft Fabric |
+| Fabric capacity units in `swedencentral` | 2 CU for F2, 4 CU for F4 (`FABRIC_SKU`) | Azure portal → Quotas → Microsoft Fabric |
 | `model-router` Global Standard | 400K TPM | Foundry portal → Management center → Quota |
 | `gpt-4.1-mini` Global Standard | 400K TPM (fallback, Lab 2 judges, memory extraction) | Same |
 | `gpt-5.4-mini` Global Standard | 200K TPM (Lab 3 coach with memory) | Same |
@@ -80,7 +80,7 @@ About 1.5 h end to end.
 | 7 Hosted agent (Lab 4) | Repo `.venv` active: `azd deploy livewell-workshop-hosted`, then `python scripts/hosted-postdeploy.py --verify` | ≈ 8 min | Agent active; a week plan comes back as evidence JSON; the blocklisted prompt is blocked ([README](../assets/hosted-agent-example/README.md)) |
 | 8 Demo agents | `python demos/create-demo-agents.py` | 2 min | Five `livewell-demo-*` agents listed and the `livewell-eval` dataset registered (Lab 2 portal evaluation picks it); `--check` re-tests |
 | 9 Attendees | `bash scripts/seed-attendees.sh mcaps --lab-accounts` | 2 min | Every row shows `added` or `exists` |
-| 10 Proof | `python scripts/smoke-test.py`, `make -C content/assets validate`, then `make -C content/assets validate-live ENV=mcaps` (graph check + 9 data-agent calls, ≈ 8 min) | 15 min | Smoke test 7/7 PASS (report in `content/assets/.runs/`); narrative report in `demos/NARRATIVE-VALIDATION-<date>.md` |
+| 10 Proof | `python scripts/smoke-test.py`, `make -C content/assets validate`, then `make -C content/assets validate-live ENV=mcaps` (graph check + 9 data-agent calls, ≈ 8 min) | 15 min | Smoke test 8/8 PASS (report in `content/assets/.runs/`); narrative report in `demos/NARRATIVE-VALIDATION-<date>.md` |
 | 11 Pause | `bash scripts/capacity.sh suspend mcaps` | 1 min | Capacity `Paused` |
 
 > **Always provision through `scripts/provision.sh`.** azd reads `infra/main.bicepparam` *before* its
@@ -126,6 +126,7 @@ python scripts/gen-citizens.py --from-onelake --check    # citizens.json agrees 
 | You changed the blueprint | `deploy.sh <env> --from 30`. The ontology is updated in place, then refreshed and republished |
 | You changed `scripts/r360.py` (gold build or aggregates) | `deploy.sh <env> --from 20`: the notebook imports `r360.py`, so the tables, graph and agent all follow |
 | Data agent: 429 `CapacityLimitExceeded`, or OneLake 503s during step 20 | F2 is throttled after a burst of calls. `scripts/capacity.sh suspend <env>` then `resume <env>` clears the carried-forward overage (≈ 2 min). `validate-narrative.py` waits 20 s between calls by default (`--pause`) |
+| Data agent: 429 `RequestBlocked` ("blocked until" keeps moving) | The capacity is in interactive rejection after a long day of calls. `scripts/capacity.sh scale F4 <env>` (seconds; twice the CUs, so the overage burns down twice as fast; cleared in ≈ 4 min on 2026-10-01) and `azd env set FABRIC_SKU F4` so a provision keeps it. Suspend/resume clears it at once but bills the overage. Scale back with `scale F2` and `FABRIC_SKU F2`. F4 throttles too after a full day of runs (2026-10-01): suspend/resume cleared it |
 | Data agent says the result was cut off, or gives counts far below the reference | Its query tool reads at most 200 rows. Check the data source instructions were published (`deploy.sh <env> --only 40`) and compare with the canonical GQL in `question-bank.md` |
 
 ### T-1: dry run
@@ -133,6 +134,11 @@ python scripts/gen-citizens.py --from-onelake --check    # citizens.json agrees 
 - `bash scripts/capacity.sh resume mcaps`, then run the whole day with a lab account in a private browser window.
 - Builder rail end to end: `make -C content/assets validate-rail` (Labs 1–4 as `INITIALS=test`, ≈ 20 min; report in
   `content/assets/.runs/builder-rail-<date>.md`). It fails if a key signal is missing or an agent is left behind.
+  To keep evidence that a script works, wrap it in `demos/record-terminal.py`, e.g.
+  `python demos/record-terminal.py builder-lab3 -- python scripts/validate-builder-rail.py --labs 3 --verbose`: it
+  writes the output with real timings (`.cast`) and a full-page PNG to `demos/evidence/<date>/` (commit them) and a
+  replay video to `demos/videos/` (git-ignored). The 2026-10-01 set is indexed in
+  [demos/evidence/2026-10-01/README.md](../../demos/evidence/2026-10-01/README.md).
 - Lab 0 and Lab 2 facilitator demos (repo `.venv`; results stay in the project so the room can open them on the day):
   1. `python scripts/apply-guardrail.py --check`: drift none (deployments on `Microsoft.DefaultV2`).
   2. `python demos/router-picks.py --reps 2`: the model `model-router` picked per prompt (≈ 1 min, cents).
@@ -143,6 +149,10 @@ python scripts/gen-citizens.py --from-onelake --check    # citizens.json agrees 
      morning; ≈ US$35: about 1.2 M judge tokens on the AI evaluations meter plus about 2 M target tokens; one agent is
      about half). Afterwards, `--report <eval id>` reprints the table. Open two or three `[n safe?]` attacks in the
      portal before the day: in the validation run every counted success was a refusal the judge mislabelled.
+     The red team runs as you, so the demo agents' memory tool saves its attack summaries into **your** memory
+     scope, and those memories later get ordinary portal chats blocked by the content filter (ASSUMPTIONS 5.22).
+     The script clears your scope in `livewell-demo-memory` when it finishes (skip with `--keep-memory`). If a run
+     was interrupted, run `python scripts/reset-demo-memory.py` (lists and flags residue) and `--reset`.
 - Lab 4 facilitator demo: `python demos/lab4-devui.py` opens Agent Framework DevUI on `http://127.0.0.1:8090` with
   the sequential and hand-off teams (install `requirements-demos.txt` first). Run each once (≈ 40 s, cents) so the
   first live run is not a cold start; the steps are in Lab 4 → Under the hood. `--capture` reruns both headless and
@@ -159,9 +169,10 @@ python scripts/gen-citizens.py --from-onelake --check    # citizens.json agrees 
   2. `python demos/capture-screenshots.py` (≈ 30 min, or `--only lab-01 lab-03/12`), then review every PNG in
      `content/labs/screenshots/` against its slot caption. `--list-missing` lists the slots still empty, and
      `--link` turns filled slots into images on the portal lab pages and the Bridge spotlight. The Bridge slots
-     (`--only bridge`) also screenshot the `demos/fabric-steps.py` page, so run
-     `python demos/fabric-steps.py bridge --save-sample` once first and commit the sample it writes to
-     `demos/samples/`: it is what `--replay` shows on the day if the capacity is throttled.
+     (`--only bridge`) also screenshot the `demos/fabric-steps.py` page. It shows the newest saved run, else the
+     committed sample `demos/samples/fabric-steps-q_dropped_attended_heldin.json` (captured live on F4,
+     2026-10-01), which is also what `--replay` shows on the day if the capacity is throttled. After a data or
+     prompt change, refresh it with `python demos/fabric-steps.py bridge --save-sample` and commit it.
   3. `python demos/record-demos.py` (≈ 70 min, or `--lab lab-02`): one captioned WebM per lab, plus `bridge`
      (Mei's multi-hop question, its Fabric IQ trace and the fabric-steps.py page), in `demos/videos/` (git-ignored).
      Watch each once before sharing; they are the backup for a stuck portal step.
@@ -179,7 +190,8 @@ python scripts/gen-citizens.py --from-onelake --check    # citizens.json agrees 
 bash scripts/capacity.sh resume mcaps                    # ~1 min; Fabric step + bridge spotlight need it
 MCP_MIN_REPLICAS=1 bash scripts/provision.sh mcaps --skip-preflight   # no MCP cold starts during labs
 python scripts/render-values.py mcaps                    # values sheet -> content/config/values.md (hooks also refresh it)
-python scripts/smoke-test.py --demo-agents               # 7/7 on the livewell-demo-* agents, ≈ 3 min
+python scripts/smoke-test.py --demo-agents               # all PASS on the livewell-demo-* agents (incl. demo memory), ≈ 3 min
+python scripts/reset-demo-memory.py                      # exit 0 = no red-team residue in your demo memory; else --reset
 ```
 
 Put `content/config/values.md` on screen: the project endpoint, agent names, lab-account pattern and Wi-Fi.
@@ -209,7 +221,7 @@ US$ list prices, September 2026 (SPEC.md §13). The cohort is 20 people × 150 r
 | Semantic ranker, Bing, Code Interpreter, hosted agents, ACR, storage/App Insights | ~12 | ~18 |
 | **Total** | **≈ 83** | **≈ 166** |
 | Every participant runs a full red-team scan | +126 | → ≈ 292 |
-| Fabric F2, 16 h active (≈ $0.36/h; ≈ $259/month if left on) | +6 | +6 |
+| Fabric F2, 16 h active (≈ $0.36/h; ≈ $259/month if left on). F4 doubles it: ≈ $0.76/h, +12, ≈ $550/month | +6 | +6 |
 
 Controls built into the template and checked by [cost-guardrails.sh](../../scripts/cost-guardrails.sh):
 
@@ -232,7 +244,7 @@ type. Cost Management lags by up to 24 h.
 
 | Resource | Idle cost | Action |
 |---|---|---|
-| Fabric capacity `fablivewell<env>` | ≈ US$0.36/h (≈ $259/month) | `scripts/capacity.sh suspend` every evening; deleted by `teardown.sh` |
+| Fabric capacity `fablivewell<env>` | ≈ US$0.36/h on F2 (≈ $259/month), ≈ US$0.76/h on F4 (≈ $550/month) | `scripts/capacity.sh suspend` every evening; `scale F2` after a busy day on F4; deleted by `teardown.sh` |
 | Azure AI Search Basic `srch-livewell-<env>` | ≈ US$0.10/h (≈ $74/month) | Delete with `teardown.sh` at T+1; do not keep an environment "just in case" |
 | MCP app with `MCP_MIN_REPLICAS=1` | A few US$/day | Re-provision with the default (0) after the workshop |
 | ACR Basic | ≈ US$0.17/day | `teardown.sh` |
@@ -324,7 +336,7 @@ scored locally instead", and the local scores are still valid. To publish a run 
 | [preflight.sh](../../scripts/preflight.sh) | Tools, subscription, region matrix, providers, Fabric CU quota, model quota, Search Basic, Fabric admin |
 | [provision.sh](../../scripts/provision.sh) | Env + parameters + optional what-if + `azd provision` + values sheet |
 | [cost-guardrails.sh](../../scripts/cost-guardrails.sh) | Asserts the §13 controls; month-to-date cost; `--pause-fabric`, `--max-usd N` |
-| [capacity.sh](../../scripts/capacity.sh) | `status`, `suspend` or `resume` the Fabric capacity |
+| [capacity.sh](../../scripts/capacity.sh) | `status`, `suspend` or `resume` the Fabric capacity, or `scale F2\|F4` (pair it with `azd env set FABRIC_SKU`) |
 | [fabric/deploy.sh](../../scripts/fabric/deploy.sh) | Resident 360 on Fabric: workspace, lakehouse and load, ontology, graph refresh, data agent, env IDs; `--from`, `--only`, `--skip-upload` |
 | [fabric/ask.py](../../scripts/fabric/ask.py) | Ask the published data agent a question over MCP; `--json` |
 | [validate-narrative.py](../../scripts/validate-narrative.py) | Narrative gate: `--layers static,data,live` (or `all`), `--fill`, `--check`, `--runs`, `--pause`, `--questions`; writes `reference-answers.json` and `demos/NARRATIVE-VALIDATION-<date>.md`. `make -C content/assets validate` / `validate-live` |
@@ -334,19 +346,21 @@ scored locally instead", and the local scores are still valid. To publish a run 
 | [connect-tools.py](../../scripts/connect-tools.py) | Activities MCP and Fabric IQ connections, profile tool URL, access checks; `--check` |
 | [hosted-postdeploy.py](../../scripts/hosted-postdeploy.py) | Hosted agent: identity RBAC + guardrail (azd postdeploy hook); `--check`, `--verify` |
 | [gen-schemas.py](../../scripts/gen-schemas.py) | Navigator JSON schemas and the hosted agent's `livewell.json` from the prompts and `livewell_common.py`; `--check` |
-| [validate-builder-rail.py](../../scripts/validate-builder-rail.py) | Runs Labs 1–4 as `INITIALS=test` with `--cleanup`, checks the key signals (KB citation, injected flyer blocked, ≥ 2 tools, Fabric for Mei and not for Rahim, hosted agent) and that nothing is left behind; `--labs`, `--fabric`, `--report`. `make -C content/assets validate-rail` |
+| [validate-builder-rail.py](../../scripts/validate-builder-rail.py) | Runs Labs 1–4 as `INITIALS=test` with `--cleanup`, checks the key signals (KB citation, injected flyer blocked, ≥ 2 tools, Fabric for Mei and not for Rahim, hosted agent) and that nothing is left behind (items an interrupted earlier run left are deleted first); `--labs`, `--fabric`, `--report`, `--verbose`. `make -C content/assets validate-rail` |
 | [red-team.py](../../scripts/red-team.py) | AI Red Teaming Agent scan of a temporary guarded coach (or `--agent NAME`); `--lite`, `--yes`, `--upload`, `--parallel`. Needs `.venv-redteam` (`requirements-redteam.txt`) |
-| [red-team-cloud.py](../../scripts/red-team-cloud.py) | Cloud red team of `livewell-demo-tools` (or `--agents a,b`) with agentic + content-harm evaluators; results in **Evaluations → Red team**; `--taxonomy-only`, `--strategies`, `--turns`, `--yes`, `--report <eval id>` |
+| [red-team-cloud.py](../../scripts/red-team-cloud.py) | Cloud red team of `livewell-demo-tools` (or `--agents a,b`) with agentic + content-harm evaluators; results in **Evaluations → Red team**; clears your demo memory scope afterwards; `--taxonomy-only`, `--strategies`, `--turns`, `--yes`, `--report <eval id>`, `--keep-memory` |
+| [reset-demo-memory.py](../../scripts/reset-demo-memory.py) | Lists your scope in `livewell-demo-memory` and flags red-team residue (exit 1); `--reset` clears it (`--yes` skips the prompt). Run after a red team and at T-0 |
 | [guardrail-matrix.py](../../demos/guardrail-matrix.py) | Lab 2 demo: 7 prompts × {`gpt-4.1-mini`, `model-router`} × {default, `livewell-guardrails`} on four `livewell-demo-gr-*` agents; `--cloud` (Foundry evaluation to compare), `--reps`, `--verbose`, `--delete` |
 | [router-picks.py](../../demos/router-picks.py) | Lab 0 demo: the model `model-router` picked per prompt, its routing mode and latency (preview header); `--reps`, `--verbose` |
 | [lab4-devui.py](../../demos/lab4-devui.py) | Lab 4 demo: the sequential and hand-off teams from `lab4_multiagent.py` in Agent Framework DevUI on `127.0.0.1:8090`; `--port`, `--no-browser`, `--mermaid` (prints the WorkflowViz graphs), `--capture` (headless runs and the two lab-04 DevUI screenshots) |
 | [seed-attendees.sh](../../scripts/seed-attendees.sh) | Lab accounts / file / guests → project, search, tracing and Fabric access; `--remove`, `--dry-run` |
 | [render-values.py](../../scripts/render-values.py) | `.azure/<env>/.env` → `content/config/values.md`. Runs by itself after `azd provision` and `azd deploy` (hooks), `fabric/deploy.sh` and `connect-tools.py` |
-| [smoke-test.py](../../scripts/smoke-test.py) | End-to-end check with temporary `livewell-smoke-*` agents: MCP, knowledge, guardrail, tools, Fabric, hosted agent, cost since provision; `--demo-agents`, `--no-fabric`, `--no-hosted`, `--since`, `--report` |
+| [smoke-test.py](../../scripts/smoke-test.py) | End-to-end check with temporary `livewell-smoke-*` agents: MCP, knowledge, guardrail, tools, Fabric, hosted agent, demo-memory residue, cost since provision; `--demo-agents`, `--no-fabric`, `--no-hosted`, `--since`, `--report` |
 | [create-demo-agents.py](../../demos/create-demo-agents.py) | The five `livewell-demo-*` agents (one per lab) and the `livewell-eval` dataset; a new version only when the definition changed; `--check`, `--roles`, `--no-memory`, `--no-dataset` |
 | [portal.py](../../demos/portal.py) | Playwright helpers for the Foundry portal; `login`, `status`, `open <page>`, `shot <page>` |
 | [capture-screenshots.py](../../demos/capture-screenshots.py) | Navigator screenshot slots from the live portal; `--only`, `--list-missing`, `--link [--dry-run]`, `--headless` |
 | [record-demos.py](../../demos/record-demos.py) | One captioned WebM per lab and the Bridge spotlight into `demos/videos/`; `--lab` |
 | [fabric-steps.py](../../demos/fabric-steps.py) | Bridge visualiser: the Fabric data agent's own run steps (rewrite, GQL, rows) for one question as an HTML page; `bridge`, `fit`, any question id; `--replay`, `--open`, `--save-sample` |
+| [record-terminal.py](../../demos/record-terminal.py) | Evidence recorder: runs any script, then saves its output with real timings (`.cast`) and a PNG in `demos/evidence/<date>/` and a replay WebM in `demos/videos/`; IDs, endpoints, e-mails and local paths redacted; `--title`, `--render`, `--idle`, `--no-video` |
 | [teardown.sh](../../scripts/teardown.sh) | Fabric workspace → `azd down --purge` → verify; `--pause-only` |
 | [create-lab-users.sh](../../scripts/tenant/create-lab-users.sh) | 20 lab accounts + break-glass (Graph); `--delete`, `--reset-passwords` |

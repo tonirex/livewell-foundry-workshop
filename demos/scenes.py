@@ -134,13 +134,27 @@ class Run:
         took = P.send(self.page, text, typing_delay=30 if self.video else 4, timeout=timeout)
         answer = P.last_answer(self.page)
         self.log(f"  [chat] {pid}: {took:.0f}s, {len(answer)} chars" + (" (approval pending)" if P.approval_pending(self.page) else ""))
+        if len(answer) < 300:
+            self.log("         " + " ".join(answer.split())[:240])
         self.pause(3)
         return answer
 
     def trace(self, span: str | None = None, tab: str | None = None) -> bool:
         ok = P.open_trace(self.page)
+        if ok:
+            P.trace_expand(self.page)
         if ok and span:
-            P.trace_span(self.page, span)
+            # Spans arrive over a minute or two; a trace opened early can lack the one we want, so reopen it.
+            for attempt in range(3):
+                if P.trace_span(self.page, span) or attempt == 2:
+                    break
+                self.log(f"  [trace] no span like {span!r} yet; reopening")
+                P.close_dialog(self.page)
+                time.sleep(30)
+                ok = P.open_trace(self.page)
+                if not ok:
+                    break
+                P.trace_expand(self.page)
         if ok and tab:
             P.trace_tab(self.page, tab)
         if ok:
