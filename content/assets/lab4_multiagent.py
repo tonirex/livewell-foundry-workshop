@@ -261,6 +261,9 @@ if hosted is not None and smoke is not None:
 
 # %% [markdown]
 # ## 8. Checkpoint
+#
+# Who spoke in each workflow, the merged plan and the hosted smoke test in one place. Compare them with Expected
+# output under Checkpoint on the lab page; there is nothing to submit.
 
 # %%
 lw.checkpoint("Lab 4", {

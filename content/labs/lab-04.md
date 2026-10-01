@@ -174,16 +174,37 @@ Or open `content/assets/lab4_multiagent.py` and run it cell by cell in VS Code o
 
 What the script does per section (the diagrams and line-by-line pointers are in [Under the hood](#under-the-hood)):
 
-1. **Request.** Reads your profile from the activities app (`/profile/me`) as a one-line summary and puts it in front of `lab4_week_plan_handoff`. The resident_id never enters the conversation.
+1. **Request.** The local specialists have no profile tool, so the script reads the session resident's profile with the same function as Lab 3 (`get_citizen_profile("me")`), turns it into a one-line summary and puts it in front of `lab4_week_plan_handoff`. The summary carries no resident_id. The hosted agent does the same step server-side, from the activities app's `/profile/me`.
 2. **Client and tools.** One Agent Framework client for the project, plus the Lab 3 tools: the knowledge-base MCP endpoint and `find_activities` (never `register_interest`).
 3. **Specialists.** Nutrition and Activity, each with its instruction block. A small `text_only` middleware passes earlier answers on as plain text.
 4. **Sequential team.** Nutrition → Activity → Coach; the Coach merges both answers into the Lab 3 evidence JSON. Prints the trace and checks JSON, a real guide citation, an indoor morning activity and no resident_id.
 5. **Handoff team** (skip with `--no-handoff`). The Coach triages and hands off to Nutrition, which hands off to Activity. Checks the route and that both specialists answered.
 6. **Programme-Insights** (only with `--fabric`, when the facilitator confirms `FABRIC_BRIDGE=true`). Creates **`livewell-<INITIALS>-insights`** with the Fabric tool and asks `lab4_q_programmes_disengaged`; checks the top programme against the reference answer.
 7. **Hosted agent.** Once the facilitator has deployed **`livewell-workshop-hosted`**, sends it the same week-plan prompt on its own endpoint and checks that its guardrail is **`livewell-guardrails`**, the reply is evidence JSON with a real guide, and no resident_id appears. Before the deploy it just says "not deployed yet".
-8. **Checkpoint.** Prints the paste block and saves the run to `content/assets/.runs/`.
+8. **Checkpoint.** Prints your key results under **CHECKPOINT** and saves the run to `content/assets/.runs/lab4-<initials>.json`.
 
 Use `--verbose` for each agent's full answer. Use `--cleanup` to delete only `livewell-<INITIALS>-*` agents (the hosted agent has a protected name and is never deleted). Retype lines are marked `# 👉`.
+
+### How the code works
+
+[Under the hood](#under-the-hood) has the diagrams and the agent table. This is the short map from each script section to the code that does the work.
+
+| Section | Code | What it does |
+|---|---|---|
+| 1 | [L56-L58](../assets/lab4_multiagent.py#L56-L58), [`profile_summary`](../assets/common/livewell_common.py#L521-L526) | Builds the request: one profile line plus the prompt. |
+| 2 | [`af_client`](../assets/common/livewell_common.py#L1068-L1080), [`af_kb_tool` and `af_activities_tool`](../assets/common/livewell_common.py#L1083-L1094) | A `FoundryChatClient` on the project's model deployment, and the two hosted MCP tools from `client.get_mcp_tool`. `allowed_tools` keeps Activity to `find_activities`. |
+| 3 | [`text_only` and `team()`](../assets/lab4_multiagent.py#L81-L95) | Agent middleware that strips earlier tool calls, and a factory for fresh Nutrition and Activity agents. An agent instance belongs to one workflow, so each workflow builds its own. |
+| 4 | [`sequential()`](../assets/lab4_multiagent.py#L124-L129), [run and checks](../assets/lab4_multiagent.py#L132-L152) | `SequentialBuilder` in a fixed order. The Coach's strict schema comes from [`af_json_format`](../assets/common/livewell_common.py#L1097-L1100), the same evidence contract as Lab 3. |
+| 5 | [`handoff()`](../assets/lab4_multiagent.py#L164-L179) | `HandoffBuilder`: who may hand off to whom, the start agent, one autonomous turn for Nutrition and a stop condition. |
+| 6 | [L203-L209](../assets/lab4_multiagent.py#L203-L209) | Not Agent Framework: a Foundry prompt agent with the Fabric tool, created and asked exactly as in Lab 3. |
+| 7 | [L237-L260](../assets/lab4_multiagent.py#L237-L260) | Finds `livewell-workshop-hosted`, checks its guardrail, and sends it the week-plan prompt. |
+
+Two helpers do the plumbing:
+
+- [`af_run`](../assets/common/livewell_common.py#L1128-L1154) builds a **fresh** workflow, runs it with `await workflow.run(request)` and collects every output message. A 429 or a model error re-runs the whole workflow, because a half-finished hand-off cannot be resumed.
+- [`af_steps`](../assets/common/livewell_common.py#L1103-L1118) turns those messages into the printed trace: who spoke (`author_name`), in order, and which tools each speaker called.
+
+`lw.ask` knows that a hosted agent only answers on its own endpoint. For `livewell-workshop-hosted` it uses an OpenAI client for `{project}/agents/<name>/endpoint/protocols/openai` ([`_openai_agent`](../assets/common/livewell_common.py#L363-L366)). For a prompt agent it sends an `agent_reference` instead.
 
 Engineer appendix notes:
 
@@ -202,7 +223,34 @@ Engineer appendix notes:
 
 ✅ **Learned** what changes when an agent moves from playground to endpoint: RBAC, policy attachment, versioning and operational traces.
 
-Paste into the checkpoint form: the JSON output for `lab4_week_plan_handoff` from the facilitator smoke test, or the trace summary showing Nutrition then Activity. If the Programme-Insights demo ran, paste the grouped programme answer for `lab4_q_programmes_disengaged`.
+There is nothing to submit. Try the steps first, then open **Expected output** to compare.
+
+<details>
+<summary><b>Expected output</b> (open after you have tried it)</summary>
+
+**What this demonstrates.** One request can be split across specialists, and you choose who decides the route. In the sequential team your code fixes the order. In the hand-off team the model picks the next agent by calling a `handoff_to_…` tool. Either way, the resident gets one merged answer with the same evidence contract as Lab 3. Officer questions go to a separate Programme-Insights agent with Fabric access, so citizen and officer data paths never mix. Packaged as a hosted agent, the same team runs behind its own endpoint with the workshop guardrail, an agent identity and traces.
+
+**Hosted agent playground.** The food prompt returns evidence JSON with real guide ids. The log stream on the right shows the container's own logs (Agent Framework workflow runner, agent server).
+
+![Hosted agent playground: evidence JSON for the food prompt, with the container log stream](screenshots/lab-04/05-hosted-agent-food-prompt.png)
+
+**Hosted trace.** `workflow.run` contains one `executor.process` span per step: `resident_profile` first, then `nutrition`, `activity` and the coach. Each agent has its own `invoke_agent` and `chat` span. That is the sequential team, seen from production.
+
+![Hosted trace: workflow.run with resident_profile, nutrition and activity executor spans](screenshots/lab-04/06-hosted-agent-trace.png)
+
+**DevUI** (facilitator demo): see the two screenshots at the end of [Under the hood](#under-the-hood).
+
+**Builder.** Look for:
+
+- `trace: nutrition -> activity -> coach`, with `coach tools: none`, then one evidence JSON;
+- `trace: coach -> nutrition -> activity`, with `handoff_to_nutrition` and `handoff_to_activity` in the tool lists: the model chose that route;
+- with `--fabric`: `livewell-<INITIALS>-insights` calls the Fabric data agent and returns a table by programme, with no resident rows;
+- `livewell-workshop-hosted version N (hosted), guardrail: livewell-guardrails`, then a hosted reply with real guide ids;
+- PASS on every line.
+
+![lab4_multiagent.py output: sequential and hand-off traces with tools per agent, merged evidence JSON, Programme-Insights table and the hosted smoke test, each with PASS lines](screenshots/lab-04/builder-output.png)
+
+</details>
 
 ## Troubleshooting
 

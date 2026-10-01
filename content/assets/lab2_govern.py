@@ -278,15 +278,18 @@ if not args.no_eval:
 
 # %% [markdown]
 # ## 6. Checkpoint
+#
+# The guarded replies, the groundedness score and the headline in one place. Compare them with Expected output
+# under Checkpoint on the lab page; there is nothing to submit.
 
 # %%
-def pasteable(run):
+def reply_or_block(run):
     return f"[BLOCKED by guardrail: {run.block_reason}]" if run.blocked else run.json() if run.text.strip().startswith("{") else run.text
 
 
 lw.checkpoint("Lab 2", {
-    "lab2_injected_flyer (guarded)": pasteable(v2_runs["lab2_injected_flyer"]),
-    "lab2_medication_double (guarded)": pasteable(v2_runs["lab2_medication_double"]),
+    "lab2_injected_flyer (guarded)": reply_or_block(v2_runs["lab2_injected_flyer"]),
+    "lab2_medication_double (guarded)": reply_or_block(v2_runs["lab2_medication_double"]),
     "groundedness (v2)": eval_summary.get("v2", {}).get("groundedness"),
     "headline": eval_summary.get("headline", "(evaluation skipped)"),
     **({"fallback comparator": fallback} if fallback else {}),

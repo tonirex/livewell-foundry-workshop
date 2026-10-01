@@ -117,7 +117,7 @@ Routing rule to keep in mind:
 | Mei | Region, programme, event, challenge aggregates | Fabric IQ tool |
 | Anyone | Another resident's data | Refuse |
 
-The checkpoint is about routing as much as the answer. A correct region table with the wrong tool path is not a pass, and a good programme recommendation that sent Rahim's name or area to Fabric is not a pass either.
+Routing matters as much as the answer. A correct region table that came through the wrong tool is still wrong. A good programme recommendation is still a failure if the question sent to Fabric included Rahim's name or area.
 
 ## 🔵 Builder
 
@@ -149,6 +149,18 @@ When `FABRIC_BRIDGE=false`, run Lab 3 without `--fabric`; the profile tool still
 
 Keep Fabric disabled in local experiments unless the facilitator confirms the shared connection is ready.
 
+### How the code works
+
+The Fabric step is section 10 of `lab3_tools.py`. It creates a new version of the same coach; there is no new agent.
+
+- **The tool.** [`fabric_tool`](../assets/common/livewell_common.py#L494-L498) returns a `FabricIQPreviewTool` on the project connection `livewell-fabric-resident360`. Foundry calls the published data agent with your own identity (identity passthrough), so Fabric's permissions still apply to you. It only reads aggregates, so no approval is needed. [`fabric_enabled`](../assets/common/livewell_common.py#L120-L121) gates the whole step on `--fabric` or `FABRIC_BRIDGE=true`.
+- **The coach, version 2.** [Lines 284–289](../assets/lab3_tools.py#L284-L289) call `create_agent` with the Lab 3 tools plus the Fabric tool, and the Lab 3 blocks plus `fabric`. The `fabric` block is the routing rule from the table above, written for the model.
+- **Mei, then the control.** [Lines 291–310](../assets/lab3_tools.py#L291-L310) ask the region question with a longer timeout (`FABRIC_TIMEOUT`, 300 s). The script compares the first region named with `content/fabric/reference-answers.json`, then asks Rahim's food question on the same coach and checks that no Fabric call was made.
+- **Programme fit.** [Lines 312–324](../assets/lab3_tools.py#L312-L324) send one prompt. The model chains four tools on its own: profile, then Fabric, then `find_activities`, then the approval for `register_interest`. If it asks "shall I sign you up?" in text instead of raising the approval, the script says yes in the same conversation.
+- **The privacy check.** `question_sent` ([lines 326–332](../assets/lab3_tools.py#L326-L332)) pulls the `userQuestion` argument out of each Fabric call: the exact text that left your project for Fabric. [Lines 333–355](../assets/lab3_tools.py#L333-L355) check that it names the age band and not Rahim's id, name or planning area, that the profile call came before the Fabric call, and that the approval came before the write.
+
+`lw.ask` keeps every tool call with its arguments, in order (`run.tool_calls`). That is what makes order and argument checks like these possible in your own tests.
+
 ## Checkpoint
 
 ✅ **Built** a coach that chains profile, Fabric IQ and activities tools to make one personal decision, and routes officer aggregate questions to Fabric IQ while keeping citizen guidance in Foundry IQ.
@@ -157,7 +169,39 @@ Keep Fabric disabled in local experiments unless the facilitator confirms the sh
 
 ✅ **Learned** that Fabric IQ adds governed population evidence to a personal answer, as long as the question sent to it stays aggregate.
 
-Paste into the checkpoint form: the `userQuestion` the coach sent to Fabric for `lab3_programme_fit` and the programme it recommended (**<!--ref:q_programme_fit.recommended_programme-->Diabetes Prevention<!--/ref-->**), the trace line showing the Fabric IQ MCP call for `fabric_q_disengaged_regions`, the grouped-by-region answer, and confirmation that `lab1_prediabetes_eat` produced no Fabric call. The top region should be **<!--ref:q_disengaged_regions.top_region-->North<!--/ref-->** (±1 rank, from `content/fabric/reference-answers.json`), and the answer must not include any `resident_id`.
+There is nothing to submit. Try the steps first, then open **Expected output** to compare.
+
+<details>
+<summary><b>Expected output</b> (open after you have tried it)</summary>
+
+**What this demonstrates.** Fabric IQ adds population evidence to a personal decision. For `lab3_programme_fit` the coach reads Rahim's profile, asks Fabric one aggregate question about his age band, picks a programme people his age stay in and that he is not already in, finds its intake session near Woodlands, and asks before registering him. The same coach routes Mei's aggregate question to Fabric and keeps Rahim's food question on the guides. Foundry IQ answers "what is good advice"; Fabric IQ answers "what happens to people like me".
+
+**The question that left the project.** In the `lab3_programme_fit` trace, select the Fabric call. `userQuestion` names the age band and nothing else. The output is a table by programme with enrolled, dropped and drop-out %. Counts under 5 show as "fewer than 5", the small-cell rule from the data-agent instructions.
+
+![Fabric IQ call in the trace: userQuestion names only the age band; the output is a programme table](screenshots/lab-03/20-programme-fit-fabric-question.png)
+
+**The recommendation.** Active Ageing has the lowest drop-out in the table, but Rahim is already in it. The coach recommends **<!--ref:q_programme_fit.recommended_programme-->Diabetes Prevention<!--/ref-->** (<!--ref:q_programme_fit.recommended_dropout_pct-->21.6<!--/ref-->% drop-out against <!--ref:q_programme_fit.dropped_programme_dropout_pct-->37.1<!--/ref-->% for <!--ref:q_programme_fit.dropped_programme-->Healthier SG<!--/ref-->, which he dropped) and offers its intake session. The tool chips show `openapi_call` (profile), `resident360` (Fabric) and `livewell_activities`.
+
+![Programme-fit reply with the profile, Fabric and activities tools in the chips](screenshots/lab-03/19-programme-fit-recommendation.png)
+
+**Mei's question.** `fabric_q_disengaged_regions` returns **<!--ref:q_disengaged_regions.top_region-->North<!--/ref-->** first (±1 rank is fine), by region and with no `resident_id`. `resident360` appears in the chips.
+
+![Region answer with North first and the Fabric IQ tool in the chips](screenshots/lab-03/22-fabric-disengaged-regions.png)
+
+**The control.** `lab1_prediabetes_eat` on the same coach: the profile and the knowledge base only, with **no Fabric call**.
+
+![Trace for the food question: profile and knowledge base, no Fabric call](screenshots/lab-03/24-no-fabric-for-citizen-question.png)
+
+**Builder.** Look for:
+
+- `fabric coach = livewell-<INITIALS>-coach version 2`;
+- the region answer with `DataAgent_Resident360_Ontology_Agent` in its tools (first call 60–120 s) and `top region matches the reference`;
+- the food question with `get_citizen_profile` and `knowledge_base_retrieve`, but no Fabric tool;
+- programme fit: `profile at 0, Fabric at 2`, the question sent (`For residents in age band 60-64, how many enrolled in each programme and how many dropped out?`), then `APPROVAL requested: …register_interest({"activity_id":"ACT047",…}) -> APPROVED` and a Diabetes Prevention intake confirmation.
+
+![lab3_tools.py --fabric output: Fabric coach v2, region answer, no-Fabric food answer, and programme fit with the question sent to Fabric, the approval and PASS lines](screenshots/lab-03/builder-output-fabric.png)
+
+</details>
 
 ## Troubleshooting
 

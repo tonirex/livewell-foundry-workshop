@@ -1174,7 +1174,9 @@ def save_results(lab: str) -> pathlib.Path:
 
 
 def checkpoint(lab: str, fields: dict[str, Any]) -> None:
-    heading(f"CHECKPOINT {lab}: paste this into the checkpoint form")
+    """The run's key results in one place. Nothing is submitted: participants compare them with the
+    Expected output block under Checkpoint on the lab page."""
+    heading(f"CHECKPOINT {lab}: your key results (compare with Expected output on the lab page)")
     show_json(fields)
 
 

@@ -116,7 +116,7 @@ Windows on ARM: some wheels are x64-only. Use an x64 Python, or Codespaces.
   [Fabric capacity](scripts/capacity.sh), [seed attendees](scripts/seed-attendees.sh), [teardown](scripts/teardown.sh).
 - [Rahim's story](content/narrative/rahim.md): one chapter per lab, every beat tagged by seat and source.
 - [Prompt bank](content/prompts/test-prompts.json): the single source of truth for every prompt in the labs, keys and demos.
-- [Answer keys](content/answer-keys/) for the paste-the-output checkpoints.
+- [Answer keys](content/answer-keys/): facilitator reference answers for each checkpoint (participants compare with the Expected output block on each lab page).
 - [Fabric bridge inputs](content/fabric/): ontology blueprint, data-agent instructions, Mei's question bank.
 - Deck: `deck/LiveWell-Foundry-Workshop-Day1.pptx` (built by `deck/build_deck.py`).
 - Proof and demo kit (`pip install -r requirements-demos.txt`):
@@ -139,7 +139,7 @@ content/
   labs/           lab pages, Fabric step, bridge spotlight, Portal Track
   narrative/      rahim.md
   prompts/        test-prompts.json, coach-instructions.md
-  answer-keys/    checkpoint validators
+  answer-keys/    facilitator reference answers per checkpoint
   fabric/         ontology blueprint, data-agent instructions, question bank
 scripts/          generators (gen-activity.py, gen-citizens.py), r360.py, check-content.py, smoke-test.py, build-guides-pdf.py
 demos/            demo agents, screenshot capture, demo recorder (portal.py, scenes.py), DRY-RUN-TEMPLATE.md
