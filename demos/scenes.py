@@ -1,7 +1,7 @@
 """Portal scenes shared by demos/capture-screenshots.py and demos/record-demos.py.
 
 A scene walks one part of the 🟢 Navigator portal track on a facilitator demo agent (livewell-demo-*,
-livewell-workshop-hosted). In "shots" mode it saves the PORTAL-TRACK.md screenshot slots it passes; in
+livewell-workshop-hosted). In "shots" mode it saves the screenshot slots of the lab-0N-portal.md pages and the Bridge spotlight; in
 "video" mode it shows captions and types slowly. Scenes never save an agent: menus and dialogs are opened,
 captured and cancelled, and the Lab 0 model switch is discarded by reloading the page.
 """
@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import contextlib
 import dataclasses
+import importlib.util
 import json
 import pathlib
 import re
@@ -22,10 +23,13 @@ RUNS = ROOT / "demos" / "runs"
 PROMPTS = json.loads((ROOT / "content" / "prompts" / "test-prompts.json").read_text(encoding="utf-8"))["prompts"]
 # Same follow-up as the builder rail (content/assets/lab3_tools.py) when the coach first asks which activity.
 SIGNUP_YES = "Yes, please sign me up for the first indoor option you found."
+FIT = json.loads((ROOT / "content" / "fabric" / "reference-answers.json").read_text(encoding="utf-8"))["q_programme_fit"]
+PROGRAMME_YES = f"Yes, please sign me up for the {FIT['recommended_programme']} intake session."
 
-SLOT_RE = re.compile(r"^(?P<indent>\s*)> 📸 \*\*Screenshot slot\*\* · `(?P<path>screenshots/(?P<id>lab-0\d/\d\d)-[^`]+\.png)`"
+SLOT_ID = r"(?:lab-0\d|bridge)/\d\d"
+SLOT_RE = re.compile(rf"^(?P<indent>\s*)> 📸 \*\*Screenshot slot\*\* · `(?P<path>screenshots/(?P<id>{SLOT_ID})-[^`]+\.png)`"
                      r" · (?P<caption>.+?)\s*$")
-IMAGE_RE = re.compile(r"^(?P<indent>\s*)!\[(?P<caption>[^\]]*)\]\((?P<path>screenshots/(?P<id>lab-0\d/\d\d)-[^)]+\.png)\)\s*$")
+IMAGE_RE = re.compile(rf"^(?P<indent>\s*)!\[(?P<caption>[^\]]*)\]\((?P<path>screenshots/(?P<id>{SLOT_ID})-[^)]+\.png)\)\s*$")
 
 # Slots a script cannot take: they need a participant (Foundry User) lab account or a fresh sign-in.
 MANUAL = {
@@ -33,7 +37,7 @@ MANUAL = {
     "lab-00/02": "Authenticator registration on a lab account",
     "lab-04/07": "needs a Foundry User lab account (disabled controls)",
     "lab-04/08": "needs a Foundry User lab account (Access control, My role)",
-    "lab-02/16": "needs two completed portal evaluation runs (submit step 15 for demo-kb and demo-guarded)",
+    "lab-02/20": "needs two completed portal evaluation runs (submit step 19 for demo-kb and demo-guarded)",
 }
 
 
@@ -50,9 +54,14 @@ class Slot:
         return LABS / self.path
 
 
+def slot_pages() -> list[pathlib.Path]:
+    """Pages with screenshot slots: the Navigator lab pages and the Bridge spotlight."""
+    return sorted(LABS.glob("lab-0*-portal.md")) + [LABS / "bridge-spotlight.md"]
+
+
 def slots() -> dict[str, Slot]:
     found: dict[str, Slot] = {}
-    for md in sorted(LABS.glob("lab-0*-portal.md")):
+    for md in slot_pages():
         for line in md.read_text(encoding="utf-8").splitlines():
             m = SLOT_RE.match(line) or IMAGE_RE.match(line)
             if m:
@@ -288,14 +297,37 @@ def tour(run: Run) -> None:
         name.press_sequentially("livewell-ac", delay=60 if run.video else 10)
         run.say("Name it livewell-<initials> (not created in this demo)")
         run.shot("lab-00/06")
-    if run.wants("lab-02/08"):
-        with run.soft("agents list demo", "lab-02/08"):
+    if run.wants("lab-02/10"):
+        with run.soft("agents list demo", "lab-02/10"):
             run.search_agents("livewell-demo")
-            run.shot("lab-02/08")
+            run.shot("lab-02/10")
     if run.wants("lab-04/01"):
         with run.soft("agents list hosted", "lab-04/01"):
             run.search_agents("hosted")
             run.shot("lab-04/01")
+
+
+def router_playground(run: Run) -> None:
+    """Lab 0 step 12: the model-router deployment's playground prints the routed model under each answer
+    (the agent trace only records the deployment name)."""
+    run.goto("models", settle=5)
+    run.page.get_by_text("model-router", exact=True).first.click(timeout=15000)
+    time.sleep(6)
+    run.say("Build → Models → model-router → Playground: each answer shows the model the router chose")
+    labels = run.page.get_by_text(re.compile(r"^(gpt-|o\d-|claude-|grok-|deepseek|llama)[\w.-]*$", re.I))
+    for text in ("Hi!", prompt("lab0_router_compare")):
+        before = labels.count()
+        box = run.page.get_by_role("textbox", name=re.compile("chat with the model", re.I)).first
+        box.click(timeout=10000)
+        box.press_sequentially(text, delay=30 if run.video else 4)
+        box.press("Enter")
+        end = time.time() + 180
+        while labels.count() <= before and time.time() < end:
+            time.sleep(1)
+        run.log(f"  [router] {text[:30]!r} -> {labels.last.inner_text(timeout=3000) if labels.count() > before else '?'}")
+        time.sleep(2)
+    run.page.mouse.move(640, 600)
+    run.say("A greeting goes to a small model, a 7-day plan to a larger one", 4)
 
 
 def lab0(run: Run) -> None:
@@ -314,14 +346,14 @@ def lab0(run: Run) -> None:
             run.shot("lab-00/10")
     run.escape()
     run.chat("lab0_router_compare")
-    run.say("model-router picks a model per request - the answer shows which one")
+    run.say("model-router picks a model per request")
     run.shot("lab-00/11")
-    with run.soft("router trace", "lab-00/12"):
-        if run.trace(span=r"^chat\b", tab="Metadata"):
-            P.trace_find(run.page, r"response\.model")
+    with run.soft("router playground", "lab-00/12"):
+        if run.wants("lab-00/12"):
+            router_playground(run)
             run.shot("lab-00/12")
-    run.escape()
     if run.wants("lab-00/13", "lab-00/14"):
+        run.goto("agent:livewell-demo-lab0", settle=5)
         with run.soft("compare gpt-4.1-mini", "lab-00/13"):
             run.say("Compare: switch the model to gpt-4.1-mini (not saved)")
             if not P.pick_model(run.page, "gpt-4.1-mini"):
@@ -407,65 +439,75 @@ def kb_chat(run: Run) -> None:
 
 
 def kb_redflags(run: Run) -> None:
-    """Lab 2 steps 2-6: the red-flag prompts on the unguarded baseline (livewell-demo-kb)."""
+    """Lab 2 steps 2-8: the ladder on the baseline (livewell-demo-kb, platform default guardrail)."""
     run.goto("agent:livewell-demo-kb", settle=5)
-    run.say("Lab 2 · Red flags on the baseline agent (no guardrail yet)")
-    for sid, pid in (("lab-02/02", "lab2_extreme_fasting"), ("lab-02/03", "lab2_medication_double")):
+    run.say("Lab 2 · The ladder on the platform default guardrail (Microsoft.DefaultV2)")
+    for sid, pid, note in (("lab-02/02", "lab2_extreme_fasting", "Crash diets are not a filter category: the instructions refuse"),
+                           ("lab-02/03", "lab2_medication_double", "The model declines - nothing outside the model stopped it")):
         run.chat(pid)
+        run.say(note)
         run.shot(sid)
     if run.wants("lab-02/04"):
         P.new_chat(run.page)
         run.say("Paste the community-club flyer below the prompt (it hides an injected instruction)")
         took = P.send(run.page, lw_prompt_text("lab2_injected_flyer"), timeout=300)
         run.log(f"  [chat] lab2_injected_flyer (flyer pasted): {took:.0f}s")
+        run.say("Blocked: the default already includes Prompt Shields (jailbreak)")
         run.shot("lab-02/04")
-    for sid, pid in (("lab-02/05", "lab2_other_resident"), ("lab-02/06", "lab2_benign_control")):
+    for sid, pid, note in (("lab-02/05", "lab2_other_resident", "Privacy is about whose data: the instructions refuse"),
+                           ("lab-02/06", "lab2_skip_meals", "Answered: self-harm scored Low, so the default only annotates it"),
+                           ("lab-02/07", "lab2_benign_control", "Benign: answered"),
+                           ("lab-02/08", "lab2_benign_dose_reminder", "Benign medication habit: answered")):
         run.chat(pid)
+        run.say(note)
         run.shot(sid)
 
 
 def guarded(run: Run) -> None:
-    """Lab 2 steps 7-14 on livewell-demo-guarded (livewell-guardrails, safety block)."""
+    """Lab 2 steps 9-18 on livewell-demo-guarded (livewell-guardrails, safety block)."""
     run.goto("agent:livewell-demo-guarded", settle=5)
     run.say("livewell-demo-guarded: livewell-guardrails attached")
-    with run.soft("guardrail section", "lab-02/07"):
+    with run.soft("guardrail section", "lab-02/09"):
         run.collapse("Instructions", "Tools", "Knowledge")
         P.expand(run.page, "Guardrail")
         run.page.get_by_role("button", name=re.compile(r"^guardrail", re.I)).first.scroll_into_view_if_needed(timeout=5000)
-        run.shot("lab-02/07")
+        run.shot("lab-02/09")
     run.goto("agent:livewell-demo-guarded", settle=5)
     P.scroll_instructions(run.page)
     run.say("Instructions: base + knowledge + safety blocks")
-    run.shot("lab-02/09")
-    with run.soft("guarded versions", "lab-02/10"):
-        run.version_history()
-        run.shot("lab-02/10", note="demo agent shows v1")
-    run.goto("agent:livewell-demo-guarded", settle=5)  # closes the version-history panel before chatting
-    run.chat("lab2_medication_double")
-    run.say("Guarded: medication dosing is refused")
     run.shot("lab-02/11")
+    with run.soft("guarded versions", "lab-02/12"):
+        run.version_history()
+        run.shot("lab-02/12", note="demo agent shows v1")
+    run.goto("agent:livewell-demo-guarded", settle=5)  # closes the version-history panel before chatting
+    for sid, pid, note in (("lab-02/13", "lab2_medication_double", "Blocked by the medication-dosage blocklist, before the model"),
+                           ("lab-02/14", "lab2_skip_meals", "Blocked: same Low self-harm score, stricter threshold - the custom guardrail's benefit"),
+                           ("lab-02/15", "lab2_benign_control", "Normal sugar advice is still allowed"),
+                           ("lab-02/16", "lab2_benign_dose_reminder", "Over-blocked by the blocklist: the cost of a stricter control")):
+        run.chat(pid)
+        run.say(note, 4)
+        run.shot(sid)
+    run.say("Back to an allowed run to compare its trace")
     run.chat("lab2_benign_control")
-    run.say("Normal sugar advice is still allowed - no over-blocking")
-    run.shot("lab-02/12")
-    with run.soft("allowed trace", "lab-02/14"):
+    with run.soft("allowed trace", "lab-02/18"):
         if run.trace():
-            run.shot("lab-02/14")
+            run.shot("lab-02/18")
     run.escape()
-    with run.soft("blocked trace", "lab-02/13"):
+    with run.soft("blocked trace", "lab-02/17"):
         # A guardrail-blocked chat turn has no response-metrics row, so open it from the agent's Traces tab.
-        if run.wants("lab-02/13"):
+        if run.wants("lab-02/17"):
             run.say("Blocked runs have no metrics row in chat: open them from the Traces tab (Status: Failed)")
             if not run.blocked_trace():
                 raise RuntimeError("no guardrail-blocked trace in the Traces tab yet")
-            run.shot("lab-02/13")
+            run.shot("lab-02/17")
     run.escape()
 
 
 def evals(run: Run) -> None:
-    """Lab 2 step 15: the evaluation wizard with the guarded agent and livewell-eval selected (nothing is submitted)."""
+    """Lab 2 step 19: the evaluation wizard with the guarded agent and livewell-eval selected (nothing is submitted)."""
     run.goto("evaluations", settle=5)
     run.say("Evaluations → Create: pick the agent, then the livewell-eval dataset")
-    with run.soft("evaluation wizard", "lab-02/15"):
+    with run.soft("evaluation wizard", "lab-02/19"):
         run.button(r"^create$")
         time.sleep(3)
         row = run.page.get_by_role("row").filter(has_text="livewell-demo-guarded").first
@@ -486,7 +528,7 @@ def evals(run: Run) -> None:
             run.page.get_by_role("progressbar", name=re.compile("loading dataset preview", re.I)).wait_for(state="hidden", timeout=90000)
         time.sleep(2)
         run.say("Existing dataset: livewell-eval (registered by create-demo-agents.py)")
-        run.shot("lab-02/15", note="livewell-eval selected")
+        run.shot("lab-02/19", note="livewell-eval selected")
         if run.video:
             run.wizard_next()
             time.sleep(4)
@@ -614,7 +656,7 @@ def tools_chat(run: Run) -> None:
 
 
 def fabric(run: Run) -> None:
-    """Lab 3 steps 16-21 on livewell-demo-fabric (optional Fabric IQ step)."""
+    """Lab 3 steps 16-24 on livewell-demo-fabric (optional Fabric IQ step)."""
     run.goto("agent:livewell-demo-fabric", settle=5)
     run.say("Optional Fabric step · Fabric IQ for programme-level questions")
     if run.wants("lab-03/16"):
@@ -649,18 +691,36 @@ def fabric(run: Run) -> None:
     P.scroll_instructions(run.page)
     run.say("Instructions: fabric routing rules at the end")
     run.shot("lab-03/18")
-    run.chat("fabric_q_disengaged_regions")
-    run.say("Aggregated by region - never an individual resident")
-    run.shot("lab-03/19")
-    with run.soft("fabric trace", "lab-03/20"):
-        if run.trace(span=r"fabric|mcp|tool"):
+    run.chat("lab3_programme_fit", timeout=480)
+    run.say(f"Profile → Fabric IQ (age band only) → {FIT['recommended_programme']} intake near Woodlands")
+    run.shot("lab-03/19", note="" if P.approval_pending(run.page) else "coach asked first; no approval card yet")
+    with run.soft("programme fit trace", "lab-03/20"):
+        if run.trace(span=r"resident360|dataagent|fabric"):
+            P.trace_find(run.page, r"age band")
+            run.say("What left the coach: userQuestion names the age band only")
             run.shot("lab-03/20")
     run.escape()
+    with run.soft("programme fit approve", "lab-03/21"):
+        if not P.approval_pending(run.page):
+            run.chat(PROGRAMME_YES, new=False)
+        if not P.approval_pending(run.page):
+            raise RuntimeError("no approval card")
+        run.say("Approve → Approve once: only now is he registered")
+        if not P.approve(run.page):
+            raise RuntimeError("approval still pending after Approve once")
+        run.shot("lab-03/21")
+    run.chat("fabric_q_disengaged_regions")
+    run.say("Mei: aggregated by region - never an individual resident")
+    run.shot("lab-03/22")
+    with run.soft("fabric trace", "lab-03/23"):
+        if run.trace(span=r"resident360|dataagent|fabric|mcp"):
+            run.shot("lab-03/23")
+    run.escape()
     run.chat("lab1_prediabetes_eat")
-    with run.soft("citizen trace", "lab-03/21"):
+    with run.soft("citizen trace", "lab-03/24"):
         if run.trace():
             run.say("Citizen food question: knowledge/profile, no Fabric call")
-            run.shot("lab-03/21")
+            run.shot("lab-03/24")
     run.escape()
 
 
@@ -690,30 +750,77 @@ def hosted(run: Run) -> None:
         run.shot("lab-04/09")
 
 
+def fabric_steps():
+    """demos/fabric-steps.py as a module (the file name has a hyphen)."""
+    spec = importlib.util.spec_from_file_location("fabric_steps", ROOT / "demos" / "fabric-steps.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def bridge(run: Run) -> None:
+    """Bridge spotlight step 5: Mei's multi-hop question, its Foundry trace, then the data agent's own steps."""
+    run.goto("agent:livewell-demo-fabric", settle=5)
+    run.say("Bridge spotlight · Two IQs, one agent")
+    run.chat("bridge_q_dropped_attended_heldin", timeout=480)
+    run.say("Mei: residents who dropped a programme, by the region where their events were held")
+    run.shot("bridge/01")
+    with run.soft("bridge trace", "bridge/02"):
+        if run.trace(span=r"resident360|dataagent|fabric|mcp"):
+            P.trace_find(run.page, r"userQuestion")
+            run.say("The Foundry trace: one Fabric IQ call, an aggregate question in, an answer out")
+            run.shot("bridge/02")
+    run.escape()
+    if not run.wants("bridge/03", "bridge/04", "bridge/05"):
+        return
+    with run.soft("bridge visualiser", "bridge/03", "bridge/04", "bridge/05"):
+        try:
+            page = fabric_steps().replay_page("bridge")
+        except SystemExit as e:  # no saved run yet: skip these slots, not the whole capture
+            raise RuntimeError(f"{e}; run: python demos/fabric-steps.py bridge --save-sample") from None
+        run.log(f"  [page] {page.relative_to(ROOT)}")
+        run.page.goto(page.resolve().as_uri(), wait_until="load")
+        time.sleep(1.5)
+        run.say("Inside the data agent: the steps the Foundry trace does not show (demos/fabric-steps.py)", 4)
+        run.shot("bridge/03")
+        for sid, section, text in [
+            ("bridge/04", "queries", "Each query: the rewrite, the GQL it generated, the rows it read"),
+            ("bridge/05", "check", "Checked against the reference answer: 248 residents, Central first"),
+        ]:
+            run.page.evaluate("id => document.getElementById(id).scrollIntoView({block: 'start'})", section)
+            time.sleep(1)
+            run.say(text, 4)
+            run.shot(sid)
+        run.page.evaluate("document.getElementById('answer').scrollIntoView({block: 'start'})")
+        run.say("The answer the coach receives: aggregate only, event region kept apart from home region", 4)
+
+
 def lw_prompt_text(pid: str) -> str:
     """The prompt with its attachments inlined (the flyer), as the Builder scripts send it."""
     return P.lw.prompt_text(pid)
 
 
 SCENES = {
-    "tour": (tour, ["lab-00/03", "lab-00/04", "lab-00/05", "lab-00/06", "lab-02/08", "lab-04/01"]),
+    "tour": (tour, ["lab-00/03", "lab-00/04", "lab-00/05", "lab-00/06", "lab-02/10", "lab-04/01"]),
     "lab0": (lab0, [f"lab-00/{n:02d}" for n in range(7, 15)]),
     "kb-config": (kb_config, [f"lab-01/{n:02d}" for n in range(1, 7)] + ["lab-02/01"]),
     "kb-chat": (kb_chat, [f"lab-01/{n:02d}" for n in range(7, 12)]),
-    "kb-redflags": (kb_redflags, [f"lab-02/{n:02d}" for n in range(2, 7)]),
-    "guarded": (guarded, ["lab-02/07", "lab-02/09", "lab-02/10", "lab-02/11", "lab-02/12", "lab-02/13", "lab-02/14"]),
-    "evals": (evals, ["lab-02/15"]),
+    "kb-redflags": (kb_redflags, [f"lab-02/{n:02d}" for n in range(2, 9)]),
+    "guarded": (guarded, ["lab-02/09"] + [f"lab-02/{n:02d}" for n in range(11, 19)]),
+    "evals": (evals, ["lab-02/19"]),
     "tools-config": (tools_config, [f"lab-03/{n:02d}" for n in range(1, 10)]),
     "tools-chat": (tools_chat, [f"lab-03/{n:02d}" for n in range(10, 16)]),
-    "fabric": (fabric, [f"lab-03/{n:02d}" for n in range(16, 22)]),
+    "fabric": (fabric, [f"lab-03/{n:02d}" for n in range(16, 25)]),
     "hosted": (hosted, ["lab-04/02", "lab-04/03", "lab-04/04", "lab-04/05", "lab-04/06", "lab-04/09"]),
+    "bridge": (bridge, [f"bridge/{n:02d}" for n in range(1, 6)]),
 }
 
-# One Navigator-rail demo video per lab.
+# One Navigator-rail demo video per lab, plus the Bridge spotlight.
 VIDEOS = {
     "lab-00": ["tour", "lab0"],
     "lab-01": ["kb-config", "kb-chat"],
     "lab-02": ["kb-redflags", "guarded", "evals"],
     "lab-03": ["tools-config", "tools-chat", "fabric"],
     "lab-04": ["hosted"],
+    "bridge": ["bridge"],
 }

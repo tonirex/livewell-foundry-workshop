@@ -273,7 +273,10 @@ lw.record("lab3_specialists", plans)
 #
 # A new coach version adds the Fabric IQ tool (the published Resident360 Ontology Agent, connection
 # `livewell-fabric-resident360`) and the `fabric` routing block. Mei's programme question should go to Fabric
-# (the first call can take 1-2 minutes); Rahim's food question must not.
+# (the first call can take 1-2 minutes); Rahim's food question must not. Then Rahim's programme fit: the coach
+# reads his profile, asks Fabric ONE aggregate question about his age band (never his id, name or area),
+# recommends the programme people his age stay in that he is not already in, finds its intake session and asks
+# before it registers him.
 
 # %%
 fabric_result: dict = {}
@@ -305,6 +308,53 @@ if lw.fabric_enabled(args.fabric):
     fabric_result = {"fabric trace line": fabric_line, "fabric answer": mei.json() if not mei.blocked else mei.block_reason}
     lw.record("fabric_q_disengaged_regions", mei)
     lw.record("fabric_citizen_control", rahim)
+
+    fit_ref = reference["q_programme_fit"]
+    conversation = lw.new_conversation()
+    fit = lw.ask(fabric_coach, prompt_id="lab3_programme_fit", functions=FUNCTIONS, approve=lw.ask_human,  # 👉
+                 conversation=conversation, timeout=lw.FABRIC_TIMEOUT)
+    lw.show_run(fit, verbose=args.verbose)
+    fit_turns = [fit]
+    if not fit.approvals:
+        more = lw.ask(fabric_coach, f"Yes, please sign me up for the {fit_ref['recommended_programme']} intake session.",
+                      functions=FUNCTIONS, approve=lw.ask_human, conversation=conversation, consent=False,
+                      timeout=lw.FABRIC_TIMEOUT)
+        lw.show_run(more, verbose=args.verbose)
+        fit_turns.append(more)
+    fit_calls = [c for r in fit_turns for c in r.tool_calls]
+
+    def question_sent(call) -> str:
+        try:
+            return str(json.loads(call.arguments or "{}").get("userQuestion", call.arguments))
+        except ValueError:
+            return call.arguments
+
+    sent = [question_sent(c) for c in fit_calls if c.is_fabric and c.kind == "mcp_call"]
+    personal = [w for w in (r"RESIDENT_\d+", re.escape(me["display_name"]), re.escape(me["planning_area"]))
+                if any(re.search(w, s, re.I) for s in sent)]
+    first_profile = next((i for i, c in enumerate(fit_calls) if c.name == "get_citizen_profile"), None)
+    first_fabric = next((i for i, c in enumerate(fit_calls) if c.is_fabric), None)
+    asked = next((i for i, c in enumerate(fit_calls) if c.kind == "mcp_approval_request" and c.name == "register_interest"), None)
+    wrote = next((i for i, c in enumerate(fit_calls) if c.kind == "mcp_call" and c.name == "register_interest"), None)
+    said = lw.ascii_safe(" ".join(advice_of(r) for r in fit_turns))
+    lw.expect("lab3_programme_fit: Fabric IQ tool called", bool(sent), [c.name for c in fit_calls])
+    lw.expect("lab3_programme_fit: profile read before the Fabric question",
+              first_profile is not None and first_fabric is not None and first_profile < first_fabric,
+              f"profile at {first_profile}, Fabric at {first_fabric}")
+    lw.expect("lab3_programme_fit: no resident_id or personal detail sent to Fabric", bool(sent) and not personal,
+              sent or "no Fabric call")
+    lo, hi = re.findall(r"\d+", me["age_band"])[:2]
+    lw.expect("lab3_programme_fit: asks about the age band",
+              any(re.search(rf"\b{lo}\s*(?:-|–|to)\s*{hi}\b", s) for s in sent), sent)
+    lw.expect("lab3_programme_fit: recommends the reference programme",
+              fit_ref["recommended_programme"].lower() in said.lower(), fit_ref["recommended_programme"])
+    lw.expect("lab3_programme_fit: approval requested before register_interest", asked is not None
+              and (wrote is None or asked < wrote), f"approval at {asked}, write at {wrote}")
+    lw.expect("lab3_programme_fit: no resident_id in the reply", all(no_resident_id(r) for r in fit_turns))
+    fabric_result["programme fit: question sent to Fabric"] = sent
+    fabric_result["programme fit: advice"] = said
+    lw.record("lab3_programme_fit", {"turns": [r.summary() for r in fit_turns],
+                                     "tool_calls": [(c.kind, c.name) for c in fit_calls], "sent_to_fabric": sent})
 else:
     lw.say("Fabric step skipped (run with --fabric when the facilitator confirms FABRIC_BRIDGE=true)")
 

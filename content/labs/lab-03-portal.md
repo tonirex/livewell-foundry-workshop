@@ -148,11 +148,36 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
 
     ![Fabric routing rules appended to instructions](screenshots/lab-03/18-fabric-instructions.png)
 
-19. Ask the programme-level Fabric question.
+19. As Rahim, ask which programme people his age stick with. The coach reads his profile, asks Fabric one
+    age-band question, finds the intake session near Woodlands, then pauses on an approval card.
 
     **Chat → New chat → Message box → Send**
 
-    ![Aggregated region answer with no resident_id](screenshots/lab-03/19-fabric-disengaged-regions.png)
+    > 📸 **Screenshot slot** · `screenshots/lab-03/19-programme-fit-recommendation.png` · Recommendation with the age-band drop-out numbers and an approval card for register_interest
+
+    Prompt `lab3_programme_fit`:
+
+    ```text
+    I dropped out of Healthier SG last year. Which programme do people my age actually stick with? Find me a way to start near Woodlands and sign me up.
+    ```
+
+20. Check what the coach sent to Fabric. The `userQuestion` argument names the age band and nothing else.
+
+    **Response metrics → Traces → Fabric IQ / MCP call → Input**
+
+    > 📸 **Screenshot slot** · `screenshots/lab-03/20-programme-fit-fabric-question.png` · Trace: profile call, then the Fabric IQ call whose userQuestion names only the age band
+
+21. Approve the sign-up for the intake session.
+
+    **Approval card → Approve → Approve once**
+
+    > 📸 **Screenshot slot** · `screenshots/lab-03/21-programme-fit-approved.png` · register_interest approved for the Diabetes Prevention intake session
+
+22. As Mei, ask the programme-level Fabric question.
+
+    **Chat → New chat → Message box → Send**
+
+    ![Aggregated region answer with no resident_id](screenshots/lab-03/22-fabric-disengaged-regions.png)
 
     Prompt `fabric_q_disengaged_regions`:
 
@@ -160,17 +185,17 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
     Which regions have the highest share of disengaged residents?
     ```
 
-20. Confirm the Fabric IQ call in the trace.
+23. Confirm the Fabric IQ call in the trace.
 
     **Response metrics → Traces → Fabric IQ / MCP call**
 
-    ![Trace showing Fabric IQ call for the officer question](screenshots/lab-03/20-fabric-iq-trace.png)
+    ![Trace showing Fabric IQ call for the officer question](screenshots/lab-03/23-fabric-iq-trace.png)
 
-21. Confirm a citizen knowledge question does not call Fabric.
+24. Confirm a citizen knowledge question does not call Fabric.
 
     **Chat → New chat → Message box → Send**
 
-    ![Trace for food question showing knowledge/profile but no Fabric IQ call](screenshots/lab-03/21-no-fabric-for-citizen-question.png)
+    ![Trace for food question showing knowledge/profile but no Fabric IQ call](screenshots/lab-03/24-no-fabric-for-citizen-question.png)
 
     Prompt `lab1_prediabetes_eat`:
 
@@ -180,7 +205,7 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
 
 ## What you should see
 
-Profile advice is tailored to the signed-in synthetic resident and cites guides. Activity registration pauses on an approval card before `register_interest` runs. Memory affects a new chat. In the optional Fabric step, the officer aggregate question calls Fabric IQ, while the citizen food question stays on Foundry IQ and profile tools.
+Profile advice is tailored to the signed-in synthetic resident and cites guides. Activity registration pauses on an approval card before `register_interest` runs. Memory affects a new chat. In the optional Fabric step, Rahim's programme question chains profile → Fabric IQ (age band only) → activities → approval, Mei's aggregate question calls Fabric IQ, and the citizen food question stays on Foundry IQ and profile tools.
 
 ## If something looks different
 

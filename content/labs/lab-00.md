@@ -14,7 +14,7 @@ Patterns: #10 Governance & Safety.
 
 - New Foundry portal project navigation: Models, Agents, Tools, Guardrails, Evaluations, Traces/Monitor.
 - Prompt agent creation: model + instructions + playground chat.
-- `model-router` and `gpt-4.1-mini` comparison, with the router choice read from the trace.
+- `model-router` and `gpt-4.1-mini` comparison, with the router's choice read from the model-router playground.
 - Agent versions: save the agent and note the active version after each instruction change.
 - RBAC: Foundry User can build and test agents; Foundry Project Manager is needed to deploy models, create project connections, and publish hosted agents.
 
@@ -58,7 +58,7 @@ Patterns: #10 Governance & Safety.
     Plan a gentle 7-day walking routine for a 61-year-old who is just getting started, one line per day.
     ```
 
-12. Open the trace for that run and record the model the router chose. Then switch the model to **`gpt-4.1-mini`**, save a new version, send the same prompt again, and compare tone, length and latency.
+12. See which model the router chose. The agent trace only records the deployment name (`model-router`), so open **Build → Models → `model-router` → Playground**. Send `Hi!` and then the same walking prompt. The model name under each answer is the router's choice, typically a small model for the greeting and a larger one for the plan. Then switch your agent's model to **`gpt-4.1-mini`**, save a new version, send the walking prompt again, and compare tone, length and latency.
 13. Switch back to **`model-router`** and save again if your facilitator asks everyone to continue on the router.
 
 What to record before you leave the portal:
@@ -67,7 +67,7 @@ What to record before you leave the portal:
 |---|---|---|
 | Agent name | Agents list | Labs 1-3 keep extending the same Navigator agent. |
 | Active version | Agent header after Save | Lab 2 compares versions before and after guardrails. |
-| Router-chosen model | Trace for `lab0_router_compare` | Shows that routing is observable, not hidden magic. |
+| Router-chosen model | **Models → `model-router` → Playground**, under each answer | Shows that routing is observable, not hidden magic. |
 | Fallback behaviour | The `gpt-4.1-mini` comparison run | Gives you a quota-safe option if the router is busy. |
 
 Keep the chat short in Lab 0. The goal is not to optimise the walking plan; it is to prove the trace, version and refusal behaviour are visible.
@@ -88,6 +88,8 @@ If you finish early, help a neighbour check the trace rather than creating extra
 
 Lab 0 is the same portal exercise for everyone. Builders should use the remaining time to open the repository in Codespaces or VS Code, confirm Python is available, and wait for the facilitator values sheet before filling `.env` for Lab 1.
 
+In code, the routed model is the `model` field of every response. From Lab 1 on, the Builder scripts print it next to each answer (`model: gpt-5.6-luna-…`), so you can watch the router choose per request.
+
 From Lab 1 onward, Builder scripts are linear `# %%` cell files. Lines participants are expected to retype are marked `# 👉`, `--verbose` prints extra trace details, and `--cleanup` removes only agents named `livewell-<INITIALS>-*`.
 
 Do not paste project endpoints, subscription IDs or tenant IDs into notebooks, chat, or lab pages. Keep those values in `.env` and the facilitator values sheet only.
@@ -100,9 +102,9 @@ That habit is part of the governance pattern, not just setup hygiene.
 
 ✅ **Did** the first safety tests and compared `model-router` with `gpt-4.1-mini`.
 
-✅ **Learned** that a Foundry agent starts as model + instructions, and the trace shows which model served a routed request.
+✅ **Learned** that a Foundry agent starts as model + instructions, and that the router picks a model per request, which you can see under each answer in the model-router playground.
 
-Paste into the checkpoint form: the reply to `lab0_hi`, the reply to `lab0_am_i_diabetic`, and the model name you saw in the trace for `lab0_router_compare`.
+Paste into the checkpoint form: the reply to `lab0_hi`, the reply to `lab0_am_i_diabetic`, and the model names the model-router playground showed for `Hi!` and for `lab0_router_compare`.
 
 ## Troubleshooting
 

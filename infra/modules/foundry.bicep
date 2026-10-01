@@ -70,13 +70,14 @@ resource modelDeployments 'Microsoft.CognitiveServices/accounts/deployments@2025
     properties: {
       model: d.model
       versionUpgradeOption: 'NoAutoUpgrade'
-      raiPolicyName: contains(guardrail.attach_to, d.name) ? raiPolicy.name : null
+      raiPolicyName: contains(guardrail.attach_to, d.name) ? raiPolicy.name : guardrail.deployment_policy
     }
   }
 ]
 
 // Lab 2 guardrail: medication-dosage blocklist + RAI policy `livewell-guardrails`, defined once in
-// content/config/guardrails.yaml and attached to the chat deployments above.
+// content/config/guardrails.yaml. Deployments keep `deployment_policy` (Microsoft.DefaultV2); agents attach
+// livewell-guardrails through rai_config (ASSUMPTIONS.md 6.1).
 var guardrail = loadYamlContent('../../content/config/guardrails.yaml')
 
 resource blocklist 'Microsoft.CognitiveServices/accounts/raiBlocklists@2025-06-01' = {

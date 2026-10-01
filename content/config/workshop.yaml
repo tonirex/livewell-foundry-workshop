@@ -98,7 +98,7 @@ region_matrix:
     evaluators_playground_batch_risk_safety:  { swedencentral: "yes", northcentralus: "unverified" }
     hosted_agents:                           { swedencentral: "yes", northcentralus: "unverified" }
   not_colocated:
-    portal_red_teaming: "eastus2 / northcentralus only -> run red teaming via the azure-ai-evaluation SDK"
+    portal_red_teaming: "portal wizard documented for eastus2 / northcentralus only -> run the cloud red team API (scripts/red-team-cloud.py, works in swedencentral, validated 2026-10-01; results show in the portal) or the azure-ai-evaluation SDK"
   ruled_out:
     eastus2: "new Azure AI Search services capacity-blocked"
     southeastasia: "never used (SPEC.md §0)"

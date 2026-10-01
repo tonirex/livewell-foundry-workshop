@@ -4,6 +4,8 @@ Main page: [Lab 4](lab-04.md) · [Portal track](PORTAL-TRACK.md)
 
 This is a watch-along for the facilitator demo. Foundry User participants observe the hosted agent, versions, traces, and RBAC boundaries; deployment and production publishing require Foundry Project Manager.
 
+How the three agents are wired (diagrams, code pointers and the DevUI view of each run): [Lab 4 · Under the hood](lab-04.md#under-the-hood).
+
 1. Find the hosted workshop agent in the agent list.
 
    **Build → Agents → Search `livewell-workshop-hosted`**

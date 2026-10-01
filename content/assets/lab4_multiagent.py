@@ -2,7 +2,9 @@
 # # Lab 4 - Multi-agent & Hosted deploy - Builder rail
 #
 # The coach becomes a team. Microsoft Agent Framework runs the orchestration on your machine and calls the
-# project's model deployments, so the `livewell-guardrails` policy on each deployment still applies.
+# project's model deployments directly, so these local agents run under the deployment's guardrail (the platform
+# default, Microsoft.DefaultV2), not `livewell-guardrails`. The Foundry agents below (Programme-Insights, the
+# hosted agent) carry `livewell-guardrails` themselves.
 #
 # * Two local specialists, Nutrition and Activity, with the same hosted tools as Lab 3: the knowledge-base
 #   MCP endpoint and `find_activities` (never `register_interest`).

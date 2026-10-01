@@ -5,8 +5,8 @@
 >
 > **Rules (SPEC.md §3.3, §11.1)** — checked by `scripts/validate-narrative.py`:
 > every beat carries a tag `**[chN.M · seat: citizen|officer · source: kb|profile|fabric|mcp|memory · prompt: <prompt_id>]**`;
-> citizen beats never use `source: fabric`; every `fabric` beat's prompt has a `question_id` in
-> `content/fabric/question-bank.md`; numbers appear only as `{{ref:<question_id>.<field>}}` or
+> citizen beats use `source: fabric` only for the one aggregate cohort question in the question bank (age band
+> only); every `fabric` beat's prompt has a `question_id` in `content/fabric/question-bank.md`; numbers appear only as `{{ref:<question_id>.<field>}}` or
 > `{{ref:rahim.<field>}}` placeholders, filled from `content/fabric/reference-answers.json` (Phase 3b);
 > no fabric beat names a resident.
 
@@ -19,9 +19,10 @@ fifth step: **Coach & Act** — the agent that *talks to* him.
 
 - **Rahim**, 61, Woodlands (North region) — `seat: citizen`. Joined the National Steps Challenge but is
   drifting, rarely logs meals, skips outdoor events on hazy days, dropped a programme, and his last
-  screening showed elevated glucose. He asks citizen questions only.
-- **Mei Lin**, HPB programme officer (fictional) — `seat: officer`. She asks three programme-level questions.
-  She is the only reason the coach ever calls Fabric.
+  screening showed elevated glucose. He asks citizen questions only. When he asks which programme to try
+  next, the coach asks Fabric one aggregate question about his age band for him, never about him.
+- **Mei Lin**, HPB programme officer (fictional) — `seat: officer`. She asks three programme-level questions,
+  and every one of them goes to Fabric.
 
 ---
 
@@ -85,9 +86,19 @@ for suggestions. Every option is in the morning and none involves a pool.
 **[ch3.5 · seat: citizen · source: kb · prompt: lab3_specialists]** He asks for a meal plan and an exercise
 plan. The coach hands off to its Nutrition and Activity specialists and merges one reply.
 
-**[ch3.6 · seat: officer · source: fabric · prompt: fabric_q_disengaged_regions]** *(Fabric step)* Across town,
+**[ch3.6 · seat: citizen · source: fabric · prompt: lab3_programme_fit]** *(Fabric step)* Rahim admits he dropped
+out of <!--ref:q_programme_fit.dropped_programme-->Healthier SG<!--/ref--> and asks which programme people his age actually stick with. The guides
+know *what* helps with pre-diabetes; only the governed Resident 360 knows *who stays*. The coach reads his profile,
+then asks the Fabric IQ tool one aggregate question about age band <!--ref:q_programme_fit.age_band-->60-64<!--/ref--> and nothing else: no
+name, no id, no area. In that band (<!--ref:q_programme_fit.cohort_residents-->97<!--/ref--> residents),
+<!--ref:q_programme_fit.dropped_programme_dropout_pct-->37.1<!--/ref-->% of those who joined <!--ref:q_programme_fit.dropped_programme-->Healthier SG<!--/ref--> dropped out,
+against <!--ref:q_programme_fit.recommended_dropout_pct-->21.6<!--/ref-->% for <!--ref:q_programme_fit.recommended_programme-->Diabetes Prevention<!--/ref-->: the best-kept
+programme he is not already in, and the one built for his glucose. The coach finds its intake session in Woodlands
+through the activities MCP server and pauses for his approval before it signs him up.
+
+**[ch3.7 · seat: officer · source: fabric · prompt: fabric_q_disengaged_regions]** *(Fabric step)* Across town,
 Mei Lin is planning the next re-engagement roadshow and asks the same coach: "Which regions have the
-highest share of disengaged residents?" The coach routes her — and only her — to the Fabric IQ tool. The
+highest share of disengaged residents?" The coach routes her programme question to the Fabric IQ tool. The
 published Resident360 Ontology Agent answers in aggregate: <!--ref:q_disengaged_regions.top_region-->North<!--/ref--> leads at
 <!--ref:q_disengaged_regions.top_share_pct-->20.0<!--/ref-->%, followed by <!--ref:q_disengaged_regions.second_region-->West<!--/ref--> at
 <!--ref:q_disengaged_regions.second_share_pct-->17.1<!--/ref-->%. The coach suggests pairing the top region with the indoor,
@@ -116,4 +127,5 @@ how many still attended an event, by the region where the event was held? The on
 busiest event regions.
 
 **The extended arc.** Unify → Govern → Personalise → Converse → **Coach & Act**. Foundry IQ grounds the coach in
-documents; Fabric IQ grounds it in governed business data. Rahim's chapters never needed Fabric — Mei's did.
+documents; Fabric IQ grounds it in governed business data. Mei uses Fabric to plan for whole regions; Rahim gets
+the same governed data back as one decision about him, and his name never leaves the coach.

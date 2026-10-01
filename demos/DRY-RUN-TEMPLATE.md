@@ -26,7 +26,8 @@ Paste the summary lines. Every gate must be green before the timed run starts.
 | Builder rail | `make -C content/assets validate-rail` | _/_ signals | | report: `content/assets/.runs/builder-rail-<date>.md` |
 | Demo agents | `python demos/create-demo-agents.py` | 5 agents, dataset v____ | | |
 | Screenshots | `python demos/capture-screenshots.py --list-missing` | _ missing | | |
-| Demo videos | `python demos/record-demos.py` | lab-00 … lab-04 | | `demos/videos/` |
+| Demo videos | `python demos/record-demos.py` | lab-00 … lab-04, bridge | | `demos/videos/` |
+| Bridge visualiser | `python demos/fabric-steps.py bridge --save-sample` | 248 ✓ / Central ✓ | | `demos/runs/` |
 | Red team (facilitator) | `scripts/red-team.py` / `--lite` | ASR __% (_/_) | | cost US$__ |
 | Values sheet | `python scripts/render-values.py <env>` | _ values, _ missing | | |
 | Cost check | `bash scripts/cost-guardrails.sh <env> --max-usd 150` | US$__ to date | | |

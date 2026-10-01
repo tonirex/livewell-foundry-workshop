@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""Capture the 🟢 Navigator screenshot slots of content/labs/lab-0*-portal.md from the live portal.
+"""Capture the 🟢 Navigator screenshot slots of content/labs/lab-0*-portal.md and bridge-spotlight.md from the portal.
 
     python demos/capture-screenshots.py --list-missing        # which slots have no PNG yet (no browser)
     python demos/capture-screenshots.py                        # capture every slot a script can take (~30 min)
     python demos/capture-screenshots.py --only lab-01          # one lab
     python demos/capture-screenshots.py --only lab-03/12 lab-03/13
+    python demos/capture-screenshots.py --only bridge          # Bridge spotlight (needs a saved fabric-steps run)
     python demos/capture-screenshots.py --link                 # turn filled slots into markdown images
 
 Prerequisites: `python demos/portal.py login` once (facilitator account), and the demo agents from
 `python demos/create-demo-agents.py`. Scenes chat with the livewell-demo-* agents and the hosted agent, open
 menus and dialogs and cancel them; nothing is saved. Tenant/subscription IDs, endpoints and e-mails are
 rewritten in the page and the account button is masked before each shot. Review every PNG before committing.
-PNGs go to content/labs/screenshots/lab-0N/. The four slots that need a participant lab account are listed as
+PNGs go to content/labs/screenshots/lab-0N/ and screenshots/bridge/. The four slots that need a participant lab account are listed as
 manual (see scenes.MANUAL).
 """
 from __future__ import annotations
@@ -45,7 +46,7 @@ def status_rows(results: dict[str, str] | None = None) -> list[tuple[str, str, s
 def link(dry_run: bool = False) -> int:
     """Rewrite every slot whose PNG exists as `![caption](path)`; slots without a PNG stay as slots."""
     changed = 0
-    for md in sorted(S.LABS.glob("lab-0*-portal.md")):
+    for md in S.slot_pages():
         lines = md.read_text(encoding="utf-8").split("\n")
         out = []
         for line in lines:
@@ -54,15 +55,15 @@ def link(dry_run: bool = False) -> int:
                 line = f"{m['indent']}![{m['caption']}]({m['path']})"
                 changed += 1
             out.append(line)
-        if not dry_run:
-            md.write_text("\n".join(out), encoding="utf-8")
+        if not dry_run and out != lines:
+            md.write_bytes("\n".join(out).encode("utf-8"))  # LF on Windows too
     print(f"[capture] linked {changed} slot(s){' (dry run)' if dry_run else ''}")
     return changed
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--only", nargs="*", metavar="SLOT", help="lab-0N or lab-0N/NN (several allowed)")
+    ap.add_argument("--only", nargs="*", metavar="SLOT", help="lab-0N, lab-0N/NN, bridge or bridge/NN (several allowed)")
     ap.add_argument("--list-missing", action="store_true", help="print the slots without a PNG and exit")
     ap.add_argument("--link", action="store_true", help="convert filled slots into markdown images and exit")
     ap.add_argument("--dry-run", action="store_true", help="with --link: count only")

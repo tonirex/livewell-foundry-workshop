@@ -131,5 +131,57 @@
     ],
     "top_programme": "Healthier SG",
     "top_disengaged_enrolled": 82
+  },
+  "q_programme_fit": {
+    "grain": "programme (Resident enrolledIn / droppedOut Programme), distinct residents in Rahim's age band",
+    "age_band": "60-64",
+    "cohort_residents": 97,
+    "rows": [
+      {
+        "programme_name": "Eat Drink Shop Healthy",
+        "enrolled": 29,
+        "dropped": 3,
+        "dropout_pct": 10.3
+      },
+      {
+        "programme_name": "Active Ageing",
+        "enrolled": 28,
+        "dropped": 5,
+        "dropout_pct": 17.9
+      },
+      {
+        "programme_name": "Diabetes Prevention",
+        "enrolled": 37,
+        "dropped": 8,
+        "dropout_pct": 21.6
+      },
+      {
+        "programme_name": "Weight Management",
+        "enrolled": 27,
+        "dropped": 7,
+        "dropout_pct": 25.9
+      },
+      {
+        "programme_name": "I Quit (Tobacco)",
+        "enrolled": 30,
+        "dropped": 11,
+        "dropout_pct": 36.7
+      },
+      {
+        "programme_name": "Healthier SG",
+        "enrolled": 35,
+        "dropped": 13,
+        "dropout_pct": 37.1
+      }
+    ],
+    "smallest_group": 27,
+    "recommended_programme": "Diabetes Prevention",
+    "recommended_enrolled": 37,
+    "recommended_dropped": 8,
+    "recommended_dropout_pct": 21.6,
+    "dropped_programme": "Healthier SG",
+    "dropped_programme_enrolled": 35,
+    "dropped_programme_dropped": 13,
+    "dropped_programme_dropout_pct": 37.1
   }
 }
