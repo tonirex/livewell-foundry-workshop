@@ -11,4 +11,4 @@ Each row is a real run, recorded with `demos/record-terminal.py` against the azd
 | Builder Lab 4 · Multi-agent + Fabric (validate-builder-rail.py --labs 4) | `python scripts/validate-builder-rail.py --labs 4 --verbose` | 0 | 4 min 14 s | [builder-lab4.png](builder-lab4.png) |
 | Lab 0 · router-picks.py: which model did model-router pick? | `python demos/router-picks.py` | 0 | 17 s | [lab0-router-picks.png](lab0-router-picks.png) |
 
-Videos (git-ignored): `demos/videos/evidence-2026-10-01-<name>.webm`. To replay a recording: `python demos/record-terminal.py --render <name>.cast` (rebuilds the screenshot and the video) or `asciinema play <name>.cast`.
+Videos (git-ignored, on the machine that recorded them): `demos/videos/evidence-2026-10-01-<name>.mp4` (plays in PowerPoint, Teams and any player) and the same as `.webm`. Waits over 2 s are shortened; the clock shows real elapsed time. To rebuild the screenshot and both videos from a recording: `python demos/record-terminal.py --render <name>.cast` (or `asciinema play <name>.cast` on macOS/Linux).
