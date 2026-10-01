@@ -18,7 +18,8 @@ and 6.8.
   The run is committed as `demos/samples/fabric-steps-q_dropped_attended_heldin.json`, so `--replay` works on the
   day with no capacity, and screenshots bridge/01-05 are filled.
 - **Terminal evidence recorder.** `demos/record-terminal.py NAME -- <command>` records a script's output with real
-  timings (asciinema `.cast`), a full-page PNG and a replay video (`demos/videos/`, git-ignored). Local paths are
+  timings (asciinema `.cast`), a full-page PNG and a replay video, as WebM and, when ffmpeg is installed, as MP4
+  for PowerPoint and Teams (`demos/videos/`, git-ignored). Local paths are
   redacted, and `--render` re-redacts and re-renders an existing cast. The 2026-10-01 set (Lab 0 router picks,
   Builder Labs 1-4, the Bridge replay) is indexed in `demos/evidence/2026-10-01/README.md`.
 - **Lab 3 specialists.** The coach's `tools` instructions told it both to search the knowledge base before food or

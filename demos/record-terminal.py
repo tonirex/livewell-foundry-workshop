@@ -14,10 +14,11 @@ real elapsed time. Output:
   demos/evidence/<date>/<name>.png           the whole output as one image (commit it)
   demos/evidence/<date>/README.md            index of that day's recordings (rewritten on every run)
   demos/videos/evidence-<date>-<name>.webm   replay video (git-ignored, like the other videos)
+  demos/videos/evidence-<date>-<name>.mp4    the same as H.264 for PowerPoint, Teams and QuickTime (needs ffmpeg)
 
 IDs, endpoints and e-mails are rewritten with the same rules as the portal captures (portal.redaction_rules), and
 local paths are shown relative to the repo (the home folder as ~).
-Needs Playwright with Edge (as capture-screenshots.py); --no-video skips the video.
+Needs Playwright with Edge (as capture-screenshots.py); --no-video skips the videos.
 """
 from __future__ import annotations
 
@@ -231,8 +232,23 @@ def render(cast: pathlib.Path, idle: float, speed: float, video: bool) -> None:
             shutil.move(str(raw), dest)
             shutil.rmtree(tmp, ignore_errors=True)
             print(f"[record] video {dest.relative_to(ROOT)} (~{replay:.0f} s)", flush=True)
+            mp4 = to_mp4(dest)
+            if mp4:
+                print(f"[record] video {mp4.relative_to(ROOT)}", flush=True)
         browser.close()
     index(cast.parent)
+
+
+def to_mp4(webm: pathlib.Path) -> pathlib.Path | None:
+    """H.264 copy of a replay video for PowerPoint, Teams and QuickTime, which do not play WebM. Needs ffmpeg."""
+    ffmpeg = shutil.which("ffmpeg")
+    if not ffmpeg:
+        print("[record] ffmpeg not on PATH: no .mp4 (winget install Gyan.FFmpeg, or brew install ffmpeg)", flush=True)
+        return None
+    dest = webm.with_suffix(".mp4")
+    subprocess.run([ffmpeg, "-y", "-v", "error", "-i", str(webm), "-vf", "fps=25", "-c:v", "libx264", "-crf", "18",
+                    "-preset", "slow", "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an", str(dest)], check=True)
+    return dest
 
 
 def index(folder: pathlib.Path) -> None:
@@ -248,9 +264,11 @@ def index(folder: pathlib.Path) -> None:
         "Each row is a real run, recorded with `demos/record-terminal.py` against the azd env shown in the "
         "screenshot header. Exit 0 means every check in that script passed.", "",
         "| Recording | Command | Exit | Real time | Screenshot |", "|---|---|---:|---:|---|", *rows, "",
-        f"Videos (git-ignored): `demos/videos/evidence-{folder.name}-<name>.webm`. To replay a recording: "
-        "`python demos/record-terminal.py --render <name>.cast` (rebuilds the screenshot and the video) or "
-        "`asciinema play <name>.cast`.", ""])
+        f"Videos (git-ignored, on the machine that recorded them): `demos/videos/evidence-{folder.name}-<name>.mp4` "
+        "(plays in PowerPoint, Teams and any player) and the same as `.webm`. Waits over 2 s are shortened; the "
+        "clock shows real elapsed time. To rebuild the screenshot and both videos from a recording: "
+        "`python demos/record-terminal.py --render <name>.cast` (or `asciinema play <name>.cast` on macOS/Linux).",
+        ""])
     (folder / "README.md").write_bytes(text.encode("utf-8"))
 
 
