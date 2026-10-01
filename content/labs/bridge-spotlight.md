@@ -64,7 +64,9 @@ This is a facilitator-led spotlight. Slides-only when the Lab 3 Fabric step is l
    Among residents who dropped a programme, how many attended at least one event, broken down by the region where those events were held?
    ```
 
-   The ontology traversal is `enrolledIn` → `attended` → `heldIn`, keeping home region and event region apart.
+   The ontology traversal is Resident → `attended` → EventOccurrence → `heldIn` → Region, for residents who dropped a
+   programme (`programmes_dropped ≥ 1` in the canonical GQL, or the `droppedOut` edge the live agent used). It keeps
+   home region (`livesIn`) and event region apart.
    The reference answer is <!--ref:q_dropped_attended_heldin.distinct_residents-->248<!--/ref--> residents, with
    <!--ref:q_dropped_attended_heldin.top_region-->Central<!--/ref--> hosting the most of them (<!--ref:q_dropped_attended_heldin.top_residents-->95<!--/ref-->).
    Multi-hop answers over the preview ontology can vary between runs, so a live mismatch is a talking point, not a failure.
@@ -129,25 +131,44 @@ Facilitator close-out prompts:
 
 ## 🔵 Builder
 
+This is a facilitator demo, not a participant build. The Builder view is the step 6 visualiser run from a terminal,
+plus a short walk through its code. It needs `az login` with access to the Fabric workspace and an Active capacity,
+except `--replay`.
+
 ```bash
-INITIALS=demo python content/assets/lab3_tools.py --fabric --verbose
+python demos/fabric-steps.py bridge                    # live: asks the published data agent, prints the steps (30-90 s)
+python demos/fabric-steps.py --replay bridge --open    # no capacity needed: latest saved run, else demos/samples/
+python demos/fabric-steps.py fit --open                # Rahim's programme-fit question: two queries, joined
+python demos/fabric-steps.py bridge --save-sample      # refresh the committed sample after a data or instructions change
 ```
 
 ```powershell
-$env:INITIALS = "demo"
-python content\assets\lab3_tools.py --fabric --verbose
+python demos\fabric-steps.py bridge
+python demos\fabric-steps.py --replay bridge --open
+python demos\fabric-steps.py fit --open
+python demos\fabric-steps.py bridge --save-sample
 ```
 
-This is optional facilitator replay, not a participant build. If the Fabric step already ran live, keep this section as slides-only.
+The terminal prints the question, each query the data agent wrote with its GQL and rows, then the answer. Add
+`--open` to see the same run as the HTML page from step 6, or `--quiet` to print only the file paths. The argument
+can also be any question-bank id (`q_disengaged_regions`), a test-prompt id (`bridge_q_dropped_attended_heldin`) or
+free text.
 
-What the replay does per cell:
+### How the code works
 
-1. Confirms the Fabric IQ tool connection used in [Fabric step](fabric-step.md).
-2. Sends the bridge question and records the Fabric IQ trace.
-3. Shows that the same coach still routes Rahim's citizen prompt to the knowledge base.
-4. Prints the decision-table summary for discussion.
+[`demos/fabric-steps.py`](../../demos/fabric-steps.py) asks the data agent directly, reads its run steps, and draws
+them. The coach never uses this path: in Foundry it calls the data agent through the Fabric IQ tool
+([`fabric_tool`](../assets/common/livewell_common.py#L494-L498)) and the trace sees one call. This script is a lens on
+what happens inside that call.
 
-Use `--cleanup` only if you created demo agents named `livewell-demo-*` outside the protected facilitator set; participant cleanup remains guarded to `livewell-<INITIALS>-*`.
+| Step | Code | What it does |
+|---|---|---|
+| Pick the question | [`resolve_question`](../../demos/fabric-steps.py#L105-L117) | `bridge` and `fit` are aliases for question-bank ids. A test-prompt id maps to its `question_id`. Anything else is sent as free text. |
+| Ask Fabric | [`Assistants`](../../demos/fabric-steps.py#L122-L143), [`capture`](../../demos/fabric-steps.py#L163-L190) | Gets a Fabric token from your `az login` and calls the data agent's OpenAI-compatible Assistants endpoint (⚠️ preview): create an assistant and a thread, post the question, start a run, poll it every 3 s, then read the run steps and the answer. The thread is deleted afterwards. A 429 prints a hint to use `--replay`. |
+| Strip ids | [`sanitise`](../../demos/fabric-steps.py#L146-L160) | Keeps each step's tool name, arguments and output, and drops the workspace and artifact ids before anything is saved. |
+| Group into queries | [`queries`](../../demos/fabric-steps.py#L229-L260) | Groups the tool calls by the natural-language query the data agent wrote. `analyze.database.nl2code` holds the generated GQL; `analyze.database.execute` holds the rows that came back. |
+| Draw the page | [`ontology_svg`](../../demos/fabric-steps.py#L338-L385), [`timeline_html`](../../demos/fabric-steps.py#L388-L409), [`reference_html`](../../demos/fabric-steps.py#L412-L452), [`render`](../../demos/fabric-steps.py#L509-L565) | Highlights the edges the GQL traversed, lays the steps on a timeline, ticks the result against `content/fabric/reference-answers.json`, and writes one self-contained HTML page (no CDN). |
+| Run or replay | [`main`](../../demos/fabric-steps.py#L619-L660), [`summary`](../../demos/fabric-steps.py#L606-L616) | A live run saves JSON and HTML to `demos/runs/` (git-ignored). `--replay` re-renders a saved run, or the committed sample, with no call to Fabric. `summary` prints the terminal view. |
 
 ## Checkpoint
 
@@ -157,7 +178,57 @@ Use `--cleanup` only if you created demo agents named `livewell-demo-*` outside 
 
 ✅ **Learned** how to choose the right grounding path before adding tools to an agent.
 
-Paste into the checkpoint form: one sentence saying when you would use Foundry IQ, one sentence saying when you would use Fabric IQ, and the Fabric traversal for `bridge_q_dropped_attended_heldin`.
+There is nothing to submit. To close, ask the room for one sentence on when they would use Foundry IQ, one on when
+they would use Fabric IQ, and the traversal behind `bridge_q_dropped_attended_heldin`. Then open **Expected output**.
+
+<details>
+<summary><b>Expected output</b> (open after the discussion)</summary>
+
+**What this demonstrates.** One coach, two grounding paths. Foundry IQ answers from curated documents and cites them.
+Fabric IQ answers from governed business data by walking named relationships in the ontology, and returns only
+aggregates. Mei's question needs three hops (dropped a programme, attended an event, where the event was held), so no
+document index can answer it. The Foundry trace shows that hop chain as one tool call; the visualiser opens it up.
+
+**Example sentences.**
+
+- Foundry IQ: "When the answer is in curated guidance, such as HPB's eating or activity guides, and the reply must
+  cite its source."
+- Fabric IQ: "When the answer is a count or comparison across governed data that crosses relationships, such as
+  programmes, events and regions, and only aggregates may leave."
+- Traversal: Resident (dropped a programme) → `attended` → EventOccurrence → `heldIn` → Region, grouped by the
+  region where the event was **held**, not where the resident lives (`livesIn`).
+
+**The answer and the trace.** <!--ref:q_dropped_attended_heldin.top_region-->Central<!--/ref--> first with
+<!--ref:q_dropped_attended_heldin.top_residents-->95<!--/ref--> residents. The reply is the coach's JSON with
+`resident360` in the tool chips and `personalisation_flags` that say aggregate only. In the trace, `userQuestion` is the
+aggregate question with no name or `resident_id`, and the call takes 30–90 s.
+
+![Mei's multi-hop question on livewell-demo-fabric: the aggregate JSON reply with resident360 in the tool chips](screenshots/bridge/01-mei-multi-hop-answer.png)
+
+![Foundry trace: one Fabric IQ call with the aggregate userQuestion in and the answer out](screenshots/bridge/02-fabric-iq-trace.png)
+
+**Inside Fabric.** The page from step 6. Look for the `attended` and `heldIn` edges highlighted, the dashed
+`livesIn` edge not used, one query card with its GQL and a bar per region, and **5/5** region counts ticked against
+the reference. The rows add up to more than the
+<!--ref:q_dropped_attended_heldin.distinct_residents-->248<!--/ref--> distinct residents because some residents
+attended events in two regions.
+
+![fabric-steps.py overview: Foundry trace view next to the steps inside Fabric, with attended and heldIn highlighted](screenshots/bridge/03-fabric-steps-overview.png)
+
+![fabric-steps.py query card: rewritten question, generated GQL and rows per event region](screenshots/bridge/04-fabric-steps-queries.png)
+
+![fabric-steps.py reference check and talking points](screenshots/bridge/05-fabric-steps-check.png)
+
+**Builder.** Look for:
+
+- `completed in … s, 1 ontology queries` (the recorded run took 123 s; 30–90 s is typical);
+- a `[Q1]` line where the data agent restated the question, and `GQL: MATCH (…)-[…droppedOut…]->(…), (…)-[…attended…]->(…EventOccurrence…)-[…heldIn…]->(…Region…)`;
+- rows per event region: Central 95, West 57, North 52, North-East 51, East 51;
+- `ANSWER:` with counts only and no resident named, then the `page:` path for `--open`.
+
+![fabric-steps.py terminal output: the question, one ontology query with its GQL and rows per event region, and the aggregate answer](screenshots/bridge/builder-fabric-steps-terminal.png)
+
+</details>
 
 ## Troubleshooting
 

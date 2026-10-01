@@ -4,6 +4,21 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Checkpoints show the expected output (`checkpoint-expected-output`)
+
+There was no checkpoint form to paste into. Participants now submit nothing and compare with a hidden example
+instead. Details in ASSUMPTIONS 7.1-7.4.
+
+- **Expected output blocks.** Every Checkpoint (Labs 0-4, Lab 1 portal, Fabric step, Bridge spotlight) ends with a
+  collapsed block: what the step demonstrates, portal screenshots with what to look for, and the Builder script's
+  output from a fresh recording (`content/labs/screenshots/*/builder-output*.png`).
+- **How the code works.** Each Builder section walks through its script with links to the line ranges: the tools,
+  `create_agent`, the `ask` loop and approvals, specialists as tools, the Agent Framework runs and the Fabric checks.
+- **Bridge Builder.** Rewritten around `demos/fabric-steps.py` (live, `--replay`, `fit`, `--save-sample`) with a
+  code walkthrough; the old command used the protected `demo` prefix and never asked the Bridge question.
+- **Fixes.** Lab 4 step 1 profile wording, the Bridge traversal, Lab 3 look-for flags, and the scripts'
+  `CHECKPOINT` heading and comments. Answer keys are labelled as facilitator reference (README, SPEC).
+
 ### Builder evidence and Fabric F4 (`builder-evidence`)
 
 Evidence that the Builder-rail scripts work, and the Bridge captured live. Details in ASSUMPTIONS 3b.7, 4.16, 4.23

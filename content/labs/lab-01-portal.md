@@ -94,6 +94,6 @@ The food answer returns JSON with `route: "self_care"`, at least one LiveWell gu
 
 - ⚠️ If **Knowledge → Add → Connect to Foundry IQ** has moved, search the Add menu for `Foundry IQ`.
 - ⚠️ If the KB settings page does not expose retrieval reasoning effort or output mode, capture the available settings and continue.
-- If answers include prose outside JSON, recheck **Response format → JSON object** and the `knowledge` block.
+- If answers include prose outside JSON, recheck **Response format → JSON schema** (with `lab1-answer.schema.json` pasted) and the `knowledge` block.
 - If the food answer cites no source, confirm `livewell-guides-kb` is attached and Active.
 

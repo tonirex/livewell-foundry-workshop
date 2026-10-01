@@ -95,6 +95,32 @@ What the script does per cell:
 
 Use `--verbose` for tool-call and approval details. Use `--cleanup` to delete only `livewell-<INITIALS>-*` agents. Lines to retype are marked `# 👉`.
 
+### How the code works
+
+The coach gets five tools, and they run in three different places. That is the main idea of this lab.
+
+| Tool | Kind | Where it runs | Code |
+|---|---|---|---|
+| `knowledge_base_retrieve` | MCP (`MCPTool`) | Foundry calls the knowledge base | [`kb_tool`](../assets/common/livewell_common.py#L454-L458) |
+| `find_activities`, `register_interest` | MCP (`MCPTool`) with approval rules | Foundry calls the activities server, but pauses before `register_interest` | [`activities_tool`](../assets/common/livewell_common.py#L461-L473) |
+| `get_citizen_profile` | Function (`FunctionTool`) | **Your script** answers it from `citizens.json` | [`profile_tool`](../assets/common/livewell_common.py#L529-L536), [`get_citizen_profile`](../assets/common/livewell_common.py#L512-L518) |
+| `livewell-nutrition`, `livewell-activity` | Function | **Your script** runs a specialist agent and returns its reply | [`specialist()`](../assets/lab3_tools.py#L105-L116) |
+| memory search | `MemorySearchPreviewTool` | Foundry searches and updates your memory store | [`memory_tool`](../assets/common/livewell_common.py#L583-L585) |
+
+All of them go into one [`create_agent`](../assets/lab3_tools.py#L128-L136) call, with the evidence schema and the guardrail. The coach runs on `gpt-5.4-mini` when memory is on.
+
+[`lw.ask`](../assets/common/livewell_common.py#L862-L942) is a small loop that handles what comes back from each response:
+
+- **`function_call`.** Foundry cannot run a function tool, so it hands the call back. `ask` looks the name up in `FUNCTIONS`, runs it, and sends the result as a `function_call_output` ([lines 914–925](../assets/common/livewell_common.py#L914-L925)). This is how a profile lookup stays on your side: the function refuses any resident except the signed-in one.
+- **`mcp_approval_request`.** Foundry stops before `register_interest` and waits. `ask` calls `approve` (`lw.ask_human` asks you `[y/N]` at the keyboard) and sends an `mcp_approval_response` ([lines 926–931](../assets/common/livewell_common.py#L926-L931)). Nothing is written until you say yes.
+- **A message.** This is the final answer; the loop stops.
+
+The specialists are agents used as tools. When the coach calls `livewell-nutrition`, the handler calls `lw.ask(nutrition, ...)`, and the specialist's answer becomes the function result. The Activity specialist gets `find_activities` only, so only the coach can ask you to approve a registration.
+
+For memory, the script waits for the preference to be stored, then asks `lab3_memory_recall` in `lw.new_conversation()`. A new conversation has no chat history, so a correct answer can only come from memory.
+
+The Navigator uses an OpenAPI tool for the profile, which Foundry calls on the server. Builder uses a function tool so that you can see the call arrive in your own code.
+
 ## Checkpoint
 
 ✅ **Built** a coach that can personalise, search activities, wait for approval and delegate to specialists.
@@ -103,7 +129,36 @@ Use `--verbose` for tool-call and approval details. Use `--cleanup` to delete on
 
 ✅ **Learned** which work belongs in instructions, which belongs in tools, and where human approval belongs.
 
-Paste into the checkpoint form: the trace tool-call list for `lab3_hazy_indoor_signup`, the evidence JSON for `lab3_profile_tailored`, and, if memory is enabled, the new-conversation reply for `lab3_memory_recall`.
+There is nothing to submit. Try the steps first, then open **Expected output** to compare.
+
+<details>
+<summary><b>Expected output</b> (open after you have tried it)</summary>
+
+**What this demonstrates.** Hyper-personalisation comes from tools, not from a longer prompt. The coach reads the signed-in resident's profile, searches the guides and community activities, and remembers stated preferences across conversations. Writes are different from reads: registering interest changes something for the resident, so Foundry pauses for a human yes. The evidence schema keeps every answer explainable, with advice, confidence, the guides behind it, a rationale and the profile signals used.
+
+`lab3_profile_tailored`: the trace shows the profile tool (with `resident_id` `me`) and then the knowledge base. The tool output is Rahim's profile. The reply uses it, but never repeats the resident identifier.
+
+![Trace showing the profile tool before the knowledge-base search](screenshots/lab-03/11-profile-trace.png)
+
+`lab3_hazy_indoor_signup`: the coach looks up indoor options, then asks to register. After your yes, the approval card shows the exact call (`register_interest` with an activity id and display name) and waits.
+
+![Approval card for register_interest with Approve and Deny](screenshots/lab-03/12-hazy-indoor-signup.png)
+
+`lab3_memory_recall` in a **new** chat: morning, indoor suggestions and no swimming. Look for `prefers morning` and `dislikes swimming` in `personalisation_flags`, and `memory_search_call` in the chips under the reply.
+
+![New chat recalling the morning preference and avoiding swimming](screenshots/lab-03/15-memory-recall-new-chat.png)
+
+**Builder.** Look for:
+
+- `another resident -> {'error': 'forbidden', ...}`: the profile function only serves the signed-in resident;
+- `get_citizen_profile` and `knowledge_base_retrieve` in the `tools:` list of the first answer, with `personalisation_flags` such as `high_screening_risk`, `low_steps` and `region_hazy`;
+- `APPROVAL requested: livewell_activities.register_interest(...) -> APPROVED` before the registration, and the PASS line "approval requested before register_interest";
+- `memories: ['User prefers mornings.', ... 'User dislikes swimming.' ...]`, then a recall answer with morning, indoor options and no swimming;
+- `livewell-nutrition` and `livewell-activity` in the `tools:` list of the specialists answer: one merged plan built from both specialists.
+
+![lab3_tools.py output: session resident, forbidden lookup for another resident, profile-tailored answer, approval before register_interest, memory recall and specialists, each with PASS lines](screenshots/lab-03/builder-output.png)
+
+</details>
 
 ## Troubleshooting
 

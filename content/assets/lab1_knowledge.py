@@ -128,7 +128,8 @@ else:
 # %% [markdown]
 # ## 6. Checkpoint
 #
-# Paste the two JSON replies (and the intake JSON if you ran it) into the checkpoint form.
+# The two JSON replies (and the intake JSON if you ran it) in one place. Compare them with Expected output
+# under Checkpoint on the lab page; there is nothing to submit.
 
 # %%
 lw.checkpoint("Lab 1", {"lab1_prediabetes_eat": eat_json, "lab1_supplement": supp_json,

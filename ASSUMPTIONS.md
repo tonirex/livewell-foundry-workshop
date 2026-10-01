@@ -734,3 +734,26 @@ Where an entry changes something SPEC.md states, it says so.
   the sample with `--save-sample` only if the data changes. Without a saved run the `bridge` scene skips slots 03-05
   and carries on. A trace with more detail (a span per GQL query) would need the data agent itself to send spans to
   the project's Application Insights; no setting for that was found on Fabric data agents (2026-10-01).
+
+## Phase 7: Checkpoints show the expected output (2026-10-01)
+
+- **7.1** There is no checkpoint form. The lab pages said "Paste into the checkpoint form", a wording carried over
+  from the reference kit's server-side answer keys, but nothing in this workshop collects submissions. The
+  facilitator's decision: participants submit nothing. Each Checkpoint section now ends with a collapsed
+  **Expected output** block: what the step demonstrates, the portal screenshots with what to look for, and a
+  screenshot of the Builder script's output. `content/answer-keys/` stays as the facilitator's reference (its
+  `validation_type` and notes are unchanged, so `check-content.py` still checks the prompt ids in it).
+- **7.2** Builder screenshots are crops of terminal recordings made on 2026-10-01 against the `mcaps` environment
+  (`demos/evidence/2026-10-01/lab{1..4}-builder-output.*`, plus the Lab 0 router picks and the Bridge replay). Live
+  runs vary in wording and latency, so the "Look for" notes name stable markers (tool names, PASS lines, reference
+  values) rather than exact text. Re-record with `demos/record-terminal.py` when a script's output changes.
+- **7.3** Every Builder section has a **How the code works** walkthrough linking to line ranges in the scripts.
+  `check-content.py` checks that the linked files exist but checks anchors only on `.md` targets, so re-check the
+  line ranges after editing `livewell_common.py`, the lab scripts or `demos/fabric-steps.py`.
+- **7.4** Fixes found while writing the walkthroughs: Lab 4 step 1 reads the profile with `get_citizen_profile("me")`
+  plus a one-line summary in the script (the hosted agent uses `/profile/me`); Lab 3's look-for flags match the
+  recording (`high_screening_risk`, `low_steps`, `region_hazy`); the script `checkpoint()` heading now says "compare
+  with Expected output on the lab page". The Bridge Builder section ran `lab3_tools.py --fabric` with
+  `INITIALS=demo`, a protected prefix, and that script never sends the Bridge question; it now runs
+  `demos/fabric-steps.py`. The Bridge traversal said `enrolledIn` -> `attended` -> `heldIn`; the canonical GQL
+  filters residents who dropped a programme (`programmes_dropped >= 1`) and the live agent used `droppedOut`.

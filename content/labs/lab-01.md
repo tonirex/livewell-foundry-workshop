@@ -91,9 +91,25 @@ What the script does per cell:
 3. Attaches the knowledge base over its MCP endpoint using the project connection **`livewell-guides-kb-mcp`**.
 4. Applies the strict JSON schema response format for `answer`, `intent`, `risk_level`, `route`, `cited_sources`, and `personalisation_flags`.
 5. Runs `lab1_prediabetes_eat`, `lab1_supplement`, and optionally `lab1_intake`.
-6. Prints the participant checkpoint payload.
+6. Prints your key results under **CHECKPOINT** and saves the run to `content/assets/.runs/lab1-<initials>.json`.
 
 Use `--verbose` to print tool and citation details. Use `--cleanup` only when you want to delete agents created by the script; it is guarded to names starting with `livewell-<INITIALS>-*`. Lines you are expected to retype during the lab are marked `# 👉`.
+
+### How the code works
+
+The lab file stays short because the Foundry calls live in one shared helper, [`livewell_common.py`](../assets/common/livewell_common.py). Three calls do the work:
+
+1. **The knowledge tool.** [`lw.kb_tool()`](../assets/common/livewell_common.py#L454-L458) returns an `MCPTool` that points at the knowledge base's MCP endpoint. It goes through the project connection `livewell-guides-kb-mcp`, so the project's managed identity signs in and the file holds no URL or key. `allowed_tools=["knowledge_base_retrieve"]` exposes only the search tool.
+2. **The agent.** [`lw.create_agent(...)`](../assets/common/livewell_common.py#L618-L638) calls `project().agents.create_version(...)` with a `PromptAgentDefinition`: the model, the instructions, the tools, a strict JSON-schema response format and the guardrail. Each run adds a version to the same agent, as **Save** does in the portal.
+
+   ```python
+   coach = lw.create_agent("coach", instructions, tools=[knowledge],
+                           schema=lw.lab1_schema(), rai_policy=lw.DEFAULT_RAI_POLICY)
+   ```
+
+3. **The question.** [`lw.ask(coach, prompt_id=...)`](../assets/common/livewell_common.py#L862-L942) sends the prompt through the OpenAI Responses API with `extra_body={"agent_reference": {"name": ..., "version": ...}}`. Foundry runs the agent on the server: it calls the knowledge base, then the model, then returns the JSON reply. The helper records the tools called, the routed model and the citations, and [`lw.expect`](../assets/lab1_knowledge.py#L75-L79) prints the PASS lines.
+
+`create_agent` and `ask` are reused unchanged in Labs 2 to 4; only the instructions and tools change.
 
 ## Checkpoint
 
@@ -103,7 +119,30 @@ Use `--verbose` to print tool and citation details. Use `--cleanup` only when yo
 
 ✅ **Learned** that retrieval is useful only when the agent is required to cite real sources and admit when the corpus is silent.
 
-Paste into the checkpoint form: the JSON reply for `lab1_prediabetes_eat`, plus the JSON reply for `lab1_supplement`. If you ran the optional intake step, paste that JSON too.
+There is nothing to submit. Try the steps first, then open **Expected output** to compare.
+
+<details>
+<summary><b>Expected output</b> (open after you have tried it)</summary>
+
+**What this demonstrates.** Grounding is two things together: a knowledge tool that retrieves the guides, and a response contract that forces the agent to name its sources. The JSON schema only accepts real guide ids in `cited_sources`, so the agent can cite a guide or cite nothing, but it cannot make one up. When the guides are silent, the right answer is to say so and route to a clinician.
+
+`lab1_prediabetes_eat`: JSON with `route` `self_care` and real guide ids in `cited_sources`, usually `lg-05-eating-for-pre-diabetes` and `lg-01-healthy-plate`. The citation chip under the reply links to the guide PDF.
+
+![JSON answer with cited_sources populated](screenshots/lab-01/07-prediabetes-json-answer.png)
+
+In the trace, look for **Execute Tool** `knowledge_base_retrieve` running before the **Chat** span. The tool span's output shows the documents it retrieved.
+
+![Trace showing knowledge-base retrieval before the answer](screenshots/lab-01/09-knowledge-trace.png)
+
+`lab1_supplement`: "The LiveWell guides don't cover this", `intent` `out_of_scope`, `route` `clinician` and an empty `cited_sources`. The agent still searched the guides, found nothing about supplements and said so.
+
+![route clinician and empty cited_sources for the supplement prompt](screenshots/lab-01/11-json-route-clinician.png)
+
+**Builder.** The same two answers, each followed by its PASS lines, then the CHECKPOINT block. Look for `tools: knowledge_base_retrieve` on both runs, five PASS lines for the food answer and three for the supplement answer. The `model:` field shows the model the router chose.
+
+![lab1_knowledge.py output: coach created on model-router, cited food answer with five PASS lines, clinician route with three PASS lines, then the CHECKPOINT JSON](screenshots/lab-01/builder-output.png)
+
+</details>
 
 ## Troubleshooting
 
@@ -111,7 +150,7 @@ Paste into the checkpoint form: the JSON reply for `lab1_prediabetes_eat`, plus 
 |---|---|
 | **Connect to Foundry IQ** is not visible | You may be in Tools instead of Knowledge, or the portal preview has shifted. Ask the facilitator and use the portal-track fallback if shown. |
 | **`livewell-guides-kb`** is not listed | Refresh, confirm you are in `livewell-workshop`, then ask the facilitator to check the shared knowledge base and your Foundry User access. |
-| Agent returns prose instead of JSON | Set Response format to **JSON object**, save a new version, and re-run the prompt. |
+| Agent returns prose instead of JSON | Set Response format to **JSON schema**, paste [`lab1-answer.schema.json`](../config/schemas/lab1-answer.schema.json), save a new version, and re-run the prompt in a new chat. |
 | Cited source is empty for `lab1_prediabetes_eat` | Re-check that `livewell-guides-kb` is attached and that the [`knowledge`](../prompts/coach-instructions.md#knowledge-lab-1) block is appended. |
 | It invents a supplement source | Tighten the knowledge block by re-copying it, then send `lab1_supplement` again in a new conversation. |
 | Builder script sees 5xx from the service | Re-run with `--verbose`; the script retries transient 5xx automatically. |

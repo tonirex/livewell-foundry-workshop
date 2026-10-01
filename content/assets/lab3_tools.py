@@ -360,6 +360,9 @@ else:
 
 # %% [markdown]
 # ## 11. Checkpoint
+#
+# The tool-call order, the evidence JSON and the memory recall (plus the Fabric results with `--fabric`) in one
+# place. Compare them with Expected output under Checkpoint on the lab page; there is nothing to submit.
 
 # %%
 lw.checkpoint("Lab 3", {

@@ -1,5 +1,5 @@
 {
-  "_comment": "Server-side validator for Lab 00. Never surface to participants.",
+  "_comment": "Facilitator reference for the Lab 00 checkpoint: what a good result looks like. Participants submit nothing; they compare with the Expected output block on the lab page. validation_type and notes describe how to judge a reply if you review one.",
   "lab": "lab-00",
   "checkpoints": [
     {

@@ -77,16 +77,18 @@ If you finish early, help a neighbour check the trace rather than creating extra
 ## 🔵 Builder
 
 ```bash
-# Lab 0 is portal-only. No Builder script runs in this lab.
-# Optional prep for Lab 1: open Codespaces or VS Code, then create your .env when the facilitator gives the values.
+# Lab 0 is a portal lab. Optional, once your .env is filled: see which model the router picks per prompt.
+python demos/router-picks.py
 ```
 
 ```powershell
-# Lab 0 is portal-only. No Builder script runs in this lab.
-# Optional prep for Lab 1: use VS Code or Codespaces and keep endpoint values in .env, never in a lab page.
+# Lab 0 is a portal lab. Optional, once your .env is filled: see which model the router picks per prompt.
+python demos\router-picks.py
 ```
 
 Lab 0 is the same portal exercise for everyone. Builders should use the remaining time to open the repository in Codespaces or VS Code, confirm Python is available, and wait for the facilitator values sheet before filling `.env` for Lab 1.
+
+With `.env` filled, the optional [`demos/router-picks.py`](../../demos/router-picks.py) sends four prompts (`lab0_hi`, `lab0_am_i_diabetic`, `lab0_router_compare` and a calorie sum) straight to the `model-router` deployment and prints one line per prompt: the model that answered, the router mode, how long routing took and the tokens used. Add `--reps 3` to see that the choice can change between identical requests.
 
 In code, the routed model is the `model` field of every response. From Lab 1 on, the Builder scripts print it next to each answer (`model: gpt-5.6-luna-…`), so you can watch the router choose per request.
 
@@ -96,6 +98,23 @@ Do not paste project endpoints, subscription IDs or tenant IDs into notebooks, c
 
 That habit is part of the governance pattern, not just setup hygiene.
 
+### How the code works
+
+The script is about 90 lines. The parts that matter:
+
+- [`client()`](../../demos/router-picks.py#L41-L47) builds an `AzureOpenAI` client on the resource's `.openai.azure.com` host and signs in with your Entra token (`get_bearer_token_provider`). There is no API key.
+- [`main()`](../../demos/router-picks.py#L61-L90) sends each prompt as a plain Chat Completions call. `model=` is the deployment name `model-router`, the system message is the same `base` block as your portal agent, and `extra_headers` adds the preview header `Foundry-Features: ModelRouterControls=V1Preview`.
+
+  ```python
+  resp = oai.chat.completions.create(
+      model=lw.DEFAULT_MODEL, extra_headers=HEADERS,
+      messages=[{"role": "system", "content": instructions}, {"role": "user", "content": text}])
+  ```
+
+- `resp.model` is the model the router chose, for example `gpt-5.6-luna-2026-07-09`. The preview header adds `model_selection_details` to the response. [`details()`](../../demos/router-picks.py#L50-L58) reads the router mode (`balanced`), the routing latency and any fallback attempts from it.
+
+The agent playground and the agent trace record only the deployment name (`gen_ai.response.model: "model-router"`). The API response carries the routed model, which is why the scripts can print it and the trace cannot.
+
 ## Checkpoint
 
 ✅ **Built** a safe prompt agent named `livewell-<initials>`.
@@ -104,7 +123,36 @@ That habit is part of the governance pattern, not just setup hygiene.
 
 ✅ **Learned** that a Foundry agent starts as model + instructions, and that the router picks a model per request, which you can see under each answer in the model-router playground.
 
-Paste into the checkpoint form: the reply to `lab0_hi`, the reply to `lab0_am_i_diabetic`, and the model names the model-router playground showed for `Hi!` and for `lab0_router_compare`.
+There is nothing to submit. Try the steps first, then open **Expected output** to compare.
+
+<details>
+<summary><b>Expected output</b> (open after you have tried it)</summary>
+
+**What this demonstrates.** A Foundry prompt agent is a model plus instructions, saved as a version. The `base` block alone sets the persona and the first safety rule: the coach introduces itself, says it is not a doctor and refuses to diagnose. `model-router` is one deployment that chooses a model per request; you see the choice in the model playground and the API response, not in the agent trace.
+
+`lab0_hi`: the coach introduces itself as LiveWell Coach and says it is not a doctor.
+
+![Chat response introducing LiveWell Coach and stating it is not a doctor](screenshots/lab-00/08-lab0-hi.png)
+
+`lab0_am_i_diabetic`: a refusal to diagnose, with a suggestion to see a doctor. In the trace, look for one `chat model-router` span under the agent, no tool calls, and the `base` block as the system message. The span names the deployment, not the model the router picked.
+
+![Refusal to diagnose with advice to speak to a doctor](screenshots/lab-00/09-lab0-am-i-diabetic.png)
+
+![Trace view for the diagnosis refusal response](screenshots/lab-00/10-refusal-trace.png)
+
+**Which model the router chose.** In **Models → `model-router` → Playground** the model name sits under each answer. Look for a small model on `Hi!` and a larger one on the walking plan. The exact names change as the router's model set changes.
+
+![model-router playground showing gpt-5-nano for Hi and gpt-5.6-luna for the walking plan](screenshots/lab-00/12-router-chosen-model-playground.png)
+
+The `gpt-4.1-mini` version answers the same walking prompt. Compare tone, length and latency; both should still sound like the LiveWell Coach.
+
+![gpt-4.1-mini answer to the same walking routine prompt](screenshots/lab-00/13-compare-gpt-41-mini.png)
+
+**Builder (optional `router-picks.py`).** One line per prompt. Look for the **routed to** column: the router can pick a different model for each prompt (here a reasoning model for the arithmetic), **mode** `balanced`, and routing that adds only about 20 ms.
+
+![router-picks.py output: greeting and 7-day plan routed to gpt-5.6-luna, refusal to gpt-5.6-terra, arithmetic to grok-4-1-fast-reasoning, all in balanced mode with about 20 ms routing](screenshots/lab-00/builder-router-picks.png)
+
+</details>
 
 ## Troubleshooting
 

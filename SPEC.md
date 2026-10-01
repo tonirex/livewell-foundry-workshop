@@ -94,7 +94,7 @@ Time	Block	Foundry capability shown	Demo / lab
 Logistics to state in the README and deck: participants bring personal laptops (WOG devices cannot sign in to external Entra tenants); guest Wi-Fi slide; Authenticator registration at first sign-in.
 
 5. Lab specification
-Every lab page (content/labs/lab-0N.md): shared objective · Foundry features covered · story chapter · 🟢 Navigator and 🔵 Builder sections · checkpoint (paste-the-output validator in content/answer-keys/) · troubleshooting · "Where next" footer. Portal-only screenshot walkthroughs in content/labs/PORTAL-TRACK.md (lab-0N-portal.md) with screenshot slots.
+Every lab page (content/labs/lab-0N.md): shared objective · Foundry features covered · story chapter · 🟢 Navigator and 🔵 Builder sections · checkpoint (nothing to submit: a collapsed Expected output block with screenshots and a short explainer; facilitator reference answers in content/answer-keys/) · troubleshooting · "Where next" footer. Portal-only screenshot walkthroughs in content/labs/PORTAL-TRACK.md (lab-0N-portal.md) with screenshot slots.
 
 Lab	Title (capability first) · time	Build	Checkpoint
 0	Setup & first agent · 15 min · morning, portal, all rails	Sign in; portal tour; create livewell-<initials> prompt agent (model + instructions + playground); model-router vs gpt-4.1-mini comparison	Agent introduces itself, states it is not a doctor, refuses to diagnose
@@ -161,7 +161,7 @@ Developer loop	Foundry Toolkit for VS Code, Foundry Skill for coding agents, Cod
 │   ├── eval/livewell-eval.jsonl (30 rows) · evaluators/advice_matches_conditions.py
 │   ├── fabric/ontology.blueprint.yaml · data-agent-instructions.md · question-bank.md · reference-answers.json (generated)
 │   ├── labs/lab-00.md … lab-04.md · fabric-step.md · bridge-spotlight.md · PORTAL-TRACK.md · lab-0N-portal.md
-│   ├── answer-keys/*.json             ← server-side only
+│   ├── answer-keys/*.json             ← facilitator reference
 │   └── assets/
 │       ├── common/livewell_common.py  ← the one helper that calls Foundry (strict-schema fix, 5xx retry, consent line)
 │       ├── lab1_knowledge.py · lab2_govern.py · lab3_tools.py · lab4_multiagent.py (canonical; `# %%` cells; `python labN_*.py` or run cells in VS Code)
