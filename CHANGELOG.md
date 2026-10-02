@@ -4,6 +4,18 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Lab-flow deck and Day 1 deck refresh (`deck-lab-flow`)
+
+- **New participant deck.** `deck/LiveWell-Lab-Flow.pptx` (18 slides, built by `deck/build_lab_flow.py`) explains the
+  flow of the labs and the learning objectives: the journey, the layer staircase, the two seats, how a lab page works,
+  one slide per lab with a screenshot of success, the Lab 2 guardrail ladder, the Lab 4 orchestration lanes, an
+  objectives table, the ten patterns by lab, resources and takeaways. Objectives, prompts and minutes are read from the
+  lab pages, `test-prompts.json` and `workshop.yaml`.
+- **Day 1 deck refresh.** Module cards, agenda, human thread and architecture now match the current labs (router pick,
+  clinician route, default-vs-custom guardrail ladder, `livewell_profile`, approval before `register_interest`, the
+  Fabric step's aggregate questions, DevUI sequential and hand-off). The guardrail slide is the seven-prompt ladder
+  with block vs annotate, evaluators and red team; the Fabric step card no longer carries the Bridge objective; the
+  "Where we left off" chevrons no longer overflow; checkpoint notes say nothing is submitted.
 ### Checkpoints show the expected output (`checkpoint-expected-output`)
 
 There was no checkpoint form to paste into. Participants now submit nothing and compare with a hidden example

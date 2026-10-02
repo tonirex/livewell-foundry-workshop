@@ -118,7 +118,9 @@ Windows on ARM: some wheels are x64-only. Use an x64 Python, or Codespaces.
 - [Prompt bank](content/prompts/test-prompts.json): the single source of truth for every prompt in the labs, keys and demos.
 - [Answer keys](content/answer-keys/): facilitator reference answers for each checkpoint (participants compare with the Expected output block on each lab page).
 - [Fabric bridge inputs](content/fabric/): ontology blueprint, data-agent instructions, Mei's question bank.
-- Deck: `deck/LiveWell-Foundry-Workshop-Day1.pptx` (built by `deck/build_deck.py`).
+- Decks (generated; see [deck/README.md](deck/README.md)): `deck/LiveWell-Foundry-Workshop-Day1.pptx` is the facilitator's
+  day deck (`deck/build_deck.py`); `deck/LiveWell-Lab-Flow.pptx` is the participant guide to the lab flow and learning
+  objectives (`deck/build_lab_flow.py`).
 - Proof and demo kit (`pip install -r requirements-demos.txt`):
   [smoke test](scripts/smoke-test.py) (end-to-end check of the live environment, run T-1 and on the morning),
   [demo agents](demos/create-demo-agents.py) (the five `livewell-demo-*` agents and the `livewell-eval` dataset),
@@ -143,7 +145,7 @@ content/
   fabric/         ontology blueprint, data-agent instructions, question bank
 scripts/          generators (gen-activity.py, gen-citizens.py), r360.py, check-content.py, smoke-test.py, build-guides-pdf.py
 demos/            demo agents, screenshot capture, demo recorder (portal.py, scenes.py), DRY-RUN-TEMPLATE.md
-deck/             build_deck.py + the pptx
+deck/             build_deck.py (Day 1 deck), build_lab_flow.py (lab-flow deck) + the two pptx files
 ```
 
 </details>
