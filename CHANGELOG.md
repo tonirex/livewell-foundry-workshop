@@ -22,6 +22,9 @@ All notable changes to this workshop. One entry per phase PR.
   box. The reply failed twice: DevUI looked up the checkpoint under the display name, but the workflow had saved it
   under its build-time name, and the box sends text where the hand-off expects chat messages. The workflows are now
   named at build time and text replies are wrapped as a user message.
+- **Lab 4 step 3 shows where hand-off wins.** The week plan needs both specialists, so both teams took the same
+  path. Navigators now also run an activity-only request on both teams: hand-off calls only `handoff_to_activity`
+  (about 25 s on MCAPS) while sequential runs all three agents (about 55 s). New demo-map row.
 - **Specialists copy guide ids from their search results.** The Nutrition and Activity blocks in
   `coach-instructions.md` now say to copy ids exactly from the guide search results and never invent or shorten
   one. Before, the Activity specialist made up ids such as `lg-07-physical-activity` in 4 of 6 runs; after, 0 of

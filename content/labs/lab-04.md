@@ -39,6 +39,16 @@ Steps 1–3 and 7 are hands-on in your browser, with nothing to install. The fac
 
    Each box turns green when that agent finishes. A run takes about a minute. In **Execution Timeline**, look for Nutrition, then Activity, then the Coach's evidence JSON with at least one guide id.
 3. **Run the hand-off team.** Switch to **LiveWell hand-off**, select **+** and run the same request. Open **Tools** on the right: it lists two hand-off calls, newest at the top. Read from the bottom: `handoff_to_nutrition` (the Coach chose Nutrition), then `handoff_to_activity` (Nutrition passed on to Activity). This shows the model chose the route. **Traces** shows each agent's time and tokens. Ignore the **Deployment Guide** button; this lab does not use it.
+
+   **Then see where hand-off wins.** The week plan needs both specialists, so both teams took the same path. Now ask for an activity only. In each team, select **+** and run:
+
+   ```text
+   Resident profile: age band 60-64, lives in Woodlands (North region, hazy today: yes), screening risk High, conditions: elevated blood glucose, about 3100 steps a day.
+
+   Suggest one indoor morning activity near Woodlands for me this week.
+   ```
+
+   In the hand-off team, **Tools** lists only `handoff_to_activity` and the run takes about 25 seconds. The sequential team still runs all three agents and takes about a minute. A fixed route is predictable and always ends with the Coach's evidence JSON. A model-chosen route skips agents the request does not need, but it can vary, and it ends with Activity's answer rather than a merged JSON. If the Coach answers by itself and a reply box appears, type what you need and send it: the run carries on from there.
 4. The facilitator adds or shows **`livewell-<INITIALS>-insights`**, the Programme-Insights specialist that uses the Fabric tool for programme-level questions, and sends it (`lab4_q_programmes_disengaged`):
 
    ```text
@@ -62,6 +72,7 @@ Demo map:
 |---|---|---|
 | DevUI sequential run | Nutrition runs before Activity | Sequential handoff is explicit, not implied. |
 | DevUI hand-off run | The **Tools** tab lists `handoff_to_nutrition` then `handoff_to_activity` | In a hand-off team the model picks the route by calling a tool. |
+| DevUI activity-only run | Hand-off calls only `handoff_to_activity` and takes about half the time of sequential | A model-chosen route skips agents the request does not need; a fixed route always runs every agent. |
 | Programme-Insights | Officer prompt uses Fabric | Specialist routing keeps citizen and officer data paths separate. |
 | Hosted deploy | `rai_config` references the RAI policy; the agent identity gets a role | Governance and least privilege follow the agent into production. |
 | Smoke test | JSON plus citation returns from endpoint; the blocklisted prompt is blocked | Systems can consume the same governed behaviour. |
