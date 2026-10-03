@@ -4,12 +4,19 @@
 They are the Navigator agent at the end of each lab, built with the same instruction blocks, tools, response
 formats and guardrail as the portal track, so facilitators can demo, record and fall back on them:
 
-  lab0       livewell-demo-lab0      base block on model-router (Lab 0)
+  lab0       livewell-demo-lab0      base block on gpt-5-mini (Lab 0)
   knowledge  livewell-demo-kb        + knowledge block, Foundry IQ knowledge base, lab1 JSON schema (Lab 1)
   guarded    livewell-demo-guarded   + safety block and livewell-guardrails (Lab 2 comparator)
   tools      livewell-demo-tools     + tools block: livewell_profile (OpenAPI), activities MCP with approval
-                                     for register_interest, memory, evidence JSON schema, gpt-5.4-mini (Lab 3)
+                                     for register_interest, memory, evidence JSON schema, gpt-4.1-mini (Lab 3)
   fabric     livewell-demo-fabric    + fabric block and the Fabric IQ tool (Fabric step; FABRIC_BRIDGE only)
+  nutrition  livewell-demo-nutrition Nutrition specialist: nutrition block, knowledge base, guardrail
+  activity   livewell-demo-activity  Activity specialist: activity block, knowledge base, find_activities only
+
+The two specialists also get incoming A2A (Agent2Agent) and an agent card. These are agent-level settings with
+no portal switch. Participants reach the specialists through the `livewell-nutrition-a2a` and
+`livewell-activity-a2a` connections (scripts/connect-tools.py) in Lab 3 step 11. `livewell-demo-tools` does
+not call them, so the Lab 3 demo works even if a specialist is down.
 
 Every tool runs server-side (no client-side function calls), so the agents work in the portal playground.
 It also registers the shared `livewell-eval` dataset (content/eval/livewell-eval.jsonl) that the portal
@@ -40,10 +47,16 @@ os.environ.setdefault("PYTHONIOENCODING", "utf-8")
 
 from common import livewell_common as lw  # noqa: E402
 
-ORDER = ["lab0", "knowledge", "guarded", "tools", "fabric"]
+ORDER = ["lab0", "knowledge", "guarded", "tools", "fabric", "nutrition", "activity"]
 ALIASES = {"kb": "knowledge"}
 MEMORY_STORE = f"{lw.NAMING['demo_prefix']}memory"
 MEMORY_SCOPE = "{{$userId}}"  # each signed-in viewer gets their own memories, as in the portal
+# Specialists reachable over A2A: role -> (agent card skill name, description the calling model reads).
+SPECIALISTS = {
+    "nutrition": ("LiveWell nutrition specialist", "Meal suggestions and meal plans grounded in the LiveWell guides."),
+    "activity": ("LiveWell activity specialist",
+                 "Safe exercise plans and community activities grounded in the LiveWell guides."),
+}
 
 
 def demo_names() -> dict[str, str]:
@@ -81,7 +94,7 @@ def definition(role: str, *, memory: bool = True, guardrail: str | None = None) 
     rai = m.RaiConfig(rai_policy_name=lw.rai_policy_id(guardrail))
     if role == "lab0":
         return {"model": lw.DEFAULT_MODEL, "instructions": lw.load_instructions("base")}, \
-            "LiveWell demo - Lab 0: base instructions on model-router"
+            "LiveWell demo - Lab 0: base instructions on gpt-5-mini"
     if role == "knowledge":
         return {"model": lw.DEFAULT_MODEL, "instructions": lw.load_instructions("base", "knowledge"),
                 "tools": [lw.kb_tool()], "text": text(lw.lab1_schema(), "livewell_lab1_answer")}, \
@@ -99,10 +112,36 @@ def definition(role: str, *, memory: bool = True, guardrail: str | None = None) 
             tools.append(lw.fabric_tool())
         what = ("Fabric step: Fabric IQ tool for programme questions" if role == "fabric"
                 else "Lab 3: profile OpenAPI, activities MCP with approval" + (", memory" if memory else ""))
-        return {"model": lw.MEMORY_MODEL if memory else lw.DEFAULT_MODEL, "instructions": lw.load_instructions(*blocks),
+        # OpenAPI, A2A and Fabric tools are not supported on gpt-5-mini, so these run on the tools deployment.
+        return {"model": lw.TOOLS_MODEL, "instructions": lw.load_instructions(*blocks),
                 "tools": tools, "text": text(lw.evidence_schema(), "livewell_evidence"), "rai_config": rai}, \
             f"LiveWell demo - {what}"
+    if role in SPECIALISTS:
+        tools = [lw.kb_tool()] + ([lw.activities_tool(read_only=True)] if role == "activity" else [])
+        return {"model": lw.DEFAULT_MODEL, "instructions": lw.load_instructions(role), "tools": tools,
+                "rai_config": rai}, f"LiveWell demo - Lab 3: {SPECIALISTS[role][0]}, reachable over A2A"
     raise ValueError(role)
+
+
+def ensure_a2a(name: str, role: str, *, check: bool = False) -> str:
+    """Turn on incoming A2A and publish the agent card for a specialist. Both are agent-level settings (they are
+    not part of a version) and have no portal switch. Calls arrive as the calling project's managed identity,
+    which needs Foundry Agent Consumer on the project (infra/modules/rbac.bicep)."""
+    m = lw.models()
+    skill, about = SPECIALISTS[role]
+    card = m.AgentCard(version="1.0", description=about,
+                       skills=[m.AgentCardSkill(id=role, name=skill, description=about)])
+    details = lw.retry(lambda: lw.project().agents.get(name), what=f"get {name}").as_dict()
+    protocols = (details.get("agent_endpoint") or {}).get("protocols") or []
+    if "a2a" in protocols and details.get("agent_card") == card.as_dict():
+        return "a2a on"
+    if check:
+        return "a2a off"
+    endpoint = m.AgentEndpointConfig(protocol_configuration=m.ProtocolConfiguration(
+        responses=m.ResponsesProtocolConfiguration(), a2a=m.A2AProtocolConfiguration()))
+    lw.retry(lambda: lw.project().agents.update_details(name, agent_endpoint=endpoint, agent_card=card),
+             what=f"enable A2A on {name}")
+    return "a2a enabled"
 
 
 def spec_hash(kwargs: dict) -> str:
@@ -111,7 +150,10 @@ def spec_hash(kwargs: dict) -> str:
 
 
 def upsert(name: str, kwargs: dict, description: str, *, rail: str = "demo", check: bool = False) -> tuple[str, object]:
-    """Create a version when the definition changed. Returns (state, version or None)."""
+    """Create a version when the definition changed. Returns (state, version or None). Reasoning models get the
+    workshop's reasoning effort (gpt-5-mini: low), like lw.create_agent."""
+    if "reasoning" not in kwargs and lw.reasoning(kwargs["model"]):
+        kwargs = {**kwargs, "reasoning": lw.reasoning(kwargs["model"])}
     digest = spec_hash(kwargs)
     current = lw.agent_by_name(name)
     if current is not None and (getattr(current, "metadata", None) or {}).get("spec_hash") == digest:
@@ -154,6 +196,16 @@ def register_dataset(*, check: bool = False) -> tuple[str, str]:
         return name, f"FAILED: {lw._trunc(e, 140)}"
 
 
+def stale_memory_store() -> str | None:
+    """'chat/embedding' when the demo memory store exists on other models than workshop.yaml (fixed at creation)."""
+    try:
+        d = lw.project().beta.memory_stores.get(MEMORY_STORE).definition
+    except Exception:  # noqa: BLE001 - not created yet
+        return None
+    have = (getattr(d, "chat_model", None), getattr(d, "embedding_model", None))
+    return None if have == (lw.DEFAULT_MODEL, lw.MODELS["embeddings"]) else "/".join(map(str, have))
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--check", action="store_true", help="report only; exit 1 if an agent is missing or out of date")
@@ -165,6 +217,14 @@ def main() -> int:
     names = demo_names()
     fabric = lw.fabric_enabled()
     rows, ok = [], True
+    stale = None if args.no_memory else stale_memory_store()
+    if stale and args.check:
+        rows.append((MEMORY_STORE, "out of date (models)", "", stale, ""))
+        ok = False
+    elif stale:  # its memories are lost; the agents keep the same store name and need no new version
+        lw.project().beta.memory_stores.delete(MEMORY_STORE)
+        lw.say(f"[demo-agents] {MEMORY_STORE}: deleted ({stale}), recreated on "
+               f"{lw.DEFAULT_MODEL}/{lw.MODELS['embeddings']}")
     for role in pick_roles(args.roles):
         name = names[role]
         if role == "fabric" and not fabric:
@@ -180,6 +240,10 @@ def main() -> int:
         kwargs, description = definition(role, memory=not args.no_memory)
         state, version = upsert(name, kwargs, description, check=args.check)
         ok &= state in ("in sync", "created", "updated")
+        if role in SPECIALISTS and version is not None:
+            a2a = ensure_a2a(name, role, check=args.check)
+            ok &= a2a != "a2a off"
+            state = f"{state}, {a2a}"
         if version is not None:
             rows.append((name, state, f"v{version.version}", version.definition.model,
                          f"{lw.rai_policy_of(version) or 'deployment default'} | {tool_summary(version)}"))

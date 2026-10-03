@@ -49,11 +49,16 @@ For every FAIL, preflight prints the quota-request link. Typical asks on a fresh
 | Quota | Needed | Where |
 |---|---|---|
 | Fabric capacity units in `swedencentral` | 2 CU for F2, 4 CU for F4 (`FABRIC_SKU`) | Azure portal → Quotas → Microsoft Fabric |
-| `model-router` Global Standard | 400K TPM | Foundry portal → Management center → Quota |
-| `gpt-4.1-mini` Global Standard | 400K TPM (fallback, Lab 2 judges, memory extraction) | Same |
-| `gpt-5.4-mini` Global Standard | 200K TPM (Lab 3 coach with memory) | Same |
-| `text-embedding-3-large` Global Standard | 100K TPM | Same |
+| `gpt-5-mini` Global Standard | 400K TPM (Labs 0–2, Lab 3 specialists, memory store, KB planner, Lab 4) | Foundry portal → Management center → Quota |
+| `gpt-4.1-mini` Global Standard | 200K TPM (Lab 3 coach on, Fabric tool agents, evaluation judges) | Same |
+| `text-embedding-3-small` Global Standard | 100K TPM | Same |
 | Azure AI Search Basic in `swedencentral` | 1 service | Usually available; preflight checks it |
+
+These caps are sized for 6 participants plus the facilitator on one shared project. The Azure sponsorship
+subscription (quota Tier 0) offers 500K TPM for `gpt-5-mini`, 200K for `gpt-4.1-mini` and 1M for
+`text-embedding-3-small`, and no `model-router` (ASSUMPTIONS.md 9.1). Quota is per subscription, per region and per
+model, so **delete any test deployment of the same model first**: a 100K `gpt-4.1-mini` test deployment leaves only
+100K for the workshop and the 200K deployment fails. A second region adds no quota on Tier 0, so keep one region.
 
 ### T-7: tenant settings and preflight green
 
@@ -76,11 +81,11 @@ About 1.5 h end to end.
 | 3 Resident 360 on Fabric | `bash scripts/fabric/deploy.sh mcaps` | ≈ 17–20 min | 7 tables, ontology 4/5 with instances, graph refresh Completed, data agent published |
 | 4 Knowledge base | `python scripts/build-kb.py` | 5 min | `livewell-guides-kb` answers with a citation (`--check` re-tests it) |
 | 5 MCP server | `azd deploy mcp-activities` | 5 min | `MCP_URL` responds |
-| 6 Tool connections | `python scripts/connect-tools.py` | 2 min | Activities MCP and Fabric IQ connections; `/profile/me` 200, another resident 403; `FABRIC_IQ_CONNECTION_ID` in `.azure/mcaps/.env` |
+| 6 Tool connections | `python scripts/connect-tools.py` | 2 min | Activities MCP, Fabric IQ and the two specialist A2A connections (`livewell-nutrition-a2a`, `livewell-activity-a2a`); `/profile/me` 200, another resident 403; `FABRIC_IQ_CONNECTION_ID` in `.azure/mcaps/.env` |
 | 7 Hosted agent (Lab 4) | Repo `.venv` active: `azd deploy livewell-workshop-hosted`, then `python scripts/hosted-postdeploy.py --verify` | ≈ 8 min | Agent active; a week plan comes back as evidence JSON; the blocklisted prompt is blocked ([README](../assets/hosted-agent-example/README.md)) |
-| 8 Demo agents | `python demos/create-demo-agents.py` | 2 min | Five `livewell-demo-*` agents listed and the `livewell-eval` dataset registered (Lab 2 portal evaluation picks it); `--check` re-tests |
+| 8 Demo agents | `python demos/create-demo-agents.py` | 3 min | Seven `livewell-demo-*` agents listed (five lab agents plus the Nutrition and Activity specialists, each with "a2a on") and the `livewell-eval` dataset registered (Lab 2 portal evaluation picks it); `--check` re-tests |
 | 9 Attendees | `bash scripts/seed-attendees.sh mcaps --lab-accounts` | 2 min | Every row shows `added` or `exists` |
-| 10 Proof | `python scripts/smoke-test.py`, `make -C content/assets validate`, then `make -C content/assets validate-live ENV=mcaps` (graph check + 9 data-agent calls, ≈ 8 min) | 15 min | Smoke test 8/8 PASS (report in `content/assets/.runs/`); narrative report in `demos/NARRATIVE-VALIDATION-<date>.md` |
+| 10 Proof | `python scripts/smoke-test.py`, `make -C content/assets validate`, then `make -C content/assets validate-live ENV=mcaps` (graph check + 9 data-agent calls, ≈ 8 min) | 15 min | Smoke test 11/11 PASS (report in `content/assets/.runs/`); narrative report in `demos/NARRATIVE-VALIDATION-<date>.md` |
 | 11 Pause | `bash scripts/capacity.sh suspend mcaps` | 1 min | Capacity `Paused` |
 
 > **Always provision through `scripts/provision.sh`.** azd reads `infra/main.bicepparam` *before* its
@@ -137,14 +142,14 @@ python scripts/gen-citizens.py --from-onelake --check    # citizens.json agrees 
   To keep evidence that a script works, wrap it in `demos/record-terminal.py`, e.g.
   `python demos/record-terminal.py builder-lab3 -- python scripts/validate-builder-rail.py --labs 3 --verbose`: it
   writes the output with real timings (`.cast`) and a full-page PNG to `demos/evidence/<date>/` (commit them) and a
-  replay video to `demos/videos/` (git-ignored). The 2026-10-01 set is indexed in
+  replay video to `demos/videos/` (git-ignored). The current Builder Labs 1–4 set (sponsorship models) is indexed in
+  [demos/evidence/2026-10-03/README.md](../../demos/evidence/2026-10-03/README.md); the Bridge replay is in
   [demos/evidence/2026-10-01/README.md](../../demos/evidence/2026-10-01/README.md).
 - Lab 0 and Lab 2 facilitator demos (repo `.venv`; results stay in the project so the room can open them on the day):
   1. `python scripts/apply-guardrail.py --check`: drift none (deployments on `Microsoft.DefaultV2`).
-  2. `python demos/router-picks.py --reps 2`: the model `model-router` picked per prompt (≈ 1 min, cents).
-  3. `python demos/guardrail-matrix.py --cloud`: four `livewell-demo-gr-*` agents and the evaluation
+  2. `python demos/guardrail-matrix.py --cloud`: four `livewell-demo-gr-*` agents and the evaluation
      `LiveWell guardrail matrix <timestamp>` (≈ 3 min, cents). Open it in **Evaluations → Compare** before the day.
-  4. `python scripts/red-team-cloud.py --agents livewell-demo-tools,livewell-demo-guarded --yes`: cloud red team
+  3. `python scripts/red-team-cloud.py --agents livewell-demo-tools,livewell-demo-guarded --yes`: cloud red team
      whose scorecard opens in **Evaluations → Red team** (≈ 50 min for both agents in parallel, so start it in the
      morning; ≈ US$35: about 1.2 M judge tokens on the AI evaluations meter plus about 2 M target tokens; one agent is
      about half). Afterwards, `--report <eval id>` reprints the table. Open two or three `[n safe?]` attacks in the
@@ -190,11 +195,17 @@ python scripts/gen-citizens.py --from-onelake --check    # citizens.json agrees 
 bash scripts/capacity.sh resume mcaps                    # ~1 min; Fabric step + bridge spotlight need it
 MCP_MIN_REPLICAS=1 bash scripts/provision.sh mcaps --skip-preflight   # no MCP cold starts during labs
 python scripts/render-values.py mcaps                    # values sheet -> content/config/values.md (hooks also refresh it)
+python scripts/apply-guardrail.py                        # AFTER 09:30 SGT: restores livewell-guardrails (reset daily ~09:15)
 python scripts/smoke-test.py --demo-agents               # all PASS on the livewell-demo-* agents (incl. demo memory), ≈ 3 min
 python scripts/reset-demo-memory.py                      # exit 0 = no red-team residue in your demo memory; else --reset
 ```
 
+> ⚠️ **Re-apply the guardrail on the day.** In the MCAPS tenant a governance automation (`MCAPSGovernance-AutomationApp`) rewrites `livewell-guardrails` every morning at about 09:15 SGT: it keeps one annotate-only Indirect Attack filter and drops the blocklist. Agents still show the policy attached, but Lab 2's custom-guardrail blocks stop happening. Run `python scripts/apply-guardrail.py` after 09:30 SGT, then `python scripts/apply-guardrail.py --check` just before Lab 2 (exit 1 = drifted again; run it without `--check`). It takes under a minute and needs no agent changes (ASSUMPTIONS.md 4.14).
+
 Put `content/config/values.md` on screen: the project endpoint, agent names, lab-account pattern and Wi-Fi.
+Also post its rows in the workshop chat, so the URLs are clickable. In Lab 3, Navigators open the
+**Profile OpenAPI spec URL** and copy the JSON it returns, and Builders copy the project endpoint into `.env`.
+Both are too long to retype from the screen. The sheet holds no keys or passwords.
 Lab pages only ever use names.
 
 ### T+1: teardown
@@ -226,10 +237,10 @@ US$ list prices, September 2026 (SPEC.md §13). The cohort is 20 people × 150 r
 Controls built into the template and checked by [cost-guardrails.sh](../../scripts/cost-guardrails.sh):
 
 - One shared search service and knowledge base. Twenty Basic services would cost about $1,475/month.
-- `model-router` is the default deployment. Every deployment is Global Standard with no PTU and no partner models.
-  `model-router` and `gpt-4.1-mini` are capped at 400K TPM, `gpt-5.4-mini` (Lab 3 memory coach) at 200K and
-  embeddings at 100K. Pay-as-you-go tokens mean the cap costs nothing by itself; at 100K, three Lab 3 coaches
-  running at once already hit HTTP 429.
+- `gpt-5-mini` at reasoning effort Low is the default deployment. Every deployment is Global Standard with no PTU and
+  no partner models. `gpt-5-mini` is capped at 400K TPM, `gpt-4.1-mini` (Lab 3 coach, Fabric tool agents, judges) at
+  200K and embeddings at 100K. Pay-as-you-go tokens mean the cap costs nothing by itself; at 100K, three Lab 3
+  coaches running at once already hit HTTP 429.
 - Red teaming is run by the facilitator. The participant "lite" run (10 prompts × 2 strategies) costs about $17 in total.
 - Bing grounding is off: there is no connection.
 - The budget alerts at US$150 and US$300 (actual spend) and emails the facilitators plus the subscription Owners and Contributors.
@@ -263,6 +274,7 @@ type. Cost Management lags by up to 24 h.
 | Project managed identity | Search Index Data Reader, AcrPull | Search, ACR | `rbac.bicep` |
 | Project managed identity | Foundry User (memory calls the deployments as the project; 401 without it) | Foundry account | `rbac.bicep` |
 | Project managed identity | Storage Blob Data Contributor (evaluation uploads) | Storage | `rbac.bicep` |
+| Project managed identity | Foundry Agent Consumer (the A2A connections sign in as the project to call the demo specialists in Lab 3 step 11) | Project | `rbac.bicep` |
 | Search managed identity | Cognitive Services User, Storage Blob Data Reader | Foundry account, storage | `rbac.bicep` |
 | MCP app identity | AcrPull | ACR | `infra/modules/containerapps.bicep` |
 | Hosted agent identity (`livewell-workshop-hosted`) | Foundry User | Project | `scripts/hosted-postdeploy.py` (azd postdeploy hook; the identity only exists after the first deploy) |
@@ -343,20 +355,19 @@ scored locally instead", and the local scores are still valid. To publish a run 
 | [gen-citizens.py](../../scripts/gen-citizens.py) | `citizens.json` from the gold build; `--check`, `--from-onelake` |
 | [apply-guardrail.py](../../scripts/apply-guardrail.py) | `livewell-guardrails` + blocklist from `guardrails.yaml`, and each deployment's guardrail (`Microsoft.DefaultV2`) (postprovision hook); `--check` |
 | [build-kb.py](../../scripts/build-kb.py) | Foundry IQ knowledge base `livewell-guides-kb` + its MCP connection; `--source onelake`, `--check` |
-| [connect-tools.py](../../scripts/connect-tools.py) | Activities MCP and Fabric IQ connections, profile tool URL, access checks; `--check` |
+| [connect-tools.py](../../scripts/connect-tools.py) | Activities MCP, Fabric IQ and specialist A2A connections, profile tool URL, access checks; `--check` |
 | [hosted-postdeploy.py](../../scripts/hosted-postdeploy.py) | Hosted agent: identity RBAC + guardrail (azd postdeploy hook); `--check`, `--verify` |
 | [gen-schemas.py](../../scripts/gen-schemas.py) | Navigator JSON schemas and the hosted agent's `livewell.json` from the prompts and `livewell_common.py`; `--check` |
 | [validate-builder-rail.py](../../scripts/validate-builder-rail.py) | Runs Labs 1–4 as `INITIALS=test` with `--cleanup`, checks the key signals (KB citation, injected flyer blocked, ≥ 2 tools, Fabric for Mei and not for Rahim, hosted agent) and that nothing is left behind (items an interrupted earlier run left are deleted first); `--labs`, `--fabric`, `--report`, `--verbose`. `make -C content/assets validate-rail` |
 | [red-team.py](../../scripts/red-team.py) | AI Red Teaming Agent scan of a temporary guarded coach (or `--agent NAME`); `--lite`, `--yes`, `--upload`, `--parallel`. Needs `.venv-redteam` (`requirements-redteam.txt`) |
 | [red-team-cloud.py](../../scripts/red-team-cloud.py) | Cloud red team of `livewell-demo-tools` (or `--agents a,b`) with agentic + content-harm evaluators; results in **Evaluations → Red team**; clears your demo memory scope afterwards; `--taxonomy-only`, `--strategies`, `--turns`, `--yes`, `--report <eval id>`, `--keep-memory` |
 | [reset-demo-memory.py](../../scripts/reset-demo-memory.py) | Lists your scope in `livewell-demo-memory` and flags red-team residue (exit 1); `--reset` clears it (`--yes` skips the prompt). Run after a red team and at T-0 |
-| [guardrail-matrix.py](../../demos/guardrail-matrix.py) | Lab 2 demo: 7 prompts × {`gpt-4.1-mini`, `model-router`} × {default, `livewell-guardrails`} on four `livewell-demo-gr-*` agents; `--cloud` (Foundry evaluation to compare), `--reps`, `--verbose`, `--delete` |
-| [router-picks.py](../../demos/router-picks.py) | Lab 0 demo: the model `model-router` picked per prompt, its routing mode and latency (preview header); `--reps`, `--verbose` |
+| [guardrail-matrix.py](../../demos/guardrail-matrix.py) | Lab 2 demo: 7 prompts × {`gpt-5-mini`, `gpt-4.1-mini`} × {default, `livewell-guardrails`} on four `livewell-demo-gr-*` agents; `--cloud` (Foundry evaluation to compare), `--reps`, `--verbose`, `--delete` |
 | [lab4-devui.py](../../demos/lab4-devui.py) | Lab 4 demo: the sequential and hand-off teams from `lab4_multiagent.py` in Agent Framework DevUI on `127.0.0.1:8090`; `--port`, `--no-browser`, `--mermaid` (prints the WorkflowViz graphs), `--capture` (headless runs and the two lab-04 DevUI screenshots) |
 | [seed-attendees.sh](../../scripts/seed-attendees.sh) | Lab accounts / file / guests → project, search, tracing and Fabric access; `--remove`, `--dry-run` |
 | [render-values.py](../../scripts/render-values.py) | `.azure/<env>/.env` → `content/config/values.md`. Runs by itself after `azd provision` and `azd deploy` (hooks), `fabric/deploy.sh` and `connect-tools.py` |
 | [smoke-test.py](../../scripts/smoke-test.py) | End-to-end check with temporary `livewell-smoke-*` agents: MCP, knowledge, guardrail, tools, Fabric, hosted agent, demo-memory residue, cost since provision; `--demo-agents`, `--no-fabric`, `--no-hosted`, `--since`, `--report` |
-| [create-demo-agents.py](../../demos/create-demo-agents.py) | The five `livewell-demo-*` agents (one per lab) and the `livewell-eval` dataset; a new version only when the definition changed; `--check`, `--roles`, `--no-memory`, `--no-dataset` |
+| [create-demo-agents.py](../../demos/create-demo-agents.py) | The seven `livewell-demo-*` agents (one per lab, plus the Nutrition and Activity specialists with incoming A2A and an agent card) and the `livewell-eval` dataset; a new version only when the definition changed; `--check`, `--roles`, `--no-memory`, `--no-dataset` |
 | [portal.py](../../demos/portal.py) | Playwright helpers for the Foundry portal; `login`, `status`, `open <page>`, `shot <page>` |
 | [capture-screenshots.py](../../demos/capture-screenshots.py) | Navigator screenshot slots from the live portal; `--only`, `--list-missing`, `--link [--dry-run]`, `--headless` |
 | [record-demos.py](../../demos/record-demos.py) | One captioned WebM per lab and the Bridge spotlight into `demos/videos/`; `--lab` |

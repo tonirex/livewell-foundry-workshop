@@ -52,7 +52,7 @@ Watch the facilitator demo; here is what to look for:
 7. Open the hosted-agent trace and compare it with the playground trace.
 8. Note why participants cannot publish: Foundry User can build and test; Foundry Project Manager is required for hosted publish.
 
-> The Foundry portal **Workflows** item is not used in this workshop because it is retiring on **1 Dec 2026**. Multi-agent orchestration is shown with Microsoft Agent Framework, connected agents and function tools instead.
+> The Foundry portal **Workflows** item is not used in this workshop because it is retiring on **1 Dec 2026**. Multi-agent orchestration is shown with Microsoft Agent Framework, with specialist agents called through function tools (Builder) and with the A2A tool (Navigator, Lab 3 step 11) instead.
 
 Demo map:
 
@@ -76,10 +76,10 @@ flowchart LR
     devui["demos/lab4-devui.py<br/>same workflows in DevUI"]
   end
   subgraph project["Foundry project livewell-workshop"]
-    dep["Model deployment model-router<br/>guardrail: Microsoft.DefaultV2"]
+    dep["Model deployment gpt-5-mini<br/>guardrail: Microsoft.DefaultV2"]
     kb["Foundry IQ knowledge base<br/>MCP: knowledge_base_retrieve"]
     acts["Activities app<br/>MCP: find_activities, /profile/me"]
-    insights["Prompt agent livewell-INITIALS-insights<br/>Fabric tool · guardrail: livewell-guardrails"]
+    insights["Prompt agent livewell-INITIALS-insights<br/>gpt-4.1-mini · Fabric tool · guardrail: livewell-guardrails"]
     hosted["Hosted agent livewell-workshop-hosted<br/>container: hosted-agent-example/main.py<br/>rai_config: livewell-guardrails"]
     appi["Application Insights<br/>traces"]
   end
@@ -105,7 +105,7 @@ flowchart LR
 | Activity | `activity` | `knowledge_base_retrieve`, `find_activities` (read-only) | A safe, indoor-on-hazy-days activity plus guide ids | [L92-94](../assets/lab4_multiagent.py#L92-L94) |
 | Coach, sequential | `base`, `safety`, `merge` | none | One evidence JSON (strict schema): `advice`, `confidence`, `supporting_guides`, `rationale`, `personalisation_flags` | [L124-129](../assets/lab4_multiagent.py#L124-L129) |
 | Coach, hand-off | `base`, `handoff` | `handoff_to_nutrition`, `handoff_to_activity` (added by `HandoffBuilder`) | Nothing: it only routes | [L164-179](../assets/lab4_multiagent.py#L164-L179) |
-| Programme-Insights | `insights` | Fabric tool | Programme-level aggregates, no resident rows | [L203-205](../assets/lab4_multiagent.py#L203-L205) (a Foundry prompt agent, so it runs server-side under `livewell-guardrails`) |
+| Programme-Insights | `insights` | Fabric tool | Programme-level aggregates, no resident rows | [L203-205](../assets/lab4_multiagent.py#L203-L206) (a Foundry prompt agent, so it runs server-side under `livewell-guardrails`) |
 
 **Sequential: the code decides the route.** `SequentialBuilder` wires the participants in a fixed order and passes one shared conversation down the chain. Each agent sees the request and every earlier answer, adds its own, and hands the longer conversation on. The Coach has no tools and a strict JSON schema, so the last message is always the evidence JSON. `output_from="all"` makes the workflow emit every agent's answer, which is how the script prints the route.
 
@@ -129,7 +129,7 @@ sequenceDiagram
   C-->>W: one evidence JSON (the reply)
 ```
 
-**Hand-off: the model decides the route.** `HandoffBuilder` gives each agent a `handoff_to_<name>` function tool for every target allowed by `add_handoff` (L173-175). An agent hands over by *calling* that tool, and the workflow then makes the target agent active. The instruction block tells the Coach never to answer and to send food-plus-activity requests to Nutrition first. Nutrition runs in **autonomous mode** for one turn, so it answers and then calls `handoff_to_activity` without waiting for the resident. The `termination_condition` (L170-171) stops the run as soon as Activity has answered. Section 5 checks the route because a model-chosen route can vary; that is the trade-off for flexibility.
+**Hand-off: the model decides the route.** `HandoffBuilder` gives each agent a `handoff_to_<name>` function tool for every target allowed by `add_handoff` (L173-175). An agent hands over by *calling* that tool, and the workflow then makes the target agent active. The instruction block tells the Coach never to answer and to send food-plus-activity requests to Nutrition first. Nutrition runs in **autonomous mode** for one turn: its first reply is the food answer, and on the extra turn it calls `handoff_to_activity` instead of waiting for the resident. The two steps are kept in separate turns on purpose: with "answer, then hand off" in one turn, `gpt-5-mini` often called the hand-off tool and skipped the answer. The `termination_condition` (L170-171) stops the run as soon as Activity has answered. Section 5 checks the route because a model-chosen route can vary; that is the trade-off for flexibility.
 
 ```mermaid
 flowchart LR
@@ -191,20 +191,20 @@ Use `--verbose` for each agent's full answer. Use `--cleanup` to delete only `li
 
 | Section | Code | What it does |
 |---|---|---|
-| 1 | [L56-L58](../assets/lab4_multiagent.py#L56-L58), [`profile_summary`](../assets/common/livewell_common.py#L521-L526) | Builds the request: one profile line plus the prompt. |
-| 2 | [`af_client`](../assets/common/livewell_common.py#L1068-L1080), [`af_kb_tool` and `af_activities_tool`](../assets/common/livewell_common.py#L1083-L1094) | A `FoundryChatClient` on the project's model deployment, and the two hosted MCP tools from `client.get_mcp_tool`. `allowed_tools` keeps Activity to `find_activities`. |
-| 3 | [`text_only` and `team()`](../assets/lab4_multiagent.py#L81-L95) | Agent middleware that strips earlier tool calls, and a factory for fresh Nutrition and Activity agents. An agent instance belongs to one workflow, so each workflow builds its own. |
-| 4 | [`sequential()`](../assets/lab4_multiagent.py#L124-L129), [run and checks](../assets/lab4_multiagent.py#L132-L152) | `SequentialBuilder` in a fixed order. The Coach's strict schema comes from [`af_json_format`](../assets/common/livewell_common.py#L1097-L1100), the same evidence contract as Lab 3. |
+| 1 | [L56-L58](../assets/lab4_multiagent.py#L56-L58), [`profile_summary`](../assets/common/livewell_common.py#L547-L552) | Builds the request: one profile line plus the prompt. |
+| 2 | [`af_client`](../assets/common/livewell_common.py#L1097-L1108), [`af_kb_tool` and `af_activities_tool`](../assets/common/livewell_common.py#L1111-L1122) | A `FoundryChatClient` on the project's model deployment, and the two hosted MCP tools from `client.get_mcp_tool`. `allowed_tools` keeps Activity to `find_activities`. |
+| 3 | [`text_only` and `team()`](../assets/lab4_multiagent.py#L80-L95) | Agent middleware that strips other agents' tool calls (but keeps the agent's own hand-off result, so a second turn still has input), and a factory for fresh Nutrition and Activity agents. An agent instance belongs to one workflow, so each workflow builds its own. |
+| 4 | [`sequential()`](../assets/lab4_multiagent.py#L124-L129), [run and checks](../assets/lab4_multiagent.py#L132-L152) | `SequentialBuilder` in a fixed order. The Coach's strict schema comes from [`af_json_format`](../assets/common/livewell_common.py#L1125-L1128), the same evidence contract as Lab 3. |
 | 5 | [`handoff()`](../assets/lab4_multiagent.py#L164-L179) | `HandoffBuilder`: who may hand off to whom, the start agent, one autonomous turn for Nutrition and a stop condition. |
-| 6 | [L203-L209](../assets/lab4_multiagent.py#L203-L209) | Not Agent Framework: a Foundry prompt agent with the Fabric tool, created and asked exactly as in Lab 3. |
-| 7 | [L237-L260](../assets/lab4_multiagent.py#L237-L260) | Finds `livewell-workshop-hosted`, checks its guardrail, and sends it the week-plan prompt. |
+| 6 | [L203-L209](../assets/lab4_multiagent.py#L203-L210) | Not Agent Framework: a Foundry prompt agent with the Fabric tool, created and asked exactly as in Lab 3. |
+| 7 | [L237-L260](../assets/lab4_multiagent.py#L238-L261) | Finds `livewell-workshop-hosted`, checks its guardrail, and sends it the week-plan prompt. |
 
 Two helpers do the plumbing:
 
-- [`af_run`](../assets/common/livewell_common.py#L1128-L1154) builds a **fresh** workflow, runs it with `await workflow.run(request)` and collects every output message. A 429 or a model error re-runs the whole workflow, because a half-finished hand-off cannot be resumed.
-- [`af_steps`](../assets/common/livewell_common.py#L1103-L1118) turns those messages into the printed trace: who spoke (`author_name`), in order, and which tools each speaker called.
+- [`af_run`](../assets/common/livewell_common.py#L1156-L1182) builds a **fresh** workflow, runs it with `await workflow.run(request)` and collects every output message. A 429 or a model error re-runs the whole workflow, because a half-finished hand-off cannot be resumed.
+- [`af_steps`](../assets/common/livewell_common.py#L1131-L1146) turns those messages into the printed trace: who spoke (`author_name`), in order, and which tools each speaker called.
 
-`lw.ask` knows that a hosted agent only answers on its own endpoint. For `livewell-workshop-hosted` it uses an OpenAI client for `{project}/agents/<name>/endpoint/protocols/openai` ([`_openai_agent`](../assets/common/livewell_common.py#L363-L366)). For a prompt agent it sends an `agent_reference` instead.
+`lw.ask` knows that a hosted agent only answers on its own endpoint. For `livewell-workshop-hosted` it uses an OpenAI client for `{project}/agents/<name>/endpoint/protocols/openai` ([`_openai_agent`](../assets/common/livewell_common.py#L381-L383)). For a prompt agent it sends an `agent_reference` instead.
 
 Engineer appendix notes:
 
@@ -248,7 +248,7 @@ There is nothing to submit. Try the steps first, then open **Expected output** t
 - `livewell-workshop-hosted version N (hosted), guardrail: livewell-guardrails`, then a hosted reply with real guide ids;
 - PASS on every line.
 
-![lab4_multiagent.py output: sequential and hand-off traces with tools per agent, merged evidence JSON, Programme-Insights table and the hosted smoke test, each with PASS lines](screenshots/lab-04/builder-output.png)
+![lab4_multiagent.py output: sequential and hand-off traces with tools per agent, merged evidence JSON, Programme-Insights ranking and the hosted smoke test, each with PASS lines](screenshots/lab-04/builder-output.png)
 
 </details>
 
@@ -264,7 +264,7 @@ There is nothing to submit. Try the steps first, then open **Expected output** t
 | `Workflow is already running` | One request at a time per workflow; re-run the cell. |
 | Programme-Insights calls the knowledge base instead of Fabric | Re-copy the fabric routing block in the specialist instructions and confirm the Fabric tool is attached. |
 | Endpoint smoke test returns prose | The hosted agent's `livewell.json` is stale: the facilitator runs `python scripts/gen-schemas.py` and redeploys. |
-| 429 or quota errors | Use `gpt-4.1-mini` for the demo or reduce concurrent participant runs. |
+| 429 or quota errors | Wait 30 seconds and re-run, or reduce concurrent participant runs. For the demo, set `LIVEWELL_MODEL=gpt-4.1-mini` to move the team to the tools deployment. |
 
 ## Where next
 

@@ -25,7 +25,7 @@ Slides cover: title, agenda, logistics, Fabric-to-Foundry arc, human thread, arc
 module cards (Labs 0-4 and the Fabric step), three Two IQs bridge slides, the guardrail scorecard, cost controls,
 resources and close.
 
-The module cards match the current lab pages: the Lab 0 model-router pick, the Lab 1 clinician route, the Lab 2
+The module cards match the current lab pages: the Lab 0 refusal trace, the Lab 1 clinician route, the Lab 2
 default-vs-custom guardrail ladder (block vs annotate, evaluators, red team), Lab 3 `livewell_profile` and approval
 before `register_interest`, the Fabric step's programme-fit and region questions, and the Lab 4 DevUI sequential and
 hand-off runs. Checkpoints are self-check against the collapsed Expected output; nothing is submitted.

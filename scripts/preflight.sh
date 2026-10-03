@@ -23,7 +23,7 @@ RG="${AZURE_RESOURCE_GROUP:-$(cfg names.resource_group)}"
 FABRIC_BRIDGE="${FABRIC_BRIDGE:-$(cfg modes.fabric_bridge)}"
 TPM="$(cfg models.tpm_cap_thousands)"
 EMB_TPM="$(cfg models.embedding_tpm_cap_thousands)"
-MEM_TPM="$(cfg models.memory_tpm_cap_thousands)"
+TOOLS_TPM="$(cfg models.tools_tpm_cap_thousands)"
 LINKS=()
 TMPD="$(mktempdir)"; trap 'rm -rf "$TMPD"' EXIT
 
@@ -162,7 +162,7 @@ else
 fi
 
 # 6 ----------------------------------------------------------------------------------------------
-log "6/8 Foundry model quota and availability (Global Standard, chat ${TPM}K / memory ${MEM_TPM}K / embeddings ${EMB_TPM}K TPM)"
+log "6/8 Foundry model quota and availability (Global Standard, default ${TPM}K / tools ${TOOLS_TPM}K / embeddings ${EMB_TPM}K TPM)"
 USAGES="$(azq cognitiveservices usage list -l "$LOCATION" -o json || echo '[]')"
 MODELS="$(azq cognitiveservices model list -l "$LOCATION" -o json || echo '[]')"
 ACCOUNT="$(cfg names.foundry_account)"
@@ -172,7 +172,7 @@ printf '%s' "$USAGES" >"$TMPD/usages.json"; printf '%s' "$MODELS" >"$TMPD/models
 while IFS=$'\t' read -r status msg; do
   if [ "$status" = "ok" ]; then ok "$msg"; else bad "$msg"; LINKS+=("models"); fi
 done < <(pyrun - "$QNAMES" "$TMPD/usages.json" "$TMPD/models.json" "$TMPD/deployed.json" \
-  "$(cfg models.default)=$TPM" "$(cfg models.fallback)=$TPM" "$(cfg models.memory)=$MEM_TPM" \
+  "$(cfg models.default)=$TPM" "$(cfg models.tools)=$TOOLS_TPM" \
   "$(cfg models.embeddings)=$EMB_TPM" <<'EOF'
 import json, sys
 qnames = json.loads(sys.argv[1])

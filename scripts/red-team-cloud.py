@@ -142,7 +142,7 @@ def criteria():
     m = lw.models()
     return [m.TestingCriterionAzureAIEvaluator(
         type="azure_ai_evaluator", name=name, evaluator_name=ev, evaluator_version="1",
-        **({"initialization_parameters": {"deployment_name": lw.FALLBACK_MODEL}} if judge else {}))
+        **({"initialization_parameters": {"deployment_name": lw.JUDGE_MODEL}} if judge else {}))
         for name, ev, judge in CRITERIA]
 
 

@@ -30,6 +30,7 @@ var roles = {
   storageBlobDataContributor: r.storage_blob_data_contributor
   acrPull: r.acr_pull
   acrPush: r.acr_push
+  foundryAgentConsumer: r.foundry_agent_consumer
 }
 
 resource account 'Microsoft.CognitiveServices/accounts@2025-06-01' existing = {
@@ -169,6 +170,19 @@ resource projectBlobContributor 'Microsoft.Authorization/roleAssignments@2022-04
     principalId: projectPrincipalId
     principalType: 'ServicePrincipal'
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roles.storageBlobDataContributor)
+  }
+}
+
+// A2A (Lab 3 step 11): a coach calls the livewell-demo-nutrition / -activity specialists through RemoteA2A
+// connections that authenticate as the project identity. Without this role the A2A call fails and the coach
+// plans from the knowledge base alone (ASSUMPTIONS.md 4.16).
+resource projectAgentConsumer 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: account::project
+  name: guid(account::project.id, projectPrincipalId, roles.foundryAgentConsumer)
+  properties: {
+    principalId: projectPrincipalId
+    principalType: 'ServicePrincipal'
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roles.foundryAgentConsumer)
   }
 }
 

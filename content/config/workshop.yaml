@@ -12,7 +12,7 @@ workshop:
   customer: "Health Promotion Board (Singapore)"
   owner: "Antonia Chen (Sr Solution Engineer, Microsoft Singapore)"
   date: "TODO"                     # workshop day (YYYY-MM-DD)
-  participant_count: "TODO"        # confirmed HPB head-count (planning default 20)
+  participant_count: 6              # confirmed HPB head-count; sponsor quota sized for it (ASSUMPTIONS.md 9.1)
   planning_cohort_size: 20
   guest_wifi:
     ssid: "TODO"
@@ -34,6 +34,8 @@ workshop:
       guarded: "livewell-demo-guarded"
       tools: "livewell-demo-tools"
       fabric: "livewell-demo-fabric"
+      nutrition: "livewell-demo-nutrition"          # Lab 3 specialists, reachable over A2A (Navigator step 11)
+      activity: "livewell-demo-activity"
 
 # ---------------------------------------------------------------------------
 # Names shared by both azd environments (SPEC.md §8.3). <env> = mcaps | sponsor.
@@ -62,26 +64,31 @@ names:
   profile_openapi_tool: "livewell_profile"         # Navigator OpenAPI tool over the profile endpoint
   fabric_connection: "livewell-fabric-resident360" # project connection created by Add tool -> Fabric IQ
   kb_mcp_connection: "livewell-guides-kb-mcp"      # project connection to the knowledge base MCP endpoint
+  nutrition_a2a_connection: "livewell-nutrition-a2a"  # A2A connection to livewell-demo-nutrition (Lab 3 step 11)
+  activity_a2a_connection: "livewell-activity-a2a"    # A2A connection to livewell-demo-activity (Lab 3 step 11)
   hosted_agent: "livewell-workshop-hosted"         # Lab 4 facilitator hosted agent (protected prefix)
   rai_policy: "livewell-guardrails"
   medication_blocklist: "livewell-medication-dosage"
   budget: "budget-livewell-<env>"
 
 models:
-  default: "model-router"
-  fallback: "gpt-4.1-mini"
-  memory: "gpt-5.4-mini"             # Lab 3 coach with memory (memory search does not run behind model-router)
-  embeddings: "text-embedding-3-large"
+  # Quota Tier 0 (Azure Sponsorship, Oct 2026) offers gpt-5-mini 500K, gpt-4.1-mini 200K, o4-mini 100K and
+  # text-embedding-3-small 1M TPM, and no model-router (ASSUMPTIONS.md 9.1). Two chat models:
+  default: "gpt-5-mini"              # Labs 0-2 agents, Lab 3 specialists, memory store, KB planner, Lab 4
+  reasoning_effort:                  # per-deployment default for agents; gpt-5-mini's own default is medium
+    gpt-5-mini: "low"                # low: about half the latency of medium and still calls every tool
+  tools: "gpt-4.1-mini"              # Lab 3 coach on: OpenAPI, A2A and Fabric Data Agent tools are not
+                                     # supported on gpt-5-mini (the portal removes them). Also the eval judge.
+  embeddings: "text-embedding-3-small"
   deployment_type: "GlobalStandard"
-  tpm_cap_thousands: 400             # model-router and gpt-4.1-mini each; Lab 2 judges + ~30 people need it
-  memory_tpm_cap_thousands: 200
+  tpm_cap_thousands: 400             # gpt-5-mini; ~6 people plus a facilitator demo peak (~240K TPM measured)
+  tools_tpm_cap_thousands: 200       # gpt-4.1-mini; Lab 3 is ~10K tokens a turn, Lab 2 judges burst higher
   embedding_tpm_cap_thousands: 100
   forbidden: ["PTU", "partner models (Anthropic, Mistral, Cohere)"]
   quota_usage_names:   # az cognitiveservices usage list -> OpenAI.GlobalStandard.<name>
-    model-router: "ModelRouter"
+    gpt-5-mini: "gpt-5-mini"
     gpt-4.1-mini: "gpt4.1-mini"
-    gpt-5.4-mini: "gpt-5.4-mini"
-    text-embedding-3-large: "text-embedding-3-large"
+    text-embedding-3-small: "text-embedding-3-small"
 
 # ---------------------------------------------------------------------------
 # Region matrix (SPEC.md §8.2, validated 25 Sep 2026). scripts/preflight.sh FAILS if the configured
@@ -92,7 +99,7 @@ region_matrix:
   validated_on: "2026-09-25"
   rows:
     foundry_project_agent_service:           { swedencentral: "yes", northcentralus: "unverified" }
-    model_router_and_models_global_standard: { swedencentral: "yes", northcentralus: "unverified" }
+    gpt_5_mini_gpt_4_1_mini_global_standard: { swedencentral: "yes", northcentralus: "unverified" }
     fabric_all_workloads_ontology_data_agent: { swedencentral: "yes", northcentralus: "unverified" }
     search_agentic_retrieval_semantic_ranker: { swedencentral: "yes", northcentralus: "unverified" }
     evaluators_playground_batch_risk_safety:  { swedencentral: "yes", northcentralus: "unverified" }
@@ -122,6 +129,7 @@ rbac_roles:
   acr_pull: "7f951dda-4ed3-4680-a7ca-43fe172d538d"                  # project + MCP app identities
   acr_push: "8311e382-0749-4cb8-b61a-304f252e45ec"
   log_analytics_reader: "73c42c96-874c-492b-b04d-ab87d138a893"      # attendees -> Application Insights (portal traces)
+  foundry_agent_consumer: "eed3b665-ab3a-47b6-8f48-c9382fb1dad6"    # project identity -> project (A2A calls to the specialists)
 
 # What scripts/seed-attendees.sh grants each attendee (keys from rbac_roles; scope = resource).
 attendee_roles:

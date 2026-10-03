@@ -59,24 +59,23 @@ param searchSku string = 'basic'
 
 @description('Region for the search service ONLY when the main region is capacity-blocked for new search services (empty = location). Exception to the one-region rule, recorded in ASSUMPTIONS.md.')
 param searchLocation string = ''
-@description('TPM cap (thousands) for model-router and gpt-4.1-mini each. Global Standard only (pay per token, so the cap has no fixed cost). 400K keeps ~30 participants plus the Lab 2 judges out of throttling.')
+@description('TPM cap (thousands) for the default deployment (gpt-5-mini: Labs 0-2, Lab 3 specialists, memory store, KB planner). Global Standard only (pay per token, so the cap has no fixed cost). 400K keeps 6 participants plus a facilitator demo out of throttling.')
 @minValue(10)
 @maxValue(1000)
 param chatTpmCapThousands int = 400
 
-@description('TPM cap (thousands) for the memory-coach deployment (gpt-5.4-mini, Lab 3 coach with memory).')
+@description('TPM cap (thousands) for the tools deployment (gpt-4.1-mini: Lab 3 coach on, Lab 2 judges). gpt-5-mini does not support OpenAPI, A2A, Fabric or function tools.')
 @minValue(10)
 @maxValue(1000)
-param memoryTpmCapThousands int = 200
+param toolsTpmCapThousands int = 200
 
 @description('TPM cap (thousands) for the embeddings deployment.')
 @minValue(10)
 @maxValue(150)
 param embeddingTpmCapThousands int = 100
 
-param modelRouterVersion string = '2025-11-18'
-param fallbackModelVersion string = '2025-04-14'
-param memoryModelVersion string = '2026-03-17'
+param defaultModelVersion string = '2025-08-07'
+param toolsModelVersion string = '2025-04-14'
 param embeddingModelVersion string = '1'
 
 @description('MCP server min replicas. 0 between sessions; 1 on the workshop day.')
@@ -145,7 +144,7 @@ var deployments = [
     model: {
       format: 'OpenAI'
       name: models.default
-      version: modelRouterVersion
+      version: defaultModelVersion
     }
     sku: {
       name: models.deployment_type
@@ -153,27 +152,15 @@ var deployments = [
     }
   }
   {
-    name: models.fallback
+    name: models.tools
     model: {
       format: 'OpenAI'
-      name: models.fallback
-      version: fallbackModelVersion
+      name: models.tools
+      version: toolsModelVersion
     }
     sku: {
       name: models.deployment_type
-      capacity: chatTpmCapThousands
-    }
-  }
-  {
-    name: models.memory
-    model: {
-      format: 'OpenAI'
-      name: models.memory
-      version: memoryModelVersion
-    }
-    sku: {
-      name: models.deployment_type
-      capacity: memoryTpmCapThousands
+      capacity: toolsTpmCapThousands
     }
   }
   {
@@ -313,8 +300,7 @@ output AZURE_AI_PROJECT_ENDPOINT string = foundry.outputs.projectEndpoint
 output FOUNDRY_PROJECT_ENDPOINT string = foundry.outputs.projectEndpoint
 output AZURE_OPENAI_ENDPOINT string = foundry.outputs.openAiEndpoint
 output AZURE_AI_MODEL_DEPLOYMENT_NAME string = models.default
-output AZURE_AI_FALLBACK_DEPLOYMENT_NAME string = models.fallback
-output AZURE_AI_MEMORY_DEPLOYMENT_NAME string = models.memory
+output AZURE_AI_TOOLS_DEPLOYMENT_NAME string = models.tools
 output AZURE_AI_EMBEDDING_DEPLOYMENT_NAME string = models.embeddings
 
 output AZURE_SEARCH_SERVICE_NAME string = search.outputs.name

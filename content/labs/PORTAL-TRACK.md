@@ -12,7 +12,7 @@ Your portal agent is `livewell-<initials>` and is reused from Lab 0 through Lab 
 
 | # | Walkthrough | Capability | Time | Guide |
 |---|---|---|---:|---|
-| 0 | Setup & first agent | Foundry portal, prompt agent, model-router, traces | 15 min | [Lab 0 portal](lab-00-portal.md) |
+| 0 | Setup & first agent | Foundry portal, prompt agent, reasoning effort, traces | 15 min | [Lab 0 portal](lab-00-portal.md) |
 | 1 | Agents & Knowledge | Foundry IQ knowledge base, citations, JSON response | 40 min | [Lab 1 portal](lab-01-portal.md) |
 | 2 | Guardrails, Evaluations & Tracing | RAI policy, red flags, traces, version comparison | 40 min | [Lab 2 portal](lab-02-portal.md) |
 | 3 | Tools, MCP & Memory | OpenAPI, MCP approvals, memory, optional Fabric IQ | 40 min | [Lab 3 portal](lab-03-portal.md) |

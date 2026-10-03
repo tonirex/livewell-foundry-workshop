@@ -21,6 +21,12 @@
       "expected_ref": "prompts/test-prompts.json#/prompts/lab3_memory_recall/expected"
     },
     {
+      "prompt_id": "lab3_specialists",
+      "validation_type": "B_trace_field",
+      "notes": "Optional. Paste the trace tool-call list and the reply. Navigator with the A2A tools attached: PASS if the trace has one call each to livewell-nutrition-a2a and livewell-activity-a2a (about 1 minute) and the reply merges a meal plan and an exercise plan with guide ids. Navigator without A2A tools: the knowledge base alone is correct. Builder: livewell-nutrition and livewell-activity both in the tools list. No medication advice.",
+      "expected_ref": "prompts/test-prompts.json#/prompts/lab3_specialists/expected"
+    },
+    {
       "prompt_id": "fabric_q_disengaged_regions",
       "validation_type": "B_trace_field",
       "notes": "Fabric step (only if FABRIC_BRIDGE=true). Paste (1) the trace line showing the Fabric IQ MCP call and (2) the answer. PASS if grouped by region, top region matches content/fabric/reference-answers.json#q_disengaged_regions (+-1 rank), no resident_id. Then confirm lab1_prediabetes_eat in the same agent shows NO Fabric call.",

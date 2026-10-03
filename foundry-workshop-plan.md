@@ -30,7 +30,7 @@ All figures come from `python scripts/r360.py` (and, from Phase 3b, `scripts/val
 | Knowledge base alive | Send `lab1_prediabetes_eat` to `livewell-demo-kb` | ≥ 1 citation to `lg-05-eating-for-pre-diabetes` |
 | MCP alive | `GET /health` on `ca-mcp-activities-<env>` | 200 |
 | Demo videos ready | `demos/videos/<lab>-<date>.webm` from `python demos/record-demos.py` (T-1) open in a local player | Plays offline |
-| Smoke test | `python scripts/smoke-test.py --demo-agents` | 8/8 PASS (includes the demo-memory residue check) |
+| Smoke test | `python scripts/smoke-test.py --demo-agents` | 11/11 PASS (includes the guardrail drift check, the demo-memory residue check and the A2A specialists check) |
 | Demo memory clean | `python scripts/reset-demo-memory.py` (`--reset` if it flags residue after a red team) | Exit 0, 0 flagged |
 | Wi-Fi slide | SSID/code from `content/config/workshop.yaml` | Correct values (TODO until confirmed) |
 
@@ -39,9 +39,9 @@ All figures come from `python scripts/r360.py` (and, from Phase 3b, `scripts/val
 | Time | Block | Facilitation notes | Demo prompt(s) | Checkpoint to move on |
 |---|---|---|---|---|
 | 9:00 | What is Microsoft Foundry (30) | New Foundry portal tour: models, agents, tools, observability, governance. "Where we left off": the Fabric arc, then "today we add Coach & Act". | — | Room can name the four Fabric arc steps and the new fifth one |
-| 9:30 | Foundry Models (20) | Catalogue, Global Standard, quota, TPM caps, model-router. Compare router with gpt-4.1-mini on one prompt; open the trace and read the router's pick. | `lab0_router_compare` | Room sees which model the router picked, and why it matters for cost |
+| 9:30 | Foundry Models (20) | Catalogue, Global Standard, quota, TPM caps, reasoning effort. Why two models: `gpt-5-mini` at Low reasoning effort for Labs 0-2, `gpt-4.1-mini` from Lab 3 because not every model supports every tool (OpenAPI, A2A, Fabric). Open a trace and read the model and tokens. | `lab0_am_i_diabetic` | Room can say why the Lab 3 coach changes model |
 | 9:50 | Foundry Agent Service (25) | Agent = model + instructions (+ tools). Managed runtime, versions, multi-agent, memory, frameworks. Build LiveWell Coach live; show a structured output. | `lab0_hi`, `lab0_am_i_diabetic` | Agent states it is not a doctor and refuses to diagnose |
-| 10:15 | **Micro-Lab 0** (15, all rails, portal) | Everyone creates `livewell-<initials>`, pastes the `base` instructions block from [coach-instructions.md](content/prompts/coach-instructions.md), sends two prompts, compares router vs gpt-4.1-mini. [Lab 0](content/labs/lab-00.md). | `lab0_hi`, `lab0_am_i_diabetic`, `lab0_router_compare` | ≥ 80% of the room shows the refusal to diagnose. Stragglers pair with a neighbour |
+| 10:15 | **Micro-Lab 0** (15, all rails, portal) | Everyone creates `livewell-<initials>`, pastes the `base` instructions block from [coach-instructions.md](content/prompts/coach-instructions.md), sets Reasoning effort to Low, removes Web search if the template added it, sends two prompts and reads the trace. [Lab 0](content/labs/lab-00.md). | `lab0_hi`, `lab0_am_i_diabetic` | ≥ 80% of the room shows the refusal to diagnose. Stragglers pair with a neighbour |
 | 10:30 | Break (15) | Helpers triage sign-in, Authenticator and RBAC. | — | — |
 | 10:45 | Tools & Knowledge (30) | Foundry IQ knowledge base on Azure AI Search (agentic retrieval, citations, refusal on absence), connectors, MCP, the Fabric IQ tool. **Two IQs on Rahim:** guide question with citation, then Mei's region question via their own Fabric data agent. | `lab1_prediabetes_eat`, `lab1_supplement`, `fabric_q_disengaged_regions` | Room can say which IQ answered which question |
 | 11:15 | Control Plane: "CIO lab" (40) | Guardrails (input/output/tool), tracing, monitoring, evaluation, red teaming, identity (Entra Agent ID), cost tracking. Trip a guardrail, open the trace, show eval and red-team scorecards. Stress the Foundry User ceiling. | `lab2_medication_double`, `lab2_injected_flyer`, `lab2_benign_control` | Each table names **one policy they would require before production** |
@@ -82,7 +82,7 @@ Lab 4 recording. The bridge spotlight is slides-only when the Fabric step ran li
 
 | Lab | prompt_ids (in order) |
 |---|---|
-| 0 | `lab0_hi`, `lab0_am_i_diabetic`, `lab0_router_compare` |
+| 0 | `lab0_hi`, `lab0_am_i_diabetic` |
 | 1 | `lab1_prediabetes_eat`, `lab1_supplement`, `lab1_activity_guideline`, `lab1_intake` |
 | 2 | `lab2_extreme_fasting`, `lab2_medication_double`, `lab2_injected_flyer`, `lab2_other_resident`, `lab2_benign_control` |
 | 3 | `lab3_profile_tailored`, `lab3_hazy_indoor_signup`, `lab3_memory_set`, `lab3_memory_recall`, `lab3_specialists` |
@@ -97,7 +97,7 @@ Scripted runs prepend the `consent_line` from the prompt bank so the Lab 0 conse
 | Failure | Backup |
 |---|---|
 | Sign-in / Authenticator / RBAC | Pair with a neighbour on a shared screen while an operator fixes access (`scripts/seed-attendees.sh` re-run) |
-| Model quota or router unavailable | Switch the agent to `gpt-4.1-mini`; facilitator shows router behaviour from the reference agent's trace |
+| Model quota (429 on `gpt-5-mini`) | Switch the agent to `gpt-4.1-mini` (no Reasoning effort setting) and carry on; the facilitator raises the TPM cap if the quota allows |
 | Knowledge base missing or slow | Show the static guides in [content/knowledge/livewell-guides/](content/knowledge/livewell-guides/); Builder asserts on expected guide ids |
 | Guardrail attach fails in the portal | Use the prebuilt `livewell-demo-guarded` agent for the red-flag contrast |
 | Evaluators unavailable | Show the pre-captured evaluation run and trace from `demos/` |

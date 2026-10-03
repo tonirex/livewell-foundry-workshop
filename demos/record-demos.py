@@ -28,7 +28,7 @@ import scenes as S  # noqa: E402
 
 OUT = P.ROOT / "demos" / "videos"
 TITLES = {
-    "lab-00": "Lab 0 · First agent: the LiveWell Coach and model-router",
+    "lab-00": "Lab 0 · First agent: the LiveWell Coach on gpt-5-mini",
     "lab-01": "Lab 1 · Grounding in the LiveWell guides (Foundry IQ)",
     "lab-02": "Lab 2 · Red flags, guardrails and evaluation",
     "lab-03": "Lab 3 · Profile tool, activities MCP, memory and Fabric IQ",

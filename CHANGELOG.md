@@ -4,6 +4,34 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Sponsorship subscription models (`dry-run-navigator-fixes`)
+
+- **Two models, no model-router.** The delivery sponsorship subscription (quota Tier 0) offers no `model-router`. Labs
+  0–2, the Lab 3 specialists, memory, KB planning and Lab 4 use `gpt-5-mini` at reasoning effort Low; any agent with
+  OpenAPI, A2A, function or Fabric tools (the Lab 3 coach on, the Lab 4 insights agent) and the judges use
+  `gpt-4.1-mini`; embeddings use `text-embedding-3-small`. Caps 400K / 200K / 100K for 6 participants
+  (ASSUMPTIONS.md 9.1).
+- **Lab 0 rewritten** around model, instructions, reasoning effort and a refusal trace; `demos/router-picks.py` and the
+  router screenshots are removed. Lab 3 step 1 switches the coach to `gpt-4.1-mini` before adding tools.
+- **Coach `tools` block re-ordered** (profile → knowledge base always → specialists → activities → reply): 16/16 on
+  the Lab 3 bench.
+- **Lab 4 `handoff` block for `gpt-5-mini`**: Nutrition answers in one turn and hands off in the next, and Activity
+  never hands back (the hand-off had skipped Nutrition's answer). Scripts: `build-kb.py` recreates a knowledge source
+  whose embedding model changed, `create-demo-agents.py` recreates a stale memory store, the guardrail-matrix judge
+  labels rows its own filter blocked as "judge filtered", and the smoke A2A check tries 3 times. Re-validated on MCAPS
+  (ASSUMPTIONS.md 9.2).
+- **`fabric` block programme-fit steps**: `gpt-4.1-mini` skipped the profile and guessed Rahim's age band in 3 of 4
+  runs, so the rule is now ordered steps (profile alone first, then one Fabric question with the profile's
+  `age_band`): 4 of 4. New troubleshooting row in `fabric-step.md`.
+- **Lab 4 `text_only` middleware keeps the agent's own hand-off result**, so an agent given a second turn in the
+  hand-off workflow no longer sends an empty request ("Messages are required for chat completions").
+- **Screenshots retaken and Builder runs re-recorded.** The portal's Create-an-agent dialog lost its model picker, so
+  Lab 0 picks `gpt-5-mini` in the playground (new slot 06b: Reasoning Low, no tools). Lab 0 06, 06b, 10 and Lab 3
+  01, 07 retaken; Builder Labs 1–4 re-recorded in `demos/evidence/2026-10-03/` and the lab-page crops refreshed.
+- **Dry-run fixes** (`demos/DRY-RUN-2026-10-02.md`): Web search removal, Foundry IQ explainer,
+  Text format steps, guardrail reset, injected flyer, version numbers, OpenAPI vs MCP and workshop shortcuts, and
+  pre-built A2A specialists.
+
 ### Lab-flow deck and Day 1 deck refresh (`deck-lab-flow`)
 
 - **New participant deck.** `deck/LiveWell-Lab-Flow.pptx` (18 slides, built by `deck/build_lab_flow.py`) explains the

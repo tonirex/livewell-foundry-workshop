@@ -2,8 +2,8 @@
 """Record a script run as evidence: a replayable .cast, a screenshot of the whole output and a video.
 
     python demos/record-terminal.py builder-lab1 -- python scripts/validate-builder-rail.py --labs 1 --verbose
-    python demos/record-terminal.py router-picks --title "Lab 0 · router picks" -- python demos/router-picks.py
-    python demos/record-terminal.py --render demos/evidence/2026-10-01/router-picks.cast   # redo png and video
+    python demos/record-terminal.py lab1-builder-output --title "Lab 1 · knowledge" -- python content/assets/lab1_knowledge.py
+    python demos/record-terminal.py --render demos/evidence/2026-10-01/builder-lab1.cast   # redo png and video
 
 The command runs for real: its output is echoed live and its exit code is returned. The output is recorded
 with its timings as an asciinema v2 file (`asciinema play x.cast` also works), then replayed in a

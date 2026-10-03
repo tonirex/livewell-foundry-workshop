@@ -26,7 +26,7 @@ SIGNUP_YES = "Yes, please sign me up for the first indoor option you found."
 FIT = json.loads((ROOT / "content" / "fabric" / "reference-answers.json").read_text(encoding="utf-8"))["q_programme_fit"]
 PROGRAMME_YES = f"Yes, please sign me up for the {FIT['recommended_programme']} intake session."
 
-SLOT_ID = r"(?:lab-0\d|bridge)/\d\d"
+SLOT_ID = r"(?:lab-0\d|bridge)/\d\d[a-z]?"
 SLOT_RE = re.compile(rf"^(?P<indent>\s*)> 📸 \*\*Screenshot slot\*\* · `(?P<path>screenshots/(?P<id>{SLOT_ID})-[^`]+\.png)`"
                      r" · (?P<caption>.+?)\s*$")
 IMAGE_RE = re.compile(rf"^(?P<indent>\s*)!\[(?P<caption>[^\]]*)\]\((?P<path>screenshots/(?P<id>{SLOT_ID})-[^)]+\.png)\)\s*$")
@@ -308,8 +308,8 @@ def tour(run: Run) -> None:
         run.menuitem(r"^build an agent$")
         name = run.page.get_by_role("dialog").last.get_by_role("textbox", name=re.compile("agent name", re.I))
         name.fill("")
-        name.press_sequentially("livewell-ac", delay=60 if run.video else 10)
-        run.say("Name it livewell-<initials> (not created in this demo)")
+        name.press_sequentially("livewell-jt", delay=60 if run.video else 10)
+        run.say("Name it livewell-<initials>, Text mode; the model is picked in the playground (not created in this demo)")
         run.shot("lab-00/06")
     if run.wants("lab-02/10"):
         with run.soft("agents list demo", "lab-02/10"):
@@ -321,63 +321,27 @@ def tour(run: Run) -> None:
             run.shot("lab-04/01")
 
 
-def router_playground(run: Run) -> None:
-    """Lab 0 step 12: the model-router deployment's playground prints the routed model under each answer
-    (the agent trace only records the deployment name)."""
-    run.goto("models", settle=5)
-    run.page.get_by_text("model-router", exact=True).first.click(timeout=15000)
-    time.sleep(6)
-    run.say("Build → Models → model-router → Playground: each answer shows the model the router chose")
-    labels = run.page.get_by_text(re.compile(r"^(gpt-|o\d-|claude-|grok-|deepseek|llama)[\w.-]*$", re.I))
-    for text in ("Hi!", prompt("lab0_router_compare")):
-        before = labels.count()
-        box = run.page.get_by_role("textbox", name=re.compile("chat with the model", re.I)).first
-        box.click(timeout=10000)
-        box.press_sequentially(text, delay=30 if run.video else 4)
-        box.press("Enter")
-        end = time.time() + 180
-        while labels.count() <= before and time.time() < end:
-            time.sleep(1)
-        run.log(f"  [router] {text[:30]!r} -> {labels.last.inner_text(timeout=3000) if labels.count() > before else '?'}")
-        time.sleep(2)
-    run.page.mouse.move(640, 600)
-    run.say("A greeting goes to a small model, a 7-day plan to a larger one", 4)
-
-
 def lab0(run: Run) -> None:
-    """Lab 0 steps 7-14 on livewell-demo-lab0 (base instructions, model-router)."""
+    """Lab 0 steps 7-11 on livewell-demo-lab0 (base instructions, gpt-5-mini at Low reasoning effort, no tools)."""
     run.goto("agent:livewell-demo-lab0", settle=5)
-    run.say("Instructions: the base LiveWell Coach block, model-router")
+    with run.soft("lab0 parameters", "lab-00/06b"):
+        P.expand(run.page, "Tools")
+        run.button(r"^parameters$")
+        run.say("Parameters: reasoning effort Low; Tools: none")
+        run.shot("lab-00/06b")
+    run.escape()
+    run.say(f"Instructions: the base LiveWell Coach block, {P.lw.DEFAULT_MODEL}, no tools")
     P.scroll_instructions(run.page, to_end=False)
     run.shot("lab-00/07")
     run.chat("lab0_hi")
     run.shot("lab-00/08")
     run.chat("lab0_am_i_diabetic")
     run.shot("lab-00/09")
-    run.say("Open the trace for the refusal")
+    run.say("Open the trace: one model call, no tools, the token counts")
     with run.soft("lab0 refusal trace", "lab-00/10"):
         if run.trace():
             run.shot("lab-00/10")
     run.escape()
-    run.chat("lab0_router_compare")
-    run.say("model-router picks a model per request")
-    run.shot("lab-00/11")
-    with run.soft("router playground", "lab-00/12"):
-        if run.wants("lab-00/12"):
-            router_playground(run)
-            run.shot("lab-00/12")
-    if run.wants("lab-00/13", "lab-00/14"):
-        run.goto("agent:livewell-demo-lab0", settle=5)
-        with run.soft("compare gpt-4.1-mini", "lab-00/13"):
-            run.say("Compare: switch the model to gpt-4.1-mini (not saved)")
-            if not P.pick_model(run.page, "gpt-4.1-mini"):
-                raise RuntimeError("model picker")
-            run.chat("lab0_router_compare")
-            run.shot("lab-00/13")
-        run.page.reload(wait_until="domcontentloaded")
-        time.sleep(6)
-        run.say("Back on model-router (the switch was never saved)")
-        run.shot("lab-00/14")
 
 
 def kb_config(run: Run) -> None:
@@ -625,7 +589,7 @@ def tools_config(run: Run) -> None:
     with run.soft("memory section", "lab-03/07"):
         run.collapse("Instructions", "Tools", "Knowledge")
         P.expand(run.page, "Memory")
-        run.say("Memory (Preview) on, model gpt-5.4-mini")
+        run.say(f"Memory (Preview) on, model {P.lw.TOOLS_MODEL}")
         run.shot("lab-03/07")
     run.goto("agent:livewell-demo-tools", settle=5)
     with run.soft("tools instructions", "lab-03/08"):
@@ -816,7 +780,7 @@ def lw_prompt_text(pid: str) -> str:
 
 SCENES = {
     "tour": (tour, ["lab-00/03", "lab-00/04", "lab-00/05", "lab-00/06", "lab-02/10", "lab-04/01"]),
-    "lab0": (lab0, [f"lab-00/{n:02d}" for n in range(7, 15)]),
+    "lab0": (lab0, ["lab-00/06b"] + [f"lab-00/{n:02d}" for n in range(7, 11)]),
     "kb-config": (kb_config, [f"lab-01/{n:02d}" for n in range(1, 7)] + ["lab-02/01"]),
     "kb-chat": (kb_chat, [f"lab-01/{n:02d}" for n in range(7, 12)]),
     "kb-redflags": (kb_redflags, [f"lab-02/{n:02d}" for n in range(2, 9)]),

@@ -6,10 +6,11 @@ Steps (all idempotent):
      lakehouse Files folder (OneLake). For Blob on a default-Deny account (storageNetworkDefaultAction='Deny')
      the caller's IP is allowed on the storage firewall for the upload only and removed again (ASSUMPTIONS.md 4.4).
   2. Knowledge source `livewell-guides-ks`: indexed Blob source (default) or indexed OneLake Files source
-     (--source onelake). Azure AI Search builds the indexer/index itself and embeds with
-     text-embedding-3-large through its managed identity.
+     (--source onelake). Azure AI Search builds the indexer/index itself and embeds with the models.embeddings
+     deployment (text-embedding-3-small) through its managed identity. When that deployment changes, the source
+     and the knowledge base are deleted and recreated with the same names (the index vectors change size).
   3. Knowledge base `livewell-guides-kb`: reasoning effort low, extractive output (the agent writes the
-     answer and cites guide ids), retrieval + answer instructions, gpt-4.1-mini for query planning.
+     answer and cites guide ids), retrieval + answer instructions, models.default (gpt-5-mini) for query planning.
   4. Project connection `livewell-guides-kb-mcp` (RemoteTool, project managed identity) to the KB MCP
      endpoint, used by lab1_knowledge.py and the Navigator "Connect to Foundry IQ" flow.
   5. Retrieval check: the pre-diabetes prompt must come back with lg-05 (or another expected guide).
@@ -205,6 +206,17 @@ def build_source(env: dict, names: dict, models: dict, source: str):
             ingestion_parameters=ingestion))
 
 
+def embedding_of(ks) -> str | None:
+    """The embedding deployment a knowledge source ingests with (Blob or OneLake)."""
+    def get(obj, attr: str, key: str):
+        # A fetched source returns ingestion_parameters as a plain dict (REST names), a built one as models.
+        return obj.get(key) if isinstance(obj, dict) else getattr(obj, attr, None)
+
+    params = getattr(ks, "azure_blob_parameters", None) or getattr(ks, "indexed_one_lake_parameters", None)
+    model = get(get(params, "ingestion_parameters", "ingestionParameters"), "embedding_model", "embeddingModel")
+    return get(get(model, "azure_open_ai_parameters", "azureOpenAIParameters"), "deployment_name", "deploymentId")
+
+
 def build_kb(env: dict, names: dict, models: dict):
     from azure.search.documents.indexes.models import (
         KnowledgeBase, KnowledgeBaseAzureOpenAIModel, KnowledgeSourceReference)
@@ -215,7 +227,7 @@ def build_kb(env: dict, names: dict, models: dict):
         name=names["knowledge_base"],
         description="LiveWell healthy-living guides for the LiveWell Coach workshop (shared by all attendees).",
         knowledge_sources=[KnowledgeSourceReference(name=names["knowledge_source"])],
-        models=[KnowledgeBaseAzureOpenAIModel(azure_open_ai_parameters=aoai_params(env, models["fallback"]))],
+        models=[KnowledgeBaseAzureOpenAIModel(azure_open_ai_parameters=aoai_params(env, models["default"]))],
         retrieval_reasoning_effort=KnowledgeRetrievalLowReasoningEffort(),
         output_mode=KnowledgeRetrievalOutputMode.EXTRACTIVE_DATA,
         retrieval_instructions=RETRIEVAL_INSTRUCTIONS,
@@ -330,8 +342,10 @@ def main() -> int:
             existing = client.get_knowledge_source(ks.name)
         except Exception:  # noqa: BLE001 - ResourceNotFoundError
             existing = None
-        if existing is not None and existing.kind != ks.kind:
-            log(f"replacing {ks.name} ({existing.kind} -> {ks.kind}); the knowledge base is detached first")
+        old_emb, new_emb = (embedding_of(existing), embedding_of(ks)) if existing is not None else (None, None)
+        if existing is not None and (existing.kind != ks.kind or (old_emb and old_emb != new_emb)):
+            log(f"replacing {ks.name} ({existing.kind} -> {ks.kind}, embeddings {old_emb} -> {new_emb}); "
+                "the knowledge base is detached first")
             try:
                 client.delete_knowledge_base(names["knowledge_base"])
             except Exception:  # noqa: BLE001

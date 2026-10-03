@@ -14,7 +14,7 @@ Patterns: #2 Evidence-Based Decision Support; #3 Workflow Orchestration; #6 Huma
 
 - Fabric IQ tool ⚠️ preview, connected to a published Fabric data agent through OneLake Catalog and MCP.
 - Project connection **`livewell-fabric-resident360`**.
-- Identity passthrough: participants must use the same lab account in Foundry and Fabric.
+- Identity passthrough: participants must use the same lab account in Foundry and Fabric. For what this means in a real deployment, see [what is fixed for the workshop](lab-03.md#workshop-shortcuts).
 - Multi-step tool chaining in one turn: profile tool → Fabric IQ → activities MCP → approval-gated action.
 - Privacy by design: the coach asks Fabric an aggregate cohort question (age band only), never about a person.
 - Tool routing instructions that separate citizen guide questions, Rahim's one cohort question and officer programme questions.
@@ -153,11 +153,11 @@ Keep Fabric disabled in local experiments unless the facilitator confirms the sh
 
 The Fabric step is section 10 of `lab3_tools.py`. It creates a new version of the same coach; there is no new agent.
 
-- **The tool.** [`fabric_tool`](../assets/common/livewell_common.py#L494-L498) returns a `FabricIQPreviewTool` on the project connection `livewell-fabric-resident360`. Foundry calls the published data agent with your own identity (identity passthrough), so Fabric's permissions still apply to you. It only reads aggregates, so no approval is needed. [`fabric_enabled`](../assets/common/livewell_common.py#L120-L121) gates the whole step on `--fabric` or `FABRIC_BRIDGE=true`.
-- **The coach, version 2.** [Lines 284–289](../assets/lab3_tools.py#L284-L289) call `create_agent` with the Lab 3 tools plus the Fabric tool, and the Lab 3 blocks plus `fabric`. The `fabric` block is the routing rule from the table above, written for the model.
-- **Mei, then the control.** [Lines 291–310](../assets/lab3_tools.py#L291-L310) ask the region question with a longer timeout (`FABRIC_TIMEOUT`, 300 s). The script compares the first region named with `content/fabric/reference-answers.json`, then asks Rahim's food question on the same coach and checks that no Fabric call was made.
-- **Programme fit.** [Lines 312–324](../assets/lab3_tools.py#L312-L324) send one prompt. The model chains four tools on its own: profile, then Fabric, then `find_activities`, then the approval for `register_interest`. If it asks "shall I sign you up?" in text instead of raising the approval, the script says yes in the same conversation.
-- **The privacy check.** `question_sent` ([lines 326–332](../assets/lab3_tools.py#L326-L332)) pulls the `userQuestion` argument out of each Fabric call: the exact text that left your project for Fabric. [Lines 333–355](../assets/lab3_tools.py#L333-L355) check that it names the age band and not Rahim's id, name or planning area, that the profile call came before the Fabric call, and that the approval came before the write.
+- **The tool.** [`fabric_tool`](../assets/common/livewell_common.py#L511-L515) returns a `FabricIQPreviewTool` on the project connection `livewell-fabric-resident360`. Foundry calls the published data agent with your own identity (identity passthrough), so Fabric's permissions still apply to you. It only reads aggregates, so no approval is needed. [`fabric_enabled`](../assets/common/livewell_common.py#L128-L129) gates the whole step on `--fabric` or `FABRIC_BRIDGE=true`.
+- **The coach, version 2.** [Lines 285–290](../assets/lab3_tools.py#L285-L290) call `create_agent` with the Lab 3 tools plus the Fabric tool, and the Lab 3 blocks plus `fabric`. The `fabric` block is the routing rule from the table above, written for the model.
+- **Mei, then the control.** [Lines 292–311](../assets/lab3_tools.py#L292-L311) ask the region question with a longer timeout (`FABRIC_TIMEOUT`, 300 s). The script compares the first region named with `content/fabric/reference-answers.json`, then asks Rahim's food question on the same coach and checks that no Fabric call was made.
+- **Programme fit.** [Lines 313–325](../assets/lab3_tools.py#L313-L325) send one prompt. The model chains four tools on its own: profile, then Fabric, then `find_activities`, then the approval for `register_interest`. If it asks "shall I sign you up?" in text instead of raising the approval, the script says yes in the same conversation.
+- **The privacy check.** `question_sent` ([lines 327–333](../assets/lab3_tools.py#L327-L333)) pulls the `userQuestion` argument out of each Fabric call: the exact text that left your project for Fabric. [Lines 334–356](../assets/lab3_tools.py#L334-L356) check that it names the age band and not Rahim's id, name or planning area, that the profile call came before the Fabric call, and that the approval came before the write.
 
 `lw.ask` keeps every tool call with its arguments, in order (`run.tool_calls`). That is what makes order and argument checks like these possible in your own tests.
 
@@ -199,7 +199,7 @@ There is nothing to submit. Try the steps first, then open **Expected output** t
 - the food question with `get_citizen_profile` and `knowledge_base_retrieve`, but no Fabric tool;
 - programme fit: `profile at 0, Fabric at 2`, the question sent (`For residents in age band 60-64, how many enrolled in each programme and how many dropped out?`), then `APPROVAL requested: …register_interest({"activity_id":"ACT047",…}) -> APPROVED` and a Diabetes Prevention intake confirmation.
 
-![lab3_tools.py --fabric output: Fabric coach v2, region answer, no-Fabric food answer, and programme fit with the question sent to Fabric, the approval and PASS lines](screenshots/lab-03/builder-output-fabric.png)
+![lab3_tools.py --fabric output: new Fabric coach version, region answer, no-Fabric food answer, and programme fit with the question sent to Fabric, the approval and PASS lines](screenshots/lab-03/builder-output-fabric.png)
 
 </details>
 
@@ -213,6 +213,7 @@ There is nothing to submit. Try the steps first, then open **Expected output** t
 | Fabric call is slow | Normal preview latency is **30-90 s**; wait before retrying. |
 | Citizen food question calls Fabric | Re-copy the `fabric` routing block and verify the knowledge base remains attached. |
 | Programme-fit question sent Rahim's area, name or risk to Fabric | Re-copy the `fabric` block; it fixes the question to the age band only. Run the prompt again in a new chat. |
+| Programme-fit question names the wrong age band (not <!--ref:q_programme_fit.age_band-->60-64<!--/ref-->), with no profile call before Fabric | The model guessed his age. Re-copy the current `fabric` block: step a makes the profile call come first and step b copies `age_band` from it. Run the prompt again in a new chat. |
 | Coach recommends a programme Rahim is already in, or <!--ref:q_programme_fit.dropped_programme-->Healthier SG<!--/ref--> again | Check the profile call ran first; the `programmes` field lists his active and dropped programmes. |
 | No intake session found | The activities MCP server needs the latest `activities.json` (the intake session has a `programme` field). The facilitator runs `azd deploy mcp-activities`. |
 | Fabric shows a count under 5 as a number | Ask the facilitator to re-apply the [data-agent instructions](../fabric/data-agent-instructions.md) small-cell rule. |

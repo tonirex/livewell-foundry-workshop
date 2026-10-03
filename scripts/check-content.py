@@ -12,6 +12,7 @@ import json
 import re
 import subprocess
 import sys
+import textwrap
 from pathlib import Path
 
 import yaml
@@ -309,6 +310,19 @@ def check_prompts(r: Report, prompts: dict, contracts: set[str]) -> None:
     for n in range(5):
         if f"lab-0{n}" not in labs_keys:
             problems.append(f"missing content/answer-keys/lab-0{n}.json")
+    # The Lab 2 flyer paste must be exactly what the scripts send (lw.prompt_text): Prompt Shields scores the
+    # whole message, so a missing HTML comment or extra text around the flyer changes the verdict (ASSUMPTIONS 8.2).
+    flyer = (ROOT / "content" / "data" / "flyer-injected.md").read_text(encoding="utf-8")
+    flyer = re.sub(r"\A(?:>.*\n)+\s*^---\s*$\n", "", flyer, count=1, flags=re.MULTILINE).strip()
+    want = prompts.get("lab2_injected_flyer", {}).get("text", "") + "\n\n" + flyer
+    for page in ("lab-02.md", "lab-02-portal.md"):
+        md = (ROOT / "content" / "labs" / page).read_text(encoding="utf-8")
+        blocks = [textwrap.dedent(m.group(2)).strip()
+                  for m in re.finditer(r"^( *)```text\n(.*?)^\1```", md, flags=re.MULTILINE | re.DOTALL)
+                  if "SYSTEM NOTICE" in m.group(2)]
+        if blocks != [want]:
+            problems.append(f"content/labs/{page}: the lab2_injected_flyer block must be the prompt + flyer-injected.md "
+                            f"without its repo note ({len(blocks)} flyer block(s) found)")
     r.check("prompt ids consistent across pages, plan, narrative, answer keys", problems)
     r.warn("prompts defined but never referenced", sorted(ids - used))
 

@@ -16,7 +16,7 @@ workshop**. Fabric built the Resident 360 that sees Rahim; today Foundry builds 
 
 | Lab | Title | What you build | Time |
 |-----|-------|----------------|------|
-| **▶ [Lab 0](content/labs/lab-00.md)** | Setup & first agent | `livewell-<initials>`: model + instructions, model-router compared with gpt-4.1-mini | 15 min |
+| **▶ [Lab 0](content/labs/lab-00.md)** | Setup & first agent | `livewell-<initials>`: model + instructions on gpt-5-mini, a safe refusal and its trace | 15 min |
 | [Lab 1](content/labs/lab-01.md) | Agents & Knowledge: Foundry IQ | Foundry IQ knowledge base, citations, JSON contract | 40 min |
 | [Lab 2](content/labs/lab-02.md) | Guardrails, Evaluations & Tracing | RAI policy, four red-flag prompts, traces, batch evaluation, v1 vs v2 | 40 min |
 | [Lab 3](content/labs/lab-03.md) | Tools, MCP & Memory: hyper-personalisation | Profile tool, activities MCP with approval, memory, specialists | 40 min |
@@ -123,7 +123,7 @@ Windows on ARM: some wheels are x64-only. Use an x64 Python, or Codespaces.
   objectives (`deck/build_lab_flow.py`).
 - Proof and demo kit (`pip install -r requirements-demos.txt`):
   [smoke test](scripts/smoke-test.py) (end-to-end check of the live environment, run T-1 and on the morning),
-  [demo agents](demos/create-demo-agents.py) (the five `livewell-demo-*` agents and the `livewell-eval` dataset),
+  [demo agents](demos/create-demo-agents.py) (the seven `livewell-demo-*` agents, including the two A2A specialists, and the `livewell-eval` dataset),
   [screenshots](demos/capture-screenshots.py) (fills the portal-track 📸 slots; `--list-missing`, `--link`),
   [demo videos](demos/record-demos.py) (one captioned walkthrough per lab, not committed), and the
   [dry-run template](demos/DRY-RUN-TEMPLATE.md).

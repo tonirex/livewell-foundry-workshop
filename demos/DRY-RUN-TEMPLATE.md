@@ -63,7 +63,7 @@ Each was left open in [ASSUMPTIONS.md](../ASSUMPTIONS.md). Record the observed a
 | Q4 | Portal batch evaluation (Lab 2): time to finish, and does slot 02/16 now have a run to screenshot? | | |
 | Q5 | Red-team full scan: wall-clock time and cost | | |
 | Q6 | Memory recall in Lab 3: how long before "I prefer mornings" is recalled in a new conversation? | | |
-| Q7 | Model quota: any 429s on gpt-4.1-mini / model-router during Labs 1–3? | | |
+| Q7 | Model quota: any 429s on gpt-5-mini / gpt-4.1-mini during Labs 1–3? | | |
 | Q8 | Sign-in: first-login MFA / password change time for a fresh lab account | | |
 
 ## 4. Findings

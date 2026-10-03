@@ -63,9 +63,8 @@ lw.warm_activities()  # the server scales to zero; wake it while the agents are 
 # %% [markdown]
 # ## 3. Memory (preview)
 #
-# A memory store per participant (`livewell-<INITIALS>-memory`), scoped to you. With model-router the
-# agent never searches memory, so the coach with memory runs on its own deployment, gpt-5.4-mini
-# (`lw.MEMORY_MODEL`). The memory store itself uses gpt-4.1-mini to extract and summarise memories.
+# A memory store per participant (`livewell-<INITIALS>-memory`), scoped to you. The store uses gpt-5-mini to
+# extract and summarise memories.
 
 # %%
 memory, store = None, None
@@ -120,7 +119,9 @@ lw.say(f"specialists: {nutrition.name} v{nutrition.version}, {activity.name} v{a
 # ## 5. The Lab 3 coach
 #
 # Base + knowledge + safety + tools instruction blocks, the workshop guardrail, and the evidence JSON contract
-# (advice, confidence, supporting_guides, rationale, personalisation_flags).
+# (advice, confidence, supporting_guides, rationale, personalisation_flags). The coach runs on `lw.TOOLS_MODEL`
+# (gpt-4.1-mini): the agent service does not support function, OpenAPI, A2A or Fabric tools on gpt-5-mini.
+# The specialists above have only the knowledge base and MCP, so they stay on gpt-5-mini.
 
 # %%
 blocks = ["base", "knowledge", "safety", "tools"]
@@ -130,7 +131,7 @@ coach = lw.create_agent(
     lw.load_instructions(*blocks),  # 👉
     tools=tools,  # 👉
     schema=lw.evidence_schema(), schema_name="livewell_evidence",
-    model=lw.MEMORY_MODEL if memory else None,
+    model=lw.TOOLS_MODEL,  # 👉
     rai_policy=GUARDRAIL,
     description="LiveWell Coach - Lab 3 tools, MCP and memory",
 )
@@ -285,7 +286,7 @@ if lw.fabric_enabled(args.fabric):
         "coach", lw.load_instructions(*blocks, "fabric"),  # 👉
         tools=tools + [lw.fabric_tool()],  # 👉
         schema=lw.evidence_schema(), schema_name="livewell_evidence",
-        model=lw.MEMORY_MODEL if memory else None, rai_policy=GUARDRAIL,
+        model=lw.TOOLS_MODEL, rai_policy=GUARDRAIL,
         description="LiveWell Coach - Lab 3 Fabric step")
     lw.say(f"fabric coach = {fabric_coach.name} version {fabric_coach.version}")
     mei = lw.ask(fabric_coach, prompt_id="fabric_q_disengaged_regions", functions=FUNCTIONS,  # 👉

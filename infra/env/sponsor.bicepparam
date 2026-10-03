@@ -16,13 +16,15 @@ param fabricAdminMembers = [
 param fabricBridge = bool(readEnvironmentVariable('FABRIC_BRIDGE', 'true'))
 param projectMode = readEnvironmentVariable('MODE', 'shared-project')
 
-// Caps (delivery: 20 attendees on one shared project, one shared search service).
+// Caps (delivery: 6 attendees on one shared project, one shared search service). Quota Tier 0 limits:
+// gpt-5-mini 500K, gpt-4.1-mini 200K, text-embedding-3-small 1M TPM (ASSUMPTIONS.md 9.1).
 // Search: Basic in the main region by default. If the region is capacity-blocked for new search services
 // (preflight check 7), set SEARCH_LOCATION (e.g. francecentral) or SEARCH_SKU=serverless in the azd env.
 param searchSku = readEnvironmentVariable('SEARCH_SKU', 'basic')
 param searchLocation = readEnvironmentVariable('SEARCH_LOCATION', '')
 param fabricSku = readEnvironmentVariable('FABRIC_SKU', 'F2')
 param chatTpmCapThousands = 400
+param toolsTpmCapThousands = 200
 param embeddingTpmCapThousands = 100
 param mcpMinReplicas = int(readEnvironmentVariable('MCP_MIN_REPLICAS', '0'))
 param mcpImage = readEnvironmentVariable('SERVICE_MCP_ACTIVITIES_IMAGE_NAME', '')

@@ -18,15 +18,15 @@ How the three agents are wired (diagrams, code pointers and the DevUI view of ea
 
    ![Hosted agent page opened in the Foundry portal](screenshots/lab-04/02-open-hosted-agent.png)
 
-3. Open the versions view.
+3. Open the version history.
 
-   **Agent page → Versions**
+   **Version dropdown (top right) → Show all version history**
 
    ![Version history for livewell-workshop-hosted](screenshots/lab-04/03-hosted-agent-versions.png)
 
-4. Inspect the active version details without changing traffic.
+4. Inspect the active version without changing traffic.
 
-   **Versions → Active version → Details**
+   **Details tab → Active version** (leave **Edit** alone)
 
    ![Active hosted-agent version details](screenshots/lab-04/04-active-version-details.png)
 

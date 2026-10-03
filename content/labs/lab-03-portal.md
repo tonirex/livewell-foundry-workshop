@@ -2,13 +2,16 @@
 
 Main page: [Lab 3](lab-03.md) · [Portal track](PORTAL-TRACK.md)
 
-You will add a profile OpenAPI tool, an activities MCP tool with approval before registration, memory, and optionally the Fabric IQ tool for programme-level questions.
+You will switch the coach to `gpt-4.1-mini`, add a profile OpenAPI tool, an activities MCP tool with approval before registration, memory, and optionally the Fabric IQ tool for programme-level questions.
 
-1. Open your guarded agent.
+1. Open your guarded agent and switch it to the tools model before adding any tool.
 
-   **Build → Agents → `livewell-<initials>` → Configure**
+   **Build → Agents → `livewell-<initials>` → Configure → Model `gpt-4.1-mini` → Save**
 
    ![Agent configuration page after Lab 2](screenshots/lab-03/01-open-guarded-agent.png)
+
+   - `gpt-5-mini` does not support the OpenAPI tool (step 3) or the A2A tools (optional specialists). Switching a coach that has them back to `gpt-5-mini` makes the portal warn that it will remove them.
+   - `gpt-4.1-mini` is not a reasoning model, so **Reasoning effort** disappears from **Parameters**. The guardrail, knowledge base and JSON schema stay.
 
 2. Start adding the profile OpenAPI tool.
 
@@ -16,13 +19,26 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
 
    ![Tool catalog showing Custom OpenAPI](screenshots/lab-03/02-add-openapi-tool.png)
 
-3. Create the `livewell_profile` tool from the spec on the facilitator values sheet. The form has no import-from-URL option. Open the **Profile OpenAPI spec URL** in a new browser tab, select all of the JSON and copy it.
+3. Copy the profile API's description (a block of text called an OpenAPI spec) and paste it into the form. The form has no import-from-URL option.
 
-   **OpenAPI → Name `livewell_profile` → Description → Authentication method `Anonymous` → OpenAPI 3.0+ schema: paste → Create tool**
+   1. Leave the form open. In a new browser tab, open the **Profile OpenAPI spec URL (Lab 3)** link from the values sheet (the workshop links your facilitator shares). The page shows a block of text that starts with `{"openapi":"3.0.3"`.
+   2. Click on that page, press **Ctrl+A** to select all of the text, then **Ctrl+C** to copy it (**Cmd** instead of **Ctrl** on a Mac). Copy the text, not the link.
 
-   - Use an underscore: the portal does not accept spaces or dashes in custom tool names.
-   - Description, for example: `Profile of the signed-in resident. Always pass resident_id 'me'.`
-   - The pasted spec already carries the server URL, so no other field is needed.
+      ![The spec page with all of its text selected](screenshots/lab-03/profile-spec-page.png)
+
+   3. Go back to the Foundry tab, fill in the form, and select **Create tool**.
+
+   **Name `livewell_profile` → Description → Authentication method `Anonymous` → OpenAPI 3.0+ schema: click the empty box, Ctrl+V → Create tool**
+
+   | Field | What to enter |
+   |---|---|
+   | **Name** | `livewell_profile`. Use an underscore: the portal rejects dashes and spaces. |
+   | **Description** | `Profile of the signed-in resident. Always pass resident_id 'me'.` |
+   | **Authentication method** | **Anonymous**, already selected. |
+   | **OpenAPI 3.0+ schema** | Click inside the empty box and press **Ctrl+V**. The text may show as one long line, which is fine. |
+
+   - The pasted text already contains the API's address, so no other field is needed. The screenshot below shows it formatted, with the address hidden.
+   - This is a real, read-only REST API that returns only the signed-in resident's profile. Steps 4–6 add the activities as an MCP tool instead, because MCP lets you require approval before a write. See [OpenAPI tool vs MCP tool](lab-03.md#openapi-vs-mcp) and [what is fixed for the workshop](lab-03.md#workshop-shortcuts).
 
    ![OpenAPI form with livewell_profile named and the spec pasted](screenshots/lab-03/03-livewell-profile-spec.png)
 
@@ -44,25 +60,25 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
 
    ![register_interest configured to require approval](screenshots/lab-03/06-register-interest-approval.png)
 
-7. Enable memory for the agent and switch it to the memory model.
+7. Enable memory for the agent.
 
-   **Memory (Preview) → Enable memory → Create / select memory store → Save**, then **Model → `gpt-5.4-mini` → Save**
+   **Memory (Preview) → Enable memory → Create / select memory store → Save**
 
-   Memory is not searched when the agent runs on `model-router`, so the Lab 3 coach runs on `gpt-5.4-mini`.
-
-   ![Memory preview enabled for the agent, model gpt-5.4-mini](screenshots/lab-03/07-enable-memory-preview.png)
+   ![Memory preview enabled for the agent](screenshots/lab-03/07-enable-memory-preview.png)
 
 8. Append the `tools` instruction block from [coach-instructions.md](../prompts/coach-instructions.md) and switch to the evidence schema.
 
-   **Instructions → paste after `safety` block**, then **Response format → JSON schema → replace with all of [`lab3-evidence.schema.json`](../config/schemas/lab3-evidence.schema.json) → Save**
+   **Instructions → paste after `safety` block**, then **Parameters (sliders icon next to Model) → Text format: JSON Schema → pencil next to `livewell_answer` → replace with all of [`lab3-evidence.schema.json`](../config/schemas/lab3-evidence.schema.json) → close the panel → Save**
 
    ![Instructions with tools block appended and livewell_evidence schema set](screenshots/lab-03/08-tools-instructions.png)
 
-9. Save a tools-and-memory version.
+9. Note the tools-and-memory version number.
 
-   **Versions → Save / Create version → Name `v3-tools-memory` → Save**
+   **Version dropdown (top right, next to Save) → note the newest number → Show all version history**
 
-   ![Version list showing v3 tools and memory version](screenshots/lab-03/09-save-v3-tools-memory.png)
+   ![Version history panel listing the agent's numbered versions](screenshots/lab-03/09-save-v3-tools-memory.png)
+
+   Versions are numbered, not named. Steps 1, 7 and 8 each saved, so expect the number to have gone up by more than one since Lab 2. Use the newest one.
 
 10. Ask for tailored advice from the profile.
 
@@ -129,6 +145,26 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
     ```text
     Any activities you would suggest for me next week?
     ```
+
+**Optional: specialist agents (A2A).** Step 11 of the [lab guide](lab-03.md#a2a-specialists). The facilitator has already built and connected the two specialists; you only attach them.
+
+- Attach both specialists, then save.
+
+  **Tools → Add → Add tools → Configured → `livewell-nutrition-a2a` → Add tool**, then the same for **`livewell-activity-a2a`** → **Save**
+
+- Ask for both plans. The reply takes about a minute.
+
+  **Chat → New chat → Message box → Send**
+
+  Prompt `lab3_specialists`:
+
+  ```text
+  Can you give me a simple meal plan and an exercise plan for this week that fit my glucose results?
+  ```
+
+- Check that both specialists were called.
+
+  **Response metrics → Traces** → one call to `livewell-nutrition-a2a` and one to `livewell-activity-a2a`
 
 16. Optional Fabric step: add the published Fabric IQ data agent from the OneLake Catalog. The catalog takes a few seconds to load; filter by keyword `Resident360`.
 
@@ -206,13 +242,14 @@ You will add a profile OpenAPI tool, an activities MCP tool with approval before
 
 ## What you should see
 
-Profile advice is tailored to the signed-in synthetic resident and cites guides. Activity registration pauses on an approval card before `register_interest` runs. Memory affects a new chat. In the optional Fabric step, Rahim's programme question chains profile → Fabric IQ (age band only) → activities → approval, Mei's aggregate question calls Fabric IQ, and the citizen food question stays on Foundry IQ and profile tools.
+Profile advice is tailored to the signed-in synthetic resident and cites guides. Activity registration pauses on an approval card before `register_interest` runs. Memory affects a new chat. With the optional specialists attached, the combined-plan prompt calls both A2A connections and merges their answers into one reply. In the optional Fabric step, Rahim's programme question chains profile → Fabric IQ (age band only) → activities → approval, Mei's aggregate question calls Fabric IQ, and the citizen food question stays on Foundry IQ and profile tools.
 
 ## If something looks different
 
-- ⚠️ The OpenAPI form takes a pasted schema, not a URL. Copy the JSON from the values sheet's spec URL, and keep the tool name `livewell_profile` (dashes are rejected).
+- ⚠️ The OpenAPI form takes a pasted schema, not a URL. Copy the JSON from the values sheet's spec URL, and keep the tool name `livewell_profile` (dashes are rejected). If **Create tool** reports an invalid schema, you pasted the URL or part of the JSON: go back to the `/openapi.json` tab, press **Ctrl+A**, **Ctrl+C**, and replace everything in the box.
 - ⚠️ **Custom → Model Context Protocol (MCP)** creates a *new* connection. Use it only if `livewell-activities-mcp` is missing from **Configured**: paste the **Activities MCP server** URL from the values sheet as the endpoint and set **Authentication** to **Unauthenticated**.
 - ⚠️ Memory is preview and may appear under a different panel; if it is unavailable, complete the tool steps and watch the facilitator memory demo.
+- If `livewell-nutrition-a2a` or `livewell-activity-a2a` is missing from **Configured**, the facilitator has not run the specialist setup. Skip the optional specialists; the coach still writes both plans from the knowledge base. An A2A call that fails with 401 or 403 usually means the project's Foundry Agent Consumer role has not applied yet (up to 10 minutes).
 - ⚠️ Fabric IQ is preview; if OneLake Catalog browsing is unavailable, use `livewell-fabric-resident360` or the facilitator's prepared agent.
 - If registration runs without approval, stop using that chat and reconfigure approval for `register_interest`.
 

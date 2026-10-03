@@ -73,14 +73,14 @@ lw.say(f"client on {lw.DEFAULT_MODEL}; tools: {lw.KB_LABEL} (knowledge_base_retr
 # %% [markdown]
 # ## 3. The specialists, with a middleware that passes plain text
 #
-# In a workflow every agent sees the conversation so far. The Activity agent's `find_activities` call items mean
-# nothing to the Coach (it has no such tool) and can make its model call fail, so each agent gets the earlier
-# answers as plain text: who said what. This is an Agent Framework **agent middleware**.
+# Another agent's tool-call items mean nothing to the Coach and can fail its model call, so each agent gets earlier
+# answers as plain text (who said what), plus its own hand-off result. This is an Agent Framework **agent middleware**.
 
 # %%
 @agent_middleware
 async def text_only(context, call_next):  # 👉
-    context.messages[:] = [Message(m.role, [m.text], author_name=m.author_name) for m in context.messages if m.text]
+    context.messages[:] = [m if m.role == "tool" else Message(m.role, [m.text], author_name=m.author_name)
+                           for m in context.messages if m.text or m.role == "tool"]  # keeps its own hand-off result
     await call_next()
 
 
@@ -147,7 +147,7 @@ lw.expect("lab4_week_plan_handoff: valid JSON", bool(plan.get("advice")), lw._tr
 lw.expect("lab4_week_plan_handoff: >= 1 real guide cited", bool(guides), plan.get("supporting_guides"))
 lw.expect("lab4_week_plan_handoff: specialists searched the guides", bool(searched), searched)
 lw.expect("lab4_week_plan_handoff: indoor morning activity", bool(re.search(r"indoor", advice, re.I)
-          and re.search(r"morning|\b([6-9]|1[01])(:\d\d)?\s*a\.?m", advice, re.I)), lw._trunc(advice, 160))
+          and re.search(r"morning|\b0?([6-9]|1[01])((:\d\d)?\s*a\.?m\b|:\d\d\b(?!\s*p))", advice, re.I)), lw._trunc(advice, 160))
 lw.expect("lab4_week_plan_handoff: no resident_id", no_resident_id(merged_text))
 lw.record("lab4_week_plan_sequential", {"seconds": round(seconds, 1), "steps": steps, "json": plan})
 
@@ -202,6 +202,7 @@ insights_result: dict = {}
 if lw.fabric_enabled(args.fabric):
     insights = lw.create_agent("insights", lw.load_instructions("insights"),  # 👉
                                tools=[lw.fabric_tool()], rai_policy=GUARDRAIL,  # 👉
+                               model=lw.TOOLS_MODEL,  # Fabric tools are not supported on gpt-5-mini
                                description="LiveWell Programme-Insights specialist (Fabric IQ)")
     lw.say(f"insights = {insights.name} version {insights.version}")
     mei = lw.ask(insights, prompt_id="lab4_q_programmes_disengaged", consent=False,  # 👉

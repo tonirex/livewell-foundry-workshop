@@ -7,9 +7,13 @@ a pass/fail table plus the total cost since provision (Cost Management, resource
 
   * MCP server        /healthz answers (the Container App scales to zero; the first call wakes it)
   * Knowledge         lab1_prediabetes_eat searches the knowledge base and cites a real guide
-  * Guardrail         lab2_injected_flyer is blocked, or safely refused, under livewell-guardrails
+  * Guardrail         lab2_injected_flyer is blocked, or safely refused, under livewell-guardrails;
+                      lab2_medication_double is blocked by the blocklist (the default never blocks it); and
+                      `apply-guardrail.py --check` finds no drift (tenant governance can reset the policy)
   * Tools             lab3_hazy_indoor_signup fires >= 2 tools (livewell_profile + find_activities);
                       a register_interest approval, if requested, is denied so nothing is written
+  * Specialists       a temporary coach with the livewell-nutrition-a2a / livewell-activity-a2a tools asks
+                      lab3_specialists and both A2A calls complete (Lab 3 Navigator step 11; also with --demo-agents)
   * Fabric bridge     fabric_q_disengaged_regions calls Fabric IQ and ranks the reference top region first
                       (+-1); lab1_prediabetes_eat on the same agent does NOT call Fabric (FABRIC_BRIDGE only)
   * Hosted agent      livewell-workshop-hosted (if deployed) answers lab4_week_plan_handoff with evidence
@@ -33,6 +37,7 @@ import json
 import os
 import pathlib
 import re
+import subprocess
 import sys
 import time
 import urllib.error
@@ -99,9 +104,31 @@ def check_guardrail(agent) -> list:
     row = next(r for r in lw.load_eval_rows() if r.get("source_prompt_id") == "lab2_injected_flyer")
     run = lw.ask(agent, prompt_id="lab2_injected_flyer")
     policy = lw.rai_policy_of(agent)
-    return [("Guardrail: injected flyer blocked or refused",
+    rows = [("Guardrail: injected flyer blocked or refused",
              policy == lw.NAMES["rai_policy"] and lw.safe_outcome(run, row),
              f"{outcome(run)} under {policy or 'deployment default'} ({run.seconds:.0f}s)")]
+    # The flyer is blocked by the platform default too, so it can't tell whether the custom policy is intact.
+    # The blocklist can: tenant governance has been seen to strip it (ASSUMPTIONS.md 4.14).
+    med = lw.ask(agent, prompt_id="lab2_medication_double")
+    rows.append(("Guardrail: blocklist blocks lab2_medication_double",
+                 med.blocked and "blocklist" in (med.block_reason or ""),
+                 f"{outcome(med)} ({med.seconds:.0f}s)"
+                 + ("" if med.blocked else "; policy reset? python scripts/apply-guardrail.py")))
+    return rows
+
+
+def check_guardrail_config() -> list:
+    res = subprocess.run([sys.executable, str(ROOT / "scripts" / "apply-guardrail.py"), "--check"], cwd=ROOT,
+                         capture_output=True, text=True, encoding="utf-8", timeout=300)
+    if res.returncode == 0:
+        detail = "in sync"
+    else:
+        drift = [ln.removeprefix("[guardrail] ") for ln in res.stdout.splitlines()
+                 if "drift=" in ln and "drift=none" not in ln]
+        last = (res.stdout + res.stderr).strip().splitlines()
+        detail = ("; ".join(drift) or (last[-1] if last else f"exit {res.returncode}")) \
+            + "; fix: python scripts/apply-guardrail.py"
+    return [("Guardrail: livewell-guardrails matches guardrails.yaml", res.returncode == 0, detail)]
 
 
 def check_tools(agent, attempts: int = 2) -> list:
@@ -118,6 +145,34 @@ def check_tools(agent, attempts: int = 2) -> list:
     return [("Tools: compound question fires >= 2 tools", ok,
              f"{', '.join(names) or 'no tools'}; {len(run.approvals)} approval request(s)"
              f"{' denied' if run.approvals else ''} ({run.seconds:.0f}s{retry})")]
+
+
+def check_specialists(demo, created: list, attempts: int = 3) -> list:
+    """A temporary Lab 3 coach with the two A2A tools asks lab3_specialists; both specialists must answer."""
+    label = "Specialists: coach calls both over A2A"
+    names = demo.demo_names()
+    missing = [names[r] for r in demo.SPECIALISTS if lw.agent_by_name(names[r]) is None]
+    if missing:
+        return [(label, False, f"{', '.join(missing)} missing: python demos/create-demo-agents.py")]
+    try:
+        a2a = lw.specialist_a2a_tools()
+    except Exception as e:
+        return [(label, False, f"A2A connection missing ({lw._trunc(e, 60)}): python scripts/connect-tools.py")]
+    kwargs, _ = demo.definition("tools", memory=False)
+    kwargs["tools"] = kwargs["tools"] + a2a
+    name = lw.agent_name("specialists")
+    created.append(name)
+    _, agent = demo.upsert(name, kwargs, "Smoke test (specialists over A2A)", rail="smoke")
+    want = {lw.NAMES["nutrition_a2a_connection"], lw.NAMES["activity_a2a_connection"]}
+    for attempt in range(1, attempts + 1):  # two retries: the coach sometimes plans from the KB alone
+        run = lw.ask(agent, prompt_id="lab3_specialists", approve=False)
+        calls = {c.name for c in run.tool_calls if c.kind.startswith("a2a") and not c.error}
+        ok = want <= calls and not run.blocked
+        if ok:
+            break
+    retry = f", attempt {attempt}/{attempts}" if attempt > 1 else ""
+    return [(label, ok, f"{', '.join(sorted(calls)) or 'no A2A calls'}; "
+                        f"{f'BLOCKED ({run.block_reason})' if run.blocked else 'answered'} ({run.seconds:.0f}s{retry})")]
 
 
 def fabric_capacity_state() -> str:
@@ -268,8 +323,9 @@ def main() -> int:
         print(f"[smoke] agents: {', '.join(f'{a.name} v{a.version}' for a in agents.values())}", flush=True)
 
         jobs = {"mcp": check_mcp, "knowledge": lambda: check_knowledge(agents["knowledge"]),
-                "guarded": lambda: check_guardrail(agents["guarded"]), "tools": lambda: check_tools(agents["tools"]),
-                "memory": check_memory}
+                "guarded": lambda: check_guardrail(agents["guarded"]), "guardrail-config": check_guardrail_config,
+                "tools": lambda: check_tools(agents["tools"]), "memory": check_memory,
+                "specialists": lambda: check_specialists(demo, created)}
         if fabric:
             jobs["fabric"] = lambda: check_fabric(agents["fabric"])
         if not args.no_hosted:

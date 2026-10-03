@@ -86,10 +86,9 @@ Deployment names equal model names (see `models:` in `content/config/workshop.ya
 
 | Role | Model | SKU | Region |
 |---|---|---|---|
-| Default | model-router | GlobalStandard, 400K TPM cap | swedencentral (availability is checked in Phase 2 preflight) |
-| Fallback | gpt-4.1-mini (2025-04-14) | GlobalStandard, 400K TPM cap | swedencentral (also Lab 2 judges, memory extraction, KB query planning) |
-| Memory coach | gpt-5.4-mini (2026-03-17) | GlobalStandard, 200K TPM cap | swedencentral (Lab 3 coach with memory; retirement 2027-09-21) |
-| Embeddings | text-embedding-3-large | GlobalStandard, 100K TPM cap | swedencentral |
+| Default | gpt-5-mini (2025-08-07), reasoning effort Low | GlobalStandard, 400K TPM cap | swedencentral (Labs 0–2, Lab 3 specialists, memory store, KB query planning, Lab 4) |
+| Tools | gpt-4.1-mini (2025-04-14) | GlobalStandard, 200K TPM cap | swedencentral (Lab 3 coach on: OpenAPI, A2A, function and Fabric tools are not supported on gpt-5-mini; also the evaluation judges) |
+| Embeddings | text-embedding-3-small (1) | GlobalStandard, 100K TPM cap | swedencentral |
 
 PTU deployments and partner models are never used.
 
@@ -98,11 +97,10 @@ PTU deployments and partner models are never used.
 | Surface | Used in | Fallback |
 |---|---|---|
 | Foundry IQ knowledge bases (agentic retrieval) | Lab 1 | Classic Azure AI Search tool on the same index |
-| Model router | Lab 0 | Fixed `gpt-4.1-mini` deployment |
 | Guardrails (new Foundry portal) and custom blocklists | Lab 2 | Content filter on the deployment; prebuilt demo agent `livewell-demo-guarded` |
 | Prompt shields / indirect-attack detection | Lab 2 | Instruction-level defence plus a facilitator demo |
-| Memory (Foundry Agent Service) | Lab 3 | Conversation-scoped preferences in instructions; the coach with memory runs on `gpt-5.4-mini` (memory is not searched behind model-router) |
-| Connected agents / multi-agent | Lab 3 | Single agent with specialist instruction blocks |
+| Memory (Foundry Agent Service) | Lab 3 | Conversation-scoped preferences in instructions |
+| Specialist agents as tools (multi-agent) | Lab 3, Lab 4 | No connected-agent tool in the new Agent Service. Navigator (optional step 11) attaches two admin-built specialists with the GA A2A tool: incoming A2A on the specialists is REST/SDK only and the connections need Foundry Project Manager, so `create-demo-agents.py` and `connect-tools.py` do both before the workshop. Builder calls its own specialists through function tools. Without the A2A tools, the Navigator coach writes both plans from the knowledge base |
 | Fabric IQ tool (Ontology Agent via OneLake Catalog) | Fabric step, Lab 4 | Facilitator-only demo from `demos/`; pre-computed numbers from `scripts/r360.py` |
 | Fabric ontology (preview), graph model and data agent over the ontology | Phase 3 | Fabric data agent over the lakehouse tables |
 | Hosted agents (Agent Framework, code deploy) | Lab 4 facilitator demo | Run the same team locally (`lab4_multiagent.py` section 4); prompt agent published to Teams / M365 |

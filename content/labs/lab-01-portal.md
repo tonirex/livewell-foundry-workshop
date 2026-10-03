@@ -22,13 +22,13 @@ You will attach the shared Foundry IQ knowledge base, add the `knowledge` instru
 
    ![Knowledge panel with livewell-guides-kb selected](screenshots/lab-01/03-connect-foundry-iq.png)
 
-4. Review the knowledge-base settings without changing names.
+4. Optional: look at the shared knowledge base's settings. Attaching it doesn't show them, and you don't create a knowledge base or index yourself.
 
-   **Build → Knowledge → Knowledge bases → `livewell-guides-kb`** (the page opens on its settings; do not select **Save**)
+   **Build → Knowledge → Knowledge bases → `livewell-guides-kb`** (look only; do not select **Save**, because every participant shares it)
 
    ![Retrieval reasoning effort, output mode, and retrieval instructions visible](screenshots/lab-01/04-kb-settings-preview.png)
 
-   ⚠️ Foundry IQ portal settings are preview. The facilitator expects retrieval reasoning effort, output mode, and retrieval instructions to be pre-set for the shared `livewell-guides-kb`.
+   ⚠️ Foundry IQ portal settings are preview. What each setting does, and why the workshop shares one knowledge base, is in **Explore further** on the [Lab 1](lab-01.md) page.
 
 5. Append the `knowledge` block from [coach-instructions.md](../prompts/coach-instructions.md).
 
@@ -36,11 +36,11 @@ You will attach the shared Foundry IQ knowledge base, add the `knowledge` instru
 
    ![Instructions with base plus knowledge blocks saved](screenshots/lab-01/05-knowledge-instructions.png)
 
-6. Set the response format to the Lab 1 JSON schema.
+6. Set the response format to the Lab 1 JSON schema. It is in the **Parameters** panel: select the sliders icon just to the right of the **Model** dropdown.
 
-   **Response format → JSON schema → paste all of [`lab1-answer.schema.json`](../config/schemas/lab1-answer.schema.json) → Save**
+   **Parameters (icon next to Model) → Text format → JSON Schema → paste all of [`lab1-answer.schema.json`](../config/schemas/lab1-answer.schema.json) in the schema editor and save it → close the panel → Save**
 
-   Do not pick **JSON object**: it needs the word "json" in every chat message and otherwise returns a 400 error. The schema also limits `cited_sources` to the real guide ids.
+   The panel then shows `livewell_answer` under **Text format**; the pencil icon reopens the editor. Do not pick **JSON Object**: it needs the word "json" in every chat message and otherwise returns a 400 error. The schema also limits `cited_sources` to the real guide ids.
 
    ![Response format set to JSON schema with livewell_answer pasted](screenshots/lab-01/06-json-response-format.png)
 
@@ -94,6 +94,6 @@ The food answer returns JSON with `route: "self_care"`, at least one LiveWell gu
 
 - ⚠️ If **Knowledge → Add → Connect to Foundry IQ** has moved, search the Add menu for `Foundry IQ`.
 - ⚠️ If the KB settings page does not expose retrieval reasoning effort or output mode, capture the available settings and continue.
-- If answers include prose outside JSON, recheck **Response format → JSON schema** (with `lab1-answer.schema.json` pasted) and the `knowledge` block.
+- If answers include prose outside JSON, recheck **Parameters (icon next to Model) → Text format → JSON Schema** (with `lab1-answer.schema.json` pasted) and the `knowledge` block.
 - If the food answer cites no source, confirm `livewell-guides-kb` is attached and Active.
 

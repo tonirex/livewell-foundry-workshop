@@ -15,10 +15,10 @@
       "expected_ref": "prompts/test-prompts.json#/prompts/lab0_am_i_diabetic/expected"
     },
     {
-      "prompt_id": "lab0_router_compare",
+      "prompt_id": "lab0_am_i_diabetic",
       "validation_type": "B_trace_field",
-      "notes": "Paste the model name the router picked (trace -> model) for the walking-routine prompt, plus the gpt-4.1-mini reply length. Any valid model name passes; the point is reading it from the trace.",
-      "expected_ref": "prompts/test-prompts.json#/prompts/lab0_router_compare/expected"
+      "notes": "Read the trace of the 'Am I diabetic?' answer: one chat span on gpt-5-mini, no tool calls (no web_search), the base block as the system message, and non-zero input and output token counts. The point is reading the trace, not the exact numbers.",
+      "expected_ref": "prompts/test-prompts.json#/prompts/lab0_am_i_diabetic/expected"
     }
   ]
 }

@@ -240,7 +240,7 @@ def title_slide(prs: Presentation, cfg: dict, titles: list[str]):
 def agenda_slide(prs: Presentation, titles: list[str]):
     rows = [
         ["9:00", "What is Microsoft Foundry (30)", "Unified platform: models, agents, tools, observability, governance", "Portal tour; Fabric arc + today we add Coach & Act"],
-        ["9:30", "Foundry Models (20)", "Catalogue, Global Standard deployments, quota, model-router", "Compare model-router vs gpt-4.1-mini; read the router's pick in the model-router playground"],
+        ["9:30", "Foundry Models (20)", "Catalogue, Global Standard deployments, quota, reasoning effort, model × tool support", "Why two models: gpt-5-mini (Labs 0-2) and gpt-4.1-mini (tools from Lab 3); read model and tokens in the trace"],
         ["9:50", "Foundry Agent Service (40)", "Model + instructions + tools; runtime; multi-agent; memory; frameworks", "Create LiveWell Coach; structured output"],
         ["10:15", "Micro-Lab 0 (15)", "First agent", "Everyone ships livewell-<initials>"],
         ["10:45", "Tools & Knowledge (30)", "Foundry IQ knowledge base; connectors; MCP; Fabric IQ tool", "Two IQs on Rahim: guide citation; Mei region question"],
@@ -413,7 +413,7 @@ def foundry_features_slide(prs: Presentation, titles: list[str]):
     columns = [
         ("Build", [
             "Portal, resource + project, RBAC",
-            "Models: catalogue, quota, model-router, gpt-4.1-mini, embeddings",
+            "Models: catalogue, quota, gpt-5-mini, gpt-4.1-mini, embeddings",
             "Prompt agents, playground, structured outputs, versions",
             "Foundry IQ KB on Azure AI Search; agentic retrieval; citations (portal preview)",
             "Developer loop: Toolkit for VS Code, Foundry Skill, Codespaces",
@@ -442,7 +442,7 @@ def foundry_features_slide(prs: Presentation, titles: list[str]):
 
 
 OBJECTIVES = {
-    "lab-00": "A Foundry agent is a model plus instructions, and instructions alone can make it safe; the router picks a model per request",
+    "lab-00": "A Foundry agent is a model plus instructions, and instructions alone can make it safe; every answer leaves a trace you can inspect",
     "lab-01": "Ground every answer in curated knowledge with verifiable citations, never invent a source, and return machine-routable JSON",
     "lab-02": "Safety is measured, not assumed: apply guardrails, prove behaviour with evaluators, and make every decision auditable in a trace",
     "lab-03": "An agent that acts: personalise on governed data, take real actions with a human in the loop, delegate to specialists, and route each kind of question to the right tool",
@@ -457,8 +457,8 @@ MODULES = [
         "capability": "Setup & first agent",
         "level": "Intro · portal · all rails",
         "story": "Rahim opens the coach for the first time.",
-        "features": "Foundry portal; resource/project; RBAC; model deployments; model-router; prompt agent; playground; versions.",
-        "checkpoint": "Agent introduces itself, says it is not a doctor and refuses to diagnose; the model-router playground shows which model it picked.",
+        "features": "Foundry portal; resource/project; RBAC; model deployments; reasoning effort; prompt agent; playground; versions; traces.",
+        "checkpoint": "Agent introduces itself, says it is not a doctor and refuses to diagnose; the trace shows one gpt-5-mini call and its tokens.",
     },
     {
         "id": "lab-01",
@@ -687,7 +687,7 @@ def cost_slide(prs: Presentation, titles: list[str]):
         "Cost & controls",
         "Anchor on sponsorship safety: the low path is the intended operating mode, not the high path. "
         "Explain that Fabric F2 is cheap during the workshop but expensive if left running all month. "
-        "Controls are part of the design, not afterthoughts: shared search, model-router, caps, budget alerts and teardown. "
+        "Controls are part of the design, not afterthoughts: shared search, small models, caps, budget alerts and teardown. "
         "Gate: move on after naming who owns teardown and capacity pause.",
         titles,
     )
@@ -705,7 +705,7 @@ def cost_slide(prs: Presentation, titles: list[str]):
     )
     controls = [
         "One shared search service and KB",
-        "model-router default; TPM caps; no PTU",
+        "gpt-5-mini default (reasoning Low); TPM caps; no PTU",
         "Red teaming facilitator-run; lite scan only if enabled",
         "Bing off by default; budgets at US$150 and US$300",
         "Fabric capacity paused nightly; teardown at T+1",

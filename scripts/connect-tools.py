@@ -8,9 +8,14 @@
      (identity passthrough, audience https://analysis.windows.net/powerbi/api) to the published data agent's
      MCP endpoint `https://api.fabric.microsoft.com/v1/mcp/workspaces/<ws>/dataagents/<id>/agent`. The Fabric IQ
      tool (`fabric_iq_preview`) uses it, so each lab account queries Fabric as itself.
-  3. azd env: PROFILE_OPENAPI_URL (Navigator `livewell_profile` tool), FABRIC_IQ_SERVER_URL and
+  3. `livewell-nutrition-a2a` and `livewell-activity-a2a`: RemoteA2A connections (ProjectManagedIdentity,
+     audience https://ai.azure.com) to the A2A endpoints of the demo specialists `livewell-demo-nutrition` and
+     `livewell-demo-activity` (`<project endpoint>/agents/<name>/endpoint/protocols/a2a`). Navigator attaches
+     them in Lab 3 step 11 with Tools -> Add tools -> Configured. The agents themselves, with incoming A2A, come
+     from demos/create-demo-agents.py; the project identity's Foundry Agent Consumer role from rbac.bicep.
+  4. azd env: PROFILE_OPENAPI_URL (Navigator `livewell_profile` tool), FABRIC_IQ_SERVER_URL and
      FABRIC_IQ_CONNECTION_ID, then runs `scripts/render-values.py` to put them on the values sheet.
-  4. Checks: /healthz, /openapi.json (operationId get_citizen_profile), /profile/me 200 and another resident 403.
+  5. Checks: /healthz, /openapi.json (operationId get_citizen_profile), /profile/me 200 and another resident 403.
 
     python scripts/connect-tools.py            # create/update + checks
     python scripts/connect-tools.py --check    # report only
@@ -34,6 +39,8 @@ from azrest import Api, ApiError  # noqa: E402
 CONN_API = "2025-10-01-preview"
 FABRIC_AUDIENCE = "https://analysis.windows.net/powerbi/api"
 FABRIC_HOST = "https://api.fabric.microsoft.com"
+FOUNDRY_AUDIENCE = "https://ai.azure.com"
+A2A_SPECIALISTS = {"nutrition": "nutrition_a2a_connection", "activity": "activity_a2a_connection"}
 
 
 def log(msg: str) -> None:
@@ -106,6 +113,23 @@ def main() -> int:
         "metadata": {"type": "custom_MCP"}}, args.check)
     rows.append(("MCP connection", names["mcp_connection"], state))
     ok &= state in ("in sync", "created", "updated")
+
+    # A2A specialists: the calling coach authenticates as the project's managed identity, so one connection
+    # serves every participant's agent. A2A must be on for the agents (create-demo-agents.py) before the
+    # connections answer; creating the connections first is fine.
+    endpoint = env.get("AZURE_AI_PROJECT_ENDPOINT", "").rstrip("/")
+    demo_agents = cfg["workshop"]["agent_naming"]["demo_agents"]
+    for role, key in A2A_SPECIALISTS.items():
+        if not endpoint:
+            rows.append(("A2A connection", names[key], "SKIP: AZURE_AI_PROJECT_ENDPOINT not set"))
+            ok = False
+            continue
+        state, _ = ensure_connection(arm, env["AZURE_AI_PROJECT_ID"], names[key], {
+            "category": "RemoteA2A", "authType": "ProjectManagedIdentity", "audience": FOUNDRY_AUDIENCE,
+            "target": f"{endpoint}/agents/{demo_agents[role]}/endpoint/protocols/a2a", "isSharedToAll": True,
+            "metadata": {"ApiType": "Azure"}}, args.check)
+        rows.append(("A2A connection", names[key], state))
+        ok &= state in ("in sync", "created", "updated")
 
     if fabric:
         ws, agent = env.get("FABRIC_WORKSPACE_ID"), env.get("FABRIC_DATA_AGENT_ID")

@@ -76,19 +76,19 @@ LABS = [
         "when": "Morning · Micro-lab",
         "level": "L100",
         "rails": "Navigator",
-        "gain": "Model + instructions\nmodel-router picks a model per request",
+        "gain": "Model + instructions\nevery answer leaves a trace",
         "story_prompts": [("Rahim", "lab0_am_i_diabetic")],
         "story_note": "The coach must answer kindly without diagnosing.",
         "steps": [
             "Sign in to the Foundry portal with your hpb.labNN account and open the shared project.",
-            "**Agents → New agent**: name it `livewell-<initials>` and pick `model-router` (fallback `gpt-4.1-mini`).",
+            "**Agents → New agent**: name it `livewell-<initials>` and pick `gpt-5-mini`.",
+            "**Parameters**: Reasoning effort **Low**; remove **Web search** if the template added it.",
             "Paste the `base` instruction block, then **Save** and note the version.",
             "Send `lab0_hi` and `lab0_am_i_diabetic`: it introduces itself and refuses to diagnose.",
-            "Send `lab0_router_compare` on `model-router`, then again on `gpt-4.1-mini`.",
-            "Open the **model-router playground**: the model picked is shown under each answer.",
+            "Open the trace: one model call, no tools, the `base` block and the token counts.",
         ],
-        "shot": ("lab-00/12-router-chosen-model-playground.png", (0.505, 0.20, 0.995, 0.71)),
-        "caption": "The model-router playground prints the model it picked under each answer; the agent trace only shows `model-router`.",
+        "shot": ("lab-00/10-refusal-trace.png", (0.08, 0.03, 0.92, 0.62)),
+        "caption": "One chat span under the agent, no tool calls, and the `base` block as the system message.",
     },
     {
         "id": "lab-01",
@@ -104,7 +104,7 @@ LABS = [
         "steps": [
             "**Knowledge → Add → Connect to Foundry IQ** and pick `livewell-guides-kb`.",
             "Append the `knowledge` instruction block after `base`.",
-            "Set **Response format** to JSON schema with `lab1-answer.schema.json`; save a new version.",
+            "**Parameters** (icon next to Model) → **Text format** JSON Schema: paste `lab1-answer.schema.json`; save.",
             "Send `lab1_prediabetes_eat`: the answer cites at least one guide.",
             "Send `lab1_supplement`: nothing in the guides, so it routes to a clinician instead of inventing a source.",
             "Builder: `lab1_knowledge.py` does the same in code and prints a CHECKPOINT.",
@@ -127,7 +127,7 @@ LABS = [
             "Run the seven-prompt ladder on the **platform default** guardrail, one new chat per prompt.",
             "Note who stops each prompt: the model, Prompt Shields, or nobody (skip meals is only annotated).",
             "Inspect `livewell-guardrails` (self-harm blocked from Low, Prompt Shields, blocklist) and attach it.",
-            "Append the `safety` block and save version `v2-guarded`.",
+            "Append the `safety` block and **Save**; note the new version number next to your baseline.",
             "Re-run the ladder: four outcomes change, including one benign false positive.",
             "Open a blocked and an allowed trace; run the `livewell-eval` batch and compare versions.",
         ],
@@ -152,9 +152,9 @@ LABS = [
         "story_prompts": [("Rahim", "lab3_hazy_indoor_signup")],
         "story_note": "The sign-up is a real write, so it needs his approval.",
         "steps": [
-            "Add the OpenAPI tool `livewell_profile` (Builder: the `get_citizen_profile` function).",
+            "Switch the model to `gpt-4.1-mini`, then add the OpenAPI tool `livewell_profile` (Builder: the `get_citizen_profile` function).",
             "Add `livewell-activities-mcp` and require approval for `register_interest`.",
-            "Enable **Memory** (preview), switch the model to `gpt-5.4-mini` and append the `tools` block.",
+            "Enable **Memory** (preview) and append the `tools` block.",
             "Send `lab3_profile_tailored`: the advice uses Rahim's profile.",
             "Send `lab3_hazy_indoor_signup`: indoor options near Woodlands, then **Approve** the sign-up.",
             "State a preference, start a new chat and check the coach remembers it.",
@@ -460,13 +460,13 @@ def stack_slide(prs, titles: list[str]):
         ("Fabric step · Evidence", "optional",
          "Fabric IQ tool → `Resident360 Ontology Agent`; `fabric` block; aggregate questions only."),
         ("Lab 3 · Act", "lab",
-         "`livewell_profile` OpenAPI tool, `livewell-activities-mcp` with approval, memory on `gpt-5.4-mini`; `tools` block."),
+         "Coach on `gpt-4.1-mini`; `livewell_profile` OpenAPI tool, `livewell-activities-mcp` with approval, memory; `tools` block."),
         ("Lab 2 · Govern", "lab",
-         "`livewell-guardrails` policy + `safety` block; traces; `livewell-eval` evaluations; version `v2-guarded`."),
+         "`livewell-guardrails` policy + `safety` block; traces; `livewell-eval` evaluations; baseline vs guarded version."),
         ("Lab 1 · Know", "lab",
          "Foundry IQ knowledge base `livewell-guides-kb`; `knowledge` block; JSON schema response."),
         ("Lab 0 · Start", "lab",
-         "`model-router` + `base` instructions: a friendly coach that is not a doctor."),
+         "`gpt-5-mini` + `base` instructions: a friendly coach that is not a doctor."),
     ]
     y, h, gap = 1.12, 0.8, 0.12
     for idx, (label, kind, body) in enumerate(layers):
@@ -666,7 +666,7 @@ def ladder_slide(prs, cfg: dict, titles: list[str]):
         "probabilistic. Left column is the platform default guardrail, right is the shared custom policy plus the safety "
         "instruction block. Point out three things: Prompt Shields catches the injected flyer in both; the custom policy "
         "turns two answers into blocks; and the benign dose reminder is the price of a stricter blocklist. "
-        "Facilitator demo: demos/guardrail-matrix.py runs the same seven prompts on gpt-4.1-mini and model-router, with and "
+        "Facilitator demo: demos/guardrail-matrix.py runs the same seven prompts on gpt-5-mini and gpt-4.1-mini, with and "
         "without the custom guardrail, and can push the rows into a Foundry evaluation for a side-by-side compare.",
         titles,
     )
@@ -705,7 +705,7 @@ def ladder_slide(prs, cfg: dict, titles: list[str]):
               fill=PALE_TEAL, line=TEAL)
     add_panel(slide, 8.86, 4.9, 3.99, 1.45,
               [("Facilitator compare", {"bold": True, "color": NAVY, "size": 14, "space_after": 4}),
-               ("`demos/guardrail-matrix.py`: `gpt-4.1-mini` vs `model-router`, default vs custom. Blocks go from 1 of 7 to 4 of 7.", {"size": 11})],
+               ("`demos/guardrail-matrix.py`: `gpt-5-mini` vs `gpt-4.1-mini`, default vs custom. Blocks go from 1 of 7 to 4 of 7.", {"size": 11})],
               fill=LIGHT, line=MID)
     add_text(slide, 0.5, 6.5, 12.35, 0.4,
              "Stricter is not free: every extra block is a judgement call. Guardrails, evaluator scores and traces are the evidence.",
@@ -816,7 +816,7 @@ def resources_slide(prs, titles: list[str]):
         ("Lab pages", ["`content/labs/`", "Objective, steps, checkpoint and a collapsed Expected output on every page."]),
         ("Prompts & instructions", ["`content/prompts/test-prompts.json`", "`content/prompts/coach-instructions.md`"]),
         ("Builder scripts", ["`content/assets/lab1_knowledge.py`", "`lab2_govern.py` · `lab3_tools.py`", "`lab4_multiagent.py`"]),
-        ("Facilitator demos", ["`demos/router-picks.py`", "`demos/guardrail-matrix.py`", "`demos/fabric-steps.py`", "`demos/lab4-devui.py`"]),
+        ("Facilitator demos", ["`demos/guardrail-matrix.py`", "`demos/fabric-steps.py`", "`demos/lab4-devui.py`"]),
         ("Recordings", ["OneDrive: LiveWell Foundry Workshop › Videos", "Builder runs and portal walkthroughs, one per lab."]),
         ("Catch-up agents", ["`livewell-demo-lab0`, `-kb`, `-guarded`, `-tools`, `-fabric`", "Open one if your own agent is stuck."]),
     ]

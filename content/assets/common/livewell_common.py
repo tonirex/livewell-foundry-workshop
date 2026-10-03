@@ -108,13 +108,21 @@ def config() -> dict:
 NAMES: dict = config()["names"]
 MODELS: dict = config()["models"]
 NAMING: dict = config()["workshop"]["agent_naming"]
+# Two chat deployments (workshop.yaml models, ASSUMPTIONS.md 9.1). DEFAULT_MODEL (gpt-5-mini) runs Labs 0-2, the
+# specialists, the memory store and Lab 4. TOOLS_MODEL (gpt-4.1-mini) runs every agent with OpenAPI, A2A, Fabric
+# Data Agent or function tools (the Lab 3 coach on), because the agent service does not support those tools on
+# gpt-5-mini; it is also the evaluation judge.
 DEFAULT_MODEL: str = os.environ.get("LIVEWELL_MODEL") or MODELS["default"]
-FALLBACK_MODEL: str = MODELS["fallback"]
-# The memory search tool does not run behind model-router in the current preview (observed Sep 2026:
-# no memory_search_call is emitted), so agents that use memory run on their own deployment. gpt-5.4-mini
-# rather than gpt-4.1-mini: with strict JSON output plus tools, gpt-4.1-mini sometimes repeated the whole
-# reply many times in one response, skipped the knowledge base and invented guide ids (ASSUMPTIONS.md).
-MEMORY_MODEL: str = os.environ.get("LIVEWELL_MEMORY_MODEL") or MODELS.get("memory") or FALLBACK_MODEL
+TOOLS_MODEL: str = os.environ.get("LIVEWELL_TOOLS_MODEL") or MODELS["tools"]
+JUDGE_MODEL: str = TOOLS_MODEL  # non-reasoning, so evaluators need no is_reasoning_model flag
+REASONING_EFFORT: dict = MODELS.get("reasoning_effort") or {}
+
+
+def reasoning(model: str):
+    """The workshop's reasoning effort for a deployment (gpt-5-mini: low), or None for non-reasoning models."""
+    if model not in REASONING_EFFORT:
+        return None
+    return models().Reasoning(effort=os.environ.get("LIVEWELL_REASONING_EFFORT") or REASONING_EFFORT[model])
 
 
 def fabric_enabled(flag: bool = False) -> bool:
@@ -218,13 +226,22 @@ def expected(prompt_id: str) -> dict:
     return prompt(prompt_id).get("expected", {})
 
 
+_REPO_NOTE_RE = re.compile(r"\A(?:>.*\n)+\s*^---\s*$\n", re.M)
+
+
+def attachment_text(ref: str) -> str:
+    """An attachment as the model should see it: a leading repo-only note (blockquote lines, then a `---` rule,
+    as in flyer-injected.md) is dropped, so scripts send the same text as the lab page's copy block."""
+    raw = (ROOT / ref).read_text(encoding="utf-8")
+    return _REPO_NOTE_RE.sub("", raw, count=1).strip()
+
+
 def prompt_text(prompt_id: str, with_attachments: bool = True) -> str:
     p = prompt(prompt_id)
     text = p["text"]
     if with_attachments:
         for ref in p.get("attachments_ref", []):
-            path = ROOT / ref
-            text += f"\n\n--- {path.name} ---\n{path.read_text(encoding='utf-8').strip()}"
+            text += f"\n\n--- {pathlib.PurePosixPath(ref).name} ---\n{attachment_text(ref)}"
     return text
 
 
@@ -498,6 +515,15 @@ def fabric_tool():
                                         server_label=FABRIC_LABEL, require_approval="never")
 
 
+def specialist_a2a_tools() -> list:
+    """The demo Nutrition and Activity specialists as A2A tools (Navigator Lab 3 step 11 adds the same two from
+    Tools -> Add tools -> Configured). Connections from scripts/connect-tools.py; the agents, with incoming A2A,
+    from demos/create-demo-agents.py. The call runs as the project identity, so no per-participant setup."""
+    m = models()
+    return [m.A2ATool(project_connection_id=connection(NAMES[key]).id, a2a_version=m.A2AProtocolVersion.V1_0)
+            for key in ("nutrition_a2a_connection", "activity_a2a_connection")]
+
+
 def function_tool(name: str, description: str, parameters: dict, strict: bool = True):
     params = strict_schema(parameters) if strict else parameters
     return models().FunctionTool(name=name, description=description, parameters=params, strict=strict)
@@ -571,7 +597,7 @@ def ensure_memory_store(name: str | None = None) -> str:
         project().beta.memory_stores.get(store)
     except ResourceNotFoundError:
         definition = m.MemoryStoreDefaultDefinition(
-            chat_model=FALLBACK_MODEL, embedding_model=MODELS["embeddings"],
+            chat_model=DEFAULT_MODEL, embedding_model=MODELS["embeddings"],
             options=m.MemoryStoreDefaultOptions(user_profile_enabled=True, chat_summary_enabled=True))
         retry(lambda: project().beta.memory_stores.create(
             name=store, description="LiveWell workshop memory (participant)", definition=definition),
@@ -623,6 +649,8 @@ def create_agent(role: str, instructions: str, *, tools: Iterable[Any] | None = 
     if is_protected(name):
         raise ValueError(f"{name} uses a protected facilitator prefix")
     kw: dict[str, Any] = {"model": model or DEFAULT_MODEL, "instructions": instructions}
+    if reasoning(kw["model"]):
+        kw["reasoning"] = reasoning(kw["model"])
     if tools:
         kw["tools"] = list(tools)
     if schema:
@@ -743,7 +771,7 @@ class Run:
     seconds: float = 0.0
     replies: int = 0
     annotations: list[str] = field(default_factory=list)  # filters that scored the turn but did not block it
-    model: str = ""  # the model that answered; for model-router, the model it routed to
+    model: str = ""  # the model that answered, as reported by the response
     @property
     def tool_names(self) -> list[str]:
         return [c.name for c in self.tool_calls]
@@ -1203,7 +1231,7 @@ def judge_model_config(deployment: str | None = None) -> dict:
     """azure-ai-evaluation model config for the judge. The Azure OpenAI endpoint comes from the project
     endpoint's host, and Entra ID (your az login) is used, so no key is needed."""
     host = endpoint().split("/api/projects/")[0].replace(".services.ai.azure.com", ".openai.azure.com")
-    return {"azure_endpoint": host, "azure_deployment": deployment or FALLBACK_MODEL, "api_version": "2025-04-01-preview"}
+    return {"azure_endpoint": host, "azure_deployment": deployment or JUDGE_MODEL, "api_version": "2025-04-01-preview"}
 
 
 # The knowledge base MCP tool as an evaluator-readable function definition (ToolCallAccuracy / TaskAdherence).

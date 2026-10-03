@@ -88,7 +88,7 @@ Do Phase 2 only (SPEC.md §15, row "2 Infra"), then stop and report. azd environ
 
 Deliver on branch phase-2-infra:
 - infra/main.bicep (resource-group scope) + modules for every resource in SPEC.md §8.3: Foundry account +
-  project + deployments (model-router default, gpt-4.1-mini, text-embedding-3-large; Global Standard;
+  project + deployments (gpt-5-mini default, gpt-4.1-mini tools, text-embedding-3-small; Global Standard;
   TPM capped), Azure AI Search Basic (parameter for Serverless Developer tier), storage, Application
   Insights connected to the project, ACR Basic, Container Apps environment, Fabric capacity
   (Microsoft.Fabric/capacities@2023-11-01, sku F2 / tier Fabric, administration.members from a parameter),

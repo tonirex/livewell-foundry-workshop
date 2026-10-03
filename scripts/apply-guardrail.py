@@ -8,8 +8,9 @@ each item (idempotent) and deletes items that are no longer in the YAML.
 
 It also re-asserts the policy body and each deployment's guardrail (`deployment_policy`, or the custom policy
 for names in `attach_to`), because tenant governance automation can rewrite a custom RAI policy after
-provisioning (seen in a Microsoft-internal tenant: the policy was replaced by a single "Indirect Attack" filter
-with no blocklist; ASSUMPTIONS.md 4.14). Run it on the morning of the workshop, or at least `--check`.
+provisioning. In the MCAPS tenant it happens every morning at about 09:15 SGT: the policy is replaced by a single
+annotate-only "Indirect Attack" filter with no blocklist (ASSUMPTIONS.md 4.14). On the workshop day run it after
+09:30 SGT and again just before Lab 2; `smoke-test.py` fails while the policy has drifted.
 
     python scripts/apply-guardrail.py            # reads AZURE_* from the azd env / process env
     python scripts/apply-guardrail.py --check    # report only, exit 1 on any drift
