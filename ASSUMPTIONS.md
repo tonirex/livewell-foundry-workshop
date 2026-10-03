@@ -724,8 +724,10 @@ Where an entry changes something SPEC.md states, it says so.
     Its extra APIs, entity hot reload and deploy, do nothing here: the workflows are in memory (no source folder to
     reload or deploy), and the image has no Azure CLI or Docker. Error messages are more detailed than in user mode.
     The bearer token is still required.
-  - **Seats.** A seat pool, `DEVUI_SEATS` (default 8), gives each concurrent run its own workflow instance, because a
-    workflow object runs one request at a time.
+  - **Seats.** Every run builds a fresh workflow instance. A workflow object keeps its agents' chat history and the
+    hand-off conversation between runs, so a reused one leaks the previous run into the next and a reused hand-off
+    stops at once with no answer. `DEVUI_SEATS` (default 8) caps the runs of one workflow in flight at once.
+    Workflows are named at build time so DevUI finds the checkpoint when someone answers the triage Coach's question.
   - **Scaling.** One replica, scale to zero (≈ 23 s cold start).
   - **Load test.** Verified 2026-10-03 on MCAPS with `gpt-5-mini` and `gpt-4.1-mini`: 6 concurrent runs per
     workflow, all HTTP 200, sequential 55–73 s and hand-off 38–52 s, with no ingress timeouts.

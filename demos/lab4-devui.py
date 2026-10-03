@@ -18,8 +18,9 @@ your az login with Foundry User and the azd env (AZURE_ENV_NAME) or a filled .en
 
 The same script runs in Azure (`azd deploy lab4-devui`, demos/devui-aca/): `--host 0.0.0.0` requires the
 DEVUI_AUTH_TOKEN bearer token (DevUI stays in developer mode so the Events/Traces/Tools panel shows), and the
-Container App's managed identity (Foundry User) replaces your az login. `--seats N` builds N copies of each
-workflow because a workflow runs one request at a time.
+Container App's managed identity (Foundry User) replaces your az login. Every run gets a freshly built workflow,
+because a workflow object keeps its agents' chat history between runs; `--seats N` caps how many runs of one
+workflow are in flight at once.
 """
 from __future__ import annotations
 
@@ -38,7 +39,7 @@ os.environ.setdefault("PYTHONIOENCODING", "utf-8")
 from common import livewell_common as lw  # noqa: E402
 
 from agent_framework import Agent, Message, WorkflowException, WorkflowViz, agent_middleware  # noqa: E402
-from agent_framework.orchestrations import HandoffBuilder, SequentialBuilder  # noqa: E402
+from agent_framework.orchestrations import HandoffAgentUserRequest, HandoffBuilder, SequentialBuilder  # noqa: E402
 
 LOOPBACK = ("127.0.0.1", "localhost")
 
@@ -65,14 +66,17 @@ def build(client, knowledge, find_activities):
     coach = Agent(client, lw.load_instructions("base", "safety", "merge"), name="coach",
                   description="LiveWell Coach: merges the specialists' answers", middleware=[text_only],
                   default_options=lw.af_json_format(lw.evidence_schema(), "livewell_evidence"))
-    sequential = SequentialBuilder(participants=[nutrition, activity, coach], output_from="all").build()
-    sequential.name, sequential.description = "LiveWell sequential", "Nutrition -> Activity -> Coach (Lab 4 section 4)"
+    # Name the workflows at build time: checkpoints are saved under the build-time name and DevUI looks them up by
+    # `workflow.name` when a participant answers the triage Coach's question (hand-off), so the two must match.
+    sequential = SequentialBuilder(name="LiveWell sequential", participants=[nutrition, activity, coach],
+                                   output_from="all").build()
+    sequential.description = "Nutrition -> Activity -> Coach (Lab 4 section 4)"
 
     nutrition, activity = team("handoff")
     triage = Agent(client, lw.load_instructions("base", "handoff"), name="coach",
                    description="LiveWell Coach: triage only", middleware=[text_only],
                    require_per_service_call_history_persistence=True)
-    handoff = (HandoffBuilder(name="livewell_handoff", participants=[triage, nutrition, activity],
+    handoff = (HandoffBuilder(name="LiveWell hand-off", participants=[triage, nutrition, activity],
                               termination_condition=lambda conv: any(m.author_name == "activity" and m.text
                                                                      for m in conv if m.role == "assistant"))
                .with_start_agent(triage)
@@ -82,29 +86,37 @@ def build(client, knowledge, find_activities):
                .with_autonomous_mode(agents=[nutrition], turn_limits={"nutrition": 1}, prompts={
                    "nutrition": "If the resident also asked about activity, hand off to the Activity specialist now."})
                .build())
-    handoff.name, handoff.description = "LiveWell hand-off", "Coach triages -> Nutrition -> Activity (Lab 4 section 5)"
+    handoff.description = "Coach triages -> Nutrition -> Activity (Lab 4 section 5)"
     return sequential, handoff
 
 
-class SeatPool:
-    """One DevUI entry backed by identical copies of a workflow. A workflow instance refuses a second run while one
-    is in flight ("Workflow is already running"), so each run takes the first idle copy and a room of participants
-    can run the same workflow at once. Everything else (name, graph, executors) comes from the first copy."""
+class FreshRuns:
+    """One DevUI entry that builds a new copy of its workflow for every run, with at most `seats` runs in flight.
+    A workflow object keeps state from one run to the next: each agent's chat history, and the hand-off
+    conversation that the termination condition reads. Reusing one would show a participant the previous run, and a
+    reused hand-off copy stops at once with no answer because Activity has already replied. Everything else (name,
+    graph, executors) comes from a copy that never runs."""
 
-    def __init__(self, copies):
-        self._copies = list(copies)
+    def __init__(self, make, seats: int):
+        self._make, self._seats = make, max(seats, 1)
+        self._shown = make()
+        self._running = []
 
     def __getattr__(self, name):
-        return getattr(self._copies[0], name)
+        return getattr(self._shown, name)
 
     def run(self, *args, **kwargs):
-        for wf in self._copies:
-            try:
-                return wf.run(*args, **kwargs)
-            except WorkflowException as e:
-                if "already running" not in str(e):
-                    raise
-        raise WorkflowException(f"All {len(self._copies)} seats of {self.name} are busy. Try again in a minute.")
+        self._running = [wf for wf in self._running if wf._is_run_active()]
+        if len(self._running) >= self._seats:
+            raise WorkflowException(f"All {self._seats} seats of {self.name} are busy. Try again in a minute.")
+        if kwargs.get("responses"):
+            # The triage Coach's question (hand-off only) expects chat messages, but DevUI's reply box sends a string.
+            kwargs["responses"] = {rid: HandoffAgentUserRequest.create_response(r) if isinstance(r, str) else r
+                                   for rid, r in kwargs["responses"].items()}
+        wf = self._make()
+        stream = wf.run(*args, **kwargs)
+        self._running.append(wf)
+        return stream
 
 
 # workflow -> (screenshot, side-panel tab to show)
@@ -159,7 +171,7 @@ def main() -> int:
     ap.add_argument("--host", default="127.0.0.1",
                     help="bind address; anything but 127.0.0.1/localhost needs DEVUI_AUTH_TOKEN")
     ap.add_argument("--seats", type=int, default=int(os.environ.get("LIVEWELL_DEVUI_SEATS") or 1),
-                    help="copies of each workflow, i.e. how many runs of one workflow can be in flight at once")
+                    help="how many runs of one workflow can be in flight at once (each run builds a fresh copy)")
     ap.add_argument("--mermaid", action="store_true", help="print the two workflow graphs as Mermaid and exit")
     ap.add_argument("--no-browser", action="store_true", help="do not open the browser")
     ap.add_argument("--capture", action="store_true", help="refresh the lab-04 DevUI screenshots (needs Playwright)")
@@ -186,14 +198,15 @@ def main() -> int:
     if not local and not os.environ.get("DEVUI_AUTH_TOKEN"):
         lw.say(f"--host {args.host} makes DevUI reachable from the network: set DEVUI_AUTH_TOKEN first.")
         return 1
-    copies = [workflows] + [build(client, knowledge, find_activities) for _ in range(max(args.seats, 1) - 1)]
-    entities = [SeatPool(pool) for pool in zip(*copies)] if len(copies) > 1 else list(workflows)
+    seats = max(args.seats, 1)
+    entities = [FreshRuns(lambda i=i: build(client, knowledge, find_activities)[i], seats)
+                for i in range(len(workflows))]
 
     lw.warm_activities()
     request = f"{lw.profile_summary(lw.get_citizen_profile('me'))}\n\n{lw.prompt_text('lab4_week_plan_handoff')}"
     lw.heading("Paste this into the DevUI chat box")
     print(request)
-    lw.say(f"\nDevUI on http://{args.host}:{args.port} ({len(copies)} seat(s) per workflow, "
+    lw.say(f"\nDevUI on http://{args.host}:{args.port} ({seats} seat(s) per workflow, "
            f"{'no sign-in' if local else 'bearer token'}; Ctrl+C to stop). Pick a workflow at the top left.")
     # Developer mode is what shows the Events/Traces/Tools panel the lab uses. Its extra APIs (hot reload,
     # deploy) do nothing for in-memory workflows, and the hosted container has no az or docker.

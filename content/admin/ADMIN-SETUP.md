@@ -101,8 +101,9 @@ About 1.5 h end to end.
   access.
 - **Sign-in.** One bearer token per environment (`LIVEWELL_DEVUI_TOKEN`). `select-params.py` generates it, Bicep
   stores it as a container-app secret, and it appears on the values sheet.
-- **Capacity.** It runs one replica. `DEVUI_SEATS` (default 8) sets how many runs of each workflow can run at once;
-  a ninth gets "All 8 seats … are busy".
+- **Capacity.** It runs one replica. Every run builds a fresh copy of its workflow, so runs never share chat history.
+  `DEVUI_SEATS` (default 8) caps how many runs of each workflow can be in flight at once; a ninth gets "All 8 seats
+  … are busy".
 - **Validation.** Validated 2026-10-03 on MCAPS: 6 sequential runs at once took 55–73 s each, and 6 hand-off runs at
   once took 38–52 s each.
 - **Opting out.** `azd env set LAB4_DEVUI false` skips it. Then deploy services by name and leave out `lab4-devui`.
@@ -383,7 +384,7 @@ scored locally instead", and the local scores are still valid. To publish a run 
 | [red-team-cloud.py](../../scripts/red-team-cloud.py) | Cloud red team of `livewell-demo-tools` (or `--agents a,b`) with agentic + content-harm evaluators; results in **Evaluations → Red team**; clears your demo memory scope afterwards; `--taxonomy-only`, `--strategies`, `--turns`, `--yes`, `--report <eval id>`, `--keep-memory` |
 | [reset-demo-memory.py](../../scripts/reset-demo-memory.py) | Lists your scope in `livewell-demo-memory` and flags red-team residue (exit 1); `--reset` clears it (`--yes` skips the prompt). Run after a red team and at T-0 |
 | [guardrail-matrix.py](../../demos/guardrail-matrix.py) | Lab 2 demo: 7 prompts × {`gpt-5-mini`, `gpt-4.1-mini`} × {default, `livewell-guardrails`} on four `livewell-demo-gr-*` agents; `--cloud` (Foundry evaluation to compare), `--reps`, `--verbose`, `--delete` |
-| [lab4-devui.py](../../demos/lab4-devui.py) | Lab 4: the sequential and hand-off teams from `lab4_multiagent.py` in Agent Framework DevUI on `127.0.0.1:8090`; `--port`, `--host`, `--seats N` (runs per workflow at once), `--no-browser`, `--mermaid` (prints the WorkflowViz graphs), `--capture` (headless runs and the two lab-04 DevUI screenshots). In the `lab4-devui` container app it runs with `--host 0.0.0.0`, the token from `DEVUI_AUTH_TOKEN` and DevUI developer mode (needed for the Events/Traces/Tools panel) |
+| [lab4-devui.py](../../demos/lab4-devui.py) | Lab 4: the sequential and hand-off teams from `lab4_multiagent.py` in Agent Framework DevUI on `127.0.0.1:8090`; `--port`, `--host`, `--seats N` (runs of one workflow in flight at once; each run builds a fresh workflow), `--no-browser`, `--mermaid` (prints the WorkflowViz graphs), `--capture` (headless runs and the two lab-04 DevUI screenshots). In the `lab4-devui` container app it runs with `--host 0.0.0.0`, the token from `DEVUI_AUTH_TOKEN` and DevUI developer mode (needed for the Events/Traces/Tools panel) |
 | [stage-devui.py](../../scripts/stage-devui.py) | `lab4-devui` azd prepackage hook: copies the demo, `livewell_common.py`, `workshop.yaml`, the prompts, `citizens.json` and the 11 LiveWell guides (the Coach's `supporting_guides` may only use their ids) into `demos/devui-aca/app/` (git-ignored) for the image build |
 | [seed-attendees.sh](../../scripts/seed-attendees.sh) | Lab accounts / file / guests → project, search, tracing and Fabric access; `--remove`, `--dry-run` |
 | [render-values.py](../../scripts/render-values.py) | `.azure/<env>/.env` → `content/config/values.md`. Runs by itself after `azd provision` and `azd deploy` (hooks), `fabric/deploy.sh` and `connect-tools.py` |

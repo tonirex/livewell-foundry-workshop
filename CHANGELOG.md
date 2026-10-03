@@ -9,10 +9,19 @@ All notable changes to this workshop. One entry per phase PR.
 - **Hosted DevUI.** The `lab4-devui` service is optional and defaults to on (`LAB4_DEVUI`). `demos/lab4-devui.py`
   runs as a Container App on the workshop environment (`demos/devui-aca/`, `infra/modules/devui.bicep`,
   `scripts/stage-devui.py`). It has its own managed identity with Foundry User, a bearer token on the values sheet,
-  DevUI developer mode (so the Events/Traces/Tools panel shows), a seat pool (`DEVUI_SEATS`, default 8) and scale
-  to zero. Navigators run the sequential and hand-off teams in the browser, with no install and no Codespace. On
-  MCAPS, 6 concurrent runs of each workflow passed. The image also carries the 11 LiveWell guides: without them the
-  Coach's `supporting_guides` enum was empty and it always returned `[]` (`_guides()` now refuses an empty list).
+  DevUI developer mode (so the Events/Traces/Tools panel shows), a cap on runs in flight (`DEVUI_SEATS`, default 8)
+  and scale to zero. Navigators run the sequential and hand-off teams in the browser, with no install and no
+  Codespace. On MCAPS, 6 concurrent runs of each workflow passed. The image also carries the 11 LiveWell guides:
+  without them the Coach's `supporting_guides` enum was empty and it always returned `[]` (`_guides()` now refuses
+  an empty list).
+- **Fresh workflow per DevUI run.** A workflow object keeps its agents' chat history and the hand-off conversation
+  between runs. With the old seat pool, a second hand-off run on the same copy ended in about 1 s with no answer
+  (Activity had "already replied"), and a sequential run carried the previous person's chat. Each run now builds a
+  new workflow; `DEVUI_SEATS` only caps runs in flight.
+- **Answering the triage Coach in DevUI works.** When the Coach asks back instead of handing off, DevUI shows a reply
+  box. The reply failed twice: DevUI looked up the checkpoint under the display name, but the workflow had saved it
+  under its build-time name, and the box sends text where the hand-off expects chat messages. The workflows are now
+  named at build time and text replies are wrapped as a user message.
 - **Specialists copy guide ids from their search results.** The Nutrition and Activity blocks in
   `coach-instructions.md` now say to copy ids exactly from the guide search results and never invent or shorten
   one. Before, the Activity specialist made up ids such as `lg-07-physical-activity` in 4 of 6 runs; after, 0 of

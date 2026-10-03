@@ -2,7 +2,7 @@
 // so participants explore the sequential and hand-off workflows without local Python or Codespaces.
 // `azd deploy lab4-devui` replaces the placeholder image (demos/devui-aca/). DevUI is a sample app, not a
 // production host: it runs in developer mode (for the trace panel) behind one shared bearer token, keeps conversations in memory (so exactly
-// one replica) and runs LIVEWELL_DEVUI_SEATS copies of each workflow so a room can run the same workflow at once.
+// one replica), builds a fresh workflow for every run and caps runs in flight per workflow at LIVEWELL_DEVUI_SEATS.
 // Its own identity holds only AcrPull and Foundry User on the project (the same data-plane role as an attendee).
 param location string
 param tags object
@@ -26,7 +26,7 @@ param image string = ''
 @maxValue(1)
 param minReplicas int = 0
 
-@description('Copies of each workflow (concurrent runs of one workflow). Each run uses tens of thousands of tokens, so the gpt-5-mini TPM cap is the real limit.')
+@description('Runs of one workflow in flight at once (each run builds a fresh workflow). Each run uses tens of thousands of tokens, so the gpt-5-mini TPM cap is the real limit.')
 @minValue(1)
 @maxValue(12)
 param seats int = 8

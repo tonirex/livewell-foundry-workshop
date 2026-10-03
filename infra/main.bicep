@@ -101,7 +101,7 @@ param devuiImage string = ''
 @maxValue(1)
 param devuiMinReplicas int = 0
 
-@description('Copies of each Lab 4 workflow in the hosted DevUI, i.e. concurrent runs of one workflow (DEVUI_SEATS).')
+@description('Runs of one Lab 4 workflow in flight at once in the hosted DevUI; each run builds a fresh workflow (DEVUI_SEATS).')
 @minValue(1)
 @maxValue(12)
 param devuiSeats int = 8
