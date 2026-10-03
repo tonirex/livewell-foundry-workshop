@@ -1,7 +1,7 @@
 // Lab 4 DevUI in a browser (LAB4_DEVUI, optional): demos/lab4-devui.py on the workshop Container Apps environment,
 // so participants explore the sequential and hand-off workflows without local Python or Codespaces.
 // `azd deploy lab4-devui` replaces the placeholder image (demos/devui-aca/). DevUI is a sample app, not a
-// production host: it runs in user mode behind one shared bearer token, keeps conversations in memory (so exactly
+// production host: it runs in developer mode (for the trace panel) behind one shared bearer token, keeps conversations in memory (so exactly
 // one replica) and runs LIVEWELL_DEVUI_SEATS copies of each workflow so a room can run the same workflow at once.
 // Its own identity holds only AcrPull and Foundry User on the project (the same data-plane role as an attendee).
 param location string

@@ -12,7 +12,7 @@ Last checked: 2026-09-30 (Phase 4). Re-check before each delivery with `bash scr
 | Azure Developer CLI (`azd`) | ≥ 1.31 (1.34 available) | `azd provision`, `azd down --purge` |
 | Fabric CLI (`fab`) | `ms-fabric-cli==1.7.0` | Workspace, lakehouse, notebook, ontology import |
 | Playwright for Python | `playwright>=1.47` (1.63.0 tested), `requirements-demos.txt` | Facilitator demo kit (`demos/`): drives the installed Microsoft Edge (`channel="msedge"`), so no browser download |
-| Agent Framework DevUI | `agent-framework-devui==1.0.0b260918`, `requirements-demos.txt` | Lab 4 (`demos/lab4-devui.py`): workflow graph, execution timeline and traces. Navigators use the hosted copy (`lab4-devui` container app, token, user mode); locally it serves 127.0.0.1. Pre-release, so pinned |
+| Agent Framework DevUI | `agent-framework-devui==1.0.0b260918`, `requirements-demos.txt` | Lab 4 (`demos/lab4-devui.py`): workflow graph, execution timeline and traces. Navigators use the hosted copy (`lab4-devui` container app, token, developer mode so the trace panel shows); locally it serves 127.0.0.1. Pre-release, so pinned |
 
 Verified end to end on 2026-09-29 (Phase 2, `mcaps` environment): az 2.87.0, azd 1.34.2, Bicep 0.47.16,
 azd extension `azure.ai.agents` 1.0.0-beta.17, fab 1.7.0, Git Bash (Git for Windows) on Windows ARM64.

@@ -298,7 +298,10 @@ def _strings() -> dict:
 
 def _guides() -> dict:
     """Citations constrained to the real guide ids: strict structured output cannot invent a source."""
-    return {"type": "array", "items": {"type": "string", "enum": list(guide_ids())}}
+    ids = guide_ids()
+    if not ids:  # an empty enum still validates, but then the model can only return []
+        raise FileNotFoundError(f"no lg-*.md guides in {GUIDES_DIR}: copy content/knowledge/livewell-guides/ too")
+    return {"type": "array", "items": {"type": "string", "enum": list(ids)}}
 
 
 def lab1_schema() -> dict:

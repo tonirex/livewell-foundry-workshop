@@ -16,9 +16,10 @@ them, call the project's deployments directly under the deployment guardrail (Mi
 DevUI binds to 127.0.0.1 with no sign-in. Needs `pip install -r requirements-demos.txt` (agent-framework-devui),
 your az login with Foundry User and the azd env (AZURE_ENV_NAME) or a filled .env. Stop it with Ctrl+C.
 
-The same script runs in Azure (`azd deploy lab4-devui`, demos/devui-aca/): `--host 0.0.0.0` switches DevUI to user
-mode and requires the DEVUI_AUTH_TOKEN bearer token; the Container App's managed identity (Foundry User) replaces
-your az login. `--seats N` builds N copies of each workflow because a workflow runs one request at a time.
+The same script runs in Azure (`azd deploy lab4-devui`, demos/devui-aca/): `--host 0.0.0.0` requires the
+DEVUI_AUTH_TOKEN bearer token (DevUI stays in developer mode so the Events/Traces/Tools panel shows), and the
+Container App's managed identity (Foundry User) replaces your az login. `--seats N` builds N copies of each
+workflow because a workflow runs one request at a time.
 """
 from __future__ import annotations
 
@@ -156,7 +157,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--port", type=int, default=8090)
     ap.add_argument("--host", default="127.0.0.1",
-                    help="bind address; anything but 127.0.0.1/localhost needs DEVUI_AUTH_TOKEN and runs in user mode")
+                    help="bind address; anything but 127.0.0.1/localhost needs DEVUI_AUTH_TOKEN")
     ap.add_argument("--seats", type=int, default=int(os.environ.get("LIVEWELL_DEVUI_SEATS") or 1),
                     help="copies of each workflow, i.e. how many runs of one workflow can be in flight at once")
     ap.add_argument("--mermaid", action="store_true", help="print the two workflow graphs as Mermaid and exit")
@@ -193,9 +194,11 @@ def main() -> int:
     lw.heading("Paste this into the DevUI chat box")
     print(request)
     lw.say(f"\nDevUI on http://{args.host}:{args.port} ({len(copies)} seat(s) per workflow, "
-           f"{'no sign-in' if local else 'bearer token, user mode'}; Ctrl+C to stop). Pick a workflow at the top left.")
+           f"{'no sign-in' if local else 'bearer token'}; Ctrl+C to stop). Pick a workflow at the top left.")
+    # Developer mode is what shows the Events/Traces/Tools panel the lab uses. Its extra APIs (hot reload,
+    # deploy) do nothing for in-memory workflows, and the hosted container has no az or docker.
     serve(entities=entities, port=args.port, host=args.host, auto_open=local and not args.no_browser,
-          instrumentation_enabled=True, auth_enabled=not local, mode="developer" if local else "user")
+          instrumentation_enabled=True, auth_enabled=not local, mode="developer")
     return 0
 
 

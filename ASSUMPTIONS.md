@@ -720,7 +720,10 @@ Where an entry changes something SPEC.md states, it says so.
   - **Identity.** Its own user-assigned identity with Foundry User on the project and AcrPull. The code picks it up
     through `AZURE_CLIENT_ID` (`lw.credential()`).
   - **Ingress.** HTTPS on external ingress, and the DevUI bearer token is required.
-  - **DevUI mode.** User mode: no entity reload or deploy.
+  - **DevUI mode.** Developer mode, because user mode hides the Events/Traces/Tools panel that Lab 4 step 3 uses.
+    Its extra APIs, entity hot reload and deploy, do nothing here: the workflows are in memory (no source folder to
+    reload or deploy), and the image has no Azure CLI or Docker. Error messages are more detailed than in user mode.
+    The bearer token is still required.
   - **Seats.** A seat pool, `DEVUI_SEATS` (default 8), gives each concurrent run its own workflow instance, because a
     workflow object runs one request at a time.
   - **Scaling.** One replica, scale to zero (≈ 23 s cold start).

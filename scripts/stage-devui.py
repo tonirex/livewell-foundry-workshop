@@ -21,16 +21,23 @@ FILES = [
     "content/prompts/coach-instructions.md",
     "content/data/citizens.json",
 ]
+# The Coach's evidence schema only accepts these ids (livewell_common.guide_ids()); without them the enum is
+# empty and the hosted Coach can only return "supporting_guides": [].
+GLOBS = ["content/knowledge/livewell-guides/lg-*.md"]
 
 
 def main() -> int:
     if APP.exists():
         shutil.rmtree(APP)
-    for rel in FILES:
+    files = FILES + [p.relative_to(ROOT).as_posix() for g in GLOBS for p in sorted(ROOT.glob(g))]
+    if not any(f.startswith("content/knowledge/") for f in files):
+        print("[stage-devui] no LiveWell guides found under content/knowledge/livewell-guides/")
+        return 1
+    for rel in files:
         dst = APP / rel
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ROOT / rel, dst)
-    print(f"[stage-devui] {len(FILES)} files -> {APP.relative_to(ROOT).as_posix()}/")
+    print(f"[stage-devui] {len(files)} files -> {APP.relative_to(ROOT).as_posix()}/")
     return 0
 
 
