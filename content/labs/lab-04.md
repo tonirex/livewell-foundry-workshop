@@ -65,7 +65,7 @@ Demo map:
 | Programme-Insights | Officer prompt uses Fabric | Specialist routing keeps citizen and officer data paths separate. |
 | Hosted deploy | `rai_config` references the RAI policy; the agent identity gets a role | Governance and least privilege follow the agent into production. |
 | Smoke test | JSON plus citation returns from endpoint; the blocklisted prompt is blocked | Systems can consume the same governed behaviour. |
-| Hosted trace | Tool spans and policy spans appear | Operations can audit the deployed agent. |
+| Hosted trace | Tool calls are counted in the trace header | Operations can audit the deployed agent. |
 
 ### Under the hood
 
