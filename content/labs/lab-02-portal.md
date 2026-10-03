@@ -2,7 +2,7 @@
 
 Main page: [Lab 2](lab-02.md) · [Portal track](PORTAL-TRACK.md)
 
-You will run a **ladder** of eight prompts twice: first on the platform default guardrail, then with the shared custom guardrail `livewell-guardrails` and the `safety` instruction block. Each prompt shows which layer stops it, if any. You will then inspect a blocked and an allowed trace and compare an evaluation run.
+You will run a **ladder** of seven prompts twice: first on the platform default guardrail, then with the shared custom guardrail `livewell-guardrails` and the `safety` instruction block. Each prompt shows which layer stops it, if any. You will then inspect a blocked and an allowed trace and compare an evaluation run.
 
 | Layer | What it is | Where it acts |
 |---|---|---|
@@ -32,7 +32,7 @@ You will run a **ladder** of eight prompts twice: first on the platform default 
 
 3. Send the medication-dosage red flag.
 
-   **Chat → Message box → Send**
+   **Chat → New chat → Message box → Send**
 
    ![Baseline response to metformin dose prompt](screenshots/lab-02/03-unguarded-medication-double.png)
 
@@ -46,7 +46,7 @@ You will run a **ladder** of eight prompts twice: first on the platform default 
 
 4. Send the injected-flyer red flag with the flyer text pasted below the prompt. The playground only accepts image and PDF attachments, so paste the flyer instead of uploading the `.md` file.
 
-   **Chat → Message box → paste prompt + flyer text → Send**
+   **Chat → New chat → Message box → paste prompt + flyer text → Send**
 
    ![Default guardrail blocking the injected flyer as a jailbreak](screenshots/lab-02/04-unguarded-injected-flyer.png)
 
@@ -90,7 +90,7 @@ You will run a **ladder** of eight prompts twice: first on the platform default 
 
 5. Send the other-resident privacy red flag.
 
-   **Chat → Message box → Send**
+   **Chat → New chat → Message box → Send**
 
    ![Baseline response refusing another resident profile](screenshots/lab-02/05-unguarded-other-resident.png)
 
@@ -104,7 +104,7 @@ You will run a **ladder** of eight prompts twice: first on the platform default 
 
 6. Send the meal-skipping prompt.
 
-   **Chat → Message box → Send**
+   **Chat → New chat → Message box → Send**
 
    ![Default guardrail lets the meal-skipping prompt through](screenshots/lab-02/06-unguarded-skip-meals.png)
 
@@ -118,7 +118,7 @@ You will run a **ladder** of eight prompts twice: first on the platform default 
 
 7. Send the benign control prompt.
 
-   **Chat → Message box → Send**
+   **Chat → New chat → Message box → Send**
 
    ![Baseline response to normal hawker-centre sugar advice](screenshots/lab-02/07-unguarded-benign-control.png)
 
@@ -130,7 +130,7 @@ You will run a **ladder** of eight prompts twice: first on the platform default 
 
 8. Send the benign medication-habit prompt.
 
-   **Chat → Message box → Send**
+   **Chat → New chat → Message box → Send**
 
    ![Default guardrail answers the dose-reminder question](screenshots/lab-02/08-unguarded-dose-reminder.png)
 
@@ -160,6 +160,8 @@ You will run a **ladder** of eight prompts twice: first on the platform default 
     **Build → Agents → `livewell-demo-guarded` → Chat**
 
     ![Facilitator guarded agent available for comparison](screenshots/lab-02/10-demo-guarded-fallback.png)
+
+    > **On the fallback path:** still do steps 11–12 on your own agent, because the `safety` block is yours to add. Run steps 13–16 in the chat of `livewell-demo-guarded`, because the blocklist and the Low threshold live in the guardrail. In step 19, tick `livewell-demo-guarded` instead of your agent for the guarded run, and in step 20 compare your baseline run with that one.
 
 11. Append the `safety` block from [coach-instructions.md](../prompts/coach-instructions.md).
 

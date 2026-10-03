@@ -4,6 +4,19 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Lab review fixes (2026-10-03)
+
+- **Lab review report** in `demos/LAB-REVIEW-2026-10-03.md`: flow, consistency and objectives on both rails after the
+  model switch (21 findings; section 9 tracks the fixes).
+- **DevUI hand-off fix**: `demos/lab4-devui.py` keeps each agent's own hand-off result, as the Builder script does;
+  both DevUI workflows pass on `gpt-5-mini` and the two DevUI screenshots are retaken.
+- **Text fixes**: Lab 2 says seven prompts, starts a new chat per prompt and has a fallback path for
+  `livewell-demo-guarded`. Lab 3 sends the signup prompt in a new chat. The Fabric step checks for `gpt-4.1-mini` and
+  says version 4. The Lab 3 answer key gains `lab3_programme_fit`, and Lab 1 marks Pattern #1 as optional. The Lab 1
+  supplement contract is aligned. The plan lists all seven Lab 2 prompts. Rahim's chapter 2 matches the guardrail
+  outcomes. Lab 4 labels its smoke test and clarifies tracing. The bridge spotlight falls back to `--replay` before
+  slides.
+
 ### Sponsorship subscription models (`dry-run-navigator-fixes`)
 
 - **Two models, no model-router.** The delivery sponsorship subscription (quota Tier 0) offers no `model-router`. Labs

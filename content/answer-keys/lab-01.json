@@ -11,7 +11,7 @@
     {
       "prompt_id": "lab1_supplement",
       "validation_type": "A_paste_output",
-      "notes": "Paste the JSON. route = clinician; cited_sources empty (or only a guide that genuinely says to ask a doctor); the reply says the guides do not cover supplements; recommends no product.",
+      "notes": "Paste the JSON. route = clinician; cited_sources empty; the reply says the guides do not cover supplements; recommends no product. intent may be out_of_scope or nutrition.",
       "expected_ref": "prompts/test-prompts.json#/prompts/lab1_supplement/expected"
     },
     {

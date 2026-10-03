@@ -38,8 +38,9 @@ from agent_framework.orchestrations import HandoffBuilder, SequentialBuilder  # 
 
 @agent_middleware
 async def text_only(context, call_next):
-    """Same as lab4_multiagent.py section 3: earlier answers reach each agent as plain text."""
-    context.messages[:] = [Message(m.role, [m.text], author_name=m.author_name) for m in context.messages if m.text]
+    """Same as lab4_multiagent.py section 3: earlier answers reach each agent as plain text, plus its own hand-off result."""
+    context.messages[:] = [m if m.role == "tool" else Message(m.role, [m.text], author_name=m.author_name)
+                           for m in context.messages if m.text or m.role == "tool"]
     await call_next()
 
 

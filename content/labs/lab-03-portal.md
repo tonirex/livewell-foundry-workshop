@@ -4,6 +4,8 @@ Main page: [Lab 3](lab-03.md) · [Portal track](PORTAL-TRACK.md)
 
 You will switch the coach to `gpt-4.1-mini`, add a profile OpenAPI tool, an activities MCP tool with approval before registration, memory, and optionally the Fabric IQ tool for programme-level questions.
 
+> The screenshots were taken on the facilitator's demo agent `livewell-demo-tools`. Do every step on your own `livewell-<initials>` agent.
+
 1. Open your guarded agent and switch it to the tools model before adding any tool.
 
    **Build → Agents → `livewell-<initials>` → Configure → Model `gpt-4.1-mini` → Save**
@@ -98,9 +100,9 @@ You will switch the coach to `gpt-4.1-mini`, add a profile OpenAPI tool, an acti
 
     ![Trace showing profile and knowledge tool calls](screenshots/lab-03/11-profile-trace.png)
 
-12. Ask for an indoor Woodlands activity and registration.
+12. Ask for an indoor Woodlands activity and registration in a new chat, so the coach looks up the profile again.
 
-    **Chat → Message box → Send**
+    **Chat → New chat → Message box → Send**
 
     ![Activity recommendation with registration approval pending](screenshots/lab-03/12-hazy-indoor-signup.png)
 

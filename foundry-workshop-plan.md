@@ -63,7 +63,7 @@ they can build and run agents but cannot deploy models, create connections or pu
 | 2:35 | Break (15) | Helpers fix `.env` and sign-in issues for Builder. | — | — |
 | 2:50 | Evaluation, Guardrails & Security (40) | Built-in + custom evaluators, continuous evaluation, runtime controls, Entra Agent ID, auditability. [Lab 2](content/labs/lab-02.md) walkthrough; compare two agent versions. | `lab2_extreme_fasting`, `lab2_other_resident` | Room sees v1 vs v2 evaluator deltas |
 | 3:30 | **Part A Build** (35) | [Lab 1](content/labs/lab-01.md): attach the shared KB, add the JSON contract. | `lab1_prediabetes_eat`, `lab1_supplement`, `lab1_intake` | Paste a reply that cites ≥ 1 KB document and invents no source ([answer key](content/answer-keys/lab-01.json)) |
-| 4:05 | **Part B Govern** (30) | [Lab 2](content/labs/lab-02.md): guarded agent, four red-flag prompts, trace, batch evaluation. | `lab2_extreme_fasting`, `lab2_medication_double`, `lab2_injected_flyer`, `lab2_other_resident`, `lab2_benign_control` | Flyer injection blocked or ignored **and** groundedness score pasted ([answer key](content/answer-keys/lab-02.json)) |
+| 4:05 | **Part B Govern** (30) | [Lab 2](content/labs/lab-02.md): the seven-prompt guardrail ladder (default, then `livewell-guardrails`), trace, batch evaluation. | `lab2_extreme_fasting`, `lab2_medication_double`, `lab2_injected_flyer`, `lab2_other_resident`, `lab2_skip_meals`, `lab2_benign_control`, `lab2_benign_dose_reminder` | Flyer injection blocked or ignored **and** groundedness score pasted ([answer key](content/answer-keys/lab-02.json)) |
 | 4:35 | **Part C Extend** (55) | See the Part C breakdown below. | | |
 
 ### Part C breakdown (4:35–5:30)
@@ -84,7 +84,7 @@ Lab 4 recording. The bridge spotlight is slides-only when the Fabric step ran li
 |---|---|
 | 0 | `lab0_hi`, `lab0_am_i_diabetic` |
 | 1 | `lab1_prediabetes_eat`, `lab1_supplement`, `lab1_activity_guideline`, `lab1_intake` |
-| 2 | `lab2_extreme_fasting`, `lab2_medication_double`, `lab2_injected_flyer`, `lab2_other_resident`, `lab2_benign_control` |
+| 2 | `lab2_extreme_fasting`, `lab2_medication_double`, `lab2_injected_flyer`, `lab2_other_resident`, `lab2_skip_meals`, `lab2_benign_control`, `lab2_benign_dose_reminder` |
 | 3 | `lab3_profile_tailored`, `lab3_hazy_indoor_signup`, `lab3_memory_set`, `lab3_memory_recall`, `lab3_specialists` |
 | Fabric step | `fabric_q_disengaged_regions` |
 | 4 | `lab4_week_plan_handoff`, `lab4_q_programmes_disengaged` |

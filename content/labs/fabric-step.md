@@ -72,7 +72,7 @@ Prerequisites the facilitator completed:
 
 Steps:
 
-1. Open your Lab 3 agent.
+1. Open your Lab 3 agent and check that **Model** shows **`gpt-4.1-mini`** (Lab 3 step 1). The programme-fit prompt chains the Fabric IQ tool with the OpenAPI profile tool, which needs that model; if the agent is still on `gpt-5-mini`, switch it now and select **Save**.
 2. Go to **Tools** → **Add** → **Add tools** → **Configured** → **Fabric IQ (OneLake Catalog)** ⚠️ preview → **Add tool**, and filter the catalog by `Resident360`.
 3. Pick **`Resident360 Ontology Agent`** → **Add**, or, if the facilitator pre-created it, select the existing connection **`livewell-fabric-resident360`** on the **Configured** tab → **Add tool**.
 4. In **Instructions**, append the `fabric` block from [coach-instructions.md](../prompts/coach-instructions.md). Link to the file; do not copy from this lab page.
@@ -154,7 +154,7 @@ Keep Fabric disabled in local experiments unless the facilitator confirms the sh
 The Fabric step is section 10 of `lab3_tools.py`. It creates a new version of the same coach; there is no new agent.
 
 - **The tool.** [`fabric_tool`](../assets/common/livewell_common.py#L511-L515) returns a `FabricIQPreviewTool` on the project connection `livewell-fabric-resident360`. Foundry calls the published data agent with your own identity (identity passthrough), so Fabric's permissions still apply to you. It only reads aggregates, so no approval is needed. [`fabric_enabled`](../assets/common/livewell_common.py#L128-L129) gates the whole step on `--fabric` or `FABRIC_BRIDGE=true`.
-- **The coach, version 2.** [Lines 285–290](../assets/lab3_tools.py#L285-L290) call `create_agent` with the Lab 3 tools plus the Fabric tool, and the Lab 3 blocks plus `fabric`. The `fabric` block is the routing rule from the table above, written for the model.
+- **The coach, next version.** [Lines 285–290](../assets/lab3_tools.py#L285-L290) call `create_agent` with the Lab 3 tools plus the Fabric tool, and the Lab 3 blocks plus `fabric`. After one run each of Labs 1–3 this is version 4. The `fabric` block is the routing rule from the table above, written for the model.
 - **Mei, then the control.** [Lines 292–311](../assets/lab3_tools.py#L292-L311) ask the region question with a longer timeout (`FABRIC_TIMEOUT`, 300 s). The script compares the first region named with `content/fabric/reference-answers.json`, then asks Rahim's food question on the same coach and checks that no Fabric call was made.
 - **Programme fit.** [Lines 313–325](../assets/lab3_tools.py#L313-L325) send one prompt. The model chains four tools on its own: profile, then Fabric, then `find_activities`, then the approval for `register_interest`. If it asks "shall I sign you up?" in text instead of raising the approval, the script says yes in the same conversation.
 - **The privacy check.** `question_sent` ([lines 327–333](../assets/lab3_tools.py#L327-L333)) pulls the `userQuestion` argument out of each Fabric call: the exact text that left your project for Fabric. [Lines 334–356](../assets/lab3_tools.py#L334-L356) check that it names the age band and not Rahim's id, name or planning area, that the profile call came before the Fabric call, and that the approval came before the write.
@@ -194,7 +194,7 @@ There is nothing to submit. Try the steps first, then open **Expected output** t
 
 **Builder.** Look for:
 
-- `fabric coach = livewell-<INITIALS>-coach version 2`;
+- `fabric coach = livewell-<INITIALS>-coach version 4` (one above your Lab 3 version if you re-ran a lab);
 - the region answer with `DataAgent_Resident360_Ontology_Agent` in its tools (first call 60–120 s) and `top region matches the reference`;
 - the food question with `get_citizen_profile` and `knowledge_base_retrieve`, but no Fabric tool;
 - programme fit: `profile at 0, Fabric at 2`, the question sent (`For residents in age band 60-64, how many enrolled in each programme and how many dropped out?`), then `APPROVAL requested: …register_interest({"activity_id":"ACT047",…}) -> APPROVED` and a Diabetes Prevention intake confirmation.

@@ -30,7 +30,7 @@ How the three agents are wired (diagrams, code pointers and the DevUI view of ea
 
    ![Active hosted-agent version details](screenshots/lab-04/04-active-version-details.png)
 
-5. Watch the facilitator send a grounded food prompt.
+5. Watch the facilitator smoke-test the hosted agent with a grounded food prompt. (The week-plan hand-off prompt from [Lab 4](lab-04.md) step 3 runs in DevUI, not here.)
 
    **Playground → New chat → Message box → Send**
 

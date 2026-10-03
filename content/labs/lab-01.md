@@ -1,6 +1,6 @@
 # Lab 1 · Agents & Knowledge — Foundry IQ
 
-**40 min** · **Part A** · **Audience:** everyone · **Level:** L200 · **Rails:** 🟢 Navigator + 🔵 Builder · **Patterns:** #1 Multi-Document Understanding · #4 Knowledge Retrieval
+**40 min** · **Part A** · **Audience:** everyone · **Level:** L200 · **Rails:** 🟢 Navigator + 🔵 Builder · **Patterns:** #4 Knowledge Retrieval · #1 Multi-Document Understanding (optional step)
 
 **You are here:** [Lab 0](lab-00.md) → **Lab 1** → [Lab 2](lab-02.md) → [Lab 3](lab-03.md) ([Fabric step](fabric-step.md)) → [Lab 4](lab-04.md) → [Bridge spotlight](bridge-spotlight.md) · [README](../../README.md)
 
@@ -8,7 +8,7 @@
 
 > Ground every answer in curated knowledge with verifiable citations, never invent a source, and return machine-routable JSON
 
-Patterns: #1 Multi-Document Understanding; #4 Knowledge Retrieval.
+Patterns: #4 Knowledge Retrieval; #1 Multi-Document Understanding in the optional intake step (Navigator step 10, Builder `--intake`).
 
 ## Foundry features covered
 
@@ -199,7 +199,7 @@ In the trace, look for **Execute Tool** `knowledge_base_retrieve` running before
 
 ![Trace showing knowledge-base retrieval before the answer](screenshots/lab-01/09-knowledge-trace.png)
 
-`lab1_supplement`: "The LiveWell guides don't cover this", `intent` `out_of_scope`, `route` `clinician` and an empty `cited_sources`. The agent still searched the guides, found nothing about supplements and said so.
+`lab1_supplement`: "The LiveWell guides don't cover this", `route` `clinician` and an empty `cited_sources`. `intent` may be `out_of_scope` or `nutrition`; either is fine, because the route is what sends him to a clinician. The agent still searched the guides, found nothing about supplements and said so.
 
 ![route clinician and empty cited_sources for the supplement prompt](screenshots/lab-01/11-json-route-clinician.png)
 

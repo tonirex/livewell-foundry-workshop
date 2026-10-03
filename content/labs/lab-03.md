@@ -109,7 +109,7 @@ The tools call real services, but some parts are fixed so that everyone can fini
    ```
 
    Expect evidence JSON with advice, confidence, supporting guides, rationale and personalisation flags.
-8. Send (`lab3_hazy_indoor_signup`):
+8. Select **New chat**, then send (`lab3_hazy_indoor_signup`). The `tools` block reads the profile once per conversation, so a new chat makes the profile lookup show in this trace:
 
    ```text
    It's hazy today. What can I do indoors near Woodlands, and can you sign me up?

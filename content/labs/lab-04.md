@@ -17,7 +17,7 @@ Patterns: #3 Workflow Orchestration; #9 Collaboration Between Specialists; #10 G
 - Agent versioning and trace comparison across local and hosted runs.
 - Hosted deploy with `azd deploy` (code deploy: Foundry builds the container; no Docker needed).
 - `rai_config` on the hosted agent so the same RAI policy protects the endpoint.
-- Hosted-agent tracing in Foundry and Application Insights.
+- Hosted-agent tracing in Foundry (stored in the project's Application Insights).
 - RBAC ceiling: participants are Foundry User, so publishing is facilitator-only. The hosted agent runs as its own Entra agent identity with Foundry User on the project.
 
 ## Story chapter

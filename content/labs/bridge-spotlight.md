@@ -25,7 +25,7 @@ Patterns: revisit #1-#10; this spotlight adds no new build checkpoint.
 
 ## 🟢 Navigator
 
-This is a facilitator-led spotlight. Slides-only when the Lab 3 Fabric step is live; full demo when the Fabric step is skipped.
+This is a facilitator-led spotlight. Slides-only when the Lab 3 Fabric step ran live. When it was skipped, run the full demo: live if Fabric is up, otherwise from the saved run with `--replay` (no capacity needed).
 
 1. Start with their Fabric medallion estate:
    - `resident_360`.
@@ -235,7 +235,7 @@ attended events in two regions.
 | Symptom | Fix |
 |---|---|
 | Audience asks why not put everything in Foundry IQ | Use the decision table: documents belong in Foundry IQ; governed aggregate business data belongs in Fabric IQ. |
-| Fabric demo is unavailable | Run slides-only and point back to [Fabric question bank](../fabric/question-bank.md). |
+| Fabric demo is unavailable | Run `python demos\fabric-steps.py --replay bridge --open` (no capacity needed). Go slides-only only if the replay also fails, and point back to [Fabric question bank](../fabric/question-bank.md). |
 | Multi-hop answer confuses home region and event region | Emphasise the `heldIn` edge and the distinction documented in [data-agent instructions](../fabric/data-agent-instructions.md). |
 | Demo includes individual detail | Stop the demo and show the aggregate-only privacy rule in [data-agent instructions](../fabric/data-agent-instructions.md). |
 | OneLake Catalog item is missing | It is either unpublished or the account is in the wrong tenant. Use the facilitator screenshot or pre-recorded trace. |
