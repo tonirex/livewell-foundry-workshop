@@ -6,9 +6,11 @@ Run by scripts/provision.sh BEFORE `azd provision`, and again as the azd preprov
 1. Copies infra/env/<AZURE_ENV_NAME>.bicepparam -> infra/main.bicepparam (gitignored), fixing the
    `using` path, because azd only reads infra/main.bicepparam.
 2. Fills AZURE_PRINCIPAL_ID / AZURE_PRINCIPAL_TYPE in the azd env from the signed-in az identity
-   if they are missing (facilitator RBAC in the template), and pins BUDGET_START_DATE.
+   if they are missing (facilitator RBAC in the template), generates the Lab 4 DevUI token
+   (LIVEWELL_DEVUI_TOKEN, unless LAB4_DEVUI=false) and pins BUDGET_START_DATE.
 3. Creates the resource group (idempotent) with the workshop tags, because the template is
    resource-group scoped.
+4. With FABRIC_BRIDGE=true, stops if the Fabric capacity is paused (ARM cannot update it).
 
 azd resolves parameters BEFORE the preprovision hook runs, so in --hook mode any change made in
 steps 1-2 stops the run with "re-run" (a stale file can never deploy the wrong environment).
@@ -20,6 +22,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import secrets
 import shutil
 import subprocess
 import sys
@@ -100,6 +103,18 @@ def main() -> int:
             print("[select-params] Principal added after azd read parameters. Re-run the same command.")
             return 1
 
+    # Lab 4 DevUI bearer token (LAB4_DEVUI): one per environment, read by the bicepparam as a secure parameter and
+    # printed on the values sheet by render-values.py. Never a Bicep output.
+    if (os.environ.get("LAB4_DEVUI", "true").strip().lower() in ("1", "true", "yes")
+            and not os.environ.get("LIVEWELL_DEVUI_TOKEN")):
+        token = secrets.token_urlsafe(18)
+        run(["azd", "env", "set", "LIVEWELL_DEVUI_TOKEN", token])
+        os.environ["LIVEWELL_DEVUI_TOKEN"] = token
+        print("[select-params] LIVEWELL_DEVUI_TOKEN generated (Lab 4 DevUI sign-in, on the values sheet)")
+        if hook_mode:
+            print("[select-params] DevUI token added after azd read parameters. Re-run the same command.")
+            return 1
+
     # Pin the budget start month for the life of this environment (a budget cannot move its start date).
     # When azd has already read an empty value, main.bicep falls back to the same current month.
     if os.environ.get("BUDGET_START_DATE"):
@@ -121,7 +136,26 @@ def main() -> int:
         cmd += ["--subscription", sub]
     run(cmd)
     print(f"[select-params] resource group {rg} ready in {location}")
-    return 0
+    return 0 if fabric_capacity_updatable(rg, sub, env) else 1
+
+
+def fabric_capacity_updatable(rg: str, sub: str, env: str) -> bool:
+    """ARM cannot update a paused Fabric capacity ("Service is not ready to be updated"), which fails the whole
+    deployment after every other resource has gone through. Stop before azd starts instead."""
+    if os.environ.get("FABRIC_BRIDGE", "false").strip().lower() not in ("1", "true", "yes"):
+        return True
+    sub = sub or run(["az", "account", "show", "--query", "id", "-o", "tsv"], check=False)
+    url = (f"https://management.azure.com/subscriptions/{sub}/resourceGroups/{rg}"
+           "/providers/Microsoft.Fabric/capacities?api-version=2023-11-01")
+    out = run(["az", "rest", "--method", "get", "--url", url, "--query",
+               "value[].[name, properties.state]", "-o", "tsv"], check=False)
+    paused = [line.split("\t")[0] for line in out.splitlines()
+              if line.split("\t")[-1] in ("Paused", "Suspended")]
+    if paused:
+        print(f"[select-params] Fabric capacity {paused[0]} is paused and ARM cannot update it. Run "
+              f"`bash scripts/capacity.sh resume {env}`, provision, then `bash scripts/capacity.sh suspend {env}`.")
+        return False
+    return True
 
 
 if __name__ == "__main__":

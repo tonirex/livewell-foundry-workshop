@@ -76,6 +76,26 @@ services:
           shell: pwsh
           run: Copy-Item ../../data/activities.json, ../../data/citizens.json ./ -Force
 
+  # Lab 4 — DevUI in a browser (optional, LAB4_DEVUI): demos/lab4-devui.py with the sequential and hand-off
+  # workflows on Azure Container Apps, user mode behind the LIVEWELL_DEVUI_TOKEN bearer token, so participants
+  # explore Lab 4 without local Python. Bicep creates the app (infra/modules/devui.bicep); the prepackage hook
+  # stages the script and the content files it reads into demos/devui-aca/app (git-ignored).
+  lab4-devui:
+    project: demos/devui-aca
+    host: containerapp
+    language: python
+    docker:
+      path: Dockerfile
+      remoteBuild: true
+    hooks:
+      prepackage:
+        posix:
+          shell: sh
+          run: python3 ../../scripts/stage-devui.py
+        windows:
+          shell: pwsh
+          run: python ../../scripts/stage-devui.py
+
   # Lab 4 — facilitator-only hosted agent: the Lab 4 sequential team (Agent Framework) behind a Responses
   # endpoint. Code deploy (no Docker): `azd deploy livewell-workshop-hosted`; see
   # content/assets/hosted-agent-example/README.md. The service key must equal `name` (azd postdeploy looks

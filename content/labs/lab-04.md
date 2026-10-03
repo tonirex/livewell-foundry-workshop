@@ -1,6 +1,6 @@
 # Lab 4 · Multi-agent & Hosted deploy
 
-**30 min** · **Facilitator demo / Engineer appendix** · **Level:** L300 · **Rails:** 🟢 watch + 🔵 local orchestration · **Patterns:** #3 Workflow Orchestration · #9 Collaboration Between Specialists · #10 Governance & Safety
+**30 min** · **Browser hands-on + facilitator demo / Engineer appendix** · **Level:** L300 · **Rails:** 🟢 DevUI and playground in the browser + watch the deploy · 🔵 local orchestration · **Patterns:** #3 Workflow Orchestration · #9 Collaboration Between Specialists · #10 Governance & Safety
 
 **You are here:** [Lab 0](lab-00.md) → [Lab 1](lab-01.md) → [Lab 2](lab-02.md) → [Lab 3](lab-03.md) ([Fabric step](fabric-step.md)) → **Lab 4** → [Bridge spotlight](bridge-spotlight.md) · [README](../../README.md)
 
@@ -26,18 +26,20 @@ Patterns: #3 Workflow Orchestration; #9 Collaboration Between Specialists; #10 G
 
 ## 🟢 Navigator
 
-Watch the facilitator demo; here is what to look for:
+Steps 1–3 and 7 are hands-on in your browser, with nothing to install. The facilitator shows the rest.
 
-1. The facilitator opens the local Agent Framework orchestration in **DevUI** (`python demos/lab4-devui.py`) and points out the two shapes: a **sequential** team (Nutrition → Activity → Coach) and a **handoff** team where the Coach triages (Coach → Nutrition → Activity). Each box lights up as that agent runs; [Under the hood](#under-the-hood) below explains what you are seeing.
-2. The facilitator adds or shows **`livewell-<INITIALS>-insights`**, the Programme-Insights specialist that uses the Fabric tool for programme-level questions.
-3. Send (`lab4_week_plan_handoff`):
+1. **Open the Lab 4 DevUI.** On the values sheet, open **Lab 4 DevUI (browser, no install)**. Paste the **Lab 4 DevUI token** into **Enter Authentication Token**, then select **Connect**. This is the same Agent Framework orchestration that the Builder script runs. It is hosted in the workshop's Azure Container Apps environment and uses the same Foundry project. It has two shapes: a **sequential** team (Nutrition → Activity → Coach) and a **hand-off** team where the Coach triages (Coach → Nutrition → Activity). [Under the hood](#under-the-hood) below explains what you see.
+2. **Run the sequential team.** Pick **LiveWell sequential** at the top left. Select **+** (top right) to start a fresh session: everyone shares this DevUI, so the session list also shows other people's runs. Select **Configure & Run**, type `user` in **role** and paste this into **contents**. It is Rahim's profile line, which the Builder script also adds, followed by `lab4_week_plan_handoff`. Then select **Run Workflow**.
 
    ```text
+   Resident profile: age band 60-64, lives in Woodlands (North region, hazy today: yes), screening risk High, conditions: elevated blood glucose, about 3100 steps a day.
+
    Plan my week: what to eat for my glucose, and one indoor morning activity near Woodlands.
    ```
 
-   Look for Nutrition then Activity in the trace, followed by valid JSON with at least one citation.
-4. Send (`lab4_q_programmes_disengaged`) to the Programme-Insights specialist:
+   Each box turns green when that agent finishes. A run takes about a minute. In **Execution Timeline**, look for Nutrition, then Activity, then the Coach's evidence JSON with at least one guide id.
+3. **Run the hand-off team.** Switch to **LiveWell hand-off**, select **+** and run the same request. Open **Tools** on the right: it lists `handoff_to_nutrition` then `handoff_to_activity`, which shows the model chose the route. **Traces** shows each agent's time and tokens.
+4. The facilitator adds or shows **`livewell-<INITIALS>-insights`**, the Programme-Insights specialist that uses the Fabric tool for programme-level questions, and sends it (`lab4_q_programmes_disengaged`):
 
    ```text
    Which programmes have the most disengaged residents enrolled?
@@ -48,9 +50,9 @@ Watch the facilitator demo; here is what to look for:
    (<!--ref:q_programmes_disengaged_enrolled.top_disengaged_enrolled-->82<!--/ref--> disengaged residents enrolled). The top programmes
    are close, so ±1 rank is a pass.
 5. Watch the hosted deploy path. The facilitator runs `azd deploy livewell-workshop-hosted`: Foundry builds the sequential team from `content/assets/hosted-agent-example/`, then a postdeploy step gives the agent's identity Foundry User on the project and attaches **`livewell-guardrails`** with `rai_config`.
-6. Smoke test the hosted endpoint (`azd ai agent invoke`, or section 7 of the Builder script). The endpoint is read from the values sheet shown on screen and is never written into this page. Then a blocklisted prompt: it must come back blocked.
-7. Open the hosted-agent trace and compare it with the playground trace.
-8. Note why participants cannot publish: Foundry User can build and test; Foundry Project Manager is required for hosted publish.
+6. Watch the smoke test on the hosted endpoint (`azd ai agent invoke`, or section 7 of the Builder script). The endpoint is read from the values sheet shown on screen and is never written into this page. Then a blocklisted prompt: it must come back blocked.
+7. **Chat with the hosted agent yourself.** In the portal, open **`livewell-workshop-hosted`** → **Playground**, send `lab1_prediabetes_eat`, then open its trace ([portal walkthrough](lab-04-portal.md) steps 1–6). Compare it with your Lab 1 playground trace: here `workflow.run` has one step per agent.
+8. Note why participants cannot publish: Foundry User can build, test and chat with the hosted agent; Foundry Project Manager is required for hosted publish.
 
 > The Foundry portal **Workflows** item is not used in this workshop because it is retiring on **1 Dec 2026**. Multi-agent orchestration is shown with Microsoft Agent Framework, with specialist agents called through function tools (Builder) and with the A2A tool (Navigator, Lab 3 step 11) instead.
 
@@ -58,7 +60,7 @@ Demo map:
 
 | Moment | What to watch | Why it matters |
 |---|---|---|
-| Local orchestration | Nutrition runs before Activity | Sequential handoff is explicit, not implied. |
+| DevUI sequential run | Nutrition runs before Activity | Sequential handoff is explicit, not implied. |
 | DevUI hand-off run | The **Tools** tab lists `handoff_to_nutrition` then `handoff_to_activity` | In a hand-off team the model picks the route by calling a tool. |
 | Programme-Insights | Officer prompt uses Fabric | Specialist routing keeps citizen and officer data paths separate. |
 | Hosted deploy | `rai_config` references the RAI policy; the agent identity gets a role | Governance and least privilege follow the agent into production. |
@@ -67,13 +69,15 @@ Demo map:
 
 ### Under the hood
 
-**What runs where.** The orchestration is Python on your laptop (or Codespace); the models, tools and guardrails are in the Foundry project. Agent Framework sends each agent's turn to a project model deployment through the Responses API. The knowledge base and `find_activities` are *hosted* MCP tools: Foundry calls them server-side through the project connections, so no tool secrets reach your laptop. The hosted agent is the same sequential team, packaged as a container that Foundry runs behind its own endpoint.
+**What runs where.** The orchestration is Python: on your laptop or Codespace for Builder, and in the **Lab 4 DevUI** container app for Navigator. The models, tools and guardrails are in the Foundry project. Agent Framework sends each agent's turn to a project model deployment through the Responses API. The knowledge base and `find_activities` are *hosted* MCP tools: Foundry calls them server-side through the project connections, so no tool secrets reach your laptop or the container. The container app signs in to Foundry with its own managed identity, which has only Foundry User on the project, so you need the token and no Azure sign-in. The hosted agent is the same sequential team, packaged as a container that Foundry runs behind its own endpoint.
 
 ```mermaid
 flowchart LR
-  subgraph laptop["Your laptop or Codespace"]
+  subgraph laptop["Your laptop or Codespace (Builder)"]
     script["lab4_multiagent.py<br/>Agent Framework workflows:<br/>sequential and hand-off"]
-    devui["demos/lab4-devui.py<br/>same workflows in DevUI"]
+  end
+  subgraph aca["Azure Container Apps (Navigator)"]
+    devui["Lab 4 DevUI: demos/lab4-devui.py<br/>same workflows, token sign-in,<br/>managed identity: Foundry User"]
   end
   subgraph project["Foundry project livewell-workshop"]
     dep["Model deployment gpt-5-mini<br/>guardrail: Microsoft.DefaultV2"]
@@ -145,9 +149,9 @@ flowchart LR
 
 **The hosted agent is the sequential team in a container.** [`hosted-agent-example/main.py`](../assets/hosted-agent-example/main.py) builds the same three agents from `livewell.json` (L87-100). It puts a small `ResidentProfile` executor first (L58-78), which reads `/profile/me` for the session resident and prepends the profile summary. `SequentialBuilder([...]).build().as_agent()` (L102-104) turns the workflow into one agent, and `ResponsesHostServer` (L108) serves it on the Responses protocol. Foundry builds and runs the container, gives it an Entra agent identity, and applies `rai_config` (`livewell-guardrails`) to every call on its endpoint.
 
-**Watch it run (facilitator).** `python demos/lab4-devui.py` (install `requirements-demos.txt` first) opens [Agent Framework DevUI](https://learn.microsoft.com/agent-framework/integrations/by-component/ui/devui/) on `http://127.0.0.1:8090` with both workflows, and prints the request to paste.
+**Watch it run.** [Agent Framework DevUI](https://learn.microsoft.com/agent-framework/integrations/by-component/ui/devui/) shows both workflows. Navigator uses the hosted copy from the values sheet (Navigator steps 1–3). To run it locally instead, use `python demos/lab4-devui.py` (install `requirements-demos.txt` first). It opens `http://127.0.0.1:8090` without a token and prints the request to paste.
 
-1. Pick **LiveWell sequential** or **LiveWell hand-off** at the top left.
+1. Pick **LiveWell sequential** or **LiveWell hand-off** at the top left, and select **+** for a fresh session.
 2. Select **Configure & Run**, type `user` in **role**, paste the request into **contents**, then select **Run Workflow**.
 3. Each box turns green as that agent finishes. **Execution Timeline** shows each agent's answer. On the right, **Events** is the raw stream, **Traces** lists the spans with each agent's time and tokens, and **Tools** lists the local tool calls, which in the hand-off team are `handoff_to_nutrition` then `handoff_to_activity`. The `knowledge_base_retrieve` and `find_activities` calls are hosted MCP tools that Foundry runs server-side, so DevUI does not list them; their results show up as the large input token counts in **Traces**.
 
@@ -217,9 +221,9 @@ Engineer appendix notes:
 
 ## Checkpoint
 
-✅ **Built** or watched a multi-agent orchestration with governed handoffs.
+✅ **Built** or ran a multi-agent orchestration with governed handoffs (Builder script, or the Lab 4 DevUI in the browser).
 
-✅ **Did** a hosted-agent smoke test if you are the facilitator, or inspected the live trace as a participant.
+✅ **Did** a hosted-agent chat and trace in the playground, or the hosted smoke test if you are the facilitator.
 
 ✅ **Learned** what changes when an agent moves from playground to endpoint: RBAC, policy attachment, versioning and operational traces.
 
@@ -238,7 +242,7 @@ There is nothing to submit. Try the steps first, then open **Expected output** t
 
 ![Hosted trace: workflow.run with resident_profile, nutrition and activity executor spans](screenshots/lab-04/06-hosted-agent-trace.png)
 
-**DevUI** (facilitator demo): see the two screenshots at the end of [Under the hood](#under-the-hood).
+**DevUI** (Navigator steps 1–3): see the two screenshots at the end of [Under the hood](#under-the-hood).
 
 **Builder.** Look for:
 
@@ -257,6 +261,11 @@ There is nothing to submit. Try the steps first, then open **Expected output** t
 | Symptom | Fix |
 |---|---|
 | Participant cannot publish | Expected. Hosted publish needs Foundry Project Manager; watch the facilitator demo. |
+| DevUI asks for a token again, or a run fails with 401 | Paste the **Lab 4 DevUI token** from the values sheet again (it is kept in this browser only). |
+| DevUI takes 20–30 s to open | It scales to zero when idle and is starting up. The facilitator keeps one copy warm on the day (`DEVUI_MIN_REPLICAS=1`). |
+| DevUI: "All N seats of LiveWell … are busy" | Every seat is running someone's request. Wait a minute and run again. |
+| DevUI session list shows other people's runs | Expected: the room shares one DevUI. Select **+** for your own session. |
+| Hosted playground refuses to chat for a Foundry User account | Watch the facilitator's playground run instead. Tell the facilitator, who checks the portal walkthrough fallback. |
 | Section 7 says the hosted agent is not deployed yet | Expected before the facilitator demo; re-run the cell afterwards. |
 | Section 7: 424 `session_not_ready` | The hosted agent is cold-starting; wait a minute and re-run. If it persists, the facilitator checks the container log (hosted-agent README). |
 | Section 7: guardrail check fails | Facilitator: `python scripts/hosted-postdeploy.py --verify` re-attaches **`livewell-guardrails`** and checks a blocked prompt. |

@@ -81,6 +81,8 @@ def main() -> int:
     prefix = lab.get("prefix", "hpb.lab")
     accounts = f"{prefix}01 ... {prefix}{count:02d}" + (f" @ {tenant_domain}" if tenant_domain else "")
     fabric_ws_url = v.get("FABRIC_WORKSPACE_URL") or MISSING
+    devui_on = (v.get("LAB4_DEVUI") or "true").strip().lower() in ("1", "true", "yes")
+    devui_off = "not deployed (LAB4_DEVUI=false)"
 
     rows = [
         ("Environment", env),
@@ -103,6 +105,8 @@ def main() -> int:
         ("Your agent name", ws["agent_naming"]["portal_agent"] + "  (Navigator)"),
         ("Builder agents", ws["agent_naming"]["builder_agent"] + "  (Builder)"),
         ("Hosted agent (Lab 4, facilitator)", hosted()),
+        ("Lab 4 DevUI (browser, no install)", g("LAB4_DEVUI_URL") if devui_on else devui_off),
+        ("Lab 4 DevUI token", g("LIVEWELL_DEVUI_TOKEN") if devui_on else devui_off),
         ("Lab accounts", accounts),
         ("Guest Wi-Fi", f"{ws['guest_wifi']['ssid']} / {ws['guest_wifi']['code']}"),
     ]

@@ -87,8 +87,8 @@ def repo_files(exts: set[str] | None = None) -> list[Path]:
             continue
         if any(part in SKIP_DIRS for part in p.relative_to(ROOT).parts):
             continue
-        if rel(p) == "content/config/values.md":
-            continue
+        if rel(p) == "content/config/values.md" or rel(p).startswith("demos/devui-aca/app/"):
+            continue  # values.md and the staged DevUI build copy (scripts/stage-devui.py) are gitignored
         if exts is None or p.suffix.lower() in exts:
             out.append(p)
     return sorted(out)

@@ -4,8 +4,9 @@ This review checks that the labs still hang together after the move to the Spons
 (`gpt-5-mini` Low by default, `gpt-4.1-mini` for the Lab 3 tools coach and the judges, `text-embedding-3-small`),
 and that every lab meets its stated objective on both rails: 🟢 Navigator (portal) and 🔵 Builder (Python).
 
-> **Status, end of 2026-10-03:** the text fixes and the DevUI fix are applied (section 9). Still open: the
-> screenshot retake pass (X-1, L2-4), the lab-account checks (L4-3, L4-5) and the timing decision (X-2).
+> **Status, end of 2026-10-03:** the text fixes and the DevUI fix are applied (section 9). L4-3 is verified for the
+> data plane, and Lab 4 now has a browser-hosted DevUI for Navigators. Still open: the screenshot retake pass (X-1,
+> L2-4), the lab-account portal check (L4-5) and the timing decision (X-2).
 
 ## 1. Scope and method
 
@@ -174,7 +175,7 @@ These cannot be settled by reading files. Most need a real `hpb.lab*` account, a
 | FS-2 | ✅ Fixed | fabric-step.md Navigator step 1 checks that the model is `gpt-4.1-mini`, and says why |
 | FS-3 | ✅ Fixed | `lab3_programme_fit` added to [lab-03.json](../content/answer-keys/lab-03.json) |
 | L1-3 | ✅ Fixed | lab-01.md header and objective mark Pattern #1 as the optional intake step |
-| L4-3 | ⏳ Open | Needs a lab account |
+| L4-3 | ✅ Data plane verified | A managed identity with only Foundry User called the hosted agent and received its evidence JSON (ASSUMPTIONS 4.20). Lab 4 Navigators now chat with it themselves; a playground check with a lab account is folded into L4-5 |
 | L4-4 | ✅ Fixed | lab-04.md: "tracing in Foundry (stored in the project's Application Insights)" |
 | X-5 | ✅ Fixed | foundry-workshop-plan.md lists all seven Lab 2 prompts |
 | L1-4 | ✅ Fixed | lab-01.md and lab-01.json accept `intent` `out_of_scope` or `nutrition`; `cited_sources` must be empty, matching the prompt bank |

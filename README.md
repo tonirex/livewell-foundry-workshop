@@ -21,7 +21,7 @@ workshop**. Fabric built the Resident 360 that sees Rahim; today Foundry builds 
 | [Lab 2](content/labs/lab-02.md) | Guardrails, Evaluations & Tracing | RAI policy, four red-flag prompts, traces, batch evaluation, v1 vs v2 | 40 min |
 | [Lab 3](content/labs/lab-03.md) | Tools, MCP & Memory: hyper-personalisation | Profile tool, activities MCP with approval, memory, specialists | 40 min |
 | [Fabric step](content/labs/fabric-step.md) | Add the Fabric IQ tool (optional, in Lab 3) | Mei's region question answered by the Resident360 Ontology Agent | 15 min |
-| [Lab 4](content/labs/lab-04.md) | Multi-agent & Hosted deploy *(facilitator demo)* | Agent Framework orchestration, hosted agent with guardrails | 30 min |
+| [Lab 4](content/labs/lab-04.md) | Multi-agent & Hosted deploy *(browser hands-on + facilitator deploy)* | Agent Framework orchestration, hosted agent with guardrails | 30 min |
 | [Bridge spotlight](content/labs/bridge-spotlight.md) | Two IQs, one agent *(facilitator)* | How the Fabric medallion and Foundry fit together | 10 min |
 
 **Pick your rail** (every lab has 🟢 Navigator and 🔵 Builder sections):

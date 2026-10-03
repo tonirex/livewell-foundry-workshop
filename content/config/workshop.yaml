@@ -60,6 +60,7 @@ names:
   acr_connection: "livewell-acr"                   # project connection to ACR (hosted agent images)
   appinsights_connection: "livewell-appinsights"   # project connection to Application Insights (tracing)
   mcp_app: "ca-mcp-activities-<env>"
+  devui_app: "ca-lab4-devui-<env>"                 # Lab 4 DevUI in a browser (LAB4_DEVUI, azd deploy lab4-devui)
   mcp_connection: "livewell-activities-mcp"        # project connection to the activities MCP server
   profile_openapi_tool: "livewell_profile"         # Navigator OpenAPI tool over the profile endpoint
   fabric_connection: "livewell-fabric-resident360" # project connection created by Add tool -> Fabric IQ

@@ -351,10 +351,21 @@ def endpoint() -> str:
     return ep.rstrip("/")
 
 
+def managed_identity_client_id() -> str | None:
+    """The user-assigned identity of the Lab 4 DevUI Container App (infra/modules/devui.bicep sets AZURE_CLIENT_ID;
+    Container Apps sets IDENTITY_ENDPOINT). None on laptops and Codespaces, which sign in with az / azd."""
+    if os.environ.get("IDENTITY_ENDPOINT") and os.environ.get("AZURE_CLIENT_ID"):
+        return os.environ["AZURE_CLIENT_ID"]
+    return None
+
+
 @functools.lru_cache(maxsize=1)
 def credential():
-    from azure.identity import AzureCliCredential, AzureDeveloperCliCredential, ChainedTokenCredential
+    from azure.identity import (AzureCliCredential, AzureDeveloperCliCredential, ChainedTokenCredential,
+                                ManagedIdentityCredential)
 
+    if client_id := managed_identity_client_id():
+        return ManagedIdentityCredential(client_id=client_id)
     tenant = os.environ.get("AZURE_TENANT_ID") or None
     return ChainedTokenCredential(AzureCliCredential(tenant_id=tenant), AzureDeveloperCliCredential(tenant_id=tenant))
 
@@ -1099,10 +1110,15 @@ def af_client(model: str | None = None):
     local agents run under the deployment's guardrail (the platform default), not an agent-level policy."""
     async def make():
         from agent_framework.foundry import FoundryChatClient
-        from azure.identity.aio import AzureCliCredential, AzureDeveloperCliCredential, ChainedTokenCredential
+        from azure.identity.aio import (AzureCliCredential, AzureDeveloperCliCredential, ChainedTokenCredential,
+                                        ManagedIdentityCredential)
 
         tenant = os.environ.get("AZURE_TENANT_ID") or None
-        cred = ChainedTokenCredential(AzureCliCredential(tenant_id=tenant), AzureDeveloperCliCredential(tenant_id=tenant))
+        if client_id := managed_identity_client_id():
+            cred = ManagedIdentityCredential(client_id=client_id)
+        else:
+            cred = ChainedTokenCredential(AzureCliCredential(tenant_id=tenant),
+                                          AzureDeveloperCliCredential(tenant_id=tenant))
         return FoundryChatClient(project_endpoint=endpoint(), model=model or DEFAULT_MODEL, credential=cred)
 
     return run_async(make())

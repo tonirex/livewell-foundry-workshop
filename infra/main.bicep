@@ -86,6 +86,26 @@ param mcpMinReplicas int = 0
 @description('Last deployed MCP server image (azd writes SERVICE_MCP_ACTIVITIES_IMAGE_NAME after `azd deploy`). Empty = placeholder.')
 param mcpImage string = ''
 
+@description('LAB4_DEVUI. true = host the Lab 4 DevUI (demos/lab4-devui.py) on the Container Apps environment so participants explore both workflows in a browser, no local Python (`azd deploy lab4-devui`). false = no DevUI app.')
+param lab4DevUi bool = true
+
+@secure()
+@description('Bearer token for the hosted DevUI (LIVEWELL_DEVUI_TOKEN, generated once by scripts/select-params.py, printed on the values sheet). Empty = no DevUI app.')
+param devuiToken string = ''
+
+@description('Last deployed DevUI image (SERVICE_LAB4_DEVUI_IMAGE_NAME). Empty = placeholder.')
+param devuiImage string = ''
+
+@description('DevUI min replicas. 0 between sessions; 1 on the workshop day (DEVUI_MIN_REPLICAS=1). Max is always 1.')
+@minValue(0)
+@maxValue(1)
+param devuiMinReplicas int = 0
+
+@description('Copies of each Lab 4 workflow in the hosted DevUI, i.e. concurrent runs of one workflow (DEVUI_SEATS).')
+@minValue(1)
+@maxValue(12)
+param devuiSeats int = 8
+
 param budgetAmountUsd int = 300
 param budgetAlertThresholdsUsd array = [
   150
@@ -122,6 +142,7 @@ var n = {
   search: replace(names.search_service, '<env>', environmentName)
   fabricCapacity: replace(names.fabric_capacity, '<env>', environmentName)
   mcpApp: replace(names.mcp_app, '<env>', environmentName)
+  devuiApp: replace(names.devui_app, '<env>', environmentName)
   budget: replace(names.budget, '<env>', environmentName)
   knowledgeContainer: names.knowledge_container
   searchConnection: names.search_connection
@@ -137,6 +158,7 @@ var tags = union(extraTags, {
 })
 
 var facilitators = filter(union(empty(principalId) ? [] : [principalId], facilitatorPrincipalIds), p => !empty(p))
+var deployDevUi = lab4DevUi && !empty(devuiToken)
 
 var deployments = [
   {
@@ -263,6 +285,27 @@ module rbac 'modules/rbac.bicep' = {
   }
 }
 
+// After foundry: the DevUI needs the project endpoint and Foundry User on the project (containers comes first
+// because foundry takes the ACR from it).
+module devui 'modules/devui.bicep' = if (deployDevUi) {
+  name: 'devui'
+  params: {
+    location: location
+    tags: tags
+    name: n.devuiApp
+    identityName: 'id-livewell-devui-${environmentName}'
+    environmentId: containers.outputs.environmentId
+    acrName: containers.outputs.acrName
+    accountName: foundry.outputs.accountName
+    projectName: foundry.outputs.projectName
+    projectEndpoint: foundry.outputs.projectEndpoint
+    authToken: devuiToken
+    image: devuiImage
+    minReplicas: devuiMinReplicas
+    seats: devuiSeats
+  }
+}
+
 module fabric 'modules/fabric.bicep' = if (fabricBridge) {
   name: 'fabric'
   params: {
@@ -324,6 +367,8 @@ output AZURE_CONTAINER_APPS_ENVIRONMENT_ID string = containers.outputs.environme
 output AZURE_USER_ASSIGNED_IDENTITY_CLIENT_ID string = containers.outputs.identityClientId
 output MCP_APP_NAME string = containers.outputs.mcpAppName
 output MCP_URL string = 'https://${containers.outputs.mcpAppFqdn}/mcp'
+output LAB4_DEVUI_APP_NAME string = deployDevUi ? devui!.outputs.name : ''
+output LAB4_DEVUI_URL string = deployDevUi ? 'https://${devui!.outputs.fqdn}' : ''
 
 output FABRIC_CAPACITY_NAME string = fabricBridge ? fabric!.outputs.name : ''
 output FABRIC_CAPACITY_ID string = fabricBridge ? fabric!.outputs.id : ''

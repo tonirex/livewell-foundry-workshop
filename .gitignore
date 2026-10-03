@@ -55,6 +55,8 @@ content/config/values.md
 # copied from content/data/activities.json + citizens.json by the azd prepackage hook (azure.yaml)
 content/assets/mcp-activities/activities.json
 content/assets/mcp-activities/citizens.json
+# copied by scripts/stage-devui.py (azd prepackage hook of the lab4-devui service)
+demos/devui-aca/app/
 # Builder-rail run artefacts (lab scripts, validate-builder-rail.py, eval runs)
 content/assets/.runs/
 content/eval/.runs/

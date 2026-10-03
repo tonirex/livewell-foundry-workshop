@@ -82,7 +82,7 @@ About 1.5 h end to end.
 | 4 Knowledge base | `python scripts/build-kb.py` | 5 min | `livewell-guides-kb` answers with a citation (`--check` re-tests it) |
 | 5 MCP server | `azd deploy mcp-activities` | 5 min | `MCP_URL` responds |
 | 6 Tool connections | `python scripts/connect-tools.py` | 2 min | Activities MCP, Fabric IQ and the two specialist A2A connections (`livewell-nutrition-a2a`, `livewell-activity-a2a`); `/profile/me` 200, another resident 403; `FABRIC_IQ_CONNECTION_ID` in `.azure/mcaps/.env` |
-| 7 Hosted agent (Lab 4) | Repo `.venv` active: `azd deploy livewell-workshop-hosted`, then `python scripts/hosted-postdeploy.py --verify` | ≈ 8 min | Agent active; a week plan comes back as evidence JSON; the blocklisted prompt is blocked ([README](../assets/hosted-agent-example/README.md)) |
+| 7 Hosted agent and DevUI (Lab 4) | Repo `.venv` active: `azd deploy livewell-workshop-hosted`, then `python scripts/hosted-postdeploy.py --verify`, then `azd deploy lab4-devui` | ≈ 10 min | Agent active; a week plan comes back as evidence JSON; the blocklisted prompt is blocked ([README](../assets/hosted-agent-example/README.md)). The values sheet shows **Lab 4 DevUI** and its token; signing in with the token lists both workflows |
 | 8 Demo agents | `python demos/create-demo-agents.py` | 3 min | Seven `livewell-demo-*` agents listed (five lab agents plus the Nutrition and Activity specialists, each with "a2a on") and the `livewell-eval` dataset registered (Lab 2 portal evaluation picks it); `--check` re-tests |
 | 9 Attendees | `bash scripts/seed-attendees.sh mcaps --lab-accounts` | 2 min | Every row shows `added` or `exists` |
 | 10 Proof | `python scripts/smoke-test.py`, `make -C content/assets validate`, then `make -C content/assets validate-live ENV=mcaps` (graph check + 9 data-agent calls, ≈ 8 min) | 15 min | Smoke test 11/11 PASS (report in `content/assets/.runs/`); narrative report in `demos/NARRATIVE-VALIDATION-<date>.md` |
@@ -92,7 +92,22 @@ About 1.5 h end to end.
 > preprovision hook runs. The script runs `scripts/select-params.py` first, which copies
 > `infra/env/<env>.bicepparam` into place, records your principal ID and creates the resource group. A bare
 > `azd provision` still works once that file exists. If the hook had to regenerate anything, it stops with "re-run"
-> so a stale file can never deploy the wrong environment.
+> so a stale file can never deploy the wrong environment. With `FABRIC_BRIDGE=true` it also stops while the Fabric
+> capacity is paused, because ARM cannot update a paused capacity. Resume it first, then suspend it again afterwards.
+
+**Lab 4 DevUI (`lab4-devui`).** Navigators run the Lab 4 orchestration in the browser, with no local install. It is
+`demos/lab4-devui.py` in a container app (`ca-lab4-devui-<env>`) on the workshop's Container Apps environment.
+- **Identity.** It has its own managed identity with Foundry User on the project and AcrPull. It has no other Azure
+  access.
+- **Sign-in.** One bearer token per environment (`LIVEWELL_DEVUI_TOKEN`). `select-params.py` generates it, Bicep
+  stores it as a container-app secret, and it appears on the values sheet.
+- **Capacity.** It runs one replica. `DEVUI_SEATS` (default 8) sets how many runs of each workflow can run at once;
+  a ninth gets "All 8 seats … are busy".
+- **Validation.** Validated 2026-10-03 on MCAPS: 6 sequential runs at once took 55–73 s each, and 6 hand-off runs at
+  once took 38–52 s each.
+- **Opting out.** `azd env set LAB4_DEVUI false` skips it. Then deploy services by name and leave out `lab4-devui`.
+- **Caveats.** DevUI is a sample (beta), not a production app. Everyone with the token shares one session list, and
+  the data is fictional. Rotate the token with `azd env set LIVEWELL_DEVUI_TOKEN ""`, then provision again.
 
 Re-run step 9 after step 3 so that attendees also get **Viewer** on the Fabric workspace, which gives read access to
 the data agent. The postprovision hook (`scripts/apply-guardrail.py`) keeps every model deployment on the platform
@@ -158,10 +173,11 @@ python scripts/gen-citizens.py --from-onelake --check    # citizens.json agrees 
      scope, and those memories later get ordinary portal chats blocked by the content filter (ASSUMPTIONS 5.22).
      The script clears your scope in `livewell-demo-memory` when it finishes (skip with `--keep-memory`). If a run
      was interrupted, run `python scripts/reset-demo-memory.py` (lists and flags residue) and `--reset`.
-- Lab 4 facilitator demo: `python demos/lab4-devui.py` opens Agent Framework DevUI on `http://127.0.0.1:8090` with
-  the sequential and hand-off teams (install `requirements-demos.txt` first). Run each once (≈ 40 s, cents) so the
-  first live run is not a cold start; the steps are in Lab 4 → Under the hood. `--capture` reruns both headless and
-  refreshes `screenshots/lab-04/10-` and `11-`.
+- Lab 4 DevUI: open **Lab 4 DevUI** from the values sheet in a private window, connect with the token, and run each
+  workflow once (≈ 1 min, cents) so the first live run is not a cold start. The steps are in Lab 4 Navigator steps
+  1–3. To run it locally: `python demos/lab4-devui.py` opens `http://127.0.0.1:8090` without a token (install
+  `requirements-demos.txt` first). `--capture` reruns both workflows headless and refreshes `screenshots/lab-04/10-`
+  and `11-`.
 - Red team on this laptop instead (content-harm categories only), in its own venv (PyRIT pins its own dependencies):
   `python -m venv .venv-redteam && .venv-redteam/bin/pip install -r requirements-redteam.txt`, then
   `INITIALS=fac .venv-redteam/bin/python scripts/red-team.py` (full scan, 192 attacks, ≈ US$8, estimated 30 min) or
@@ -193,7 +209,7 @@ python scripts/gen-citizens.py --from-onelake --check    # citizens.json agrees 
 
 ```bash
 bash scripts/capacity.sh resume mcaps                    # ~1 min; Fabric step + bridge spotlight need it
-MCP_MIN_REPLICAS=1 bash scripts/provision.sh mcaps --skip-preflight   # no MCP cold starts during labs
+MCP_MIN_REPLICAS=1 DEVUI_MIN_REPLICAS=1 bash scripts/provision.sh mcaps --skip-preflight   # no MCP or Lab 4 DevUI cold starts
 python scripts/render-values.py mcaps                    # values sheet -> content/config/values.md (hooks also refresh it)
 python scripts/apply-guardrail.py                        # AFTER 09:30 SGT: restores livewell-guardrails (reset daily ~09:15)
 python scripts/smoke-test.py --demo-agents               # all PASS on the livewell-demo-* agents (incl. demo memory), ≈ 3 min
@@ -258,8 +274,9 @@ type. Cost Management lags by up to 24 h.
 | Fabric capacity `fablivewell<env>` | ≈ US$0.36/h on F2 (≈ $259/month), ≈ US$0.76/h on F4 (≈ $550/month) | `scripts/capacity.sh suspend` every evening; `scale F2` after a busy day on F4; deleted by `teardown.sh` |
 | Azure AI Search Basic `srch-livewell-<env>` | ≈ US$0.10/h (≈ $74/month) | Delete with `teardown.sh` at T+1; do not keep an environment "just in case" |
 | MCP app with `MCP_MIN_REPLICAS=1` | A few US$/day | Re-provision with the default (0) after the workshop |
+| Lab 4 DevUI app `ca-lab4-devui-<env>` (1 vCPU / 2 GiB) | Nothing at the default `DEVUI_MIN_REPLICAS=0`; ≈ US$0.11/h while active or with `DEVUI_MIN_REPLICAS=1` | Re-provision with the default (0) after the workshop; `teardown.sh` |
 | ACR Basic | ≈ US$0.17/day | `teardown.sh` |
-| Hosted agent (Lab 4 facilitator demo) | Container compute (0.5 vCPU / 1 GiB) only while a session is active; nothing when idle | `azd ai agent delete livewell-workshop-hosted` after the workshop, or `teardown.sh` |
+| Hosted agent `livewell-workshop-hosted` (Lab 4) | Container compute (0.5 vCPU / 1 GiB) only while a session is active; nothing when idle | `azd ai agent delete livewell-workshop-hosted` after the workshop, or `teardown.sh` |
 | Red-team scans | $20–$60 per 1M evaluation tokens | Facilitator only; never loop them |
 | Log Analytics / App Insights | Per GB ingested (capped at 1 GB/day) | `teardown.sh` |
 
@@ -277,6 +294,7 @@ type. Cost Management lags by up to 24 h.
 | Project managed identity | Foundry Agent Consumer (the A2A connections sign in as the project to call the demo specialists in Lab 3 step 11) | Project | `rbac.bicep` |
 | Search managed identity | Cognitive Services User, Storage Blob Data Reader | Foundry account, storage | `rbac.bicep` |
 | MCP app identity | AcrPull | ACR | `infra/modules/containerapps.bicep` |
+| Lab 4 DevUI identity (`id-livewell-devui-<env>`) | Foundry User, AcrPull | Project, ACR | `infra/modules/devui.bicep` |
 | Hosted agent identity (`livewell-workshop-hosted`) | Foundry User | Project | `scripts/hosted-postdeploy.py` (azd postdeploy hook; the identity only exists after the first deploy) |
 | Attendees | Foundry User | Project | `seed-attendees.sh` |
 | Attendees | Search Index Data Reader | Search service | `seed-attendees.sh` |
@@ -331,6 +349,8 @@ scored locally instead", and the local scores are still valid. To publish a run 
 |---|---|
 | `azd provision` → "missing required inputs" | Run `bash scripts/provision.sh <env>`, which generates `infra/main.bicepparam` first |
 | Preprovision hook says "re-run" | Expected after switching environments; run the same command again |
+| Preprovision hook: "Fabric capacity … is paused", or a provision fails on `fabric` with "Service is not ready to be updated" | ARM cannot update a paused capacity. `bash scripts/capacity.sh resume <env>`, provision, then `suspend <env>` |
+| Lab 4 DevUI shows the "Your Azure Container Apps app is live" page | The app still has the placeholder image: run `azd deploy lab4-devui` |
 | Budget deployment fails with a start-date error | An existing budget cannot move its start month. `select-params.py` pins `BUDGET_START_DATE` in the azd env on first provision and `teardown.sh` clears it. If you deleted the resource group by hand, run `azd env set BUDGET_START_DATE ""` before re-provisioning |
 | `FlagMustBeSetForRestore` / "soft-deleted" Foundry account | `az cognitiveservices account purge -n aif-livewell-<env> -g rg-livewell-workshop-<env> -l swedencentral` (`teardown.sh` does this) |
 | Fabric capacity "admin members invalid" | `fabricAdminMembers` must be UPNs of **member** accounts in the same tenant (no guests) |
@@ -363,7 +383,8 @@ scored locally instead", and the local scores are still valid. To publish a run 
 | [red-team-cloud.py](../../scripts/red-team-cloud.py) | Cloud red team of `livewell-demo-tools` (or `--agents a,b`) with agentic + content-harm evaluators; results in **Evaluations → Red team**; clears your demo memory scope afterwards; `--taxonomy-only`, `--strategies`, `--turns`, `--yes`, `--report <eval id>`, `--keep-memory` |
 | [reset-demo-memory.py](../../scripts/reset-demo-memory.py) | Lists your scope in `livewell-demo-memory` and flags red-team residue (exit 1); `--reset` clears it (`--yes` skips the prompt). Run after a red team and at T-0 |
 | [guardrail-matrix.py](../../demos/guardrail-matrix.py) | Lab 2 demo: 7 prompts × {`gpt-5-mini`, `gpt-4.1-mini`} × {default, `livewell-guardrails`} on four `livewell-demo-gr-*` agents; `--cloud` (Foundry evaluation to compare), `--reps`, `--verbose`, `--delete` |
-| [lab4-devui.py](../../demos/lab4-devui.py) | Lab 4 demo: the sequential and hand-off teams from `lab4_multiagent.py` in Agent Framework DevUI on `127.0.0.1:8090`; `--port`, `--no-browser`, `--mermaid` (prints the WorkflowViz graphs), `--capture` (headless runs and the two lab-04 DevUI screenshots) |
+| [lab4-devui.py](../../demos/lab4-devui.py) | Lab 4: the sequential and hand-off teams from `lab4_multiagent.py` in Agent Framework DevUI on `127.0.0.1:8090`; `--port`, `--host`, `--seats N` (runs per workflow at once), `--no-browser`, `--mermaid` (prints the WorkflowViz graphs), `--capture` (headless runs and the two lab-04 DevUI screenshots). In the `lab4-devui` container app it runs with `--host 0.0.0.0`, the token from `DEVUI_AUTH_TOKEN` and DevUI user mode |
+| [stage-devui.py](../../scripts/stage-devui.py) | `lab4-devui` azd prepackage hook: copies the demo, the Lab 4 Builder script, `livewell_common.py`, `workshop.yaml` and the prompts into `demos/devui-aca/app/` (git-ignored) for the image build |
 | [seed-attendees.sh](../../scripts/seed-attendees.sh) | Lab accounts / file / guests → project, search, tracing and Fabric access; `--remove`, `--dry-run` |
 | [render-values.py](../../scripts/render-values.py) | `.azure/<env>/.env` → `content/config/values.md`. Runs by itself after `azd provision` and `azd deploy` (hooks), `fabric/deploy.sh` and `connect-tools.py` |
 | [smoke-test.py](../../scripts/smoke-test.py) | End-to-end check with temporary `livewell-smoke-*` agents: MCP, knowledge, guardrail, tools, Fabric, hosted agent, demo-memory residue, cost since provision; `--demo-agents`, `--no-fabric`, `--no-hosted`, `--since`, `--report` |

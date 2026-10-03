@@ -12,9 +12,13 @@ answer into the chat. The Traces panel shows the OpenTelemetry spans of each run
 
 It prints the request to paste into the chat box (your profile summary + `lab4_week_plan_handoff`). The agents
 mirror `content/assets/lab4_multiagent.py` sections 3-5 (same instruction blocks, tools and builders) and, like
-them, call the project's deployments directly under the deployment guardrail (Microsoft.DefaultV2). DevUI binds to
-127.0.0.1 only. Needs `pip install -r requirements-demos.txt` (agent-framework-devui), your az login with Foundry
-User and the azd env (AZURE_ENV_NAME) or a filled .env. Stop it with Ctrl+C.
+them, call the project's deployments directly under the deployment guardrail (Microsoft.DefaultV2). By default
+DevUI binds to 127.0.0.1 with no sign-in. Needs `pip install -r requirements-demos.txt` (agent-framework-devui),
+your az login with Foundry User and the azd env (AZURE_ENV_NAME) or a filled .env. Stop it with Ctrl+C.
+
+The same script runs in Azure (`azd deploy lab4-devui`, demos/devui-aca/): `--host 0.0.0.0` switches DevUI to user
+mode and requires the DEVUI_AUTH_TOKEN bearer token; the Container App's managed identity (Foundry User) replaces
+your az login. `--seats N` builds N copies of each workflow because a workflow runs one request at a time.
 """
 from __future__ import annotations
 
@@ -32,8 +36,10 @@ os.environ.setdefault("PYTHONIOENCODING", "utf-8")
 
 from common import livewell_common as lw  # noqa: E402
 
-from agent_framework import Agent, Message, WorkflowViz, agent_middleware  # noqa: E402
+from agent_framework import Agent, Message, WorkflowException, WorkflowViz, agent_middleware  # noqa: E402
 from agent_framework.orchestrations import HandoffBuilder, SequentialBuilder  # noqa: E402
+
+LOOPBACK = ("127.0.0.1", "localhost")
 
 
 @agent_middleware
@@ -77,6 +83,27 @@ def build(client, knowledge, find_activities):
                .build())
     handoff.name, handoff.description = "LiveWell hand-off", "Coach triages -> Nutrition -> Activity (Lab 4 section 5)"
     return sequential, handoff
+
+
+class SeatPool:
+    """One DevUI entry backed by identical copies of a workflow. A workflow instance refuses a second run while one
+    is in flight ("Workflow is already running"), so each run takes the first idle copy and a room of participants
+    can run the same workflow at once. Everything else (name, graph, executors) comes from the first copy."""
+
+    def __init__(self, copies):
+        self._copies = list(copies)
+
+    def __getattr__(self, name):
+        return getattr(self._copies[0], name)
+
+    def run(self, *args, **kwargs):
+        for wf in self._copies:
+            try:
+                return wf.run(*args, **kwargs)
+            except WorkflowException as e:
+                if "already running" not in str(e):
+                    raise
+        raise WorkflowException(f"All {len(self._copies)} seats of {self.name} are busy. Try again in a minute.")
 
 
 # workflow -> (screenshot, side-panel tab to show)
@@ -128,6 +155,10 @@ def capture(port: int, request: str) -> int:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--port", type=int, default=8090)
+    ap.add_argument("--host", default="127.0.0.1",
+                    help="bind address; anything but 127.0.0.1/localhost needs DEVUI_AUTH_TOKEN and runs in user mode")
+    ap.add_argument("--seats", type=int, default=int(os.environ.get("LIVEWELL_DEVUI_SEATS") or 1),
+                    help="copies of each workflow, i.e. how many runs of one workflow can be in flight at once")
     ap.add_argument("--mermaid", action="store_true", help="print the two workflow graphs as Mermaid and exit")
     ap.add_argument("--no-browser", action="store_true", help="do not open the browser")
     ap.add_argument("--capture", action="store_true", help="refresh the lab-04 DevUI screenshots (needs Playwright)")
@@ -138,7 +169,8 @@ def main() -> int:
                                   f"{lw.prompt_text('lab4_week_plan_handoff')}")
 
     client = lw.af_client()
-    workflows = build(client, lw.af_kb_tool(client), lw.af_activities_tool(client))
+    knowledge, find_activities = lw.af_kb_tool(client), lw.af_activities_tool(client)
+    workflows = build(client, knowledge, find_activities)
     if args.mermaid:
         for wf in workflows:
             print(f"%% {wf.name}\n{WorkflowViz(wf).to_mermaid()}")
@@ -149,13 +181,21 @@ def main() -> int:
         lw.say("DevUI is not installed: python -m pip install -r requirements-demos.txt")
         return 1
 
+    local = args.host in LOOPBACK
+    if not local and not os.environ.get("DEVUI_AUTH_TOKEN"):
+        lw.say(f"--host {args.host} makes DevUI reachable from the network: set DEVUI_AUTH_TOKEN first.")
+        return 1
+    copies = [workflows] + [build(client, knowledge, find_activities) for _ in range(max(args.seats, 1) - 1)]
+    entities = [SeatPool(pool) for pool in zip(*copies)] if len(copies) > 1 else list(workflows)
+
     lw.warm_activities()
     request = f"{lw.profile_summary(lw.get_citizen_profile('me'))}\n\n{lw.prompt_text('lab4_week_plan_handoff')}"
     lw.heading("Paste this into the DevUI chat box")
     print(request)
-    lw.say(f"\nDevUI on http://127.0.0.1:{args.port} (Ctrl+C to stop). Pick a workflow at the top left.")
-    serve(entities=list(workflows), port=args.port, host="127.0.0.1", auto_open=not args.no_browser,
-          instrumentation_enabled=True, auth_enabled=False)
+    lw.say(f"\nDevUI on http://{args.host}:{args.port} ({len(copies)} seat(s) per workflow, "
+           f"{'no sign-in' if local else 'bearer token, user mode'}; Ctrl+C to stop). Pick a workflow at the top left.")
+    serve(entities=entities, port=args.port, host=args.host, auto_open=local and not args.no_browser,
+          instrumentation_enabled=True, auth_enabled=not local, mode="developer" if local else "user")
     return 0
 
 

@@ -497,8 +497,11 @@ Where an entry changes something SPEC.md states, it says so.
   cold start after scale-to-zero can also return 424 `session_not_ready` once; `lw.retry` treats that code as
   transient (at least 15 s between tries) and Lab 4 records a failed check instead of crashing if it persists.
 - **4.20** Hosted agents answer only on the agent endpoint (`{project}/agents/<name>/endpoint/protocols/openai`), not
-  through `agent_reference` on the project endpoint. `lw.ask` routes hosted agents there. **Unverified:** that a
-  participant with only Foundry User can call the endpoint; Lab 4 keeps the hosted agent a facilitator demo.
+  through `agent_reference` on the project endpoint. `lw.ask` routes hosted agents there. **Verified 2026-10-03**: a
+  managed identity with only Foundry User on the project (plus AcrPull) called `livewell-workshop-hosted` from a
+  temporary Container Apps job and received the evidence JSON, so the data plane accepts Foundry User callers.
+  Navigators therefore chat with the hosted agent themselves in Lab 4. **Unverified:** that the portal playground
+  allows a Foundry User lab account; the lab's fallback is to watch the facilitator.
 - **4.21** `azd ai agent run` uses `uv` when it is on `PATH`; behind corporate TLS inspection `uv` fails the TLS
   handshake. Uninstalling it or removing it from `PATH` makes azd fall back to pip (hosted README troubleshooting).
 
@@ -704,13 +707,28 @@ Where an entry changes something SPEC.md states, it says so.
   sequence and a hand-off diagram. The line links pin today's line numbers, so an edit to either file must recheck
   them. The live view is **Agent Framework DevUI** (`agent-framework-devui==1.0.0b260918`, beta, pinned in
   `requirements-demos.txt` only, never in the participant requirements). `demos/lab4-devui.py` rebuilds the two
-  workflows exactly as sections 3–5 do and serves them on localhost only, with no auth. Verified 2026-10-01 with
+  workflows exactly as sections 3–5 do. Locally it serves on localhost only, with no auth. Verified 2026-10-01 with
   `model-router`: sequential ≈ 36 s, hand-off ≈ 26 s. DevUI's form for these workflows asks for a `Message`, so the
-  facilitator types `user` in **role**. Its **Tools** tab lists only local function calls (`handoff_to_nutrition`,
+  user types `user` in **role**. Its **Tools** tab lists only local function calls (`handoff_to_nutrition`,
   `handoff_to_activity`); the knowledge-base and `find_activities` calls are hosted MCP tools run by Foundry and do not
   appear there, nor as separate spans. DevUI's hand-off timeline shows each executor several times (the hand-off
   broadcast), and `WorkflowViz` draws every possible hand-off edge, not only the `add_handoff` ones. The lab explains
   both.
+- **6.6a** So that Navigators need neither a laptop install nor a Codespace, the same script also runs as the
+  optional azd service `lab4-devui` (`LAB4_DEVUI`, default true). The image is `demos/devui-aca/` and the module is
+  `infra/modules/devui.bicep`; it is a Container App on the workshop environment.
+  - **Identity.** Its own user-assigned identity with Foundry User on the project and AcrPull. The code picks it up
+    through `AZURE_CLIENT_ID` (`lw.credential()`).
+  - **Ingress.** HTTPS on external ingress, and the DevUI bearer token is required.
+  - **DevUI mode.** User mode: no entity reload or deploy.
+  - **Seats.** A seat pool, `DEVUI_SEATS` (default 8), gives each concurrent run its own workflow instance, because a
+    workflow object runs one request at a time.
+  - **Scaling.** One replica, scale to zero (≈ 23 s cold start).
+  - **Load test.** Verified 2026-10-03 on MCAPS with `gpt-5-mini` and `gpt-4.1-mini`: 6 concurrent runs per
+    workflow, all HTTP 200, sequential 55–73 s and hand-off 38–52 s, with no ingress timeouts.
+  - **Limits.** DevUI is still a sample (beta). Everyone with the token shares one session list, the token is shared
+    and not per user, and there is no Easy Auth. That is acceptable for fictional data in a time-boxed workshop; the
+    lab says so.
 
 ### Lab 3 Fabric step: Programme fit
 

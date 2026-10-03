@@ -4,6 +4,21 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Lab 4 in the browser (2026-10-03)
+
+- **Hosted DevUI.** The `lab4-devui` service is optional and defaults to on (`LAB4_DEVUI`). `demos/lab4-devui.py`
+  runs as a Container App on the workshop environment (`demos/devui-aca/`, `infra/modules/devui.bicep`,
+  `scripts/stage-devui.py`). It has its own managed identity with Foundry User, a bearer token on the values sheet,
+  DevUI user mode, a seat pool (`DEVUI_SEATS`, default 8) and scale to zero. Navigators run the sequential and
+  hand-off teams in the browser, with no install and no Codespace. On MCAPS, 6 concurrent runs of each workflow
+  passed.
+- **Navigators chat with the hosted agent.** A Foundry User-only identity can call `livewell-workshop-hosted`
+  (ASSUMPTIONS 4.20, review item L4-3). Lab 4 and the portal walkthrough now have Navigators chat with it
+  themselves; deploy and publish stay facilitator-only.
+- **Paused-Fabric pre-check.** `scripts/select-params.py` stops provisioning early when the Fabric capacity is paused.
+  ARM cannot update a paused capacity, so the provision would otherwise fail at the end.
+- `lw.credential()` uses a user-assigned managed identity when `AZURE_CLIENT_ID` is set.
+
 ### Lab review fixes (2026-10-03)
 
 - **Lab review report** in `demos/LAB-REVIEW-2026-10-03.md`: flow, consistency and objectives on both rails after the

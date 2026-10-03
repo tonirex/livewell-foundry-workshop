@@ -16,7 +16,7 @@ Your portal agent is `livewell-<initials>` and is reused from Lab 0 through Lab 
 | 1 | Agents & Knowledge | Foundry IQ knowledge base, citations, JSON response | 40 min | [Lab 1 portal](lab-01-portal.md) |
 | 2 | Guardrails, Evaluations & Tracing | RAI policy, red flags, traces, version comparison | 40 min | [Lab 2 portal](lab-02-portal.md) |
 | 3 | Tools, MCP & Memory | OpenAPI, MCP approvals, memory, optional Fabric IQ | 40 min | [Lab 3 portal](lab-03-portal.md) |
-| 4 | Multi-agent & Hosted deploy | Facilitator watch-along: hosted agent, versions, traces, RBAC | 30 min | [Lab 4 portal](lab-04-portal.md) |
+| 4 | Multi-agent & Hosted deploy | Run both teams in the hosted DevUI; chat with the hosted agent; versions, traces, RBAC (facilitator deploys) | 30 min | [Lab 4 portal](lab-04-portal.md) |
 
 ## Screenshot slot convention
 

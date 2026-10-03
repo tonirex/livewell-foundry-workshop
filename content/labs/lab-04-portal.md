@@ -2,7 +2,7 @@
 
 Main page: [Lab 4](lab-04.md) · [Portal track](PORTAL-TRACK.md)
 
-This is a watch-along for the facilitator demo. Foundry User participants observe the hosted agent, versions, traces, and RBAC boundaries; deployment and production publishing require Foundry Project Manager.
+Foundry User participants open the hosted agent, chat with it in the playground, and inspect its versions, traces and RBAC boundaries. Deployment and production publishing require Foundry Project Manager, so the facilitator shows those. The multi-agent runs themselves happen in the browser-hosted DevUI ([Lab 4](lab-04.md) Navigator steps 1–3).
 
 How the three agents are wired (diagrams, code pointers and the DevUI view of each run): [Lab 4 · Under the hood](lab-04.md#under-the-hood).
 
@@ -30,7 +30,7 @@ How the three agents are wired (diagrams, code pointers and the DevUI view of ea
 
    ![Active hosted-agent version details](screenshots/lab-04/04-active-version-details.png)
 
-5. Watch the facilitator smoke-test the hosted agent with a grounded food prompt. (The week-plan hand-off prompt from [Lab 4](lab-04.md) step 3 runs in DevUI, not here.)
+5. Chat with the hosted agent using a grounded food prompt. (The week-plan prompt from [Lab 4](lab-04.md) steps 2–3 runs in DevUI, not here.)
 
    **Playground → New chat → Message box → Send**
 
@@ -68,12 +68,13 @@ How the three agents are wired (diagrams, code pointers and the DevUI view of ea
 
 ## What you should see
 
-`livewell-workshop-hosted` appears beside the prompt agents, has version history, responds in the playground, and produces traces like the prompt agents. Foundry User participants can observe and test but cannot deploy or publish; those buttons require Foundry Project Manager.
+`livewell-workshop-hosted` appears beside the prompt agents, has version history, answers you in the playground, and produces traces like the prompt agents. Foundry User participants can chat with it and inspect it, but cannot deploy or publish; those buttons require Foundry Project Manager.
 
 ## If something looks different
 
 - ⚠️ If the hosted agent is not visible, the facilitator may still be deploying it or filtering by a different protected name.
+- ⚠️ If the playground will not chat for a Foundry User account, watch the facilitator's run instead. The endpoint itself accepts Foundry User callers (verified with a Foundry User-only identity), so this is a portal permission.
 - ⚠️ If Deploy and Publish labels have changed, capture the disabled production action and the role message shown by the portal.
 - If traces are unavailable, the facilitator should show a pre-captured trace from the demo kit.
-- If you have Project Manager unexpectedly, do not publish; stay in watch-along mode.
+- If you have Project Manager unexpectedly, do not deploy or publish; only chat and inspect.
 

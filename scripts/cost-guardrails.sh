@@ -7,7 +7,7 @@
 # Checks: budget exists with alerts at the workshop.yaml thresholds (150/300 USD) · model deployments
 # Global Standard, capacity <= TPM cap, no PTU / partner models · exactly one search service, never
 # Standard tier, semantic + agentic-retrieval plans on Free · Fabric capacity F2 or F4 (FABRIC_SKU; state
-# reported; Active = billing) · MCP app minReplicas · Log Analytics daily cap · no Bing grounding connection ·
+# reported; Active = billing) · MCP and Lab 4 DevUI app replicas · Log Analytics daily cap · no Bing grounding connection ·
 # every resource tagged workshop=livewell + env=<env> · month-to-date cost for the resource group
 # (--max-usd fails the run above N).
 . "$(dirname "$0")/lib/common.sh"
@@ -32,6 +32,7 @@ PROJECT="${AZURE_AI_PROJECT_NAME:-$(cfg names.foundry_project)}"
 SEARCH="${AZURE_SEARCH_SERVICE_NAME:-$(cfg names.search_service)}"
 CAPACITY="${FABRIC_CAPACITY_NAME:-}"
 MCP_APP="${MCP_APP_NAME:-$(cfg names.mcp_app)}"
+DEVUI_APP="${LAB4_DEVUI_APP_NAME:-$(cfg names.devui_app)}"
 BUDGET="${BUDGET_NAME:-$(cfg names.budget)}"
 ARM="https://management.azure.com/subscriptions/$SUB/resourceGroups/$RG/providers"
 TMPD="$(mktempdir)"; trap 'rm -rf "$TMPD"' EXIT
@@ -55,6 +56,7 @@ get deployments "$ARM/Microsoft.CognitiveServices/accounts/$ACCOUNT/deployments?
 get connections "$ARM/Microsoft.CognitiveServices/accounts/$ACCOUNT/projects/$PROJECT/connections?api-version=2025-06-01" &
 get searchsvcs "https://management.azure.com/subscriptions/$SUB/providers/Microsoft.Search/searchServices?api-version=2025-05-01" &
 get mcp "$ARM/Microsoft.App/containerApps/$MCP_APP?api-version=2024-03-01" &
+get devui "$ARM/Microsoft.App/containerApps/$DEVUI_APP?api-version=2024-03-01" &
 get law "$ARM/Microsoft.OperationalInsights/workspaces/log-livewell-$ENV?api-version=2023-09-01" &
 [ -n "$CAPACITY" ] && get fabric "$ARM/Microsoft.Fabric/capacities/$CAPACITY?api-version=2023-11-01" &
 ( az rest --method post --url "$ARM/Microsoft.CostManagement/query?api-version=2023-11-01" \
@@ -183,6 +185,17 @@ if mcp.get("properties"):
     (warn if mn else ok)(f"MCP app {mcp['name']} minReplicas={mn} (1 only on workshop day: MCP_MIN_REPLICAS=1)")
 else:
     warn("MCP container app not found")
+
+# Lab 4 DevUI app (optional, LAB4_DEVUI)
+devui = load("devui")
+if devui.get("properties"):
+    scale = devui["properties"].get("template", {}).get("scale", {})
+    mn, mx = scale.get("minReplicas", 0), scale.get("maxReplicas")
+    if mx != 1:
+        bad(f"DevUI app {devui['name']} maxReplicas={mx} (must be 1: DevUI keeps conversations in memory)")
+    (warn if mn else ok)(f"DevUI app {devui['name']} minReplicas={mn} (1 only on workshop day: DEVUI_MIN_REPLICAS=1)")
+else:
+    ok("no Lab 4 DevUI app (LAB4_DEVUI=false or not provisioned)")
 
 # Log Analytics cap
 law = load("law")
