@@ -13,6 +13,11 @@ All notable changes to this workshop. One entry per phase PR.
   to zero. Navigators run the sequential and hand-off teams in the browser, with no install and no Codespace. On
   MCAPS, 6 concurrent runs of each workflow passed. The image also carries the 11 LiveWell guides: without them the
   Coach's `supporting_guides` enum was empty and it always returned `[]` (`_guides()` now refuses an empty list).
+- **Specialists copy guide ids from their search results.** The Nutrition and Activity blocks in
+  `coach-instructions.md` now say to copy ids exactly from the guide search results and never invent or shorten
+  one. Before, the Activity specialist made up ids such as `lg-07-physical-activity` in 4 of 6 runs; after, 0 of
+  8, and 8 of 8 hand-off runs still ended with an Activity answer. A stricter "always search the guides first"
+  rule was dropped because it made some hand-off runs end without the food answer.
 - **Navigators chat with the hosted agent.** A Foundry User-only identity can call `livewell-workshop-hosted`
   (ASSUMPTIONS 4.20, review item L4-3). Lab 4 and the portal walkthrough now have Navigators chat with it
   themselves; deploy and publish stay facilitator-only.

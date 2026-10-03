@@ -38,7 +38,7 @@ Steps 1–3 and 7 are hands-on in your browser, with nothing to install. The fac
    ```
 
    Each box turns green when that agent finishes. A run takes about a minute. In **Execution Timeline**, look for Nutrition, then Activity, then the Coach's evidence JSON with at least one guide id.
-3. **Run the hand-off team.** Switch to **LiveWell hand-off**, select **+** and run the same request. Open **Tools** on the right: it lists `handoff_to_nutrition` then `handoff_to_activity`, which shows the model chose the route. **Traces** shows each agent's time and tokens.
+3. **Run the hand-off team.** Switch to **LiveWell hand-off**, select **+** and run the same request. Open **Tools** on the right: it lists two hand-off calls, newest at the top. Read from the bottom: `handoff_to_nutrition` (the Coach chose Nutrition), then `handoff_to_activity` (Nutrition passed on to Activity). This shows the model chose the route. **Traces** shows each agent's time and tokens. Ignore the **Deployment Guide** button; this lab does not use it.
 4. The facilitator adds or shows **`livewell-<INITIALS>-insights`**, the Programme-Insights specialist that uses the Fabric tool for programme-level questions, and sends it (`lab4_q_programmes_disengaged`):
 
    ```text
