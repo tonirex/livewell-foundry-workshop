@@ -108,7 +108,6 @@ class Cards(FPDF):
 
     def card(self, name: str, upn: str, password: str) -> None:
         ws, names = self.cfg["workshop"], self.cfg["names"]
-        domain = upn.split("@", 1)[1]
         self.add_page()
         width = self.w - self.l_margin - self.r_margin
 
@@ -145,11 +144,19 @@ class Cards(FPDF):
         self.set_text_color(0, 0, 0)
         self.set_y(top + 46)
 
+        repo = str(ws.get("repo_url") or "").strip()
+        if repo:
+            self.heading("Lab instructions")
+            self.set_font("Courier", "B", 12)
+            self.cell(0, 7, latin1(repo), link=repo, new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+            self.set_font("Helvetica", "", 11.5)
+            self.cell(0, 6.5, "Start with the README, then Lab 0.", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+
         self.heading("Before the workshop (about 5 minutes)")
         self.numbered([
             "Use your personal laptop: government (WOG) devices cannot sign in to the workshop tenant.",
             "Open a private browser window (Edge: InPrivate, Chrome: Incognito) so your work account stays out of the way.",
-            f"Go to https://portal.azure.com/#@{domain} and sign in with the username and temporary password above.",
+            "Go to portal.azure.com and sign in with the username and temporary password above.",
             "Choose a new password when you are asked, and remember it.",
             "If you are asked for more information, install Microsoft Authenticator on your phone, tap "
             "+ > Work or school account > Scan QR code, and follow the prompts.",

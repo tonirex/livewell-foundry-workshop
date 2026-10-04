@@ -11,6 +11,7 @@ workshop:
   short_name: "livewell"
   customer: "Health Promotion Board (Singapore)"
   owner: "Antonia Chen (Sr Solution Engineer, Microsoft Singapore)"
+  repo_url: "https://github.com/tonirex/livewell-foundry-workshop"  # lab instructions, printed on the sign-in cards
   date: "TODO"                     # workshop day (YYYY-MM-DD)
   participant_count: 6              # confirmed HPB head-count; sponsor quota sized for it (ASSUMPTIONS.md 9.1)
   planning_cohort_size: 20
