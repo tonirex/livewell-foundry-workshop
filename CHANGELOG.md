@@ -4,6 +4,13 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Lab 4 DevUI stable ids (2026-10-04)
+
+- **Open DevUI pages survive a restart.** DevUI gave each workflow a random id at start-up, so after an idle
+  scale-to-zero or a redeploy a page left open failed with "Failed to Load Workflow … not found".
+  `demos/lab4-devui.py` now drops the random suffix (`workflow_in_memory_livewell-sequential` /
+  `…-hand-off`); lab-04 troubleshooting covers the symptom. Runs are still in memory only, so they reset on restart.
+
 ### Builder setup (2026-10-04)
 
 - **Codespace fixed.** The dev container failed in three places before any lab ran. The `python:3.13` image

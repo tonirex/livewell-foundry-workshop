@@ -165,6 +165,18 @@ def capture(port: int, request: str) -> int:
         server.wait(timeout=30)
 
 
+def stable_entity_ids() -> None:
+    """Drop the random suffix DevUI adds to in-memory entity ids (workflow_in_memory_<name>_<uuid4>).
+
+    Otherwise every restart (scale to zero, redeploy) gives new ids, and a page left open fails with
+    "Failed to Load Workflow ... not found". The two workflow names are unique, so the ids stay unique.
+    """
+    from agent_framework_devui._discovery import EntityDiscovery  # pinned in requirements-demos.txt
+
+    random_id = EntityDiscovery._generate_entity_id
+    EntityDiscovery._generate_entity_id = lambda self, *a, **k: random_id(self, *a, **k).rsplit("_", 1)[0]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--port", type=int, default=8090)
@@ -208,6 +220,7 @@ def main() -> int:
     print(request)
     lw.say(f"\nDevUI on http://{args.host}:{args.port} ({seats} seat(s) per workflow, "
            f"{'no sign-in' if local else 'bearer token'}; Ctrl+C to stop). Pick a workflow at the top left.")
+    stable_entity_ids()
     # Developer mode is what shows the Events/Traces/Tools panel the lab uses. Its extra APIs (hot reload,
     # deploy) do nothing for in-memory workflows, and the hosted container has no az or docker.
     serve(entities=entities, port=args.port, host=args.host, auto_open=local and not args.no_browser,
