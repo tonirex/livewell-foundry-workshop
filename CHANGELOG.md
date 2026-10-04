@@ -30,6 +30,12 @@ All notable changes to this workshop. One entry per phase PR.
 - **Attendees can run the Lab 2 judges.** `lab2_govern.py` calls the Foundry account's OpenAI endpoint as the attendee,
   which their project-level Foundry User role does not cover. `attendee_roles` adds Cognitive Services OpenAI User on
   the account. ADMIN-SETUP also notes that attendees need a Fabric licence for the Fabric IQ tool (ASSUMPTIONS.md 10.10).
+- **Participants use their own accounts.** Lab 0 (both rails), the Fabric step, the README, the values sheet and both
+  decks now say "your own workshop account" instead of `hpb.labNN`; both decks are rebuilt. `check_setup.py` no longer
+  warns on every account outside the `hpb.lab` prefix: it warns when the account is not in a workshop tenant (for
+  example a work account). `lab_accounts.naming: named` makes the values sheet show `firstname.lastname@<tenant>`.
+- **Sign-in cards.** `scripts/tenant/sign-in-cards.py` prints one A4 card per participant (username, temporary
+  password, first sign-in steps) from `attendees.txt` or the lab-accounts CSV into the gitignored `.azure/<env>/`.
 
 ### Lab 4 DevUI stable ids (2026-10-04)
 

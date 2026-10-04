@@ -113,7 +113,8 @@ bash scripts/tenant/create-lab-users.sh sponsor
 - It also creates a **break-glass** account `hpb.breakglass`: Global Administrator, no forced password change. Exclude
   it from any Conditional Access policy and keep its password offline.
 - Temporary passwords are written to `.azure/sponsor/lab-accounts.csv`, which is gitignored and never printed. Print one card
-  per account. Personal laptops only: WOG devices cannot sign in to an external tenant.
+  per account with `python scripts/tenant/sign-in-cards.py sponsor --lab-accounts` (A4 PDF in the same gitignored
+  folder). Personal laptops only: WOG devices cannot sign in to an external tenant.
 - Re-running is safe. Use `--reset-passwords` to issue new passwords, or `--delete` after the workshop.
 - **Named accounts instead** (the 2026 delivery, ASSUMPTIONS.md 10.8): create one cloud-only member per participant
   (`firstname.lastname@<tenant>`, usage location SG, password changed at first sign-in), assign each the free
@@ -121,6 +122,8 @@ bash scripts/tenant/create-lab-users.sh sponsor
   `bash scripts/seed-attendees.sh sponsor --file attendees.txt` after the Fabric deploy. Every member can already
   register applications (service principals). Creating Azure resources needs an Azure role: Owner on their own
   resource group is the safe choice; Owner on the subscription also lets them change the shared workshop resources.
+  Set `lab_accounts.naming: named` in `workshop.yaml` so the values sheet describes them, and print their cards with
+  `python scripts/tenant/sign-in-cards.py sponsor --file attendees.txt` (asks for the shared temporary password).
 
 ## Step 4: build and prove the sponsor environment
 

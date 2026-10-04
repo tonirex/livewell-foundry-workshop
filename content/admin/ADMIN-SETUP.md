@@ -156,9 +156,9 @@ python scripts/gen-citizens.py --from-onelake --check    # citizens.json agrees 
 
 ### T-1: dry run
 
-- `bash scripts/capacity.sh resume mcaps`, then run the whole day with a lab account in a private browser window.
+- `bash scripts/capacity.sh resume mcaps`, then run the whole day with a participant account in a private browser window.
 - Builder setup as a participant: create a Codespace from `main`, sign in with
-  `az login --use-device-code --allow-no-subscriptions` as an `hpb.labNN` account, fill `content/assets/.env`
+  `az login --use-device-code --allow-no-subscriptions` as a participant account, fill `content/assets/.env`
   ([README](../../README.md#your-env)) and run `python content/assets/check_setup.py`. It must end with
   **All set**. It is read-only and also confirms that the lab account can open the project, its connections and
   its model deployments.
@@ -410,3 +410,4 @@ scored locally instead", and the local scores are still valid. To publish a run 
 | [record-terminal.py](../../demos/record-terminal.py) | Evidence recorder: runs any script, then saves its output with real timings (`.cast`) and a PNG in `demos/evidence/<date>/` and a replay WebM in `demos/videos/`; IDs, endpoints, e-mails and local paths redacted; `--title`, `--render`, `--idle`, `--no-video` |
 | [teardown.sh](../../scripts/teardown.sh) | Fabric workspace → `azd down --purge` → verify; `--pause-only` |
 | [create-lab-users.sh](../../scripts/tenant/create-lab-users.sh) | 20 lab accounts + break-glass (Graph); `--delete`, `--reset-passwords` |
+| [sign-in-cards.py](../../scripts/tenant/sign-in-cards.py) | One A4 sign-in card per participant (`--file attendees.txt` or `--lab-accounts`) → `.azure/<env>/sign-in-cards.pdf` (gitignored; holds passwords) |

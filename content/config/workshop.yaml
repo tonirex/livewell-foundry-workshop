@@ -175,6 +175,9 @@ environments:
       # and stays Global Administrator + Owner) cannot create a Fabric capacity (ASSUMPTIONS.md 10.1).
       - "hpb.facilitator@hpbsub2026outlook.onmicrosoft.com"
     lab_accounts:
+      # Named participant accounts (firstname.lastname, listed in the gitignored attendees.txt; ASSUMPTIONS.md 10.8).
+      # prefix/count/break_glass are only used by scripts/tenant/create-lab-users.sh.
+      naming: "named"
       prefix: "hpb.lab"
       count: 20
       break_glass: "hpb.breakglass"
