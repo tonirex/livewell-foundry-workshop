@@ -183,7 +183,8 @@ Where an entry changes something SPEC.md states, it says so.
   Role-assignment names are deterministic (uuid5 of scope, principal and role), so re-running `seed-attendees.sh` is idempotent.
 - **2.11** Attendee roles (`workshop.yaml` → `attendee_roles`) are Foundry User on the project, **Search Index Data
   Reader** on the search service (portal KB browsing) and **Log Analytics Reader** on App Insights (portal Tracing tab).
-  The last two are assumptions, not verified against a least-privilege attendee account yet.
+  The last two are assumptions, not verified against a least-privilege attendee account yet. Builder Lab 2 also
+  needs Cognitive Services OpenAI User on the account (10.10).
 - **2.12** `MODE=project-per-attendee` creates `livewell-<upn-short>` projects by ARM PUT. It is written but not
   exercised in the MCAPS run; shared-project is the default and the tested path.
 - **2.13** `tenant/create-lab-users.sh` needs User Administrator (and Privileged Role Administrator for the break-glass
@@ -923,3 +924,12 @@ Where an entry changes something SPEC.md states, it says so.
   items" was enabled, then passed on the next try (`deploy.sh sponsor --from 30`). `fab` ran on the sponsor az
   sign-in's tokens (`FAB_TOKEN`, `FAB_TOKEN_ONELAKE`, `FAB_TOKEN_AZURE`; TENANT-BOOTSTRAP Step 4), so the user's
   `fab auth login` for MCAPS was never touched.
+- **10.10** Attendee access re-checked against the lab code (2026-10-04). The documented set (2.11) was never
+  exercised by a non-admin account: the dry run used the facilitator only (DRY-RUN-2026-10-02, Q1/Q2 open). One gap
+  is certain: the Builder Lab 2 judges (`lw.judge_model_config`) call the Foundry **account's** OpenAI endpoint with
+  the attendee's own token. A role on the project does not reach the parent account, and Owner carries no data
+  actions, so `attendee_roles` now adds **Cognitive Services OpenAI User** on the account (model calls only; no other
+  project's agents or data). The six sponsor participants also got the tenant's free Microsoft Fabric licence, because
+  the Fabric IQ tool queries Fabric as them. Still unverified until a participant account runs the labs: whether
+  workspace Viewer is enough to query the data agent (3.16), calling the hosted agent endpoint (dry run Q2), and
+  attaching the A2A connections as a Foundry User (F08).

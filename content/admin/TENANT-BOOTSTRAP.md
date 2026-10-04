@@ -116,11 +116,11 @@ bash scripts/tenant/create-lab-users.sh sponsor
   per account. Personal laptops only: WOG devices cannot sign in to an external tenant.
 - Re-running is safe. Use `--reset-passwords` to issue new passwords, or `--delete` after the workshop.
 - **Named accounts instead** (the 2026 delivery, ASSUMPTIONS.md 10.8): create one cloud-only member per participant
-  (`firstname.lastname@<tenant>`, usage location SG, password changed at first sign-in), put their UPNs in
-  `attendees.txt` (gitignored, one per line) and run `bash scripts/seed-attendees.sh sponsor --file attendees.txt`
-  after the Fabric deploy. Every member can already register applications (service principals). Creating Azure
-  resources needs an Azure role: Owner on their own resource group is the safe choice; Owner on the subscription
-  also lets them change the shared workshop resources.
+  (`firstname.lastname@<tenant>`, usage location SG, password changed at first sign-in), assign each the free
+  Microsoft Fabric licence, put their UPNs in `attendees.txt` (gitignored, one per line) and run
+  `bash scripts/seed-attendees.sh sponsor --file attendees.txt` after the Fabric deploy. Every member can already
+  register applications (service principals). Creating Azure resources needs an Azure role: Owner on their own
+  resource group is the safe choice; Owner on the subscription also lets them change the shared workshop resources.
 
 ## Step 4: build and prove the sponsor environment
 

@@ -309,6 +309,7 @@ type. Cost Management lags by up to 24 h.
 | Attendees | Foundry User | Project | `seed-attendees.sh` |
 | Attendees | Search Index Data Reader | Search service | `seed-attendees.sh` |
 | Attendees | Log Analytics Reader | Application Insights | `seed-attendees.sh` (Tracing tab) |
+| Attendees | Cognitive Services OpenAI User (Builder Lab 2 judges call the account's OpenAI endpoint, which a project role does not reach) | Foundry account | `seed-attendees.sh` |
 | Attendees | Fabric workspace Viewer (read on the data agent) | Fabric workspace | `seed-attendees.sh`, after Phase 3 |
 
 Role IDs are built-in and the same in every tenant. They live only in `workshop.yaml` → `rbac_roles`.
@@ -322,6 +323,9 @@ Gotchas:
   Attendees reuse it; they need Foundry User plus read on the data agent (workspace Viewer).
 - **The Fabric IQ tool runs as the signed-in user** (no service principal at runtime). The attendee's
   Foundry account and Fabric account must be the same Entra identity in the same tenant.
+- **Attendees need a Fabric licence** for that call. Assign the tenant's free Microsoft Fabric licence (Entra →
+  Users → Licenses, or Graph `assignLicense`), or have each attendee sign in once at app.fabric.microsoft.com before
+  the Fabric step. An unlicensed account gets `UserNotLicensed` from Fabric, as the facilitator did in preflight.
 - Role assignments take up to 5 minutes to apply. Attendees should sign out and back in to ai.azure.com if
   the project is missing.
 - `azd down` removes every role assignment with the resource group. `seed-attendees.sh` must be re-run after

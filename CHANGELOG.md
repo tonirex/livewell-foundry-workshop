@@ -8,7 +8,7 @@ All notable changes to this workshop. One entry per phase PR.
 
 - **Sponsor values filled in.** `workshop.yaml` → `environments.sponsor` and `infra/env/sponsor.bicepparam` hold the
   sponsorship subscription, its tenant and the facilitator, the cloud-only work account `hpb.facilitator` (Fabric
-  capacity admin). Budget alerts go to the outlook.com mailbox that created the tenant. ASSUMPTIONS.md 10.1–10.9.
+  capacity admin). Budget alerts go to the outlook.com mailbox that created the tenant. ASSUMPTIONS.md 10.1–10.10.
 - **A new environment provisions in one pass.** ARM preflight rejected `livewell-guardrails` on a brand-new Foundry
   account because the blocklist it names is created in the same deployment. `guardrailLinkBlocklist` keeps the policy
   unlinked until the azd env has `AZURE_AI_ACCOUNT_NAME`; the postprovision hook links it. MCAPS is unchanged, and
@@ -27,6 +27,9 @@ All notable changes to this workshop. One entry per phase PR.
 - **`fab` without a shared sign-in.** TENANT-BOOTSTRAP Step 4 runs the Fabric deploy on the sponsor az sign-in's tokens
   (`FAB_TOKEN`, `FAB_TOKEN_ONELAKE`, `FAB_TOKEN_AZURE`) instead of `fab auth login`. Step 3 covers named participant
   accounts (`seed-attendees.sh --file attendees.txt`).
+- **Attendees can run the Lab 2 judges.** `lab2_govern.py` calls the Foundry account's OpenAI endpoint as the attendee,
+  which their project-level Foundry User role does not cover. `attendee_roles` adds Cognitive Services OpenAI User on
+  the account. ADMIN-SETUP also notes that attendees need a Fabric licence for the Fabric IQ tool (ASSUMPTIONS.md 10.10).
 
 ### Lab 4 DevUI stable ids (2026-10-04)
 
