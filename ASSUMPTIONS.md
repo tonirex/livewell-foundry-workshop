@@ -905,5 +905,21 @@ Where an entry changes something SPEC.md states, it says so.
   `azure-ai-projects` 2.2.0, which lacks `agents.download_code` (`hosted-postdeploy.py`) and `ProtocolConfiguration`
   (A2A in `create-demo-agents.py`); the floor is now the tested 2.6.1.
 - **10.7** Sponsor verified on 2026-10-04 as `hpb.facilitator`: `cost-guardrails.sh` all PASS; knowledge base 11/11
-  guides; tool connections PASS (Fabric IQ waits for Phase 3); hosted agent v2 with `livewell-guardrails` blocks
-  `lab2_medication_double`; six demo agents (Fabric agent after Phase 3); smoke test 9 PASS, Fabric SKIP.
+  guides; tool connections PASS, Fabric IQ included; hosted agent v2 with `livewell-guardrails` blocks
+  `lab2_medication_double`; seven demo agents; Phase 3 Fabric deploy green (graph 1500 residents, every edge count
+  equal to the local build; the data agent ranks North 20.0%, West 17.1%, Central 13.1%); smoke test 11/11 PASS with
+  `FABRIC_BRIDGE=true`.
+- **10.8** Participants: instead of `hpb.lab01`…`hpb.lab20`, Antonia supplied six named participants. Each has a
+  cloud-only account `firstname.lastname@<tenant>` with one standard temporary password, changed at first sign-in, and
+  the workshop roles from `seed-attendees.sh sponsor --file attendees.txt` (gitignored; names are never committed).
+  At Antonia's request they are **Owner on the sponsorship subscription**, so they can create resources and grant
+  roles to their own service principals (the tenant lets every member register applications). Owner also lets them
+  change or delete the shared workshop resources and other people's access, and the budget alerts are the only
+  spending control. No break-glass account was created: the facilitator and the tenant's creator are both Global
+  Administrators.
+- **10.9** Fabric in the sponsor tenant (2026-10-04): there is no separate "Fabric data agent" switch; the data agent
+  publishes and answers with "Users can use Copilot, AI Agents and other AI experiences powered by Azure OpenAI" on.
+  The ontology call answered 403 `FeatureNotAvailable` for a few minutes after "Users can create Ontology (preview)
+  items" was enabled, then passed on the next try (`deploy.sh sponsor --from 30`). `fab` ran on the sponsor az
+  sign-in's tokens (`FAB_TOKEN`, `FAB_TOKEN_ONELAKE`, `FAB_TOKEN_AZURE`; TENANT-BOOTSTRAP Step 4), so the user's
+  `fab auth login` for MCAPS was never touched.

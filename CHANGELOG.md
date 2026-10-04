@@ -8,7 +8,7 @@ All notable changes to this workshop. One entry per phase PR.
 
 - **Sponsor values filled in.** `workshop.yaml` → `environments.sponsor` and `infra/env/sponsor.bicepparam` hold the
   sponsorship subscription, its tenant and the facilitator, the cloud-only work account `hpb.facilitator` (Fabric
-  capacity admin). Budget alerts go to the outlook.com mailbox that created the tenant. ASSUMPTIONS.md 10.1–10.7.
+  capacity admin). Budget alerts go to the outlook.com mailbox that created the tenant. ASSUMPTIONS.md 10.1–10.9.
 - **A new environment provisions in one pass.** ARM preflight rejected `livewell-guardrails` on a brand-new Foundry
   account because the blocklist it names is created in the same deployment. `guardrailLinkBlocklist` keeps the policy
   unlinked until the azd env has `AZURE_AI_ACCOUNT_NAME`; the postprovision hook links it. MCAPS is unchanged, and
@@ -24,6 +24,9 @@ All notable changes to this workshop. One entry per phase PR.
   (`AZURE_CONFIG_DIR`, `AZD_CONFIG_DIR` with `auth.useAzCliAuth`). A sponsor terminal cannot touch MCAPS, and MCAPS
   terminals keep their sign-in. Step 1 now requires a work or school facilitator: ARM cannot create a Fabric capacity
   for a personal Microsoft account.
+- **`fab` without a shared sign-in.** TENANT-BOOTSTRAP Step 4 runs the Fabric deploy on the sponsor az sign-in's tokens
+  (`FAB_TOKEN`, `FAB_TOKEN_ONELAKE`, `FAB_TOKEN_AZURE`) instead of `fab auth login`. Step 3 covers named participant
+  accounts (`seed-attendees.sh --file attendees.txt`).
 
 ### Lab 4 DevUI stable ids (2026-10-04)
 

@@ -115,14 +115,26 @@ bash scripts/tenant/create-lab-users.sh sponsor
 - Temporary passwords are written to `.azure/sponsor/lab-accounts.csv`, which is gitignored and never printed. Print one card
   per account. Personal laptops only: WOG devices cannot sign in to an external tenant.
 - Re-running is safe. Use `--reset-passwords` to issue new passwords, or `--delete` after the workshop.
+- **Named accounts instead** (the 2026 delivery, ASSUMPTIONS.md 10.8): create one cloud-only member per participant
+  (`firstname.lastname@<tenant>`, usage location SG, password changed at first sign-in), put their UPNs in
+  `attendees.txt` (gitignored, one per line) and run `bash scripts/seed-attendees.sh sponsor --file attendees.txt`
+  after the Fabric deploy. Every member can already register applications (service principals). Creating Azure
+  resources needs an Azure role: Owner on their own resource group is the safe choice; Owner on the subscription
+  also lets them change the shared workshop resources.
 
 ## Step 4: build and prove the sponsor environment
 
-Same sequence as the dry run ([ADMIN-SETUP.md → T-3](ADMIN-SETUP.md#t-3-build-the-environment)):
+Same sequence as the dry run ([ADMIN-SETUP.md → T-3](ADMIN-SETUP.md#t-3-build-the-environment)), in a sponsor
+terminal (Step 2):
 
 ```bash
 bash scripts/provision.sh sponsor --what-if       # capacity admins = member UPNs in THIS tenant
 bash scripts/cost-guardrails.sh sponsor
+# fab keeps one sign-in per user (~/.config/fab), so give it the sponsor az sign-in's tokens instead of
+# `fab auth login`; they last about an hour, so export them again before a long run.
+export FAB_TOKEN="$(az account get-access-token --resource https://analysis.windows.net/powerbi/api --query accessToken -o tsv)"
+export FAB_TOKEN_ONELAKE="$(az account get-access-token --resource https://storage.azure.com --query accessToken -o tsv)"
+export FAB_TOKEN_AZURE="$(az account get-access-token --resource https://management.azure.com --query accessToken -o tsv)"
 bash scripts/fabric/deploy.sh sponsor             # Phase 3
 # Fabric IQ connection: portal runbook step (content/labs/fabric-step.md), needs Foundry Project Manager
 bash scripts/seed-attendees.sh sponsor --lab-accounts
