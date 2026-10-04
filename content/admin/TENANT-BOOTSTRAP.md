@@ -35,7 +35,7 @@ Record the outcome in [ASSUMPTIONS.md](../../ASSUMPTIONS.md) under "Values Anton
 | Tenant country/region is **Singapore** | Entra admin centre → Overview → Properties | Data residency statement, lab-account usage location |
 | The facilitator account is a **member** (not a guest) of this tenant | Entra → Users → user type = Member | Fabric capacity admin must be a member UPN |
 | The facilitator is a **work or school** account, not a personal Microsoft account | Entra → Users: the UPN ends in the tenant's domain, without `#EXT#` | ARM cannot create the Fabric capacity for a personal account ("Unable to authorize with Azure Active Directory") |
-| Security defaults are **on** | Entra → Overview → Properties → Manage security defaults | MFA for lab accounts without Entra P1 |
+| Security defaults are **on** | Entra → Overview → Properties → Manage security defaults | MFA for lab accounts without Entra P1. In tenants created since July 2026 they also block **device code sign-in** (`az login --use-device-code` fails with error 530035), which the Builder rail uses: turn them off for the workshop day and on again at T+1, or use plain `az login` (ASSUMPTIONS.md 10.11) |
 | The facilitator has a Fabric licence | Sign in once at https://app.fabric.microsoft.com (the Free licence is assigned on first sign-in) | Fabric REST / `fab` calls (otherwise `UserNotLicensed`) |
 
 A sponsorship subscription created with an outlook.com address comes with a tenant whose only user is that personal

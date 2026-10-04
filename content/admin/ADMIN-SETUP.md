@@ -244,6 +244,8 @@ This deletes the Fabric workspace, runs `azd down --purge` (resource group, Fabr
 the soft-deleted Foundry account), then verifies that nothing tagged `workshop=livewell env=mcaps` remains.
 Lab accounts stay; remove them with `bash scripts/tenant/create-lab-users.sh mcaps --delete`.
 Between sessions use `bash scripts/teardown.sh mcaps --pause-only` (pauses the capacity).
+If you turned **security defaults** off in the sponsor tenant for the workshop (device code sign-in, ASSUMPTIONS.md
+10.11), turn them back on: Entra admin center → Entra ID → Overview → Properties → Manage security defaults → Enabled.
 
 ## Cost table
 

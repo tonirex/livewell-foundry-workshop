@@ -8,7 +8,7 @@ All notable changes to this workshop. One entry per phase PR.
 
 - **Sponsor values filled in.** `workshop.yaml` → `environments.sponsor` and `infra/env/sponsor.bicepparam` hold the
   sponsorship subscription, its tenant and the facilitator, the cloud-only work account `hpb.facilitator` (Fabric
-  capacity admin). Budget alerts go to the outlook.com mailbox that created the tenant. ASSUMPTIONS.md 10.1–10.10.
+  capacity admin). Budget alerts go to the outlook.com mailbox that created the tenant. ASSUMPTIONS.md 10.1–10.11.
 - **A new environment provisions in one pass.** ARM preflight rejected `livewell-guardrails` on a brand-new Foundry
   account because the blocklist it names is created in the same deployment. `guardrailLinkBlocklist` keeps the policy
   unlinked until the azd env has `AZURE_AI_ACCOUNT_NAME`; the postprovision hook links it. MCAPS is unchanged, and
@@ -37,6 +37,9 @@ All notable changes to this workshop. One entry per phase PR.
 - **Sign-in cards.** `scripts/tenant/sign-in-cards.py` prints one A4 card per participant (username, temporary
   password, the labs repository from `workshop.repo_url`, first sign-in steps) from `attendees.txt` or the
   lab-accounts CSV into the gitignored `.azure/<env>/`.
+- **Device code sign-in in new tenants.** Security defaults in tenants created since July 2026 block
+  `az login --use-device-code` (error 530035). TENANT-BOOTSTRAP Step 1 and ADMIN-SETUP T+1 cover turning them off for
+  the workshop and back on afterwards (ASSUMPTIONS.md 10.11).
 
 ### Lab 4 DevUI stable ids (2026-10-04)
 

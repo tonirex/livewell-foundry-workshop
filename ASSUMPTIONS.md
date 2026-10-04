@@ -933,3 +933,13 @@ Where an entry changes something SPEC.md states, it says so.
   the Fabric IQ tool queries Fabric as them. Still unverified until a participant account runs the labs: whether
   workspace Viewer is enough to query the data agent (3.16), calling the hosted agent endpoint (dry run Q2), and
   attaching the A2A connections as a Foundry User (F08).
+- **10.11** `az login --use-device-code` in a Codespace failed for `hpb.facilitator` with error **530035** ("access has
+  been blocked by security defaults"). Since 1 July 2026, security defaults block device code sign-in in new tenants
+  (Microsoft Learn, "Configure security defaults"), and the sponsor tenant is new; the older MCAPS tenant still
+  allows it. The Builder rail (README, Lab 0, sign-in cards) signs in with device code. **Decided 2026-10-04
+  (Antonia): turn security defaults off in the sponsor tenant for the workshop** and back on at T+1 (ADMIN-SETUP).
+  While they are off, nothing enforces MFA, and the six participants are subscription Owners with a shared temporary
+  password, so they should change it before the day. Microsoft may re-enable security defaults by itself (with an email
+  notice); if device code fails again, check the setting. Alternatives: plain `az login` (a Codespace in VS Code
+  Desktop forwards the localhost redirect; in the browser, `curl` the failed localhost URL in the terminal), or an
+  Entra ID P2 trial with a Conditional Access MFA policy.
