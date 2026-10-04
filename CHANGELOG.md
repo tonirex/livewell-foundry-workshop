@@ -17,6 +17,12 @@ All notable changes to this workshop. One entry per phase PR.
 - **Traces show only your own run.** DevUI attached a span collector per run and never removed it, so with several
   people on the shared app each Traces panel mixed in everyone's spans, and memory grew all day.
   `demos/lab4-devui.py` now keeps only spans started inside the run and detaches the collector when the run ends.
+- **Hand-off runs always end with both answers.** Even with the `handoff` instruction block, Nutrition sometimes
+  handed off without writing its food answer, and Activity then handed back to the Coach, so the run ended with
+  no answer (2 of 8 hosted runs). A chat middleware (`answer_first()`) now removes Nutrition's hand-off tool from
+  its first turn, and Activity has no hand-off tools at all. Same change in `lab4_multiagent.py` section 5 and
+  `demos/lab4-devui.py`; 8 of 8 food-plus-activity runs and all activity-only and food-only runs passed. Lab-04
+  explains the middleware and the line references moved.
 
 ### Builder setup (2026-10-04)
 

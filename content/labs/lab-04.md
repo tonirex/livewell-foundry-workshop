@@ -119,8 +119,8 @@ flowchart LR
 | Nutrition | `nutrition` | `knowledge_base_retrieve` | A meal tip under 120 words ending with guide ids, e.g. `(lg-05-eating-for-pre-diabetes)` | [`lab4_multiagent.py` L87-91](../assets/lab4_multiagent.py#L87-L91) |
 | Activity | `activity` | `knowledge_base_retrieve`, `find_activities` (read-only) | A safe, indoor-on-hazy-days activity plus guide ids | [L92-94](../assets/lab4_multiagent.py#L92-L94) |
 | Coach, sequential | `base`, `safety`, `merge` | none | One evidence JSON (strict schema): `advice`, `confidence`, `supporting_guides`, `rationale`, `personalisation_flags` | [L124-129](../assets/lab4_multiagent.py#L124-L129) |
-| Coach, hand-off | `base`, `handoff` | `handoff_to_nutrition`, `handoff_to_activity` (added by `HandoffBuilder`) | Nothing: it only routes | [L164-179](../assets/lab4_multiagent.py#L164-L179) |
-| Programme-Insights | `insights` | Fabric tool | Programme-level aggregates, no resident rows | [L203-205](../assets/lab4_multiagent.py#L203-L206) (a Foundry prompt agent, so it runs server-side under `livewell-guardrails`) |
+| Coach, hand-off | `base`, `handoff` | `handoff_to_nutrition`, `handoff_to_activity` (added by `HandoffBuilder`) | Nothing: it only routes | [L187-202](../assets/lab4_multiagent.py#L187-L202) |
+| Programme-Insights | `insights` | Fabric tool | Programme-level aggregates, no resident rows | [L226-228](../assets/lab4_multiagent.py#L226-L229) (a Foundry prompt agent, so it runs server-side under `livewell-guardrails`) |
 
 **Sequential: the code decides the route.** `SequentialBuilder` wires the participants in a fixed order and passes one shared conversation down the chain. Each agent sees the request and every earlier answer, adds its own, and hands the longer conversation on. The Coach has no tools and a strict JSON schema, so the last message is always the evidence JSON. `output_from="all"` makes the workflow emit every agent's answer, which is how the script prints the route.
 
@@ -144,16 +144,15 @@ sequenceDiagram
   C-->>W: one evidence JSON (the reply)
 ```
 
-**Hand-off: the model decides the route.** `HandoffBuilder` gives each agent a `handoff_to_<name>` function tool for every target allowed by `add_handoff` (L173-175). An agent hands over by *calling* that tool, and the workflow then makes the target agent active. The instruction block tells the Coach never to answer and to send food-plus-activity requests to Nutrition first. Nutrition runs in **autonomous mode** for one turn: its first reply is the food answer, and on the extra turn it calls `handoff_to_activity` instead of waiting for the resident. The two steps are kept in separate turns on purpose: with "answer, then hand off" in one turn, `gpt-5-mini` often called the hand-off tool and skipped the answer. The `termination_condition` (L170-171) stops the run as soon as Activity has answered. Section 5 checks the route because a model-chosen route can vary; that is the trade-off for flexibility.
+**Hand-off: the model decides the route.** `HandoffBuilder` gives each agent a `handoff_to_<name>` function tool for every target allowed by `add_handoff` (L197-198). An agent hands over by *calling* that tool, and the workflow then makes the target agent active. The instruction block tells the Coach never to answer and to send food-plus-activity requests to Nutrition first. Nutrition runs in **autonomous mode** for one turn: its first reply is the food answer, and on the extra turn it calls `handoff_to_activity` instead of waiting for the resident. The instructions alone were not enough: in about 1 run in 4, `gpt-5-mini` called the hand-off tool and skipped the answer. So the **chat middleware** `answer_first()` (L165-182) removes Nutrition's hand-off tool from its first model call, and the answer has to come first. Activity has no hand-off tool: it is the last stop, and the `termination_condition` (L194-195) stops the run as soon as it has answered. Section 5 still checks the route, because the model chooses it; that is the trade-off for flexibility.
 
 ```mermaid
 flowchart LR
   req(["Request"]) --> coach["Coach (start)<br/>triage only, never answers"]
-  coach -- "handoff_to_nutrition" --> nutrition["Nutrition<br/>answers the food part<br/>autonomous: 1 turn"]
-  nutrition -- "handoff_to_activity" --> activity["Activity<br/>answers the activity part"]
+  coach -- "handoff_to_nutrition" --> nutrition["Nutrition<br/>answers the food part<br/>(no hand-off tool on turn 1)<br/>autonomous: 1 turn"]
+  nutrition -- "handoff_to_activity" --> activity["Activity<br/>answers the activity part<br/>(no hand-off tools)"]
   activity -- "termination_condition:<br/>Activity has answered" --> done(["Done"])
   coach -. "handoff_to_activity<br/>(activity-only questions)" .-> activity
-  activity -. "handoff_to_coach<br/>(allowed, not used here)" .-> coach
 ```
 
 **The `text_only` middleware** (L81-84) is the one piece of glue. Each agent's turn contains its own tool calls (MCP calls, hand-off calls), and the next agent must not replay calls it never made. The middleware passes earlier turns on as plain text, keeping who said what (`author_name`).
@@ -207,9 +206,9 @@ Use `--verbose` for each agent's full answer. Use `--cleanup` to delete only `li
 | 2 | [`af_client`](../assets/common/livewell_common.py#L1097-L1108), [`af_kb_tool` and `af_activities_tool`](../assets/common/livewell_common.py#L1111-L1122) | A `FoundryChatClient` on the project's model deployment, and the two hosted MCP tools from `client.get_mcp_tool`. `allowed_tools` keeps Activity to `find_activities`. |
 | 3 | [`text_only` and `team()`](../assets/lab4_multiagent.py#L80-L95) | Agent middleware that strips other agents' tool calls (but keeps the agent's own hand-off result, so a second turn still has input), and a factory for fresh Nutrition and Activity agents. An agent instance belongs to one workflow, so each workflow builds its own. |
 | 4 | [`sequential()`](../assets/lab4_multiagent.py#L124-L129), [run and checks](../assets/lab4_multiagent.py#L132-L152) | `SequentialBuilder` in a fixed order. The Coach's strict schema comes from [`af_json_format`](../assets/common/livewell_common.py#L1125-L1128), the same evidence contract as Lab 3. |
-| 5 | [`handoff()`](../assets/lab4_multiagent.py#L164-L179) | `HandoffBuilder`: who may hand off to whom, the start agent, one autonomous turn for Nutrition and a stop condition. |
-| 6 | [L203-L209](../assets/lab4_multiagent.py#L203-L210) | Not Agent Framework: a Foundry prompt agent with the Fabric tool, created and asked exactly as in Lab 3. |
-| 7 | [L237-L260](../assets/lab4_multiagent.py#L238-L261) | Finds `livewell-workshop-hosted`, checks its guardrail, and sends it the week-plan prompt. |
+| 5 | [`answer_first()` and `handoff()`](../assets/lab4_multiagent.py#L165-L202) | A chat middleware that makes Nutrition answer before it can hand off, then `HandoffBuilder`: who may hand off to whom, the start agent, one autonomous turn for Nutrition and a stop condition. |
+| 6 | [L226-L232](../assets/lab4_multiagent.py#L226-L233) | Not Agent Framework: a Foundry prompt agent with the Fabric tool, created and asked exactly as in Lab 3. |
+| 7 | [L260-L283](../assets/lab4_multiagent.py#L261-L284) | Finds `livewell-workshop-hosted`, checks its guardrail, and sends it the week-plan prompt. |
 
 Two helpers do the plumbing:
 

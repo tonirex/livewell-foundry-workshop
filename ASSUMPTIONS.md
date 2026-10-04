@@ -858,7 +858,10 @@ Where an entry changes something SPEC.md states, it says so.
     `handoff_to_activity` without writing its answer (2 of 2), and once Activity handed back to the Coach with no
     text, which left the Coach no messages. The `handoff` block now gives Nutrition's answer and its hand-off
     separate turns (the autonomous turn was already there) and forbids Activity to hand back: 4 of 4 passed and the
-    run took about a minute instead of 75 s.
+    run took about a minute instead of 75 s. On 2026-10-04 the hosted DevUI still failed 2 of 8 runs the same way
+    (Nutrition handed off with no answer, Activity bounced to the Coach), so the order is now enforced in code: a
+    chat middleware removes Nutrition's hand-off tool on its first turn, and Activity has no hand-off tools. 8 of 8
+    passed, plus 3 of 3 activity-only and 3 of 3 food-only.
   - The instruction alone was not enough: re-recording Lab 4 (2026-10-03) crashed once more with "Messages are
     required for chat completions". An agent given a second turn gets only its own hand-off result plus the others'
     cleaned replies, and when those carry no text the `text_only` middleware left an empty list. It now keeps

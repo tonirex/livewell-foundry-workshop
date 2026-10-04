@@ -38,7 +38,8 @@ os.environ.setdefault("PYTHONIOENCODING", "utf-8")
 
 from common import livewell_common as lw  # noqa: E402
 
-from agent_framework import Agent, Message, WorkflowException, WorkflowViz, agent_middleware  # noqa: E402
+from agent_framework import (Agent, Message, WorkflowException, WorkflowViz, agent_middleware,  # noqa: E402
+                             chat_middleware)
 from agent_framework.orchestrations import HandoffAgentUserRequest, HandoffBuilder, SequentialBuilder  # noqa: E402
 
 LOOPBACK = ("127.0.0.1", "localhost")
@@ -50,6 +51,27 @@ async def text_only(context, call_next):
     context.messages[:] = [m if m.role == "tool" else Message(m.role, [m.text], author_name=m.author_name)
                            for m in context.messages if m.text or m.role == "tool"]
     await call_next()
+
+
+def answer_first() -> list:
+    """Same as lab4_multiagent.py section 5: Nutrition's first turn has no hand-off tool, so it must write its food
+    answer; it hands off on its autonomous turn."""
+    turns = 0
+
+    @agent_middleware
+    async def count_turns(context, call_next):
+        nonlocal turns
+        turns += 1
+        await call_next()
+
+    @chat_middleware
+    async def hide_handoff(context, call_next):
+        if turns == 1:
+            context.options = {**context.options, "tools": [t for t in context.options.get("tools") or []
+                                                            if not getattr(t, "name", "").startswith("handoff_to_")]}
+        await call_next()
+
+    return [count_turns, hide_handoff]
 
 
 def build(client, knowledge, find_activities):
@@ -73,6 +95,7 @@ def build(client, knowledge, find_activities):
     sequential.description = "Nutrition -> Activity -> Coach (Lab 4 section 4)"
 
     nutrition, activity = team("handoff")
+    nutrition.middleware = [*nutrition.middleware, *answer_first()]
     triage = Agent(client, lw.load_instructions("base", "handoff"), name="coach",
                    description="LiveWell Coach: triage only", middleware=[text_only],
                    require_per_service_call_history_persistence=True)
@@ -82,7 +105,6 @@ def build(client, knowledge, find_activities):
                .with_start_agent(triage)
                .add_handoff(triage, [nutrition, activity])
                .add_handoff(nutrition, [activity])
-               .add_handoff(activity, [triage])
                .with_autonomous_mode(agents=[nutrition], turn_limits={"nutrition": 1}, prompts={
                    "nutrition": "If the resident also asked about activity, hand off to the Activity specialist now."})
                .build())
