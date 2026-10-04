@@ -281,6 +281,7 @@ There is nothing to submit. Try the steps first, then open **Expected output** t
 | Trace shows only one specialist | Re-run the Agent Framework script and check the handoff rule; the week-plan prompt should require both Nutrition and Activity. |
 | `Workflow is already running` | One request at a time per workflow; re-run the cell. |
 | Programme-Insights calls the knowledge base instead of Fabric | Re-copy the fabric routing block in the specialist instructions and confirm the Fabric tool is attached. |
+| Section 6: 400 "Remote MCP server error while enumerating tools … did not return a valid MCP JSON-RPC response" | The Fabric capacity is paused (it is paused overnight). Facilitator: `bash scripts/capacity.sh resume <env>`; re-run after a minute. To carry on without Fabric, prefix the run with `FABRIC_BRIDGE=false`. |
 | Endpoint smoke test returns prose | The hosted agent's `livewell.json` is stale: the facilitator runs `python scripts/gen-schemas.py` and redeploys. |
 | 429 or quota errors | Wait 30 seconds and re-run, or reduce concurrent participant runs. For the demo, set `LIVEWELL_MODEL=gpt-4.1-mini` to move the team to the tools deployment. |
 
