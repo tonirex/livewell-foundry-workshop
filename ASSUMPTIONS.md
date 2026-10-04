@@ -10,8 +10,8 @@ Where an entry changes something SPEC.md states, it says so.
 | Workshop date | `content/config/workshop.yaml` → `workshop.date` | TODO |
 | Confirmed participant count (planning default 20) | `workshop.participant_count` | 6 (sponsor quota sized for it, 9.1) |
 | Guest Wi-Fi SSID and code | `workshop.guest_wifi` (rendered on the deck logistics slide) | TODO |
-| Sponsor subscription ID and tenant ID | `environments.sponsor` and `infra/env/sponsor.bicepparam` (Phase 2) | TODO |
-| Sponsor facilitator UPN(s) | `environments.sponsor.facilitator_upns` | TODO |
+| Sponsor subscription ID and tenant ID | `environments.sponsor` and `infra/env/sponsor.bicepparam` (Phase 2) | Done 2026-10-04: subscription "HPB-workshop_HPB_Customer" (Azure Sponsorship) in its own tenant `hpbsub2026outlook.onmicrosoft.com`, kept separate from MCAPS (no Change directory) |
+| Sponsor facilitator UPN(s) | `environments.sponsor.facilitator_upns` | Done 2026-10-04: `hpb.facilitator@hpbsub2026outlook.onmicrosoft.com`, a cloud-only work account (Global Administrator, subscription Owner) that runs the sponsor environment. The tenant's creator `hpb.sub2026@outlook.com` keeps its rights and receives the budget alerts (10.1) |
 | Fabric Administrator role for the MCAPS facilitator account | Entra ID → Roles → Fabric Administrator (or activate Global Administrator in PIM). Needed for the tenant settings in `content/admin/TENANT-BOOTSTRAP.md` | Done 2026-09-29: "Users can create Ontology (preview) items" enabled; Phase 3 deploy green |
 | Fabric tenant sign-up (MCAPS tenant has never used Fabric) | A tenant user signs in once at app.fabric.microsoft.com | Done 2026-09-29: F2 `fablivewellmcaps` created by `provision.sh mcaps` |
 
@@ -873,3 +873,37 @@ Where an entry changes something SPEC.md states, it says so.
     `age_band` into the one Fabric question. That gave 4 of 4 with the profile first and 60-64. Mei's region
     question and the Lab 4 Programme-Insights specialist passed unchanged (top region North, top programme
     Healthier SG; 44-108 s per Fabric call).
+
+## Phase 10: sponsor environment (2026-10-04)
+
+- **10.1** The sponsor tenant was created by the personal Microsoft account `hpb.sub2026@outlook.com` (Member, Global
+  Administrator, subscription Owner). It can sign in to Fabric (`app.fabric.microsoft.com/?ctid=<tenant-id>`), but
+  ARM cannot create a Fabric capacity for it: the `fabric` module failed with "Unauthorized: Unable to authorize with
+  Azure Active Directory", the documented result for personal accounts. With Antonia's approval the cloud-only work
+  account `hpb.facilitator@hpbsub2026outlook.onmicrosoft.com` (Global Administrator, subscription Owner) was created
+  on 2026-10-04. It runs the sponsor environment and is the Fabric capacity admin. The outlook.com account keeps its
+  rights and receives the budget alerts. Preflight check 2 used to look the caller up by sign-in name, which matches
+  no one for a personal account (tenant UPN `name_outlook.com#EXT#@…`); it now uses the object ID.
+- **10.2** One machine, two tenants. az and azd keep one sign-in per Windows user, shared by every terminal and agent
+  session, and `provision.sh` runs `az account set`. Sponsor work therefore runs with its own profile folders:
+  `AZURE_CONFIG_DIR=~/.azure-livewell-sponsor` (with `AZURE_EXTENSION_DIR` pointing at the default extensions) and
+  `AZD_CONFIG_DIR=~/.azd-livewell-sponsor` with `auth.useAzCliAuth true` (TENANT-BOOTSTRAP Step 2). The default
+  profile stays signed in to MCAPS.
+- **10.3** Search runs in `francecentral`, as on MCAPS (2.5): `SEARCH_LOCATION` is set in the sponsor azd env.
+- **10.4** The subscription already held a test Foundry resource (`Demo-foundry` / `demo-foundry-sc`) with
+  `gpt-4.1-mini` at 100K TPM, which left 100K of the 200K quota (9.1). With Antonia's approval that deployment was
+  deleted on 2026-10-04. Its `gpt-5-mini` deployment (50K) stays: 450K is still free against the 400K cap.
+- **10.5** The first provision of a new environment failed in `foundry`: ARM preflight rejects
+  `livewell-guardrails` with "Resource has invalid blocklist reference", because the blocklist it names is created
+  in the same deployment (a validation-only test passes without the link). MCAPS never hit it: its account and
+  blocklist existed before the policy was added. `guardrailLinkBlocklist` (main.bicep) is now false until the azd
+  env has `AZURE_AI_ACCOUNT_NAME`, i.e. on an environment's first provision; the policy starts unlinked and the
+  postprovision hook `apply-guardrail.py` links it. `teardown.sh` clears `AZURE_AI_ACCOUNT_NAME`.
+- **10.6** Two more first-environment gaps. `cost-guardrails.sh` failed on the untagged "Application Insights Smart
+  Detection" action group, which App Insights creates in a subscription that has none yet (MCAPS already had one);
+  it is now skipped like the smart-detector rules. `requirements.txt` accepted an already-installed
+  `azure-ai-projects` 2.2.0, which lacks `agents.download_code` (`hosted-postdeploy.py`) and `ProtocolConfiguration`
+  (A2A in `create-demo-agents.py`); the floor is now the tested 2.6.1.
+- **10.7** Sponsor verified on 2026-10-04 as `hpb.facilitator`: `cost-guardrails.sh` all PASS; knowledge base 11/11
+  guides; tool connections PASS (Fabric IQ waits for Phase 3); hosted agent v2 with `livewell-guardrails` blocks
+  `lab2_medication_double`; six demo agents (Fabric agent after Phase 3); smoke test 9 PASS, Fabric SKIP.

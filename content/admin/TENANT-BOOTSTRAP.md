@@ -34,12 +34,18 @@ Record the outcome in [ASSUMPTIONS.md](../../ASSUMPTIONS.md) under "Values Anton
 | You are **Global Administrator** (or hold **Fabric Administrator** + **User Administrator**) | Entra admin centre → Roles & admins → My roles | Tenant settings, lab accounts |
 | Tenant country/region is **Singapore** | Entra admin centre → Overview → Properties | Data residency statement, lab-account usage location |
 | The facilitator account is a **member** (not a guest) of this tenant | Entra → Users → user type = Member | Fabric capacity admin must be a member UPN |
+| The facilitator is a **work or school** account, not a personal Microsoft account | Entra → Users: the UPN ends in the tenant's domain, without `#EXT#` | ARM cannot create the Fabric capacity for a personal account ("Unable to authorize with Azure Active Directory") |
 | Security defaults are **on** | Entra → Overview → Properties → Manage security defaults | MFA for lab accounts without Entra P1 |
 | The facilitator has a Fabric licence | Sign in once at https://app.fabric.microsoft.com (the Free licence is assigned on first sign-in) | Fabric REST / `fab` calls (otherwise `UserNotLicensed`) |
 
+A sponsorship subscription created with an outlook.com address comes with a tenant whose only user is that personal
+account. Create a cloud-only facilitator in it (Entra → Users → New user, `<name>@<tenant>.onmicrosoft.com`), make
+it Global Administrator and Owner on the subscription, and run every step below as that account.
+
 Put the facilitator UPN(s) into [workshop.yaml](../config/workshop.yaml) `environments.sponsor.facilitator_upns`, and into
-`fabricAdminMembers` and `budgetContactEmails` in `infra/env/sponsor.bicepparam`. Put the subscription and tenant IDs
-into `environments.sponsor`.
+`fabricAdminMembers` and `budgetContactEmails` in `infra/env/sponsor.bicepparam`. A cloud-only account has no
+mailbox, so send the budget alerts to an address someone reads. Put the subscription and tenant IDs into
+`environments.sponsor`.
 
 ## Fabric tenant settings
 
@@ -63,13 +69,26 @@ Allow up to **one hour** for the settings to propagate before running `scripts/f
 
 ## Step 2: Azure subscription preparation
 
+`az` and `azd` keep one sign-in and one default subscription per user, shared by every terminal. To keep the two
+environments apart, give the sponsor tenant its own profile folders. A terminal with the three variables below works
+only on sponsor; every other terminal stays on MCAPS, and neither changes the other's sign-in.
+
 ```bash
+# Every sponsor terminal (Git Bash). PowerShell: $env:AZURE_CONFIG_DIR = "$HOME\.azure-livewell-sponsor" and so on.
+export AZURE_CONFIG_DIR="$HOME/.azure-livewell-sponsor"   # az sign-in and default subscription
+export AZURE_EXTENSION_DIR="$HOME/.azure/cliextensions"   # reuse the az extensions already installed
+export AZD_CONFIG_DIR="$HOME/.azd-livewell-sponsor"       # azd settings and extensions
+
+# Once
 az login --tenant <sponsor-tenant-id>
-az account set --subscription <sponsor-subscription-id>
-azd auth login --tenant-id <sponsor-tenant-id>
+azd config set auth.useAzCliAuth true       # azd uses the az sign-in above
+azd extension install azure.ai.agents
 azd env new sponsor --subscription <sponsor-subscription-id> --location swedencentral
-bash scripts/preflight.sh sponsor      # registers resource providers; prints quota links for any FAIL
+azd env set SEARCH_LOCATION francecentral   # as on mcaps: no new Search capacity in swedencentral (ASSUMPTIONS 2.5)
+bash scripts/preflight.sh sponsor           # registers resource providers; prints quota links for any FAIL
 ```
+
+The azd environment itself (`.azure/sponsor/`) is gitignored and lives only in the checkout that created it.
 
 On a fresh subscription, expect to request:
 

@@ -166,9 +166,12 @@ environments:
     budget_alerts_usd: [150, 300]
   sponsor:
     purpose: "delivery"
-    subscription_id: "TODO"
-    tenant_id: "TODO"
-    facilitator_upns: ["TODO"]
+    subscription_id: "d865b78f-2913-4f0a-8945-ff436fe33f6b"   # HPB-workshop_HPB_Customer (Azure Sponsorship)
+    tenant_id: "f42d5e19-57d1-4047-8d3d-cd4bb2fe7d9a"         # hpbsub2026outlook.onmicrosoft.com
+    facilitator_upns:
+      # Cloud-only work account: a personal Microsoft account (hpb.sub2026@outlook.com, which created the tenant
+      # and stays Global Administrator + Owner) cannot create a Fabric capacity (ASSUMPTIONS.md 10.1).
+      - "hpb.facilitator@hpbsub2026outlook.onmicrosoft.com"
     lab_accounts:
       prefix: "hpb.lab"
       count: 20

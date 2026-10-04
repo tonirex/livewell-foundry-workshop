@@ -18,7 +18,7 @@ workflows for anything touching azd, hosted agents, evaluations or the Foundry M
 - All data synthetic; original HPB-style guidance (no HealthHub text); no race or religion fields; Rahim = RESIDENT_00061 exactly as SPEC.md §3.3; the story quotes only numbers computed by scripts/validate-narrative.py.
 - The narrative is secondary — every lab is named by the Foundry capability it teaches; the ten agentic patterns frame the day.
 - Label every preview surface; keep validator checkpoints on GA paths; never use the Foundry portal Workflows item; use Foundry LLM-judge evaluators, not regex scorers.
-- Pin versions (ms-fabric-cli, azure-ai-projects>=2.0.0, azure-search-documents==12.1.0b1, azure-ai-evaluation, agent-framework, mcp<2, Python 3.13); verify every API call against the Microsoft Learn pages in SPEC.md §2 before writing it.
+- Pin versions (ms-fabric-cli, azure-ai-projects>=2.6.1, azure-search-documents==12.1.0b1, azure-ai-evaluation, agent-framework, mcp<2, Python 3.13); verify every API call against the Microsoft Learn pages in SPEC.md §2 before writing it.
 - Small commits, conventional messages; one branch and one PR per phase; the PR description is the phase report.
 - Ask no questions. Make reasonable assumptions, record each in ASSUMPTIONS.md with the phase number, and keep going.
 

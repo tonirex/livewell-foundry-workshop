@@ -4,6 +4,27 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Sponsor environment (2026-10-04)
+
+- **Sponsor values filled in.** `workshop.yaml` → `environments.sponsor` and `infra/env/sponsor.bicepparam` hold the
+  sponsorship subscription, its tenant and the facilitator, the cloud-only work account `hpb.facilitator` (Fabric
+  capacity admin). Budget alerts go to the outlook.com mailbox that created the tenant. ASSUMPTIONS.md 10.1–10.7.
+- **A new environment provisions in one pass.** ARM preflight rejected `livewell-guardrails` on a brand-new Foundry
+  account because the blocklist it names is created in the same deployment. `guardrailLinkBlocklist` keeps the policy
+  unlinked until the azd env has `AZURE_AI_ACCOUNT_NAME`; the postprovision hook links it. MCAPS is unchanged, and
+  `teardown.sh` clears the value so the next provision starts fresh.
+- **Preflight finds a personal-account Owner.** Check 2 looked the caller up by sign-in name. For a personal Microsoft
+  account (`name@outlook.com`, tenant UPN `name_outlook.com#EXT#@…`) that matches no one, so an Owner failed the check.
+  `scripts/preflight.sh` now looks the caller up by object ID.
+- **Cost guardrails on a new subscription.** The "Application Insights Smart Detection" action group that App Insights
+  creates in a subscription's first resource group no longer fails the tag check.
+- **`azure-ai-projects>=2.6.1`.** An already-installed 2.2.0 satisfied the old `>=2.0.0` floor but lacks
+  `agents.download_code` and `ProtocolConfiguration`, so the hosted-agent postdeploy hook and the A2A demo agents failed.
+- **One machine, two tenants.** TENANT-BOOTSTRAP Step 2 gives the sponsor tenant its own az and azd profile folders
+  (`AZURE_CONFIG_DIR`, `AZD_CONFIG_DIR` with `auth.useAzCliAuth`). A sponsor terminal cannot touch MCAPS, and MCAPS
+  terminals keep their sign-in. Step 1 now requires a work or school facilitator: ARM cannot create a Fabric capacity
+  for a personal Microsoft account.
+
 ### Lab 4 DevUI stable ids (2026-10-04)
 
 - **Open DevUI pages survive a restart.** DevUI gave each workflow a random id at start-up, so after an idle
