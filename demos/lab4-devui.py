@@ -90,6 +90,17 @@ def build(client, knowledge, find_activities):
     return sequential, handoff
 
 
+def tidy_roles(value):
+    """DevUI's Configure & Run form takes the role as free text, and Foundry rejects anything but an exact role
+    ("user " or "User" fails the whole run with 400 invalid_payload). Trim and lowercase it; anything else is the
+    resident speaking, so it becomes "user"."""
+    for m in value if isinstance(value, list) else [value]:
+        if isinstance(m, Message) and isinstance(m.role, str):
+            role = m.role.strip().lower()
+            m.role = role if role in ("user", "assistant", "system") else "user"
+    return value
+
+
 class FreshRuns:
     """One DevUI entry that builds a new copy of its workflow for every run, with at most `seats` runs in flight.
     A workflow object keeps state from one run to the next: each agent's chat history, and the hand-off
@@ -113,6 +124,8 @@ class FreshRuns:
             # The triage Coach's question (hand-off only) expects chat messages, but DevUI's reply box sends a string.
             kwargs["responses"] = {rid: HandoffAgentUserRequest.create_response(r) if isinstance(r, str) else r
                                    for rid, r in kwargs["responses"].items()}
+        if args:
+            args = (tidy_roles(args[0]), *args[1:])
         wf = self._make()
         stream = wf.run(*args, **kwargs)
         self._running.append(wf)

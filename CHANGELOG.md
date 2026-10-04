@@ -10,6 +10,10 @@ All notable changes to this workshop. One entry per phase PR.
   scale-to-zero or a redeploy a page left open failed with "Failed to Load Workflow … not found".
   `demos/lab4-devui.py` now drops the random suffix (`workflow_in_memory_livewell-sequential` /
   `…-hand-off`); lab-04 troubleshooting covers the symptom. Runs are still in memory only, so they reset on restart.
+- **A typo in the role box no longer fails the run.** Foundry rejects any role but an exact `user`, so `user ` (with a
+  trailing space) failed the Coach's first call with 400 invalid_payload ("Error: [object Object]" in DevUI).
+  `demos/lab4-devui.py` now trims and lowercases the role and treats anything else as `user`. Lab-04 troubleshooting
+  shows how to read a failed node from its trace.
 
 ### Builder setup (2026-10-04)
 

@@ -272,6 +272,7 @@ There is nothing to submit. Try the steps first, then open **Expected output** t
 | DevUI asks for a token again, or a run fails with 401 | Paste the **Lab 4 DevUI token** from the values sheet again (it is kept in this browser only). |
 | DevUI takes 20–30 s to open | It scales to zero when idle and is starting up. The facilitator keeps one copy warm on the day (`DEVUI_MIN_REPLICAS=1`). |
 | DevUI: "Failed to Load Workflow … not found", **Run Workflow** does nothing, or your earlier runs are gone | DevUI restarted (idle scale-to-zero or a redeploy) and keeps runs in memory only. Open the DevUI link from the values sheet again, pick the team and select **+**. |
+| DevUI: a node shows **failed** with "Error: [object Object]" | Select **Show error** to read it. Open **Traces → OTel Spans** and select the failed `chat` span: `gen_ai.input.messages` shows exactly what was sent. A stray space or capital in **role** is handled for you; anything else, tell the facilitator. |
 | DevUI: "All N seats of LiveWell … are busy" | Every seat is running someone's request. Wait a minute and run again. |
 | DevUI session list shows other people's runs | Expected: the room shares one DevUI. Select **+** for your own session. |
 | Hosted playground refuses to chat for a Foundry User account | Watch the facilitator's playground run instead. Tell the facilitator, who checks the portal walkthrough fallback. |
