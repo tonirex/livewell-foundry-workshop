@@ -71,7 +71,12 @@ If you finish early, help a neighbour check the trace rather than creating extra
 
 ## 🔵 Builder
 
-Lab 0 is the same portal exercise for everyone. Builders should use the remaining time to open the repository in Codespaces or VS Code, confirm Python is available, and wait for the facilitator values sheet before filling `.env` for Lab 1.
+Lab 0 is the same portal exercise for everyone. Builders then use the remaining time to get ready for Lab 1, following [Builder setup](../../README.md#-builder-setup) (about 5 minutes):
+
+1. Open the repository in **Codespaces** (Code → Codespaces → Create codespace on main), or use your local clone with its `.venv` active.
+2. Sign in to Azure in the terminal with `az login --use-device-code --allow-no-subscriptions`, as your `hpb.labNN` account in the same private browser window.
+3. Run `cp content/assets/.env.sample content/assets/.env`, then fill in two lines: `INITIALS=` with your own initials, and `FOUNDRY_PROJECT_ENDPOINT=` with the **Project endpoint** row from the values sheet. Leave `FABRIC_BRIDGE=false`.
+4. Run `python content/assets/check_setup.py` until it ends with **All set: start Lab 1**. Each FIX line says what to change.
 
 From Lab 1 onward, Builder scripts are linear `# %%` cell files. Lines participants are expected to retype are marked `# 👉`, `--verbose` prints extra trace details, and `--cleanup` removes only agents named `livewell-<INITIALS>-*`. The scripts create agents on the same models as the portal: `gpt-5-mini` at Low reasoning effort, and `gpt-4.1-mini` for the Lab 3 coach. Both names come from `content/config/workshop.yaml`, and `.env` can override them.
 

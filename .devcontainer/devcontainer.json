@@ -1,6 +1,6 @@
 {
   "name": "livewell-foundry-workshop",
-  "image": "mcr.microsoft.com/devcontainers/python:3.13",
+  "image": "mcr.microsoft.com/devcontainers/python:3.13-bookworm",
   "features": {
     "ghcr.io/devcontainers/features/azure-cli:1": {},
     "ghcr.io/azure/azure-dev/azd:latest": {},
@@ -11,9 +11,16 @@
   "containerEnv": {
     "PYTHONIOENCODING": "utf-8"
   },
-  "postCreateCommand": "uv pip install --system -r requirements.txt && uv pip install --system ms-fabric-cli==1.7.0",
+  "remoteEnv": {
+    "VIRTUAL_ENV": "${containerWorkspaceFolder}/.venv",
+    "PATH": "${containerWorkspaceFolder}/.venv/bin:${containerEnv:PATH}"
+  },
+  "postCreateCommand": "python3 -m venv .venv && uv pip install --python .venv/bin/python -r requirements.txt ms-fabric-cli==1.7.0",
   "customizations": {
     "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python"
+      },
       "extensions": [
         "ms-python.python",
         "ms-toolsai.jupyter",

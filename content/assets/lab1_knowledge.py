@@ -5,7 +5,7 @@
 # prompt agent that answers ONLY from the LiveWell guides (a Foundry IQ knowledge base on Azure AI Search),
 # cites the guide ids it used, and replies as machine-routable JSON.
 #
-# Run it all:            `INITIALS=abc python content/assets/lab1_knowledge.py`
+# Run it all:            `python content/assets/lab1_knowledge.py` (INITIALS and endpoint from content/assets/.env)
 # Or cell by cell:       open this file in VS Code / Codespaces and use "Run Cell" on each `# %%`.
 # Flags:                 `--verbose` (tool calls, citations, response ids), `--intake` (optional pattern #1
 #                        step), `--cleanup` (delete the agents this run created when it finishes).

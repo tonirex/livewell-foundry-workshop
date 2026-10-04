@@ -177,13 +177,10 @@ Further reading: [sequential orchestration](https://learn.microsoft.com/agent-fr
 ## 🔵 Builder
 
 ```bash
-INITIALS=abc python content/assets/lab4_multiagent.py
+python content/assets/lab4_multiagent.py
 ```
 
-```powershell
-$env:INITIALS = "abc"
-python content\assets\lab4_multiagent.py
-```
+Same in bash and PowerShell; your initials and endpoint come from `content/assets/.env` ([Builder setup](../../README.md#-builder-setup)).
 
 Or open `content/assets/lab4_multiagent.py` and run it cell by cell in VS Code or Codespaces. The Agent Framework orchestration runs on your machine and calls the project's model deployments directly, so those local agents run under the deployment's guardrail (the platform default), not `livewell-guardrails`; the Foundry agents in the lab (Programme-Insights and the hosted agent) carry `livewell-guardrails` themselves. Hosted deploy remains facilitator-only.
 

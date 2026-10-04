@@ -138,13 +138,10 @@ Minimal is the cheapest and fastest but needs Extractive data output and can't u
 
 ## 🔵 Builder
 
-```bash
-INITIALS=abc python content/assets/lab1_knowledge.py
-```
+Finish [Builder setup](../../README.md#-builder-setup) first: `python content/assets/check_setup.py` should end with **All set**. Your initials and the project endpoint come from `content/assets/.env`, so the command is the same in bash and PowerShell:
 
-```powershell
-$env:INITIALS = "abc"
-python content\assets\lab1_knowledge.py
+```bash
+python content/assets/lab1_knowledge.py
 ```
 
 Or open `content/assets/lab1_knowledge.py` and run it cell by cell in the VS Code or Codespaces interactive window. The file is written as `# %%` cells.

@@ -67,29 +67,63 @@ workshop**. Fabric built the Resident 360 that sees Rahim; today Foundry builds 
 
 ## 🔵 Builder setup
 
+Two things before Lab 1: a place to run Python (Codespaces or your laptop) and a filled-in `content/assets/.env`.
+Do it during Lab 0 or before the day; `check_setup.py` tells you when you are ready.
+
 <details>
-<summary><strong>Option A · GitHub Codespaces (recommended, ~3 min)</strong></summary>
+<summary><strong>Option A · GitHub Codespaces (recommended, ~5 min)</strong></summary>
 
-The dev container gives everyone the same x64 Linux image: Python 3.13, uv, `az`, `azd`, `fab`,
-Docker-in-Docker, and everything in [`requirements.txt`](requirements.txt).
+You need a GitHub account that can open this repository (the facilitator shares access before the day). The
+dev container gives everyone the same Linux image: Python 3.13 in a `.venv` that is already active, uv, `az`,
+`azd`, `fab`, Docker-in-Docker, and everything in [`requirements.txt`](requirements.txt). Codespaces usage comes
+out of your GitHub account's free monthly hours; the 2-core machine is enough.
 
-1. **Code → Codespaces → Create codespace on main.** Wait for post-create to finish.
-2. Sign in: `az login --use-device-code` (use your workshop account).
-3. Copy the values sheet the facilitator shows (project endpoint) into `content/assets/.env`, and set `INITIALS`.
-4. Open a lab script in `content/assets/` and run it cell by cell (`# %%`).
+1. On the repository page: **Code → Codespaces → Create codespace on main**. The first build takes 3–5 minutes.
+   Wait until the setup terminal finishes installing packages before you run anything.
+2. Sign in to Azure in the Codespace terminal:
+
+   ```bash
+   az login --use-device-code --allow-no-subscriptions
+   ```
+
+   Open the link it prints in the **private browser window where you are signed in as `hpb.labNN`**, enter the
+   code and pick that account. If it asks you to choose a subscription, press Enter.
+3. Create your settings file, then fill it in (see [Your `.env`](#your-env) below):
+
+   ```bash
+   cp content/assets/.env.sample content/assets/.env
+   code content/assets/.env
+   ```
+
+4. Check everything, and repeat until it ends with **All set: start Lab 1**:
+
+   ```bash
+   python content/assets/check_setup.py
+   ```
+
+5. Run a lab: `python content/assets/lab1_knowledge.py`, or open the file and click **Run Cell** above each
+   `# %%`. If VS Code asks for a kernel, pick **Python Environments → .venv**.
+
+The Codespace stops after 30 idle minutes. Reopen it from **github.com/codespaces**: your `.env`, sign-in and
+files are kept. If `az` says your token expired, repeat step 2.
 
 </details>
 
 <details>
 <summary><strong>Option B · Local machine</strong></summary>
 
+Needs Python 3.12 or 3.13, Git and the [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli).
+From the repository root:
+
 Windows (PowerShell):
 
 ```powershell
 python -m venv .venv ; .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-az login
 $env:PYTHONIOENCODING = "utf-8"
+az login --use-device-code --allow-no-subscriptions
+Copy-Item content\assets\.env.sample content\assets\.env ; notepad content\assets\.env
+python content\assets\check_setup.py
 ```
 
 macOS / Linux:
@@ -97,12 +131,43 @@ macOS / Linux:
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-az login
+az login --use-device-code --allow-no-subscriptions
+cp content/assets/.env.sample content/assets/.env && ${EDITOR:-nano} content/assets/.env
+python content/assets/check_setup.py
 ```
 
-Windows on ARM: some wheels are x64-only. Use an x64 Python, or Codespaces.
+Sign in as in Option A step 2. Activate `.venv` again in every new terminal. Windows on ARM: some wheels are
+x64-only. Use an x64 Python, or Codespaces.
 
 </details>
+
+### Your `.env`
+
+`content/assets/.env` is git-ignored and holds two values. Everything else is found by name in the project, so
+there are no keys or passwords to copy.
+
+| Line | What to put | Where it comes from |
+|---|---|---|
+| `INITIALS=` | Your own initials, 2–8 letters or digits, e.g. `INITIALS=jt` | You. If you also do the portal steps, use the same initials as your Navigator agent `livewell-<initials>` |
+| `FOUNDRY_PROJECT_ENDPOINT=` | `https://….services.ai.azure.com/api/projects/livewell-workshop` | The **Project endpoint** row on the facilitator values sheet. Copy the whole value |
+| `FABRIC_BRIDGE=false` | Leave `false` | Set `true` only when the facilitator says the Fabric step is on |
+
+The model names, the knowledge base and the tool connections (`livewell-guides-kb-mcp`,
+`livewell-activities-mcp`, `livewell-fabric-resident360`) come from
+[`workshop.yaml`](content/config/workshop.yaml) and the project. You do not set them. Because `.env` holds your
+initials, every lab command is just `python content/assets/labN_….py`.
+
+`check_setup.py` is read-only. It checks Python and the packages, your `.env`, your Azure sign-in, the project's
+tool connections and the two model deployments, and prints what to fix:
+
+| It says | Do this |
+|---|---|
+| `FIX no content/assets/.env` | Step 3 |
+| `FIX Set INITIALS first` or `WARN INITIALS=abc` | Put your own initials in `.env` |
+| `FIX FOUNDRY_PROJECT_ENDPOINT should look like…` | Copy the whole **Project endpoint** row again |
+| `FIX not signed in to Azure` | Step 2 |
+| `FIX your account cannot open this project` | Check the endpoint; otherwise ask a facilitator to grant your account **Foundry User** |
+| `WARN not an hpb.labNN account` | You signed in with another account. Run `az logout`, then step 2 |
 
 ## Facilitators
 

@@ -137,13 +137,10 @@ Show these on the projector after step 11. Run them the day before as well, so t
 ## 🔵 Builder
 
 ```bash
-INITIALS=abc python content/assets/lab2_govern.py
+python content/assets/lab2_govern.py
 ```
 
-```powershell
-$env:INITIALS = "abc"
-python content\assets\lab2_govern.py
-```
+Same in bash and PowerShell; your initials and endpoint come from `content/assets/.env` ([Builder setup](../../README.md#-builder-setup)).
 
 Or open `content/assets/lab2_govern.py` and run it cell by cell in VS Code or Codespaces. The code path mirrors the Navigator flow.
 

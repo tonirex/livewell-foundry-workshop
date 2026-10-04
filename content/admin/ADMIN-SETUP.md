@@ -69,6 +69,10 @@ model, so **delete any test deployment of the same model first**: a 100K `gpt-4.
 3. `bash scripts/preflight.sh mcaps` must end with **all checks passed**. Warnings are fine.
    Accepted warnings are portal red teaming (the cloud red team runs from `scripts/red-team-cloud.py`) and a missing `fab`
    before Phase 3.
+4. Builder repository access. This repository is private, and a Codespace needs read access. Collect the
+   Builders' GitHub user names and add them as collaborators with **Read** (repository **Settings → Collaborators**),
+   or publish a public copy for the day. Their Codespace hours come from their own GitHub account. Anyone without
+   a GitHub account uses the local option in the [README](../../README.md#-builder-setup).
 
 ### T-3: build the environment
 
@@ -153,6 +157,11 @@ python scripts/gen-citizens.py --from-onelake --check    # citizens.json agrees 
 ### T-1: dry run
 
 - `bash scripts/capacity.sh resume mcaps`, then run the whole day with a lab account in a private browser window.
+- Builder setup as a participant: create a Codespace from `main`, sign in with
+  `az login --use-device-code --allow-no-subscriptions` as an `hpb.labNN` account, fill `content/assets/.env`
+  ([README](../../README.md#your-env)) and run `python content/assets/check_setup.py`. It must end with
+  **All set**. It is read-only and also confirms that the lab account can open the project, its connections and
+  its model deployments.
 - Builder rail end to end: `make -C content/assets validate-rail` (Labs 1–4 as `INITIALS=test`, ≈ 20 min; report in
   `content/assets/.runs/builder-rail-<date>.md`). It fails if a key signal is missing or an agent is left behind.
   To keep evidence that a script works, wrap it in `demos/record-terminal.py`, e.g.

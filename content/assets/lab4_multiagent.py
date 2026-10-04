@@ -14,7 +14,7 @@
 #   for officer questions (with `--fabric`, only when the facilitator confirms FABRIC_BRIDGE=true).
 # * A smoke test of the facilitator's hosted agent, `livewell-workshop-hosted`, once it is deployed.
 #
-# Run it all:  `INITIALS=abc python content/assets/lab4_multiagent.py`
+# Run it all:  `python content/assets/lab4_multiagent.py` (INITIALS and endpoint from content/assets/.env)
 # Flags:       `--fabric`, `--no-handoff`, `--verbose` (each agent's full answer), `--cleanup`.
 #
 # Lines marked `# 👉` are the ones to retype during the lab.

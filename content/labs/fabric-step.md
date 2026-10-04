@@ -122,13 +122,10 @@ Routing matters as much as the answer. A correct region table that came through 
 ## 🔵 Builder
 
 ```bash
-INITIALS=abc python content/assets/lab3_tools.py --fabric
+python content/assets/lab3_tools.py --fabric
 ```
 
-```powershell
-$env:INITIALS = "abc"
-python content\assets\lab3_tools.py --fabric
-```
+Same in bash and PowerShell. Run it only once the facilitator confirms the Fabric step is on. Run Cell ignores flags, so for cell-by-cell runs set `FABRIC_BRIDGE=true` in `content/assets/.env` instead of `--fabric`.
 
 Or open `content/assets/lab3_tools.py` and run the Fabric cells after the main Lab 3 cells. Use this only when the facilitator confirms `FABRIC_BRIDGE=true`.
 

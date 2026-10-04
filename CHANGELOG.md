@@ -4,6 +4,28 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Builder setup (2026-10-04)
+
+- **Codespace fixed.** The dev container failed in three places before any lab ran. The `python:3.13` image
+  is now Debian trixie, where the Docker-in-Docker feature refuses to install and the Azure CLI feature falls back
+  to Debian's `az` 2.74 with broken command modules. The post-create also ran `uv pip install --system` as
+  `vscode`, which cannot write to the system site-packages. The image is pinned to `python:3.13-bookworm`
+  (current `az` from packages.microsoft.com), and post-create installs into a `.venv` that `remoteEnv` and
+  `python.defaultInterpreterPath` make active. Tested with the dev container CLI: build, post-create, `az`, `azd`,
+  `fab`, `docker`, `make notebooks` and the setup check.
+- **`content/assets/check_setup.py`.** Read-only check that Builders run after filling `.env`. It checks Python
+  and the packages, `INITIALS`, the endpoint format, the Azure sign-in (and that it is an `hpb.labNN` account),
+  the project's tool connections (401/403 means ask for Foundry User) and the two model deployments. Each problem
+  prints a FIX line with what to do.
+- **One way to set initials.** `.env.sample` has an empty `INITIALS=` and numbered lines for the two values to
+  fill. Lab pages, script headers and the Makefile now run `python content/assets/labN_….py`. The old
+  `INITIALS=abc python …` lines overrode `.env`, so anyone who copied them shared the `abc` agents. An empty value
+  in `.env` no longer crashes the settings loader.
+- **Setup docs.** README Builder setup has step-by-step Codespaces and local options, a `.env` table (what, where
+  from) and a check-output table. Lab 0 Builder has the four steps. ADMIN-SETUP T-7 adds GitHub repository access
+  for Builders (the repository is private), and T-1 adds the participant setup check. `ipykernel` was added to
+  `requirements.txt` so **Run Cell** works without an install prompt.
+
 ### Lab 4 in the browser (2026-10-03)
 
 - **Hosted DevUI.** The `lab4-devui` service is optional and defaults to on (`LAB4_DEVUI`). `demos/lab4-devui.py`

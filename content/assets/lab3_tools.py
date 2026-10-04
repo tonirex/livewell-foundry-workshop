@@ -11,7 +11,7 @@
 # * two specialists, `livewell-<INITIALS>-nutrition` and `livewell-<INITIALS>-activity`, connected to the coach
 #   as function tools: when the coach calls one, this script asks that specialist agent and hands back its reply.
 #
-# Run it all:            `INITIALS=abc python content/assets/lab3_tools.py`
+# Run it all:            `python content/assets/lab3_tools.py` (INITIALS and endpoint from content/assets/.env)
 # Fabric step:           add `--fabric` only when the facilitator confirms FABRIC_BRIDGE=true
 # Flags:                 `--verbose` (tool calls and outputs), `--no-memory`, `--cleanup`.
 # Approvals:             in a terminal you are asked y/N; in a notebook or a scripted run they are approved.

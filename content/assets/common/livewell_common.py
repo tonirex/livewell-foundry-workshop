@@ -67,7 +67,7 @@ def _read_env_file(path: pathlib.Path) -> dict[str, str]:
             line = line[len("export "):]
         key, value = line.split("=", 1)
         value = value.strip()
-        if value[:1] in "\"'":
+        if value[:1] and value[0] in "\"'":
             value = value[1:].split(value[0], 1)[0]
         elif " #" in value:
             value = value.split(" #", 1)[0].strip()
@@ -132,8 +132,8 @@ def fabric_enabled(flag: bool = False) -> bool:
 def initials() -> str:
     raw = os.environ.get("INITIALS", "").strip().lower()
     if not raw:
-        raise SystemExit("Set INITIALS first (2-8 letters or digits), for example: INITIALS=abc python "
-                         "content/assets/lab1_knowledge.py, or add INITIALS=abc to content/assets/.env.")
+        raise SystemExit("Set INITIALS first (2-8 letters or digits, your own): add INITIALS=<yours> to "
+                         "content/assets/.env (copy .env.sample), or prefix one run with INITIALS=<yours>.")
     if not re.fullmatch(r"[a-z0-9]{2,8}", raw):
         raise SystemExit(f"INITIALS={raw!r} must be 2-8 letters or digits.")
     if raw in ("demo", "workshop"):

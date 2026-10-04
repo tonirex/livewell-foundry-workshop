@@ -14,7 +14,7 @@ help:
 	@echo "make fill            recompute reference answers and refill the {{ref:...}} values in story and lab pages"
 	@echo "make notebooks       lab*.py -> lab*.ipynb next to them (jupytext; the .ipynb files are not committed)"
 	@echo "make validate-rail   run Labs LABS=$(LABS) top to bottom as INITIALS=test and check the key signals (~20 min)"
-	@echo "make clean-agents    delete every livewell-<INITIALS>-* agent and memory store (INITIALS=abc make clean-agents)"
+	@echo "make clean-agents    delete every livewell-<INITIALS>-* agent and memory store (INITIALS from content/assets/.env)"
 
 validate:
 	cd "$(ROOT)" && $(PYTHON) scripts/check-content.py

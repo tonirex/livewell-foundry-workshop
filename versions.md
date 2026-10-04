@@ -66,6 +66,7 @@ Cost Management query 2023-11-01, Fabric capacity suspend/resume 2023-11-01). Fa
 | `agent-framework-foundry-hosting` | `==1.0.0b260918` (hosted agent only) | `ResponsesHostServer`; pinned with the rest in `content/assets/hosted-agent-example/requirements.txt` |
 | `mcp` | `<2` (1.30.0 tested) | FastMCP activities server; mcp 2.x changed the server API (casepal lesson) |
 | `pyyaml`, `python-pptx`, `fpdf2`, `jupytext` | see `requirements.txt` | Content build (deck, guide PDFs, notebooks) |
+| `ipykernel` | `>=6.29` | Builder rail: VS Code **Run Cell** on the `# %%` lab files without an install prompt |
 
 Facilitator red team (`requirements-redteam.txt`, its own venv): `azure-ai-evaluation[redteam]==1.18.7`, which
 brings PyRIT 0.11.0 and pins its own dependencies.

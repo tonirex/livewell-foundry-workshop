@@ -12,3 +12,4 @@ pyyaml>=6.0
 python-pptx>=1.0
 fpdf2>=2.8
 jupytext>=1.16
+ipykernel>=6.29

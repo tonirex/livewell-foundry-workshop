@@ -11,7 +11,7 @@
 # content_filter, the model never answers); below it, the turn goes through ANNOTATED with the category and
 # severity (for example "self_harm low"), which you see in the response's content_filters and in the trace.
 #
-# Run it all:            `INITIALS=abc python content/assets/lab2_govern.py`
+# Run it all:            `python content/assets/lab2_govern.py` (INITIALS and endpoint from content/assets/.env)
 # Flags:                 `--verbose` (tool calls, response ids for Foundry > Traces), `--eval-all` (all 30 rows;
 #                        facilitator), `--no-eval`, `--upload` (log the evaluation to Foundry > Evaluations;
 #                        facilitator, needs network access to the project storage), `--cleanup`.

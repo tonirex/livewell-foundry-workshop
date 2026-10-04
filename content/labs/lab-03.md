@@ -161,13 +161,10 @@ The tools call real services, but some parts are fixed so that everyone can fini
 ## 🔵 Builder
 
 ```bash
-INITIALS=abc python content/assets/lab3_tools.py
+python content/assets/lab3_tools.py
 ```
 
-```powershell
-$env:INITIALS = "abc"
-python content\assets\lab3_tools.py
-```
+Same in bash and PowerShell; your initials and endpoint come from `content/assets/.env` ([Builder setup](../../README.md#-builder-setup)).
 
 Or open `content/assets/lab3_tools.py` and run it cell by cell in VS Code or Codespaces. Add `--fabric` only when the facilitator confirms `FABRIC_BRIDGE=true`.
 
