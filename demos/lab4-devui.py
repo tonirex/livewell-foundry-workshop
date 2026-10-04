@@ -190,6 +190,59 @@ def stable_entity_ids() -> None:
     EntityDiscovery._generate_entity_id = lambda self, *a, **k: random_id(self, *a, **k).rsplit("_", 1)[0]
 
 
+def per_run_traces() -> None:
+    """Show each run only its own spans in Traces.
+
+    DevUI attaches one trace collector per run to the shared tracer and never detaches it. With several people
+    running at once, everyone's Traces panel shows everyone's spans, and finished runs keep collecting spans for the
+    rest of the day (memory grows with every run). Keep only spans started inside the run, and detach at the end.
+    """
+    import contextlib
+    import contextvars
+
+    from agent_framework_devui import _executor, _tracing  # pinned in requirements-demos.txt
+    from opentelemetry import trace
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import SimpleSpanProcessor
+
+    current = contextvars.ContextVar("livewell_devui_run", default=None)
+
+    class ThisRunOnly(SimpleSpanProcessor):
+        def __init__(self, collector):
+            super().__init__(collector)
+            self.mine: set[int] = set()
+
+        def on_start(self, span, parent_context=None):
+            if current.get() is self:
+                self.mine.add(span.context.span_id)
+
+        def on_end(self, span):
+            if span.context.span_id in self.mine:
+                self.mine.discard(span.context.span_id)
+                super().on_end(span)
+
+    @contextlib.contextmanager
+    def capture_traces(response_id=None, entity_id=None):
+        collector = _tracing.SimpleTraceCollector(response_id, entity_id)
+        provider = trace.get_tracer_provider()
+        if not isinstance(provider, TracerProvider):
+            yield collector
+            return
+        processor = ThisRunOnly(collector)
+        provider.add_span_processor(processor)
+        token = current.set(processor)
+        try:
+            yield collector
+        finally:
+            with contextlib.suppress(ValueError):
+                current.reset(token)
+            multi = provider._active_span_processor
+            with multi._lock:
+                multi._span_processors = tuple(p for p in multi._span_processors if p is not processor)
+
+    _executor.capture_traces = capture_traces
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--port", type=int, default=8090)
@@ -234,6 +287,7 @@ def main() -> int:
     lw.say(f"\nDevUI on http://{args.host}:{args.port} ({seats} seat(s) per workflow, "
            f"{'no sign-in' if local else 'bearer token'}; Ctrl+C to stop). Pick a workflow at the top left.")
     stable_entity_ids()
+    per_run_traces()
     # Developer mode is what shows the Events/Traces/Tools panel the lab uses. Its extra APIs (hot reload,
     # deploy) do nothing for in-memory workflows, and the hosted container has no az or docker.
     serve(entities=entities, port=args.port, host=args.host, auto_open=local and not args.no_browser,

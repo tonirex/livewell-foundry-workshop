@@ -14,6 +14,9 @@ All notable changes to this workshop. One entry per phase PR.
   trailing space) failed the Coach's first call with 400 invalid_payload ("Error: [object Object]" in DevUI).
   `demos/lab4-devui.py` now trims and lowercases the role and treats anything else as `user`. Lab-04 troubleshooting
   shows how to read a failed node from its trace.
+- **Traces show only your own run.** DevUI attached a span collector per run and never removed it, so with several
+  people on the shared app each Traces panel mixed in everyone's spans, and memory grew all day.
+  `demos/lab4-devui.py` now keeps only spans started inside the run and detaches the collector when the run ends.
 
 ### Builder setup (2026-10-04)
 
