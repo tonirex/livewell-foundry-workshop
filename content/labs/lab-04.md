@@ -38,7 +38,7 @@ Steps 1–3 and 7 are hands-on in your browser, with nothing to install. The fac
    ```
 
    Each box turns green when that agent finishes. A run takes about a minute. In **Execution Timeline**, look for Nutrition, then Activity, then the Coach's evidence JSON with at least one guide id.
-3. **Run the hand-off team.** Switch to **LiveWell hand-off**, select **+** and run the same request. Open **Tools** on the right: it lists two hand-off calls, newest at the top. Read from the bottom: `handoff_to_nutrition` (the Coach chose Nutrition), then `handoff_to_activity` (Nutrition passed on to Activity). This shows the model chose the route. **Traces** shows each agent's time and tokens. Ignore the **Deployment Guide** button; this lab does not use it.
+3. **Run the hand-off team.** Switch to **LiveWell hand-off**, select **+** and run the same request. Open **Tools** on the right: it lists two hand-off calls, newest at the top. Read from the bottom: `handoff_to_nutrition` (the Coach chose Nutrition), then `handoff_to_activity` (Nutrition passed on to Activity). This shows the model chose the route. **Traces** shows each agent's time and tokens. In this team every message goes to all three agents, so **Execution Timeline** lists the same agent several times (**Run #2**, **Run #3** …). Most of those entries just record the message and take no time. The real work is the entries with an **Output**, and the spans in **Traces** that show token counts (↑ in / ↓ out). Ignore the **Deployment Guide** button; this lab does not use it.
 
    **Then see where hand-off wins.** The week plan needs both specialists, so both teams took the same path. Now ask for an activity only. In each team, select **+** and run:
 
