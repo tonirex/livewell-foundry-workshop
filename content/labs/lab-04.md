@@ -28,18 +28,22 @@ Patterns: #3 Workflow Orchestration; #9 Collaboration Between Specialists; #10 G
 
 Steps 1–3 and 7 are hands-on in your browser, with nothing to install. The facilitator shows the rest.
 
-1. **Get the token and open the Lab 4 DevUI.** The token is on the values sheet as **Lab 4 DevUI token**. You can also read it yourself if your workshop account is **Owner** or **Contributor** on the workshop subscription; Foundry User alone cannot read it.
-   1. Open [Azure Cloud Shell](https://shell.azure.com) and sign in with your workshop account. Pick **Bash**. If it asks about storage, choose **No storage account required**. Builders can use their Codespace terminal instead, after `az login`.
-   2. Copy the **Lab 4 DevUI token command** from the values sheet and run it. It has this shape, with `<env>` and the subscription filled in for your workshop:
+1. **Open the Lab 4 DevUI.**
+
+   **What DevUI is.** [DevUI](https://learn.microsoft.com/agent-framework/integrations/by-component/ui/devui/) is the developer web page that comes with Microsoft Agent Framework. It lists the agents and workflows that a Python app registers. You send one a message, and DevUI shows the run live: the workflow graph, each agent's answer, the raw event stream, tool calls and OpenTelemetry traces. It is a sample for building and testing, not a chat app for residents. Here it runs `demos/lab4-devui.py`, which holds the Builder script's two teams. That app runs as the container app **`ca-lab4-devui-<env>`** in the workshop's Azure Container Apps environment, so you only need a browser. It calls the same Foundry project with its own managed identity.
+
+   1. **Find it.** The address is on the values sheet as **Lab 4 DevUI (browser, no install)**. To find it yourself in the [Azure portal](https://portal.azure.com), you need at least Reader on the workshop resource group. Search for `ca-lab4-devui` in the top bar and open **`ca-lab4-devui-<env>`** (resource group `rg-livewell-workshop-<env>`). Then copy **Application Url** from **Overview**. The first load can take 20–30 seconds while the app starts.
+   2. **Get the token.** It is on the values sheet as **Lab 4 DevUI token**. You can also read it yourself if your workshop account is **Owner** or **Contributor** on the workshop subscription; Foundry User alone cannot read it. Open [Azure Cloud Shell](https://shell.azure.com) and sign in with your workshop account. Pick **Bash**, and if it asks about storage, choose **No storage account required**. Builders can use their Codespace terminal instead, after `az login`. Run the commands below, with `<env>` and `<subscription-id>` from the values sheet (**Environment** and **Subscription**); the **Lab 4 DevUI token command** row has the second one ready to copy. The first command prints the DevUI address (add `https://` in front), and the second prints the token.
 
       ```bash
+      az containerapp show -n ca-lab4-devui-<env> -g rg-livewell-workshop-<env> --subscription <subscription-id> --query properties.configuration.ingress.fqdn -o tsv
       az containerapp secret show -n ca-lab4-devui-<env> -g rg-livewell-workshop-<env> --subscription <subscription-id> --secret-name devui-auth-token --query value -o tsv
       ```
 
-      It prints one line: the token. `AuthorizationFailed` means your account cannot read it, so use the token from the values sheet.
-   3. Open **Lab 4 DevUI (browser, no install)** from the values sheet. Paste the token into **Enter Authentication Token**, then select **Connect**. DevUI keeps it in this browser only.
+      `AuthorizationFailed` means your account cannot read the token, so use the one on the values sheet.
+   3. **Connect.** Open the address, paste the token into **Enter Authentication Token**, then select **Connect**. DevUI keeps the token in this browser only.
 
-   This is the same Agent Framework orchestration that the Builder script runs. It is hosted in the workshop's Azure Container Apps environment and uses the same Foundry project. It has two shapes: a **sequential** team (Nutrition → Activity → Coach) and a **hand-off** team where the Coach triages (Coach → Nutrition → Activity). [Under the hood](#under-the-hood) below explains what you see.
+   You see two workflows, the same Agent Framework orchestration that the Builder script runs. **LiveWell sequential** is a fixed route (Nutrition → Activity → Coach). In **LiveWell hand-off**, the Coach triages and the agents pass the request on (Coach → Nutrition → Activity). [Under the hood](#under-the-hood) below explains what you see.
 2. **Run the sequential team.** Pick **LiveWell sequential** at the top left. Select **+** (top right) to start a fresh session: everyone shares this DevUI, so the session list also shows other people's runs. Select **Configure & Run**, type `user` in **role** and paste this into **contents**. It is Rahim's profile line, which the Builder script also adds, followed by `lab4_week_plan_handoff`. Then select **Run Workflow**.
 
    ```text

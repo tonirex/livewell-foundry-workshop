@@ -92,6 +92,7 @@ def main() -> int:
     rows = [
         ("Environment", env),
         ("Region", g("AZURE_LOCATION")),
+        ("Subscription", g("AZURE_SUBSCRIPTION_ID")),
         ("Foundry portal", "https://ai.azure.com"),
         ("Project", f"{names['foundry_project']} (resource {g('AZURE_AI_ACCOUNT_NAME')})"),
         ("Project endpoint", g("AZURE_AI_PROJECT_ENDPOINT")),

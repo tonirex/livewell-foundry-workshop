@@ -12,6 +12,10 @@ All notable changes to this workshop. One entry per phase PR.
   subscription, resource group or app (it needs `listSecrets`); Foundry User cannot, so those attendees keep using the
   token on the values sheet. Lab-04 troubleshooting covers `AuthorizationFailed` and a wrong subscription;
   ADMIN-SETUP explains who can read it.
+- **Lab 4 step 1 explains DevUI and where it lives.** What Agent Framework DevUI is, that it runs as the container app
+  `ca-lab4-devui-<env>`, and how to find its address: the values sheet, the Azure portal (**Overview → Application
+  Url**, needs Reader) or `az containerapp show … --query properties.configuration.ingress.fqdn`. The values sheet
+  now also lists the subscription.
 
 ### Lab 4 DevUI stable ids (2026-10-04)
 
