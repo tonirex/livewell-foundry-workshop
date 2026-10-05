@@ -104,7 +104,12 @@ About 1.5 h end to end.
 - **Identity.** It has its own managed identity with Foundry User on the project and AcrPull. It has no other Azure
   access.
 - **Sign-in.** One bearer token per environment (`LIVEWELL_DEVUI_TOKEN`). `select-params.py` generates it, Bicep
-  stores it as a container-app secret, and it appears on the values sheet.
+  stores it as the container-app secret `devui-auth-token`, and it appears on the values sheet.
+- **Who can read the token.** The values sheet also prints the command that reads it
+  (`az containerapp secret show … --secret-name devui-auth-token`). Running it needs
+  `Microsoft.App/containerApps/listSecrets/action`, which in the built-in roles means **Owner** or **Contributor** on
+  the app, its resource group or the subscription. Foundry User, the role `seed-attendees.sh` grants, cannot run
+  it. Attendees with one of those roles can get it themselves (Lab 4 step 1); everyone else uses the values sheet.
 - **Capacity.** It runs one replica. Every run builds a fresh copy of its workflow, so runs never share chat history.
   `DEVUI_SEATS` (default 8) caps how many runs of each workflow can be in flight at once; a ninth gets "All 8 seats
   … are busy".

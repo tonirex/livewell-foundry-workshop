@@ -4,6 +4,15 @@ All notable changes to this workshop. One entry per phase PR.
 
 ## [Unreleased]
 
+### Lab 4 DevUI token (2026-10-05)
+
+- **Participants can read the DevUI token themselves.** Lab 4 step 1 now shows the Cloud Shell (or Codespace)
+  command `az containerapp secret show … --secret-name devui-auth-token`, and the values sheet prints it with the
+  environment's app, resource group and subscription filled in. It works only for Owner or Contributor on the
+  subscription, resource group or app (it needs `listSecrets`); Foundry User cannot, so those attendees keep using the
+  token on the values sheet. Lab-04 troubleshooting covers `AuthorizationFailed` and a wrong subscription;
+  ADMIN-SETUP explains who can read it.
+
 ### Lab 4 DevUI stable ids (2026-10-04)
 
 - **Open DevUI pages survive a restart.** DevUI gave each workflow a random id at start-up, so after an idle

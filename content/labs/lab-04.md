@@ -28,7 +28,18 @@ Patterns: #3 Workflow Orchestration; #9 Collaboration Between Specialists; #10 G
 
 Steps 1–3 and 7 are hands-on in your browser, with nothing to install. The facilitator shows the rest.
 
-1. **Open the Lab 4 DevUI.** On the values sheet, open **Lab 4 DevUI (browser, no install)**. Paste the **Lab 4 DevUI token** into **Enter Authentication Token**, then select **Connect**. This is the same Agent Framework orchestration that the Builder script runs. It is hosted in the workshop's Azure Container Apps environment and uses the same Foundry project. It has two shapes: a **sequential** team (Nutrition → Activity → Coach) and a **hand-off** team where the Coach triages (Coach → Nutrition → Activity). [Under the hood](#under-the-hood) below explains what you see.
+1. **Get the token and open the Lab 4 DevUI.** The token is on the values sheet as **Lab 4 DevUI token**. You can also read it yourself if your workshop account is **Owner** or **Contributor** on the workshop subscription; Foundry User alone cannot read it.
+   1. Open [Azure Cloud Shell](https://shell.azure.com) and sign in with your workshop account. Pick **Bash**. If it asks about storage, choose **No storage account required**. Builders can use their Codespace terminal instead, after `az login`.
+   2. Copy the **Lab 4 DevUI token command** from the values sheet and run it. It has this shape, with `<env>` and the subscription filled in for your workshop:
+
+      ```bash
+      az containerapp secret show -n ca-lab4-devui-<env> -g rg-livewell-workshop-<env> --subscription <subscription-id> --secret-name devui-auth-token --query value -o tsv
+      ```
+
+      It prints one line: the token. `AuthorizationFailed` means your account cannot read it, so use the token from the values sheet.
+   3. Open **Lab 4 DevUI (browser, no install)** from the values sheet. Paste the token into **Enter Authentication Token**, then select **Connect**. DevUI keeps it in this browser only.
+
+   This is the same Agent Framework orchestration that the Builder script runs. It is hosted in the workshop's Azure Container Apps environment and uses the same Foundry project. It has two shapes: a **sequential** team (Nutrition → Activity → Coach) and a **hand-off** team where the Coach triages (Coach → Nutrition → Activity). [Under the hood](#under-the-hood) below explains what you see.
 2. **Run the sequential team.** Pick **LiveWell sequential** at the top left. Select **+** (top right) to start a fresh session: everyone shares this DevUI, so the session list also shows other people's runs. Select **Configure & Run**, type `user` in **role** and paste this into **contents**. It is Rahim's profile line, which the Builder script also adds, followed by `lab4_week_plan_handoff`. Then select **Run Workflow**.
 
    ```text
@@ -269,6 +280,8 @@ There is nothing to submit. Try the steps first, then open **Expected output** t
 |---|---|
 | Participant cannot publish | Expected. Hosted publish needs Foundry Project Manager; watch the facilitator demo. |
 | DevUI asks for a token again, or a run fails with 401 | Paste the **Lab 4 DevUI token** from the values sheet again (it is kept in this browser only). |
+| Token command: `AuthorizationFailed` … `listSecrets/action` | Your account is not Owner or Contributor on the workshop subscription. Use the token from the values sheet, or ask the facilitator. |
+| Token command: `ResourceNotFound` or "could not be found" | Cloud Shell is on another subscription or the names are wrong. Copy the whole command from the values sheet; it includes `--subscription`. |
 | DevUI takes 20–30 s to open | It scales to zero when idle and is starting up. The facilitator keeps one copy warm on the day (`DEVUI_MIN_REPLICAS=1`). |
 | DevUI: "Failed to Load Workflow … not found", **Run Workflow** does nothing, or your earlier runs are gone | DevUI restarted (idle scale-to-zero or a redeploy) and keeps runs in memory only. Open the DevUI link from the values sheet again, pick the team and select **+**. |
 | DevUI: a node shows **failed** with "Error: [object Object]" | Select **Show error** to read it. Open **Traces → OTel Spans** and select the failed `chat` span: `gen_ai.input.messages` shows exactly what was sent. A stray space or capital in **role** is handled for you; anything else, tell the facilitator. |
