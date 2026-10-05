@@ -45,6 +45,19 @@ All notable changes to this workshop. One entry per phase PR.
   the environment's address, the one endpoint allowed in a lab page. `check-content.py` allows it only there and now
   also catches real Container Apps hosts; `connect-tools.py` warns when the block is stale (ASSUMPTIONS.md 10.12).
 
+### Lab 4 DevUI token (2026-10-05)
+
+- **Participants can read the DevUI token themselves.** Lab 4 step 1 now shows the Cloud Shell (or Codespace)
+  command `az containerapp secret show … --secret-name devui-auth-token`, and the values sheet prints it with the
+  environment's app, resource group and subscription filled in. It works only for Owner or Contributor on the
+  subscription, resource group or app (it needs `listSecrets`); Foundry User cannot, so those attendees keep using the
+  token on the values sheet. Lab-04 troubleshooting covers `AuthorizationFailed` and a wrong subscription;
+  ADMIN-SETUP explains who can read it.
+- **Lab 4 step 1 explains DevUI and where it lives.** What Agent Framework DevUI is, that it runs as the container app
+  `ca-lab4-devui-<env>`, and how to find its address: the values sheet, the Azure portal (**Overview → Application
+  Url**, needs Reader) or `az containerapp show … --query properties.configuration.ingress.fqdn`. The values sheet
+  now also lists the subscription.
+
 ### Lab 4 DevUI stable ids (2026-10-04)
 
 - **Open DevUI pages survive a restart.** DevUI gave each workflow a random id at start-up, so after an idle
@@ -58,6 +71,12 @@ All notable changes to this workshop. One entry per phase PR.
 - **Traces show only your own run.** DevUI attached a span collector per run and never removed it, so with several
   people on the shared app each Traces panel mixed in everyone's spans, and memory grew all day.
   `demos/lab4-devui.py` now keeps only spans started inside the run and detaches the collector when the run ends.
+- **Hand-off runs always end with both answers.** Even with the `handoff` instruction block, Nutrition sometimes
+  handed off without writing its food answer, and Activity then handed back to the Coach, so the run ended with
+  no answer (2 of 8 hosted runs). A chat middleware (`answer_first()`) now removes Nutrition's hand-off tool from
+  its first turn, and Activity has no hand-off tools at all. Same change in `lab4_multiagent.py` section 5 and
+  `demos/lab4-devui.py`; 8 of 8 food-plus-activity runs and all activity-only and food-only runs passed. Lab-04
+  explains the middleware and the line references moved.
 
 ### Builder setup (2026-10-04)
 

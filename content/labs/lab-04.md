@@ -28,7 +28,22 @@ Patterns: #3 Workflow Orchestration; #9 Collaboration Between Specialists; #10 G
 
 Steps 1–3 and 7 are hands-on in your browser, with nothing to install. The facilitator shows the rest.
 
-1. **Open the Lab 4 DevUI.** On the values sheet, open **Lab 4 DevUI (browser, no install)**. Paste the **Lab 4 DevUI token** into **Enter Authentication Token**, then select **Connect**. This is the same Agent Framework orchestration that the Builder script runs. It is hosted in the workshop's Azure Container Apps environment and uses the same Foundry project. It has two shapes: a **sequential** team (Nutrition → Activity → Coach) and a **hand-off** team where the Coach triages (Coach → Nutrition → Activity). [Under the hood](#under-the-hood) below explains what you see.
+1. **Open the Lab 4 DevUI.**
+
+   **What DevUI is.** [DevUI](https://learn.microsoft.com/agent-framework/integrations/by-component/ui/devui/) is the developer web page that comes with Microsoft Agent Framework. It lists the agents and workflows that a Python app registers. You send one a message, and DevUI shows the run live: the workflow graph, each agent's answer, the raw event stream, tool calls and OpenTelemetry traces. It is a sample for building and testing, not a chat app for residents. Here it runs `demos/lab4-devui.py`, which holds the Builder script's two teams. That app runs as the container app **`ca-lab4-devui-<env>`** in the workshop's Azure Container Apps environment, so you only need a browser. It calls the same Foundry project with its own managed identity.
+
+   1. **Find it.** The address is on the values sheet as **Lab 4 DevUI (browser, no install)**. To find it yourself in the [Azure portal](https://portal.azure.com), you need at least Reader on the workshop resource group. Search for `ca-lab4-devui` in the top bar and open **`ca-lab4-devui-<env>`** (resource group `rg-livewell-workshop-<env>`). Then copy **Application Url** from **Overview**. The first load can take 20–30 seconds while the app starts.
+   2. **Get the token.** It is on the values sheet as **Lab 4 DevUI token**. You can also read it yourself if your workshop account is **Owner** or **Contributor** on the workshop subscription; Foundry User alone cannot read it. Open [Azure Cloud Shell](https://shell.azure.com) and sign in with your workshop account. Pick **Bash**, and if it asks about storage, choose **No storage account required**. Builders can use their Codespace terminal instead, after `az login`. Run the commands below, with `<env>` and `<subscription-id>` from the values sheet (**Environment** and **Subscription**); the **Lab 4 DevUI token command** row has the second one ready to copy. The first command prints the DevUI address (add `https://` in front), and the second prints the token.
+
+      ```bash
+      az containerapp show -n ca-lab4-devui-<env> -g rg-livewell-workshop-<env> --subscription <subscription-id> --query properties.configuration.ingress.fqdn -o tsv
+      az containerapp secret show -n ca-lab4-devui-<env> -g rg-livewell-workshop-<env> --subscription <subscription-id> --secret-name devui-auth-token --query value -o tsv
+      ```
+
+      `AuthorizationFailed` means your account cannot read the token, so use the one on the values sheet.
+   3. **Connect.** Open the address, paste the token into **Enter Authentication Token**, then select **Connect**. DevUI keeps the token in this browser only.
+
+   You see two workflows, the same Agent Framework orchestration that the Builder script runs. **LiveWell sequential** is a fixed route (Nutrition → Activity → Coach). In **LiveWell hand-off**, the Coach triages and the agents pass the request on (Coach → Nutrition → Activity). [Under the hood](#under-the-hood) below explains what you see.
 2. **Run the sequential team.** Pick **LiveWell sequential** at the top left. Select **+** (top right) to start a fresh session: everyone shares this DevUI, so the session list also shows other people's runs. Select **Configure & Run**, type `user` in **role** and paste this into **contents**. It is Rahim's profile line, which the Builder script also adds, followed by `lab4_week_plan_handoff`. Then select **Run Workflow**.
 
    ```text
@@ -119,8 +134,8 @@ flowchart LR
 | Nutrition | `nutrition` | `knowledge_base_retrieve` | A meal tip under 120 words ending with guide ids, e.g. `(lg-05-eating-for-pre-diabetes)` | [`lab4_multiagent.py` L87-91](../assets/lab4_multiagent.py#L87-L91) |
 | Activity | `activity` | `knowledge_base_retrieve`, `find_activities` (read-only) | A safe, indoor-on-hazy-days activity plus guide ids | [L92-94](../assets/lab4_multiagent.py#L92-L94) |
 | Coach, sequential | `base`, `safety`, `merge` | none | One evidence JSON (strict schema): `advice`, `confidence`, `supporting_guides`, `rationale`, `personalisation_flags` | [L124-129](../assets/lab4_multiagent.py#L124-L129) |
-| Coach, hand-off | `base`, `handoff` | `handoff_to_nutrition`, `handoff_to_activity` (added by `HandoffBuilder`) | Nothing: it only routes | [L164-179](../assets/lab4_multiagent.py#L164-L179) |
-| Programme-Insights | `insights` | Fabric tool | Programme-level aggregates, no resident rows | [L203-205](../assets/lab4_multiagent.py#L203-L206) (a Foundry prompt agent, so it runs server-side under `livewell-guardrails`) |
+| Coach, hand-off | `base`, `handoff` | `handoff_to_nutrition`, `handoff_to_activity` (added by `HandoffBuilder`) | Nothing: it only routes | [L187-202](../assets/lab4_multiagent.py#L187-L202) |
+| Programme-Insights | `insights` | Fabric tool | Programme-level aggregates, no resident rows | [L226-228](../assets/lab4_multiagent.py#L226-L229) (a Foundry prompt agent, so it runs server-side under `livewell-guardrails`) |
 
 **Sequential: the code decides the route.** `SequentialBuilder` wires the participants in a fixed order and passes one shared conversation down the chain. Each agent sees the request and every earlier answer, adds its own, and hands the longer conversation on. The Coach has no tools and a strict JSON schema, so the last message is always the evidence JSON. `output_from="all"` makes the workflow emit every agent's answer, which is how the script prints the route.
 
@@ -144,16 +159,15 @@ sequenceDiagram
   C-->>W: one evidence JSON (the reply)
 ```
 
-**Hand-off: the model decides the route.** `HandoffBuilder` gives each agent a `handoff_to_<name>` function tool for every target allowed by `add_handoff` (L173-175). An agent hands over by *calling* that tool, and the workflow then makes the target agent active. The instruction block tells the Coach never to answer and to send food-plus-activity requests to Nutrition first. Nutrition runs in **autonomous mode** for one turn: its first reply is the food answer, and on the extra turn it calls `handoff_to_activity` instead of waiting for the resident. The two steps are kept in separate turns on purpose: with "answer, then hand off" in one turn, `gpt-5-mini` often called the hand-off tool and skipped the answer. The `termination_condition` (L170-171) stops the run as soon as Activity has answered. Section 5 checks the route because a model-chosen route can vary; that is the trade-off for flexibility.
+**Hand-off: the model decides the route.** `HandoffBuilder` gives each agent a `handoff_to_<name>` function tool for every target allowed by `add_handoff` (L197-198). An agent hands over by *calling* that tool, and the workflow then makes the target agent active. The instruction block tells the Coach never to answer and to send food-plus-activity requests to Nutrition first. Nutrition runs in **autonomous mode** for one turn: its first reply is the food answer, and on the extra turn it calls `handoff_to_activity` instead of waiting for the resident. The instructions alone were not enough: in about 1 run in 4, `gpt-5-mini` called the hand-off tool and skipped the answer. So the **chat middleware** `answer_first()` (L165-182) removes Nutrition's hand-off tool from its first model call, and the answer has to come first. Activity has no hand-off tool: it is the last stop, and the `termination_condition` (L194-195) stops the run as soon as it has answered. Section 5 still checks the route, because the model chooses it; that is the trade-off for flexibility.
 
 ```mermaid
 flowchart LR
   req(["Request"]) --> coach["Coach (start)<br/>triage only, never answers"]
-  coach -- "handoff_to_nutrition" --> nutrition["Nutrition<br/>answers the food part<br/>autonomous: 1 turn"]
-  nutrition -- "handoff_to_activity" --> activity["Activity<br/>answers the activity part"]
+  coach -- "handoff_to_nutrition" --> nutrition["Nutrition<br/>answers the food part<br/>(no hand-off tool on turn 1)<br/>autonomous: 1 turn"]
+  nutrition -- "handoff_to_activity" --> activity["Activity<br/>answers the activity part<br/>(no hand-off tools)"]
   activity -- "termination_condition:<br/>Activity has answered" --> done(["Done"])
   coach -. "handoff_to_activity<br/>(activity-only questions)" .-> activity
-  activity -. "handoff_to_coach<br/>(allowed, not used here)" .-> coach
 ```
 
 **The `text_only` middleware** (L81-84) is the one piece of glue. Each agent's turn contains its own tool calls (MCP calls, hand-off calls), and the next agent must not replay calls it never made. The middleware passes earlier turns on as plain text, keeping who said what (`author_name`).
@@ -207,9 +221,9 @@ Use `--verbose` for each agent's full answer. Use `--cleanup` to delete only `li
 | 2 | [`af_client`](../assets/common/livewell_common.py#L1097-L1108), [`af_kb_tool` and `af_activities_tool`](../assets/common/livewell_common.py#L1111-L1122) | A `FoundryChatClient` on the project's model deployment, and the two hosted MCP tools from `client.get_mcp_tool`. `allowed_tools` keeps Activity to `find_activities`. |
 | 3 | [`text_only` and `team()`](../assets/lab4_multiagent.py#L80-L95) | Agent middleware that strips other agents' tool calls (but keeps the agent's own hand-off result, so a second turn still has input), and a factory for fresh Nutrition and Activity agents. An agent instance belongs to one workflow, so each workflow builds its own. |
 | 4 | [`sequential()`](../assets/lab4_multiagent.py#L124-L129), [run and checks](../assets/lab4_multiagent.py#L132-L152) | `SequentialBuilder` in a fixed order. The Coach's strict schema comes from [`af_json_format`](../assets/common/livewell_common.py#L1125-L1128), the same evidence contract as Lab 3. |
-| 5 | [`handoff()`](../assets/lab4_multiagent.py#L164-L179) | `HandoffBuilder`: who may hand off to whom, the start agent, one autonomous turn for Nutrition and a stop condition. |
-| 6 | [L203-L209](../assets/lab4_multiagent.py#L203-L210) | Not Agent Framework: a Foundry prompt agent with the Fabric tool, created and asked exactly as in Lab 3. |
-| 7 | [L237-L260](../assets/lab4_multiagent.py#L238-L261) | Finds `livewell-workshop-hosted`, checks its guardrail, and sends it the week-plan prompt. |
+| 5 | [`answer_first()` and `handoff()`](../assets/lab4_multiagent.py#L165-L202) | A chat middleware that makes Nutrition answer before it can hand off, then `HandoffBuilder`: who may hand off to whom, the start agent, one autonomous turn for Nutrition and a stop condition. |
+| 6 | [L226-L232](../assets/lab4_multiagent.py#L226-L233) | Not Agent Framework: a Foundry prompt agent with the Fabric tool, created and asked exactly as in Lab 3. |
+| 7 | [L260-L283](../assets/lab4_multiagent.py#L261-L284) | Finds `livewell-workshop-hosted`, checks its guardrail, and sends it the week-plan prompt. |
 
 Two helpers do the plumbing:
 
@@ -270,6 +284,8 @@ There is nothing to submit. Try the steps first, then open **Expected output** t
 |---|---|
 | Participant cannot publish | Expected. Hosted publish needs Foundry Project Manager; watch the facilitator demo. |
 | DevUI asks for a token again, or a run fails with 401 | Paste the **Lab 4 DevUI token** from the values sheet again (it is kept in this browser only). |
+| Token command: `AuthorizationFailed` … `listSecrets/action` | Your account is not Owner or Contributor on the workshop subscription. Use the token from the values sheet, or ask the facilitator. |
+| Token command: `ResourceNotFound` or "could not be found" | Cloud Shell is on another subscription or the names are wrong. Copy the whole command from the values sheet; it includes `--subscription`. |
 | DevUI takes 20–30 s to open | It scales to zero when idle and is starting up. The facilitator keeps one copy warm on the day (`DEVUI_MIN_REPLICAS=1`). |
 | DevUI: "Failed to Load Workflow … not found", **Run Workflow** does nothing, or your earlier runs are gone | DevUI restarted (idle scale-to-zero or a redeploy) and keeps runs in memory only. Open the DevUI link from the values sheet again, pick the team and select **+**. |
 | DevUI: a node shows **failed** with "Error: [object Object]" | Select **Show error** to read it. Open **Traces → OTel Spans** and select the failed `chat` span: `gen_ai.input.messages` shows exactly what was sent. A stray space or capital in **role** is handled for you; anything else, tell the facilitator. |
@@ -282,6 +298,7 @@ There is nothing to submit. Try the steps first, then open **Expected output** t
 | Trace shows only one specialist | Re-run the Agent Framework script and check the handoff rule; the week-plan prompt should require both Nutrition and Activity. |
 | `Workflow is already running` | One request at a time per workflow; re-run the cell. |
 | Programme-Insights calls the knowledge base instead of Fabric | Re-copy the fabric routing block in the specialist instructions and confirm the Fabric tool is attached. |
+| Section 6: 400 "Remote MCP server error while enumerating tools … did not return a valid MCP JSON-RPC response" | The Fabric capacity is paused (it is paused overnight). Facilitator: `bash scripts/capacity.sh resume <env>`; re-run after a minute. To carry on without Fabric, prefix the run with `FABRIC_BRIDGE=false`. |
 | Endpoint smoke test returns prose | The hosted agent's `livewell.json` is stale: the facilitator runs `python scripts/gen-schemas.py` and redeploys. |
 | 429 or quota errors | Wait 30 seconds and re-run, or reduce concurrent participant runs. For the demo, set `LIVEWELL_MODEL=gpt-4.1-mini` to move the team to the tools deployment. |
 

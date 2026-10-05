@@ -32,7 +32,7 @@ _here = (pathlib.Path(globals()["__file__"]).resolve().parent if "__file__" in g
 sys.path.insert(0, str(_here))
 from common import livewell_common as lw  # noqa: E402
 
-from agent_framework import Agent, Message, agent_middleware  # noqa: E402
+from agent_framework import Agent, Message, agent_middleware, chat_middleware  # noqa: E402
 from agent_framework.orchestrations import HandoffBuilder, SequentialBuilder  # noqa: E402
 
 
@@ -156,13 +156,37 @@ lw.record("lab4_week_plan_sequential", {"seconds": round(seconds, 1), "steps": s
 #
 # No fixed order this time: each agent gets hand-off tools and decides who goes next, following the `handoff`
 # instruction block. Nutrition gets one autonomous turn after its answer so it hands off instead of waiting for
-# the resident. The workflow stops once the Activity specialist has answered.
+# the resident. The instructions alone were not enough (`gpt-5-mini` sometimes handed off without answering), so a
+# **chat middleware** hides Nutrition's hand-off tool on its first turn: it has to answer before it can hand off.
+# Activity gets no hand-off tool, because it is the last stop: the workflow stops once it has answered. That is why
+# `HandoffBuilder` warns that Activity "will not be able to hand off".
 
 # %%
+def answer_first() -> list:
+    """Nutrition's middleware: count its turns, and on the first one remove the hand-off tools from the model call."""
+    turns = 0
+
+    @agent_middleware
+    async def count_turns(context, call_next):
+        nonlocal turns
+        turns += 1
+        await call_next()
+
+    @chat_middleware
+    async def hide_handoff(context, call_next):  # 👉 runs before each model call and can change its options
+        if turns == 1:
+            context.options = {**context.options, "tools": [t for t in context.options.get("tools") or []
+                                                            if not getattr(t, "name", "").startswith("handoff_to_")]}
+        await call_next()
+
+    return [count_turns, hide_handoff]
+
+
 handoff_steps: list[dict] = []
 if not args.no_handoff:
     def handoff():
         nutrition, activity = team("handoff")
+        nutrition.middleware = [*nutrition.middleware, *answer_first()]  # 👉
         coach = Agent(client, lw.load_instructions("base", "handoff"), name="coach",  # 👉
                       description="LiveWell Coach: triage only", middleware=[text_only],
                       require_per_service_call_history_persistence=True)
@@ -172,7 +196,6 @@ if not args.no_handoff:
                 .with_start_agent(coach)
                 .add_handoff(coach, [nutrition, activity])  # 👉
                 .add_handoff(nutrition, [activity])  # 👉
-                .add_handoff(activity, [coach])
                 # after its answer Nutrition gets one more turn instead of waiting for the resident
                 .with_autonomous_mode(agents=[nutrition], turn_limits={"nutrition": 1}, prompts={
                     "nutrition": "If the resident also asked about activity, hand off to the Activity specialist now."})

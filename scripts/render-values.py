@@ -87,10 +87,16 @@ def main() -> int:
     fabric_ws_url = v.get("FABRIC_WORKSPACE_URL") or MISSING
     devui_on = (v.get("LAB4_DEVUI") or "true").strip().lower() in ("1", "true", "yes")
     devui_off = "not deployed (LAB4_DEVUI=false)"
+    # Owner or Contributor can read the token themselves (listSecrets); Foundry User cannot. Lab 4 step 1.
+    devui_cmd = (f"`az containerapp secret show -n {v.get('LAB4_DEVUI_APP_NAME') or names['devui_app']}"
+                 f" -g {v.get('AZURE_RESOURCE_GROUP') or names['resource_group']}"
+                 f" --subscription {g('AZURE_SUBSCRIPTION_ID')}"
+                 " --secret-name devui-auth-token --query value -o tsv`")
 
     rows = [
         ("Environment", env),
         ("Region", g("AZURE_LOCATION")),
+        ("Subscription", g("AZURE_SUBSCRIPTION_ID")),
         ("Foundry portal", "https://ai.azure.com"),
         ("Project", f"{names['foundry_project']} (resource {g('AZURE_AI_ACCOUNT_NAME')})"),
         ("Project endpoint", g("AZURE_AI_PROJECT_ENDPOINT")),
@@ -111,6 +117,7 @@ def main() -> int:
         ("Hosted agent (Lab 4, facilitator)", hosted()),
         ("Lab 4 DevUI (browser, no install)", g("LAB4_DEVUI_URL") if devui_on else devui_off),
         ("Lab 4 DevUI token", g("LIVEWELL_DEVUI_TOKEN") if devui_on else devui_off),
+        ("Lab 4 DevUI token command (Owner or Contributor)", devui_cmd if devui_on else devui_off),
         ("Workshop accounts", accounts),
         ("Guest Wi-Fi", f"{ws['guest_wifi']['ssid']} / {ws['guest_wifi']['code']}"),
     ]
