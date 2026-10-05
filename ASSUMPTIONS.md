@@ -943,3 +943,13 @@ Where an entry changes something SPEC.md states, it says so.
   notice); if device code fails again, check the setting. Alternatives: plain `az login` (a Codespace in VS Code
   Desktop forwards the localhost redirect; in the browser, `curl` the failed localhost URL in the terminal), or an
   Entra ID P2 trial with a Conditional Access MFA policy.
+- **10.12** **Changes AGENTS.md (no endpoints in lab pages).** At Antonia's request (2026-10-05) the profile OpenAPI
+  spec is a copy-and-paste block in Lab 3 (`lab-03.md` and `lab-03-portal.md`), so Navigators no longer open the spec
+  URL and select all. The tool calls the spec's `servers` address, so the block must hold this environment's
+  activities app address: the one endpoint allowed in a lab page. `scripts/sync-openapi-block.py <env>` writes it from
+  the live `/openapi.json` (`--check` reports drift, and `connect-tools.py` warns when it is stale), and
+  `check-content.py` allows an endpoint only inside the markers, only on those two pages, and only when the block
+  parses as an OpenAPI 3 document. The block holds the sponsor address, so a run on another environment must re-sync
+  (and commit and push) first, and anyone who can read the repo sees the address (anonymous API, synthetic data).
+  Adding the exception showed that the content check's Container Apps pattern missed real hosts
+  (`<app>.<env>.<region>.azurecontainerapps.io`); it now catches them.
